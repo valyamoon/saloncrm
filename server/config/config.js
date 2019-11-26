@@ -3,7 +3,7 @@
 const config = {
     local: {        
         DATABASE: {
-            dbname: 'local',
+            dbname: 'salonCRM',
             host: 'mongodb://localhost:27017/',
             port: 0,
             username: '',
@@ -19,7 +19,7 @@ const config = {
             host: 'smtp.gmail.com',
             secure: true,
             port: 465,
-            authUser: 'asthad.sdn@gmail.com',
+            authUser: 'nadimshah.sdn@gmail.com',
             authpass: 'Mobile@1234',
             tls: {
                 rejectUnauthorized: false
