@@ -7,7 +7,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDefinition = require('./router/swagger');
 const passport = require('passport');
-const API_PORT = process.env.API_PORT || 5976
+const API_PORT = process.env.API_PORT || 3000
 
 //5976
 const options = {
@@ -30,6 +30,9 @@ app.use(logger('dev'));
 app.use(passport.initialize());
 require("./api/router")(app)
 app.use(express.static('./dist'));
+app.get('/',(req,res)=>{
+  res.send("Hiiiiiiiiiiiiiiiiiiiiiii");
+})
 app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
 
 module.exports = app;

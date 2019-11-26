@@ -1,0 +1,30 @@
+<form [formGroup]="loginForm" class="loginForm">
+    <select formControlName="countryCode" >
+        <option *ngFor="let item of countryCodes" [value]="item.countryCallingCodes[0]" ngDefaultControl >{{item.name}} ({{item.countryCallingCodes[0]}})</option>
+    </select>
+    <input  type="text" placeholder="Number" formControlName="mobileNumber">
+    <span *ngIf="forms.mobileNumber.hasError('pattern')">ENter valid number</span>
+    {{messageToShow}}
+    <!-- <span *ngIf="!forms.mobileNumber.hasError('pattern')"> valid number</span> -->
+    <button (click)="submitNumber(loginForm.value)" [disabled]="loginForm.invalid">Submit</button>
+</form>
+
+<form  [formGroup]="verifyNumber" *ngIf="showOTP" >
+    <input type="text" formControlName="otp" placeholder="ENTER OTP">
+    <button (click)="verify(verifyNumber.value)" [disabled]="verifyNumber.invalid">Verify</button>
+    <button (click)="resendOTP('sms')" >Resend OTP</button>
+    <button (click)="resendOTP('call')" >Resend OTP Via call</button>
+</form>
+
+<form [formGroup]="registerUser" *ngIf="showOtherDetails">
+    <input type="text" formControlName="firstName" placeholder="First Name">
+    <input type="text" formControlName="lastName" placeholder="Last Name">
+    <input type="text" formControlName="email" placeholder="Email">
+    <input type="text" formControlName="address" placeholder="Address">
+    <input type="date" formControlName="dob" placeholder="Date of Birth">
+    
+    <button (click)="register(registerUser.value)">submit</button>
+</form>
+
+
+<a [routerLink]="['salon']" routerLinkActive="router-link-active">Add Salon</a> 
