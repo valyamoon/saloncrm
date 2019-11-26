@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300i,400,400i,600&display=swap");
+.mat-form-field-appearance-legacy .mat-form-field-label {
+    color: #ABB0B7;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label span {
+    color: #4B9AFA;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: #E5E5E5;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: #4B9AFA;
+}
+
+
+/****************************
+Notification changes
+*****************************/
+
+.read_all_msg .mat-checkbox .mat-checkbox-layout span {
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #526371;
+}
+
+.read_all_msg .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: #006496;
+}
