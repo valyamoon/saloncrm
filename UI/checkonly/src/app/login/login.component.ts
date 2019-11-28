@@ -29,6 +29,8 @@ export class LoginComponent implements OnInit {
   showOtherDetails: boolean;
   messageToShow: any;
   isVerified: boolean;
+  userDataToPass: any;
+  showMobileNumber: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -49,13 +51,24 @@ export class LoginComponent implements OnInit {
         lastName: this.userDetails["lastName"],
         socialId: this.userDetails["id"],
         email: this.userDetails["email"],
-        loggedInVia: loggedInVia
+        loggedInVia: loggedInVia,
+        isVerified: true
       };
       let dataToPass = this.socialUserDetails;
       this.comSer.verifyNumber(dataToPass).subscribe(
         (data: any) => {
           console.log(data);
-          if (data.data["success"] == true) {
+          if (data) {
+            console.log("SOCALLLLLLLLLLLLLLLLLLLLLLLLL");
+            this.showMobileNumber = true;
+            console.log("this.showMobileNumber", this.showMobileNumber);
+            this.registerUser.get("phone").setValidators([Validators.required]);
+            this.showOtherDetails = true;
+            this.registerUser.get("firstName").setValue(data.firstName);
+            this.registerUser.get("lastName").setValue(data.lastName);
+            this.registerUser.get("email").setValue(data.email);
+          }
+          if (data["isalreadyexist"] == false) {
             this.isVerified = true;
             this.showOtherDetails = true;
           }
@@ -72,6 +85,7 @@ export class LoginComponent implements OnInit {
       );
     });
   }
+
   ngOnInit() {
     this.loginForm = this.fb.group({
       mobileNumber: [
@@ -91,7 +105,8 @@ export class LoginComponent implements OnInit {
       lastName: ["", Validators.required],
       email: ["", Validators.required],
       address: ["", Validators.required],
-      dob: ["", Validators.required]
+      dob: ["", Validators.required],
+      phone: [""]
     });
 
     this.getCodes();
@@ -158,7 +173,8 @@ export class LoginComponent implements OnInit {
     this.comSer.verifyNumber(dataToPass).subscribe(
       (data: any) => {
         console.log(data);
-        if (data.data["success"] == true) {
+
+        if (data.code == 200) {
           this.isVerified = true;
           this.showOtherDetails = true;
         }
@@ -176,23 +192,47 @@ export class LoginComponent implements OnInit {
   }
 
   register(data) {
-    console.log(data);
-    let dataToPass = {
-      phone: this.userDetails.mobileNumber,
-      code: this.userDetails.countryCode,
-      loggedInVia: this.loggedInVia,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      address: data.address,
-      lat: "",
-      long: "",
-      isVerified: this.isVerified,
-      dob: data.dob
-    };
-    console.log(dataToPass);
+    console.log("thissssssssssss", this.loggedInVia);
+    if (this.loggedInVia == "mobileNumber") {
+      this.userDataToPass = {
+        phone: this.userDetails.mobileNumber,
+        code: this.userDetails.countryCode,
+        loggedInVia: this.loggedInVia,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        address: data.address,
+        lat: "",
+        long: "",
+        isVerified: this.isVerified,
+        dob: data.dob,
+        role: 'ObjectId("5ddf6a4c8d9df1071d86a17e")'
+      };
+    }
+    if (this.loggedInVia != "mobileNumber") {
+      console.log("FACEBOOK GOOGLE");
+      this.registerUser.updateValueAndValidity();
+      this.userDataToPass = {
+        phone: data.phone,
+        code: "",
+        loggedInVia: this.socialUserDetails.loggedInVia,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        address: data.address,
+        lat: "",
+        long: "",
+        isVerified: this.socialUserDetails.isVerified,
+        dob: data.dob,
+        role: 'ObjectId("5ddf6a4c8d9df1071d86a17e")'
+      };
+    }
 
-    this.comSer.addUser(dataToPass).subscribe(
+    console.log(data);
+
+    console.log(this.userDataToPass);
+
+    this.comSer.addUser(this.userDataToPass).subscribe(
       (data: any) => {
         console.log(data);
         if (data.registered == true) {
