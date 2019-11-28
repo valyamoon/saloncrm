@@ -151,9 +151,10 @@ const config = {
     }
   },
   staging: {
+    port: 5977,
     DATABASE: {
       dbname: "saloncrm",
-      host: "http://54.71.18.74:5977/",
+      host: "mongodb://54.71.18.74:27017/saloncrm",
       port: 5977,
       username: "saloncrm",
       password: "DFr533456yt"

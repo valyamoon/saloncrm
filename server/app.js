@@ -5,9 +5,17 @@ const bodyParser = require("body-parser");
 const logger = require("morgan");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
+config = require("./config/config");
 const swaggerDefinition = require("./router/swagger");
 const passport = require("passport");
-const API_PORT = process.env.API_PORT || 3000;
+
+// process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
+process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
+// process.env.NODE_ENV = process.env.NODE_ENV || 'live'; //live server (www.mdate.app)
+//dist
+const config = require("./app/config/config.js").get(process.env.NODE_ENV);
+const API_PORT = config.port || 3000;
+// const API_PORT = process.env.API_PORT || 3000;
 
 //5976
 const options = {

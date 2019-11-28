@@ -17,7 +17,7 @@ module.exports = {
 };
 
 function requestVerification(req, res) {
-  console.log("ion Request", req.body);
+  //console.log("ion Request", req.body);
 
   authy
     .phones()
@@ -84,15 +84,15 @@ function requestVerification(req, res) {
 function verifyNumber(req, res) {
   var userData = req;
   if (req.body.email) {
-    console.log("Seeeeeeeeeeeeeeeeeeeeeeeeee");
+    // console.log("Seeeeeeeeeeeeeeeeeeeeeeeeee");
 
     users.find(
       { $or: [{ email: req.body.email }, { phone: req.body.phone }] },
       (err, result) => {
-        console.log("resultresultresult ", result);
+        //  console.log("resultresultresult ", result);
 
         if (result.length == 0) {
-          console.log("=====Hi ");
+          //  console.log("=====Hi ");
           // return false;
           res.json({
             code: 200,
@@ -105,10 +105,10 @@ function verifyNumber(req, res) {
           });
         }
         if (result.length > 0) {
-          console.log("=====Bi ");
+          // console.log("=====Bi ");
           // return false;
-          console.log("RESULLLLLLLLLLT", result);
-          console.log("USerrrrrrrrrData", userData.body);
+          //console.log("RESULLLLLLLLLLT", result);
+          // console.log("USerrrrrrrrrData", userData.body);
           // if (
           //   userData.body.email === result[0].email ||
           //   userData.body.phone === result[0].phone
@@ -155,17 +155,34 @@ function verifyNumber(req, res) {
     users.find(
       { $and: [{ phone: req.body.phone }, { code: req.body.code }] },
       (err, result) => {
-        console.log("RESULT NOW", result);
+        //  console.log("RESULT NOW", result);
         if (result.length > 0) {
           if (
             req.body.phone === result[0].phone &&
             req.body.code === result[0].code
           ) {
-            res.json({
-              data: { user: result, isalreadyexist: true, isVerified: true },
-              message: "User is already registered",
-              code: 200
-            });
+            let params = {
+              _id: result[0]._id
+            };
+            let token = jwt.sign(params, "saloncrm", { expiresIn: "1h" });
+            if (token) {
+              res.json({
+                code: 200,
+                data: {
+                  user: result,
+                  isalreadyexist: true,
+                  isVerified: true,
+                  token: token
+                },
+                message: "User is already registered"
+              });
+            }
+
+            // res.json({
+            //   data: { user: result, isalreadyexist: true, isVerified: true },
+            //   message: "User is already registered",
+            //   code: 200
+            // });
           }
         }
         if (result.length == 0) {
@@ -195,13 +212,13 @@ function verifyNumber(req, res) {
               }
             );
         } else {
-          res.json({
-            code: 400,
-            isalreadyexist: false,
-            message: "User is not registered",
-            data: result,
-            isVerified: false
-          });
+          // res.json({
+          //   code: 400,
+          //   isalreadyexist: false,
+          //   message: "User is not registered",
+          //   data: result,
+          //   isVerified: false
+          // });
         }
         if (err) {
           res.json({ code: 400, data: null, message: "Failed to fetch users" });
@@ -209,12 +226,12 @@ function verifyNumber(req, res) {
       }
     );
 
-    console.log("MOBILE SE LOGIN");
+    // console.log("MOBILE SE LOGIN");
   }
 }
 
 function addUser(req, res) {
-  console.log(req.body);
+  // console.log(req.body);
 
   var newUser = new users({
     phone: req.body.phone,
@@ -230,13 +247,13 @@ function addUser(req, res) {
     dob: req.body.dob,
     role: req.body.role
   });
-  console.log("new User", newUser);
+  //console.log("new User", newUser);
   newUser.save((err, result) => {
-    console.log("=== Err ", err, result);
+    //  console.log("=== Err ", err, result);
     if (err) {
       res.json({ code: 400, data: null, message: "Failed to resgister user" });
     } else {
-      console.log("result is=>", result);
+      // console.log("result is=>", result);
       users.find({ _id: result._id }, (err, result) => {
         if (err) {
           res.json({
@@ -248,13 +265,28 @@ function addUser(req, res) {
           result;
         }
       });
-
+      let params = {
+        _id: result._id
+      };
+      let token = jwt.sign(params, "saloncrm", { expiresIn: "1h" });
+      if (token) {
+        res.json({
+          code: 200,
+          data: {
+            user: result,
+            isalreadyexist: true,
+            isVerified: true,
+            token: token
+          },
+          message: "User registered successfully"
+        });
+      }
       // res.json({ sucess: "User registered successfully", registered: true });
-      res.json({
-        code: 200,
-        message: "User registered successfully",
-        data: { isregistered: true, user: result }
-      });
+      // res.json({
+      //   code: 200,
+      //   message: "User registered successfully",
+      //   data: { isregistered: true, user: result }
+      // });
     }
   });
 }
