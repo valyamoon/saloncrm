@@ -14,7 +14,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'live'; //live server (www.mdate.app)
 //dist
 const config = require("./app/config/config.js").get(process.env.NODE_ENV);
-const API_PORT = config.port || 3000;
+const API_PORT = 5977;
 // const API_PORT = process.env.API_PORT || 3000;
 
 //5976
