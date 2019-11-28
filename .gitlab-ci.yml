@@ -1,0 +1,26 @@
+image: 'node:latest'
+cache:
+  paths:
+    - server/node_modules/
+stages:
+  - build
+  - deploy
+build-dev:
+  stage: build
+  tags:
+    - staging
+  script:
+    - cd server
+    - npm install
+ 
+  only:
+    - staging
+deploy-dev:
+  tags:
+    - staging
+  only:
+    - staging
+  stage: deploy
+  script:
+    - cd server
+    - pm2 start app.js --name "MEAN-saloncrm"
