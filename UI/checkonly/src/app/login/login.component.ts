@@ -64,9 +64,11 @@ export class LoginComponent implements OnInit {
             console.log("this.showMobileNumber", this.showMobileNumber);
             this.registerUser.get("phone").setValidators([Validators.required]);
             this.showOtherDetails = true;
-            this.registerUser.get("firstName").setValue(data.firstName);
-            this.registerUser.get("lastName").setValue(data.lastName);
-            this.registerUser.get("email").setValue(data.email);
+            this.registerUser
+              .get("firstName")
+              .setValue(data.data.user.firstName);
+            this.registerUser.get("lastName").setValue(data.data.user.lastName);
+            this.registerUser.get("email").setValue(data.data.user.email);
           }
           if (data["isalreadyexist"] == false) {
             this.isVerified = true;
