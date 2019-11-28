@@ -1,59 +1,56 @@
-var mongoose  =  require('mongoose');
+var mongoose = require("mongoose");
 
 var userSchema = mongoose.Schema(
-{
-    code:
-    {
-        type:String,
-        required:true
+  {
+    code: {
+      type: String,
+      required: false
     },
-    phone:
-    {
-        type:String,
-        required:true,
-        unique: true  
+    phone: {
+      type: String,
+      required: true,
+      unique: true
     },
-    loggedInVia:{
-        type:String
+    loggedInVia: {
+      type: String
     },
-    firstName:{
-        type:String,
-        required:true
+    firstName: {
+      type: String,
+      required: false
     },
-    lastName:{
-        type:String,
-        required:true
+    lastName: {
+      type: String,
+      required: false
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+      type: String,
+      required: false
     },
-    address:{
-        type:String,
-        required:true
+    address: {
+      type: String,
+      required: false
     },
-    lat:{
-        type:String,
-        required:false
+    lat: {
+      type: String,
+      required: false
     },
-    long:{
-        type:String,
-        required:false
+    long: {
+      type: String,
+      required: false
     },
-    isVerified:{
-        type:Boolean,
-        required:true
+    isVerified: {
+      type: Boolean,
+      required: false
     },
-    dob:{
-        type:Date,
-        required:false
+    dob: {
+      type: Date,
+      required: false
     },
-    image:{
-        type:String,
-        required:false
+    image: {
+      type: String,
+      required: false
     }
-
-}
-
-)
-var users =  module.exports =  mongoose.model('users',userSchema);
+  },
+  { timestamps: true }
+);
+var users = (module.exports = mongoose.model("users", userSchema));

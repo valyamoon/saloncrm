@@ -36,12 +36,18 @@ function requestVerification(req, res) {
           .verification_start(
             req.body.phone,
             req.body.code,
-            { via: req.body.via, locale: "en", code_length: "6" },
+            { via: req.body.via, locale: "en", code_length: "4" },
             function(err, result) {
               if (err) {
                 res.json({ error: err["message"] });
               } else {
-                res.json({ success: result["message"] });
+                //res.json({ success: result["message"] });
+                res.json({
+                  code: 200,
+                  message: result["message"],
+                  data: "",
+                  success: true
+                });
               }
             }
           );
@@ -54,18 +60,38 @@ function requestVerification(req, res) {
 }
 
 function verifyNumber(req, res) {
-  authy
-    .phones()
-    .verification_check(req.body.phone, req.body.code, req.body.token, function(
-      err,
-      result
-    ) {
-      if (err) {
-        res.json({ error: err["message"] });
-      } else {
-        res.send(result);
-      }
+  console.log("MeriBebasi", req.body);
+  if (req.body.email) {
+    console.log("EMAIL SE LOGIN");
+    res.json({
+      message: "Please fill the required details",
+      isVerified: true,
+      code: 200,
+      data: []
     });
+  }
+  if (req.body.phone && req.body.token) {
+    console.log("MOBILE SE LOGIN");
+    authy
+      .phones()
+      .verification_check(
+        req.body.phone,
+        req.body.code,
+        req.body.token,
+        function(err, result) {
+          if (err) {
+            res.json({ error: err["message"] });
+          } else {
+            //res.send(result);
+            res.json({
+              code: 200,
+              message: "Mobile number verified successfully",
+              data: result
+            });
+          }
+        }
+      );
+  }
 }
 
 function addUser(req, res) {
@@ -91,11 +117,28 @@ function addUser(req, res) {
       res.json({ error: "Failed to resgister user" });
     } else {
       console.log("result is=>", result);
-      res.json({ sucess: "User registered successfully", registered: true });
+      users.find({ _id: result._id }, (err, result) => {
+        if (err) {
+          res.json({ error: "Failed to resgister user" });
+        } else {
+          result;
+        }
+      });
+
+      // res.json({ sucess: "User registered successfully", registered: true });
+      res.json({
+        code: 200,
+        message: "User registered successfully",
+        data: { isregistered: true, user: result }
+      });
     }
   });
 }
 
 function getCountrycodes(req, res) {
-  res.send(countryData.all);
+  res.json({
+    code: 200,
+    message: "country codes fetched successfully",
+    data: countryData.all
+  });
 }
