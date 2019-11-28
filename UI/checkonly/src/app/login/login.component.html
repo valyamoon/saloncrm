@@ -37,6 +37,12 @@
   <input type="text" formControlName="email" placeholder="Email" />
   <input type="text" formControlName="address" placeholder="Address" />
   <input type="date" formControlName="dob" placeholder="Date of Birth" />
+  <input
+    type="text"
+    *ngIf="showMobileNumber"
+    formControlName="phone"
+    placeholder="Mobile Number"
+  />
 
   <button (click)="register(registerUser.value)">submit</button>
 </form>
