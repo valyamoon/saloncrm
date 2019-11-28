@@ -24,7 +24,7 @@ var userSchema = mongoose.Schema(
     },
     email: {
       type: String,
-      required: false
+      required: true
     },
     address: {
       type: String,
@@ -48,6 +48,10 @@ var userSchema = mongoose.Schema(
     },
     image: {
       type: String,
+      required: false
+    },
+    role: {
+      type: Object,
       required: false
     }
   },
