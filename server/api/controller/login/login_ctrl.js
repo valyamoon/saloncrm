@@ -83,14 +83,15 @@ function requestVerification(req, res) {
 }
 
 function verifyNumber(req, res) {
+  console.log("BODY", req.body);
   var userData = req;
   if (req.body.email) {
-    // console.log("Seeeeeeeeeeeeeeeeeeeeeeeeee");
+    console.log("Seeeeeeeeeeeeeeeeeeeeeeeeee");
 
     users.find(
       { $or: [{ email: req.body.email }, { phone: req.body.phone }] },
       (err, result) => {
-        //  console.log("resultresultresult ", result);
+        console.log("resultresultresult ", result);
 
         if (result.length == 0) {
           //  console.log("=====Hi ");
@@ -152,11 +153,29 @@ function verifyNumber(req, res) {
     //   data: [{ user: req.body }],
     //   success: true
     // });
-  } else if (req.body.phone && req.body.token) {
+  }
+  if (req.body.phone && req.body.token) {
+    console.log("In PHONE TOKEN", req.body);
+
+    // users.find(
+    //   { $and: [{ phone: req.body.phone }, { code: req.body.code }] },
+    //   (err, result) => {
+    //     console.log("error is", err);
+    //     if (err) {
+    //       res.json({ msg: "Failed to fetch contacts" });
+    //     } else {
+    //       res.send(contacts);
+    //     }
+    //   }
+    // );
+
     users.find(
-      { $and: [{ phone: req.body.phone }, { code: req.body.code }] },
+      { phone: req.body.phone, code: req.body.code },
       (err, result) => {
-        //  console.log("RESULT NOW", result);
+        if (err) {
+          console.log(err);
+        }
+        console.log("RESULT NOW", result);
         if (result.length > 0) {
           if (
             req.body.phone === result[0].phone &&
@@ -166,6 +185,7 @@ function verifyNumber(req, res) {
               _id: result[0]._id
             };
             let token = jwt.sign(params, "saloncrm", { expiresIn: "1h" });
+            console.log(token);
             if (token) {
               res.json({
                 code: 200,
@@ -187,6 +207,7 @@ function verifyNumber(req, res) {
           }
         }
         if (result.length == 0) {
+          console.log("FIOR C", req.body);
           authy
             .phones()
             .verification_check(
