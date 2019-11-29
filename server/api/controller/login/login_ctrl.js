@@ -267,7 +267,8 @@ function addUser(req, res) {
     long: req.body.long,
     isVerified: req.body.isVerified,
     dob: req.body.dob,
-    role: req.body.role
+    role: req.body.role,
+    gender: req.body.gender
   });
   //console.log("new User", newUser);
   newUser.save((err, result) => {
