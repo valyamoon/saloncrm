@@ -64,7 +64,7 @@ const options = {
 
 //process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
 process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
-//console.log("process", process.env.NODE_ENV);
+console.log("process", process.env.NODE_ENV);
 
 const config = require("./config/config").get(process.env.NODE_ENV);
 
@@ -85,8 +85,8 @@ require("./api/router")(app);
 app.use(express.static("./dist"));
 
 var port = process.env.PORT || config.port;
-//app.listen(port); //30 min
+app.listen(port); //30 min
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+// app.listen(port, () => console.log(`Listening on port ${port}`));
 
 module.exports = app;
