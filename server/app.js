@@ -8,10 +8,6 @@ const swaggerUI = require("swagger-ui-express");
 const swaggerDefinition = require("./router/swagger");
 const passport = require("passport");
 
-//const API_PORT = process.env.API_PORT || 3000;
-// var port = process.env.port || config.port;
-
-//5976
 const options = {
   swaggerDefinition,
   apis: ["./api/router/*.js"]
@@ -19,7 +15,6 @@ const options = {
 
 //process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
 process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
-console.log("process", process.env.NODE_ENV);
 
 const config = require("./config/config").get(process.env.NODE_ENV);
 
@@ -40,7 +35,6 @@ require("./api/router")(app);
 app.use(express.static("./dist"));
 
 var port = process.env.PORT || config.port;
-// app.listen(port); //30 min
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
