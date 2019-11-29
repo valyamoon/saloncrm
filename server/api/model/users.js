@@ -50,13 +50,14 @@ var userSchema = mongoose.Schema(
       type: String,
       required: false
     },
-    role: {
-      type: Object,
+    role_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'role',
       required: false
     },
     gender: {
       type: String,
-      required: false
+      enum:['male','female']
     }
   },
   { timestamps: true }
