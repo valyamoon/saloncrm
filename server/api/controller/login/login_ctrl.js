@@ -2,7 +2,8 @@
 const users = require("../../model/users");
 var express = require("express");
 var fs = require("fs");
-var authy = require("authy")("rtB8lzgc81iP0Urq2nsp1SWevc2wo6Yr");
+//var authy = require("authy")("rtB8lzgc81iP0Urq2nsp1SWevc2wo6Yr");
+var authy = require("authy")("FwkdkYQ3G8JRtrz45ETv6o5gsJQPUp6h");
 var countryData = require("country-data").countries;
 var jwt = require("jsonwebtoken");
 const commonQuery = require("../../../lib/commonQuery"),
@@ -203,7 +204,7 @@ function verifyNumber(req, res) {
 
                     message: "Mobile number verified successfully",
                     data: {
-                      user: result,
+                      user: req.body,
                       isalreadyexist: false,
                       isVerified: true
                     }
