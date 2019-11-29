@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from "../environments/environment";
+
+const baseURL = environment.apiUrl;
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -14,38 +17,22 @@ export class CommonService {
   constructor(private http: HttpClient) {}
 
   getCodes() {
-    return this.http.get("http://54.71.18.74:5977/api/codes");
+    return this.http.get(baseURL + "/api/codes");
   }
 
   submitNumber(countrycode) {
-    return this.http.post(
-      "http://54.71.18.74:5977/api/getotp",
-      countrycode,
-      httpOptions
-    );
+    return this.http.post(baseURL + "/api/getotp", countrycode, httpOptions);
   }
 
   verifyNumber(data) {
-    return this.http.post(
-      "http://54.71.18.74:5977/api/verifyotp",
-      data,
-      httpOptions
-    );
+    return this.http.post(baseURL + "/api/verifyotp", data, httpOptions);
   }
 
   addUser(data) {
-    return this.http.post(
-      "http://54.71.18.74:5977/api/registercustomer",
-      data,
-      httpOptions
-    );
+    return this.http.post(baseURL + "/api/registercustomer", data, httpOptions);
   }
   addSalon(data) {
     console.log("::", data);
-    return this.http.post(
-      "http://54.71.18.74:5977/api/salon",
-      data,
-      httpOptions
-    );
+    return this.http.post(baseURL + "/api/salon", data, httpOptions);
   }
 }
