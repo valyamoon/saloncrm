@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 
+
 var userSchema = mongoose.Schema(
   {
     code: {
@@ -51,9 +52,8 @@ var userSchema = mongoose.Schema(
       required: false
     },
     role_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref:'role',
-      required: false
+      type: mongoose.Types.ObjectId,
+      ref:'roles'
     },
     gender: {
       type: String,
