@@ -62,7 +62,7 @@ const options = {
   apis: ["./api/router/*.js"]
 };
 
-// process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
+//process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
 process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 
 const config = require("./config/config").get(process.env.NODE_ENV);
