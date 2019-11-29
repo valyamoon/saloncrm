@@ -125,13 +125,14 @@
 // };
 
 const config = {
+  port: 5977,
   local: {
     DATABASE: {
-      dbname: "salonCRM",
-      host: "mongodb://localhost:27017/",
-      port: 0,
-      username: "",
-      password: ""
+      dbname: "saloncrm",
+      host: "mongodb://54.71.18.74:27017/saloncrm",
+      port: 5977,
+      username: "saloncrm",
+      password: "DFr533456yt"
     },
     SECRET: "lthp@$12&*01",
     crypto: {
