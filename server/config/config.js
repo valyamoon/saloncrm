@@ -6,8 +6,8 @@
 //       url: "mongodb://localhost:27017/salonCRM",
 //       // url: 'mongodb://localhost:27017/Medicolegal',
 //       user: "",
-//       password: "",
-//       url: "mongodb://localhost:27017/salonCRM"
+//       password: ""
+//       // url: "mongodb://localhost:27017/salonCRM"
 //     },
 //     baseUrl: "http://localhost:3000/",
 //     backendBaseUrl: "http://localhost:3000/",
@@ -58,14 +58,13 @@
 // };
 
 const config = {
-  port: 5977,
   local: {
     DATABASE: {
       dbname: "saloncrm",
-      host: "mongodb://54.71.18.74:27017/saloncrm",
-      port: 5977,
-      username: "saloncrm",
-      password: "DFr533456yt"
+      host: "mongodb://localhost:27017/salonCRM",
+      port: 3000,
+      username: "",
+      password: ""
     },
     SECRET: "lthp@$12&*01",
     crypto: {
@@ -82,7 +81,8 @@ const config = {
       tls: {
         rejectUnauthorized: false
       }
-    }
+    },
+    port: 3000
   },
   staging: {
     port: 5977,
