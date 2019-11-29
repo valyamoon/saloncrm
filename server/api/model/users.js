@@ -53,6 +53,10 @@ var userSchema = mongoose.Schema(
     role: {
       type: Object,
       required: false
+    },
+    gender: {
+      type: String,
+      required: false
     }
   },
   { timestamps: true }
