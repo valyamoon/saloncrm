@@ -64,6 +64,7 @@ const options = {
 
 //process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
 process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
+//console.log("process", process.env.NODE_ENV);
 
 const config = require("./config/config").get(process.env.NODE_ENV);
 
@@ -73,7 +74,7 @@ app.use("/swagger.json", function(req, res) {
   res.send(swaggerSpec);
 });
 
-require("./config/db");
+require("./config/config");
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -84,8 +85,8 @@ require("./api/router")(app);
 app.use(express.static("./dist"));
 
 var port = process.env.PORT || config.port;
-app.listen(port).timeout = 1800000; //30 min
+//app.listen(port); //30 min
 
-// app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log(`Listening on port ${port}`));
 
 module.exports = app;
