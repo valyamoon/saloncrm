@@ -1,12 +1,12 @@
-const app =                  require("express")();
-const express =              require("express");
-const cors =                 require("cors");
-const bodyParser =           require("body-parser");
-const logger =               require("morgan");
-const swaggerJSDoc =         require("swagger-jsdoc");
-const swaggerUI =            require("swagger-ui-express");
-const swaggerDefinition =    require("./router/swagger");
-const passport =             require("passport");
+const app = require("express")();
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const logger = require("morgan");
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
+const swaggerDefinition = require("./router/swagger");
+const passport = require("passport");
 
 const options = {
   swaggerDefinition,
