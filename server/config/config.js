@@ -31,7 +31,7 @@ const config = {
     port: 5977,
     DATABASE: {
       dbname: "saloncrm",
-      host: "mongodb://54.71.18.74:27017/saloncrm",
+      host: "54.71.18.74",
       port: 5977,
       username: "saloncrm",
       password: "DFr533456yt"
