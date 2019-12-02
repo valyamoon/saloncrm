@@ -32,7 +32,7 @@ const config = {
     DATABASE: {
       dbname: "saloncrm",
       host: "54.71.18.74",
-      port: 5977,
+      port: 27017,
       username: "saloncrm",
       password: "DFr533456yt"
     },
