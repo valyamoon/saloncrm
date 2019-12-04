@@ -1,0 +1,2140 @@
+{
+  "swagger": "2.0",
+  "title": "Medicolegal Api Swagger",
+  "description": "Swagger Api Tool for Medicolegal api",
+  "license": {
+    "name": "MIT",
+    "url": "https://opensource.org/licenses/MIT"
+  },
+  "version": "1.0.0",
+  "host": "http://172.10.155.144:10010",
+  "basePath": "/api/v1",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/user/userRegister": {
+      "post": {
+        "tags": [
+          "User Module"
+        ],
+        "summary": "Add User by Super Admin",
+        "description": "Add User by Super Admin",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add User by Super Admin",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/userRegister"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user/lawFirmRegister": {
+      "post": {
+        "tags": [
+          "User Module"
+        ],
+        "summary": "Law firm self registration",
+        "description": "Law firm self registration",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Law firm self registration",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/lawFirmRegister"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user/editProfile": {
+      "post": {
+        "tags": [
+          "User Details Module"
+        ],
+        "summary": "Api endpoint for upload image",
+        "description": "Image uploading on server test",
+        "parameters": [
+          {
+            "name": "image",
+            "discription": "To upload Image file",
+            "in": "formData",
+            "type": "file",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/ImageUpload"
+            }
+          },
+          {
+            "name": "userId",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "firstname",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "lastname",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "email",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "username",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "phone",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "address",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "city",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "state",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "country",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          },
+          {
+            "name": "zipcode",
+            "description": "Data to edit",
+            "in": "formData",
+            "type": "string",
+            "required": "true"
+          }
+        ],
+        "produces": [
+          "multipart/form-data"
+        ],
+        "responses": {
+          "200": {
+            "description": "Data uploaded successfully",
+            "$ref": "#definitions/appResponse"
+          },
+          "400": {
+            "description": "Login Error",
+            "$ref": "#definitions/userlogin"
+          }
+        }
+      }
+    },
+    "/user/getProfile": {
+      "post": {
+        "tags": [
+          "User Details Module"
+        ],
+        "summary": "get individual User Details",
+        "description": "get User",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "get User",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getUserDetail"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user/userLogin": {
+      "post": {
+        "tags": [
+          "User Module"
+        ],
+        "summary": "User login",
+        "description": "User login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User login",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/userLogin"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user/forgotPassword": {
+      "post": {
+        "tags": [
+          "User Module"
+        ],
+        "summary": "User forgot Password",
+        "description": "User forgot Password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User forgot Password",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/forgotPassword"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user/resetPassword": {
+      "post": {
+        "tags": [
+          "User Module"
+        ],
+        "summary": "Reset Password",
+        "description": "Reset Password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Reset Password",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/resetPassword"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "$ref": "#definitions/appResponse"
+          },
+          "400": {
+            "description": "Error",
+            "$ref": "#definitions/errorResponse"
+          }
+        }
+      }
+    },
+    "/user/changePassword": {
+      "post": {
+        "tags": [
+          "User Module"
+        ],
+        "summary": "change Password",
+        "description": "change Password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "change Password",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/changePassword"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "$ref": "#definitions/appResponse"
+          },
+          "400": {
+            "description": "Error",
+            "$ref": "#definitions/errorResponse"
+          }
+        }
+      }
+    },
+    "/user/userLogout": {
+      "post": {
+        "tags": [
+          "User Module"
+        ],
+        "summary": "User Logout ",
+        "description": "User Logout",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User Logout",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/userLogout"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/clinic/addClinic": {
+      "post": {
+        "tags": [
+          "Clinic Module"
+        ],
+        "summary": "Clinic add ",
+        "description": "Clinic add",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Clinic add",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addClinic"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/clinic/editClinic": {
+      "post": {
+        "tags": [
+          "Clinic Module"
+        ],
+        "summary": "Edit Clinic ",
+        "description": "Edit Clinic",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Edit Clinic",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/editClinic"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/clinic/listClinic": {
+      "get": {
+        "tags": [
+          "Clinic Module"
+        ],
+        "summary": "List Clinic ",
+        "description": "List Clinic",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "description": "List Clinic"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/lawyer/listLawyer": {
+      "post": {
+        "tags": [
+          "Lawyer Module"
+        ],
+        "summary": "List Lawyer ",
+        "description": "List Lawyer",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "List Lawyer",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/listLawyer"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/clinic/deleteClinic": {
+      "post": {
+        "tags": [
+          "Clinic Module"
+        ],
+        "summary": "Delete Clinic ",
+        "description": "Delete Clinic",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Delete Clinic",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/deleteClinic"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/caseState/addEditCaseState": {
+      "post": {
+        "tags": [
+          "Case state Module"
+        ],
+        "summary": "add/edit case state",
+        "description": "add/edit case state",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add/edit case state",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addEditCaseState"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/caseState/getAllCaseState/": {
+      "get": {
+        "tags": [
+          "Case state Module"
+        ],
+        "summary": "get all case states",
+        "description": "get all case states",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/amaQualification/addEditQualification": {
+      "post": {
+        "tags": [
+          "AMA Qualification Module"
+        ],
+        "summary": "add/edit qualification",
+        "description": "add/edit qualification",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add/edit qualification",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addEditQualification"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/amaQualification/getAllAMA/": {
+      "get": {
+        "tags": [
+          "AMA Qualification Module"
+        ],
+        "summary": "get all Qualification",
+        "description": "get all Qualification",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/amaQualification/changeStatus": {
+      "post": {
+        "tags": [
+          "AMA Qualification Module"
+        ],
+        "summary": "change status of ama qualification",
+        "description": "change status of ama qualification",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "change status of ama qualification",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/changeStatus"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/amaQualification/deleteAMA": {
+      "post": {
+        "tags": [
+          "AMA Qualification Module"
+        ],
+        "summary": "delete Case type",
+        "description": "delete Case type",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "delete Case type",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/deleteAMA"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/role/addEditRole": {
+      "post": {
+        "tags": [
+          "Role Module"
+        ],
+        "summary": "add/edit role",
+        "description": "add/edit role",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add/edit role",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addEditRole"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/role/getAllRole/": {
+      "get": {
+        "tags": [
+          "Role Module"
+        ],
+        "summary": "get all roles",
+        "description": "get all roles",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/role/changeStatus": {
+      "post": {
+        "tags": [
+          "Role Module"
+        ],
+        "summary": "change status of role",
+        "description": "change status of role",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "change status of role",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/changeStatus"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/role/deleteRole": {
+      "post": {
+        "tags": [
+          "Role Module"
+        ],
+        "summary": "delete role",
+        "description": "delete role",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "delete role",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/deleteRole"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/casesType/addEditCaseType": {
+      "post": {
+        "tags": [
+          "Case type Module"
+        ],
+        "summary": "add/edit case type",
+        "description": "add/edit case type",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add/edit case type",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addEditCaseType"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/casesType/getAllcaseType/": {
+      "get": {
+        "tags": [
+          "Case type Module"
+        ],
+        "summary": "get all Case types",
+        "description": "get all Case types",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/casesType/changeStatus": {
+      "post": {
+        "tags": [
+          "Case type Module"
+        ],
+        "summary": "change status of caseType",
+        "description": "change status of caseType",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "change status of caseType",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/changeStatus"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/casesType/deleteCaseType": {
+      "post": {
+        "tags": [
+          "Case type Module"
+        ],
+        "summary": "delete Case type",
+        "description": "delete Case type",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "delete Case type",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/deleteCaseType"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/skills/addSkill": {
+      "post": {
+        "tags": [
+          "Skill Module"
+        ],
+        "summary": "add specialist skill",
+        "description": "add specialist skill",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add specialist skill",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addSkill"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/skills/editSkill": {
+      "post": {
+        "tags": [
+          "Skill Module"
+        ],
+        "summary": "edit specialist skill",
+        "description": "edit specialist skill",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "edit specialist skill",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/editSkill"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/skills/changeStatus": {
+      "post": {
+        "tags": [
+          "Skill Module"
+        ],
+        "summary": "change status of skill",
+        "description": "change status of skill",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "change status of skill",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/changeStatus"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/skills/deleteSkill": {
+      "post": {
+        "tags": [
+          "Skill Module"
+        ],
+        "summary": "delete skill",
+        "description": "delete skill",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "delete skill",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/deleteSkill"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/skills/getAllSkill/": {
+      "get": {
+        "tags": [
+          "Skill Module"
+        ],
+        "summary": "get all specialist skills",
+        "description": "get all specialist skills",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/country/getAllCountry/": {
+      "get": {
+        "tags": [
+          "Country Module"
+        ],
+        "summary": "get all countries list",
+        "description": "get all countries list",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/country/addCountry": {
+      "post": {
+        "tags": [
+          "Country Module"
+        ],
+        "summary": "add country ",
+        "description": "add country ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add country ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addCountry"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/country/editCountry": {
+      "post": {
+        "tags": [
+          "Country Module"
+        ],
+        "summary": "edit country",
+        "description": "edit country",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "edit country",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/editCountry"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/state/addState": {
+      "post": {
+        "tags": [
+          "State Module"
+        ],
+        "summary": "add state ",
+        "description": "add state ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add state ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addState"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/state/getAllState/": {
+      "post": {
+        "tags": [
+          "State Module"
+        ],
+        "summary": "get all state list",
+        "description": "get all stete list",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add country ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getAllState"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/specialRequirement/addEditspecialRqmt": {
+      "post": {
+        "tags": [
+          "Special requirement Module"
+        ],
+        "summary": "add/edit special requirement",
+        "description": "add/edit special requirement",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add/edit special requirement",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addEditspecialRqmt"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/specialRequirement/getAllspecialRqmt/": {
+      "get": {
+        "tags": [
+          "Special requirement Module"
+        ],
+        "summary": "get all special requirement list",
+        "description": "get all special requirement list",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user/getCalenderSetting/": {
+      "get": {
+        "tags": [
+          "Calendar setting"
+        ],
+        "summary": "get default calendar setting",
+        "description": "get default calendar setting",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/document/addFolder": {
+      "post": {
+        "tags": [
+          "Document Module"
+        ],
+        "summary": "Add folder to the document and rename ",
+        "description": "Add folder to the document and rename ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add folder to the document and rename ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addFolder"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/document/docListing": {
+      "post": {
+        "tags": [
+          "Document Module"
+        ],
+        "summary": "List of Document ",
+        "description": "List of Document",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "List Document",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/docList"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/document/deleteFileOrFolder": {
+      "post": {
+        "tags": [
+          "Document Module"
+        ],
+        "summary": "Delete folder and files",
+        "description": "Delete folder and files",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Delete folder and files",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/delFolder"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "_comment": "Complex objects have schema definitions",
+  "definitions": {
+    "appResponse": {
+      "required": "message",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "code": {
+          "type": "number"
+        }
+      }
+    },
+    "errorResponse": {
+      "required": "message",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "lawFirmRegister": {
+      "type": "object",
+      "properties": {
+        "firm_name": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "repassword": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "mobile_no": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "userType": {
+          "type": "string"
+        }
+      }
+    },
+    "userRegister": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "userType": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "zipcode": {
+          "type": "string"
+        },
+        "mobileNumber": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "reference_id": {
+          "type": "string"
+        }
+      }
+    },
+    "userLogin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "addFolder": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "folderName": {
+          "type": "string"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "isUpdate": {
+          "type": "boolean"
+        },
+        "isParent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "delFolder": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "isParent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "forgotPassword": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "resetPassword": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "resetkey": {
+          "type": "string"
+        }
+      }
+    },
+    "changePassword": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "newRepassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "addEditCaseState": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "addEditCaseType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "string"
+        },
+        "pricing": {
+          "type": "string"
+        },
+        "review_report_pricing": {
+          "type": "string"
+        },
+        "sort_order": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "addEditspecialRqmt": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "addEditQualification": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "addState": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "country_id": {
+          "type": "string"
+        }
+      }
+    },
+    "addCountry": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "getAllState": {
+      "type": "object",
+      "properties": {
+        "country_id": {
+          "type": "string"
+        }
+      }
+    },
+    "editCountry": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "addSkill": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "editSkill": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "changeStatus": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "deleteSkill": {
+      "type": "object",
+      "properties": {
+        "delete": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "deleteCaseType": {
+      "type": "object",
+      "properties": {
+        "delete": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "addEditRole": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "deleteRole": {
+      "type": "object",
+      "properties": {
+        "delete": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "deleteAMA": {
+      "type": "object",
+      "properties": {
+        "delete": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "addClinic": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "registration_no": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        }
+      }
+    },
+    "editClinic": {
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "registration_no": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "isDeleted": {
+          "type": "boolean"
+        }
+      }
+    },
+    "deleteClinic": {
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getUserDetail": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        }
+      }
+    },
+    "listLawyer": {
+      "type": "object",
+      "properties": {
+        "rolename": {
+          "type": "string"
+        }
+      }
+    },
+    "docList": {
+      "type": "object",
+      "properties": {
+        "sharedWith": {
+          "type": "string"
+        },
+        "createdBY": {
+          "type": "string"
+        },
+        "searchText": {
+          "type": "string"
+        },
+        "count": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        }
+      }
+    },
+    "/lawyer/deleteLawyer": {
+      "post": {
+        "tags": [
+          "Lawyer Details Module"
+        ],
+        "summary": "Delete Lawyer from system",
+        "description": "Delete Lawyer from system",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Delete Lawyer from system",
+            "required": true,
+            "schema": {
+              "$ref": "#definitions/deleteUser"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}
