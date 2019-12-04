@@ -331,6 +331,16 @@ function login(req, res) {
       if (req.body.email && req.body.password) {
         let conditionToCheck = { email: req.body.email };
         let findUser = await query.findoneData(user, conditionToCheck);
+        if (!findUser.data) {
+          res.json(
+            Response(
+              constant.statusCode.validation,
+              constant.messages.requiredFieldsMissing,
+              null
+            )
+          );
+        } else {
+        }
       }
     } catch (error) {}
   }
