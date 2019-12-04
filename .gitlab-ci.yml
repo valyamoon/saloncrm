@@ -23,4 +23,4 @@ deploy-dev:
   stage: deploy
   script:
     - cd backend
-    - pm2 start app.js --name "MEAN-saloncrm"
+    - pm2 restart app.js --name "MEAN-saloncrm"
