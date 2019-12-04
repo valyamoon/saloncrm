@@ -1,7 +1,4 @@
 module.exports = function(router) {
-  //var utils = require('../../../../lib/util');
-  // var middlewares = [utils.ensureAuthorized];
-
   var user = require("./controllers/user_ctrl");
 
   //  var lawfirm = require('./controllers/lawfirms_ctrl');
@@ -12,6 +9,7 @@ module.exports = function(router) {
   router.get("/user/countrycodes", user.getCountryCodes);
   router.post("/user/verifyotp", user.verifyUser);
   router.post("/user/register", user.registerUser);
+  router.post("user/login", user.login);
   //   router.post("/user/login", user.login);
   //   router.post("/user/forgotPassword", user.forgotPassword);
   //   router.post("/user/checkUrl", user.checkUrl);

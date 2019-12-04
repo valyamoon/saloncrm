@@ -24,7 +24,8 @@ module.exports = {
   requestVerification: requestVerification,
   getCountryCodes: getCountryCodes,
   verifyUser: verifyUser,
-  registerUser: registerUser
+  registerUser: registerUser,
+  login: login
 };
 
 function requestVerification(req, res) {
@@ -94,6 +95,7 @@ function verifyUser(req, res) {
           $or: [{ email: req.body.email }, { phone: req.body.phone }]
         };
         let findUser = await query.findoneData(user, condition);
+        console.log("FindUser", findUser);
 
         if (!findUser.data) {
           authy
@@ -106,9 +108,12 @@ function verifyUser(req, res) {
                 if (err) {
                   return res.json(
                     Response(
-                      constant.statusCode.validation,
-                      err["message"],
-                      null
+                      constant.statusCode.ok,
+                      constant.messages.userNotFound,
+                      {
+                        isalreadyexist: false,
+                        isVerified: true
+                      }
                     )
                   );
                 } else {
@@ -128,8 +133,10 @@ function verifyUser(req, res) {
               }
             );
         } else {
+          //console.log("formdataispresent", findUser.data);
+
           let params = {
-            _id: findUser._id
+            _id: findUser.data._id
           };
 
           token = jwt.sign(params, "saloncrm", { expiresIn: "1h" });
@@ -139,7 +146,7 @@ function verifyUser(req, res) {
               constant.statusCode.ok,
               constant.messages.userAlreadyExist,
               {
-                user: findUser,
+                user: findUser.data,
                 token: token,
                 isalreadyexist: true,
                 isVerified: true
@@ -276,7 +283,7 @@ function registerUser(req, res) {
             let token = jwt.sign(params, "saloncrm", { expiresIn: "1h" });
             res.json(
               Response(
-                constant.statusCode.alreadyExist,
+                constant.statusCode.ok,
                 constant.messages.userAlreadyExist,
                 {
                   user: findUser.data,
@@ -316,4 +323,16 @@ function registerUser(req, res) {
     }
   }
   registerUser().then(function(data) {});
+}
+
+function login(req, res) {
+  async function login() {
+    try {
+      if (req.body.email && req.body.password) {
+        let conditionToCheck = { email: req.body.email };
+        let findUser = await query.findoneData(user, conditionToCheck);
+      }
+    } catch (error) {}
+  }
+  login().then(function(data) {});
 }
