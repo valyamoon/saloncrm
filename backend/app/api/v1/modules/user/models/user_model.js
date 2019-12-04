@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
-
+var SALT_WORK_FACTOR = 10;
+var bcrypt = require("bcrypt");
 
 var userSchema = mongoose.Schema(
   {
@@ -9,8 +10,7 @@ var userSchema = mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
-      unique: true
+      required: false
     },
     loggedInVia: {
       type: String
@@ -25,7 +25,8 @@ var userSchema = mongoose.Schema(
     },
     email: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     address: {
       type: String,
@@ -53,13 +54,31 @@ var userSchema = mongoose.Schema(
     },
     role_id: {
       type: mongoose.Types.ObjectId,
-      ref:'roles'
+      ref: "roles"
     },
     gender: {
       type: String,
-      enum:['male','female']
+      enum: ["male", "female"]
+    },
+    password: {
+      type: String,
+      default: "salon"
     }
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", function(next) {
+  var users = this;
+  if (!users.isModified("password")) return next();
+  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    if (err) return next(err);
+    bcrypt.hash(users.password, salt, function(err, hash) {
+      if (err) return next(err);
+      users.password = hash;
+      next();
+    });
+  });
+});
+
 var users = (module.exports = mongoose.model("users", userSchema));
