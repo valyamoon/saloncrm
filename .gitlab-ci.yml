@@ -1,7 +1,7 @@
 image: 'node:latest'
 cache:
   paths:
-    - server/node_modules/
+    - backend/node_modules/
 stages:
   - build
   - deploy
@@ -10,7 +10,7 @@ build-dev:
   tags:
     - staging
   script:
-    - cd server
+    - cd backend
     - npm install
  
   only:
@@ -22,5 +22,5 @@ deploy-dev:
     - staging
   stage: deploy
   script:
-    - cd server
-    - pm2 restart app.js --name "MEAN-saloncrm"
+    - cd backend
+    - pm2 start app.js --name "MEAN-saloncrm"
