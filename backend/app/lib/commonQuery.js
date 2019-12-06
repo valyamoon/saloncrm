@@ -7,6 +7,7 @@
 
 var constant = require('../config/constant');
 var mongoose = require('mongoose');
+var fs =  require('fs');
 
 
 var path = require('path');
@@ -596,5 +597,32 @@ commonQuery.findData = function findData(model, cond, fetchVal) {
         });
     })
 }
+
+commonQuery.fileUpload = function fileUpload(imagePath, buffer) {
+
+    console.log("imagePath",imagePath,buffer);
+    return new Promise((resolve, reject) => {
+        try {
+            let tempObj = {
+                status: false
+            }
+            fs.writeFile(imagePath, buffer, function (err) {
+                if (err) {
+                    tempObj.error = err;
+                    reject(err);
+                } else {
+                    tempObj.status = true;
+                    tempObj.message = 'uploaded';
+                    resolve(tempObj);
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+
+
 
 module.exports = commonQuery;

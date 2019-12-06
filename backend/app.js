@@ -2,6 +2,7 @@
 
 var express = require("express");
 var bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload");
 var path = require("path");
 var http = require("http");
 var https = require("https");
@@ -28,12 +29,13 @@ global.__debug = function() {
 
 var app = express();
 app.use(cors());
+app.use(fileUpload());
 
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-//process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
-process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
+process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
+//process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
 // process.env.NODE_ENV = process.env.NODE_ENV || 'prod';    //prod server (mdout.com)
 
@@ -48,6 +50,7 @@ app.use(bodyParser.json());
 
 // routes
 app.use("/uploads", express.static(path.join(__dirname, "./app/uploads")));
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/modules/dashboard")));
 app.use(express.static(path.join(__dirname, "public/dist")));
