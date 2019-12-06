@@ -1,7 +1,6 @@
 "use strict";
 
 var express = require("express");
-const fileUpload = require("express-fileupload");
 var bodyParser = require("body-parser");
 var path = require("path");
 var http = require("http");
@@ -11,8 +10,7 @@ var fs = require("fs");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./app/swagger/swagger.json");
 var cors = require("cors");
-//const cron = require("node-cron");
-//var logger = require("./app/lib/logger");
+
 
 global.__rootRequire = function(relpath) {
   return require(path.join(__dirname, relpath));
@@ -30,12 +28,12 @@ global.__debug = function() {
 
 var app = express();
 app.use(cors());
-app.use(fileUpload());
+
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-//process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
-process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
+process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
+//process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
 // process.env.NODE_ENV = process.env.NODE_ENV || 'prod';    //prod server (mdout.com)
 
@@ -71,7 +69,8 @@ app.use(function(req, res, next) {
   }
 });
 
-app.use("/api/v1", require("./app/api/v1/routes")(express));
+app.use("/api", require("./app/api/routes")(express));
+
 
 // start server
 var port = process.env.PORT || config.port;

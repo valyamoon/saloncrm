@@ -9,8 +9,7 @@ var userSchema = mongoose.Schema(
       required: false
     },
     phone: {
-      type: String,
-      required: false
+      type: String
     },
     loggedInVia: {
       type: String
@@ -34,18 +33,16 @@ var userSchema = mongoose.Schema(
     },
     lat: {
       type: String,
-      required: false
+      required: false,
+      default:null
     },
     long: {
       type: String,
-      required: false
+      required: false,
+      default:null
     },
     isVerified: {
       type: Boolean,
-      required: false
-    },
-    dob: {
-      type: Date,
       required: false
     },
     image: {
@@ -58,15 +55,27 @@ var userSchema = mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ["male", "female"]
+      default:null
     },
     password: {
       type: String,
-      default: "salon"
+      default: "xyzzqurk"
+    },
+    isActive: {
+      type: Boolean,
+      default:true
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    },
+    deviceToken:{
+        type:String,
+        default:null
     }
   },
   { timestamps: true }
-);
+)
 
 userSchema.pre("save", function(next) {
   var users = this;
@@ -75,10 +84,21 @@ userSchema.pre("save", function(next) {
     if (err) return next(err);
     bcrypt.hash(users.password, salt, function(err, hash) {
       if (err) return next(err);
+      hashKey = hash;
       users.password = hash;
       next();
     });
   });
 });
+
+
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
+  console.log(this.password, "candidatePassword", typeof(candidatePassword),typeof(this.password));
+  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+    console.log("============",err,isMatch)
+    if (err) return cb(err);
+    cb(null, isMatch);
+  });
+};
 
 var users = (module.exports = mongoose.model("users", userSchema));

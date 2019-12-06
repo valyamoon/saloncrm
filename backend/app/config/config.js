@@ -4,8 +4,6 @@ const config = {
   local: {
     port: 3001,
     db: {
-      // url: 'mongodb://localhost:27017/Medicolegal'
-      // url: 'mongodb://localhost:27017/Medicolegal',
       user: "",
       password: "",
       url: "mongodb://localhost:27017/salonCRM"
