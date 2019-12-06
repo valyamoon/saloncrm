@@ -32,8 +32,8 @@ app.use(cors());
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
-//process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
+//process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
+process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
 // process.env.NODE_ENV = process.env.NODE_ENV || 'prod';    //prod server (mdout.com)
 
