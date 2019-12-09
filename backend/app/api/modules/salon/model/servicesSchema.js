@@ -5,10 +5,6 @@ var serviceSchema = mongoose.Schema({
     type: String,
     required: false
   },
-  location: {
-    type: [Number],
-    default: [0, 0]
-  },
   isActive: {
     type: Boolean,
     default: true
@@ -18,16 +14,13 @@ var serviceSchema = mongoose.Schema({
     default: false
   },
   duration: {
-    type: String
-  },
-  salonaddress: {
-    type: String
+    type: Number
   },
   user_id: {
     type: mongoose.Types.ObjectId,
     ref: "users"
   },
-  image: {
+  logo: {
     type: String,
     default: null
   }

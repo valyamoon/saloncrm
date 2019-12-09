@@ -2,7 +2,7 @@
 
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
-const authy = require("authy")("7xYu5sI2Pwp1evOR8pwoWtj5pIcU11rp");
+const authy = require("authy")("Y23QOjmAiKdXpEU1MEVAp1g99X77QqFp");
 const jwt = require("jsonwebtoken");
 
 //const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
@@ -118,7 +118,8 @@ function verifyUser(req, res) {
 
   async function verifyUser() {
     try {
-      if (req.body.phone || req.body.email) {
+      if (req.body.phone) {
+        console.log("vvvvv");
         authy
           .phones()
           .verification_check(
@@ -134,15 +135,19 @@ function verifyUser(req, res) {
                   })
                 );
               } else {
-                let condition = {};
+                let condition = { phone: req.body.phone};
 
-                if (req.body.phone) {
-                  condition = { phone: req.body.phone };
-                } else if (req.body.email) {
-                  condition = { email: req.body.email };
-                } else {
-                  condition = {phone: req.body.phone,email:req.body.email};
-                }
+                console.log("svghsvhsv");
+
+                // if (req.body.phone) {
+                //   condition = { phone: req.body.phone };
+                // } else if (req.body.email) {
+                //   condition = { email: req.body.email };
+                // } else {
+                //   condition = {phone: req.body.phone,email:req.body.email};
+                // }
+
+                console.log("cpm",condition);
 
                 let findUser = await commonQuery.findoneData(users, condition);
                 if (!findUser) {
@@ -199,6 +204,69 @@ function verifyUser(req, res) {
               }
             }
           );
+      }
+      else if(req.body.email){
+        let condition = { email: req.body.email};
+
+        console.log("svghsvhsv");
+
+        console.log("cpm",condition);
+
+        let findUser = await commonQuery.findoneData(users, condition);
+        if (!findUser) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.USER_NOT_FOUND, {
+              user: req.body,
+              isalreadyexist: false,
+              isVerified: true
+            })
+          );
+        } else {
+          let params = {
+            _id: findUser._id
+          };
+
+          let deviceTokenToUpdate = {
+            deviceToken: req.body.deviceToken
+          };
+
+          let updateDeviceTokenData = await  commonQuery.updateOneDocument(
+            users,
+            params,
+            deviceTokenToUpdate
+          );
+
+          if (!updateDeviceTokenData) {
+            res.json(
+              Response(
+                constant.ERROR_CODE,
+                constant.REQURIED_FIELDS_NOT,
+                null
+              )
+            );
+          } else {
+             console.log("updatedDeviceToken",updateDeviceTokenData);
+            var userUpdatedData = updateDeviceTokenData;
+          }
+
+          token = jwt.sign(params, jwtKey, { expiresIn: expiry });
+
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.USER_ALREADY_EXIST,
+              {
+                user: userUpdatedData,
+                token: token,
+                isalreadyexist: true,
+                isVerified: true
+              }
+            )
+          );
+        }
+
+
+
       }
     } catch (error) {
       return res.json(
