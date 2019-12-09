@@ -23,6 +23,14 @@ var salonSchema = mongoose.Schema({
   salonaddress: {
     type: String
   },
+  opentime: {
+    type: Number,
+    default:null
+  },
+  closetime: {
+    type: Number,
+    default:null
+  },
   user_id: {
     type: mongoose.Types.ObjectId,
     ref: "users"
