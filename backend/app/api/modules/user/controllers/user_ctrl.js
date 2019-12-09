@@ -5,8 +5,8 @@ const utility = require("../../../../lib/utility.js");
 const authy = require("authy")("7xYu5sI2Pwp1evOR8pwoWtj5pIcU11rp");
 const jwt = require("jsonwebtoken");
 
-const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
-//const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
+//const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
+const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 
 
 
