@@ -18,7 +18,8 @@ const commonQuery = require("../../../../lib/commonQuery.js");
 
 module.exports = {
   saveSalonDetails: saveSalonDetails,
-  getSalons: getSalons
+  getSalons: getSalons,
+  addServices:addServices
 };
 
 function saveSalonDetails(req, res) {
@@ -172,4 +173,21 @@ function getSalons(req, res) {
   }
 
   getSalons().then(function() {});
+}
+
+function addServices(req, res) {
+
+  console.log(req.body);
+
+  async function addServices(){
+
+
+
+
+
+
+  }
+
+  addServices().then(function(){});
+
 }
