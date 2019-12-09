@@ -623,6 +623,42 @@ commonQuery.fileUpload = function fileUpload(imagePath, buffer) {
 }
 
 
+commonQuery.fetch_all_paginated = function fetch_all_paginated(model, cond = {},pageSize,page) {
+    //console.log("inFETCHALLPAGINATED",model,cond,pageSize.page);
+    return new Promise(function (resolve, reject) {
+
+        let pageSizes = pageSize;
+        let currentPage = page;
+      //  console.log("pageSizes",pageSizes);
+       // console.log("currentPage",currentPage);
+        if(cond){
+            cond = cond;
+        }
+        else{
+            cond = {};
+        }
+
+        let postQuery =  model.find(cond);
+
+        if(pageSizes && currentPage){
+            postQuery.skip(pageSizes *  (currentPage - 1))
+            .limit(pageSizes);
+
+        }
+        postQuery.then(result=>{
+            console.log(result);
+            resolve(result);
+
+        })
+        .catch(error=>{
+            console.log(error);
+            reject(error);
+        })
+    })
+}
+
+
+
 
 
 module.exports = commonQuery;
