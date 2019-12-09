@@ -5,8 +5,8 @@ const utility = require("../../../../lib/utility.js");
 const authy = require("authy")("7xYu5sI2Pwp1evOR8pwoWtj5pIcU11rp");
 const jwt = require("jsonwebtoken");
 
-//const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
-const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
+const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
+//const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 
 
 
@@ -34,7 +34,8 @@ module.exports = {
   login: login,
   forgotPassword: forgotPassword,
   updateUser: updateUser,
-  logoutUser: logoutUser
+  logoutUser: logoutUser,
+  getAllUsers:getAllUsers
 };
 
 // /* Function is use to Request Otp
@@ -435,83 +436,127 @@ function updateUser(req, res) {
   console.log("InUpdate USer CHeck",req.files);
 
   async function updateUser() {
+
+
+
+    
+    console.log("Innnnn");
     var image_path;
+    let updatedUserData={}
     try {
-      let updatedUserData={}
+
+    
       if (req.body && req.body._id) {
         let condition = { _id: req.body._id, isDeleted: false, isActive: true };
 
-        mkdirp(constant.PROFILEIMAGE, async function(err) {
-          let timeStamp = Date.now();
+        if(req.files){
 
-          let extension;
-          if (err) {
-            return res.json(
-              Response(constant.ERROR_CODE, constant.INTERNAL_ERROR, err)
+          mkdirp(constant.PROFILEIMAGE, async function(err) {
+            let timeStamp = Date.now();
+  
+            let extension;
+            if (err) {
+              return res.json(
+                Response(constant.ERROR_CODE, constant.INTERNAL_ERROR, err)
+              );
+            } else {
+              let db_path = "";
+              let path = "";
+              if (req.files) {
+                extension = req.files.profilepic.name.split(".");
+                let imgOriginalName = req.files.profilepic.name;
+                path = constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
+                db_path = webUrl + timeStamp + "_" + imgOriginalName;
+  
+              }
+              if (db_path) {
+                //image_path= db_path;
+                image_path = db_path;
+                console.log("CHHHHHHHHHHHHHH",updatedUserData)
+              }
+              if (path != '') {
+                let extensionArray = ["jpg", "jpeg", "png", "jfif"];
+                let format = extension[extension.length - 1];
+                if (extensionArray.includes(format)) {
+                    let result = await commonQuery.fileUpload(path, (req.files.profilepic.data)).then( async data=>{
+                     console.log('dtatatatatat 464',data)
+                      if(data.status){
+                         updatedUserData = {
+                          firstName: req.body.firstName,
+                          lastName: req.body.lastName,
+                          address: req.body.address,
+                          profilepic:image_path
+                          
+                        };
+                        console.log("updatedUserDataImage",updatedUserData);
+                        let userUpdated = await commonQuery.updateOneDocument(
+                          users,
+                          condition,
+                          updatedUserData
+                        );
+                
+                        if (!userUpdated) {
+                          res.json(
+                            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+                          );
+                        } else {
+                          console.log("updatedUser", userUpdated);
+                          //delete userUpdated.password;
+                          res.json(
+                            Response(constant.SUCCESS_CODE, constant.USER_UPDATED, userUpdated)
+                          );
+                        }
+                      }else{
+                        console.log("updatedUser nottttttttttttttttt", );
+  
+                      }
+                    });
+                    console.log("ImageKaResult",result);
+                }
+                else {
+                    return res.json(Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED));
+                }
+            } 
+  
+  
+            }
+          });
+  
+
+
+        }
+        else if(!req.files){
+          updatedUserData = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            address: req.body.address
+            
+          };
+          console.log("updatedUserDataImage",updatedUserData);
+          let userUpdated = await commonQuery.updateOneDocument(
+            users,
+            condition,
+            updatedUserData
+          );
+  
+          if (!userUpdated) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
             );
           } else {
-            let db_path = "";
-            let path = "";
-            if (req.files) {
-              extension = req.files.profilepic.name.split(".");
-              let imgOriginalName = req.files.profilepic.name;
-              path = constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
-              db_path = webUrl + timeStamp + "_" + imgOriginalName;
-
-            }
-            if (db_path) {
-              //image_path= db_path;
-              image_path = db_path;
-              console.log("CHHHHHHHHHHHHHH",updatedUserData)
-            }
-            if (path != '') {
-              let extensionArray = ["jpg", "jpeg", "png", "jfif"];
-              let format = extension[extension.length - 1];
-              if (extensionArray.includes(format)) {
-                  let result = await commonQuery.fileUpload(path, (req.files.profilepic.data)).then( async data=>{
-                   console.log('dtatatatatat 464',data)
-                    if(data.status){
-                       updatedUserData = {
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName,
-                        address: req.body.address,
-                        profilepic:image_path
-                        
-                      };
-                      console.log("updatedUserDataImage",updatedUserData);
-                      let userUpdated = await commonQuery.updateOneDocument(
-                        users,
-                        condition,
-                        updatedUserData
-                      );
-              
-                      if (!userUpdated) {
-                        res.json(
-                          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-                        );
-                      } else {
-                        console.log("updatedUser", userUpdated);
-                        //delete userUpdated.password;
-                        res.json(
-                          Response(constant.SUCCESS_CODE, constant.USER_UPDATED, userUpdated)
-                        );
-                      }
-                    }else{
-                      console.log("updatedUser nottttttttttttttttt", );
-
-                    }
-                  });
-                  console.log("ImageKaResult",result);
-              }
-              else {
-                  return res.json(Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED));
-              }
-          } 
-
-
+            console.log("updatedUser", userUpdated);
+            //delete userUpdated.password;
+            res.json(
+              Response(constant.SUCCESS_CODE, constant.USER_UPDATED, userUpdated)
+            );
           }
-        });
 
+
+
+
+        }
+
+       
 
      
       } else {
@@ -565,4 +610,46 @@ function logoutUser(req, res) {
     } catch (error) {}
   }
   logoutUser().then(function(data) {});
+}
+
+
+function getAllUsers(req,res){
+  console.log(req.query);
+async function getAllUsers(){
+
+  let pageSize =  +req.query.pageSize || +req.body.pageSize;
+  let currentPage = +req.query.page || req.body.page;
+
+
+  console.log("InUserPageSize",pageSize);
+  console.log("currentPage",currentPage);
+
+  try{
+
+    if(req.body){
+      let condition = {};
+      let fethedUsers = await commonQuery.fetch_all_paginated(users, condition, pageSize,currentPage);
+
+      if(!fethedUsers){
+        res.json(
+          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+        );
+      }
+      else{
+        res.json(Response(constant.SUCCESS_CODE,constant.FETCHED_ALL_USERS,fethedUsers));
+      }
+
+
+    }
+
+
+  }
+  catch(error){
+
+  }
+
+}
+
+getAllUsers().then(function(){});
+
 }

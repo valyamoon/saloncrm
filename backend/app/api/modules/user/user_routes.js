@@ -1,6 +1,6 @@
 module.exports = function(router) {
   var user = require("./controllers/user_ctrl");
-  var salon = require("./controllers/salon_ctrl");
+
   // var utils = __rootRequire('app/lib/util');
   var utils = require("../../../lib/util");
   var middlewares = [utils.ensureAuthorized];
@@ -13,10 +13,9 @@ module.exports = function(router) {
   router.post("/login", user.login);
   router.post("/forgotpassword", user.forgotPassword);
   router.post("/updateuser", user.updateUser); //need to add authorization
-  router.post('/logout',user.logoutUser)
+  router.post('/logout',user.logoutUser);
+  router.post('/users',user.getAllUsers);
 
-  router.post("/addsalon", salon.saveSalonDetails);
-  router.post("/searchsalon", salon.getSalons);
 
   // router.get('/listUser', middlewares, user.getUserList);
   return router;

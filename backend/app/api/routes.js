@@ -3,5 +3,6 @@ module.exports = function(express) {
   console.log("one--------------");
   // user
   require("./modules/user/user_routes")(router);
+  require("./modules/salon/salon_routes")(router);
   return router;
 };

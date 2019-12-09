@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
-const roles = require("../model/rolesSchema");
+const roles = require("../../user/model/rolesSchema");
 const salon = require("../model/salonSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
@@ -35,16 +35,16 @@ function saveSalonDetails(req, res) {
         let checkUser = await commonQuery.findoneData(users, conditon);
 
         if (!checkUser) {
-          console.log("NAHI HAI");
+         
         } else {
-          console.log("checkUser", checkUser);
+          
           let locations = {};
           let long = req.body.long;
           console.log(long);
           let lat = req.body.lat;
           console.log(lat);
           locations = [long, lat];
-          console.log("LOCATION", locations);
+         
           let salonData = new salon({
             name: req.body.name,
             location: locations,
@@ -53,7 +53,7 @@ function saveSalonDetails(req, res) {
             user_id: req.body.user_id,
             image: req.body.image
           });
-          console.log("salonData", salonData);
+          
 
           let saveSalon = await commonQuery.InsertIntoCollection(
             salon,
@@ -83,38 +83,86 @@ function saveSalonDetails(req, res) {
 
   saveSalonDetails().then(function(data) {});
 }
+
 function getSalons(req, res) {
+  //console.log("InREQUEST", req.query);
+  let pageSize = +req.query.pageSize || +req.body.pageSize;
+  let currentPage = +req.query.page || req.body.page;
+  
   console.log(req.body);
   async function getSalons() {
-    console.log("AndarAARA");
+  
 
     try {
       if (req.body && req.body.lat && req.body.long) {
-        salon.find(
-          {
-            location: {
-              $geoWithin: {
-                $centerSphere: [[req.body.long, req.body.lat], 500 / 3963.2]
-              }
+
+
+        
+
+
+      //  { $or:[ {'_id':objId}, {'name':param}, {'nickname':param} ]}
+        let conditon = {
+          location: {
+            $geoWithin: {
+              $centerSphere: [[req.body.long, req.body.lat], 500 / 3963.2]
             }
           },
-          (err, result) => {
-            if (err) {
-              res.json(
-                Response(
-                  constant.ERROR_CODE,
-                  constant.REQURIED_FIELDS_NOT,
-                  null
-                )
-              );
-            } else {
-              console.log(result);
-              res.json(
-                Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, result)
-              );
-            }
-          }
+          name:new RegExp(req.body.name, 'gi')
+        }
+        let salonLists = await commonQuery.fetch_all_paginated(
+          salon,
+          conditon,
+          pageSize,
+          currentPage
         );
+
+        if (!salonLists) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, salonLists)
+          );
+        }
+      } else if (req.body.name) {
+       
+        let conditon = { name: req.body.name };
+        let salonList = await commonQuery.fetch_all_paginated(
+          salon,
+          conditon,
+          pageSize,
+          currentPage
+        );
+
+        
+        if (!salonList) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+          );
+        } else {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, salonList)
+          );
+        }
+      } else {
+        let conditon = {};
+        let salonLists = await commonQuery.fetch_all_paginated(
+          salon,
+          conditon,
+          pageSize,
+          currentPage
+        );
+
+        if (salonLists) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, salonLists)
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+          );
+        }
       }
     } catch (error) {
       return res.json(
