@@ -9,6 +9,7 @@ module.exports = function(router) {
 
   router.post("/addsalon", salon.saveSalonDetails);
   router.post("/searchsalon", salon.getSalons);
+  router.post('/addservice',salon.addServices);
 
   // router.get('/listUser', middlewares, user.getUserList);
   return router;
