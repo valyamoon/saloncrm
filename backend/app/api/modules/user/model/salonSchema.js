@@ -5,13 +5,9 @@ var salonSchema = mongoose.Schema({
     type: String,
     required: false
   },
-  lat:{
-      type:String,
-      default:null
-  },
-  long:{
-      type:String,
-      default:null
+  location: {
+    type: [Number],
+    default: [0, 0]
   },
   isActive: {
     type: Boolean,
@@ -21,20 +17,19 @@ var salonSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  phone:{
-      type:String,
-      
+  contact: {
+    type: String
   },
-  address:{
-    type:String
+  salonaddress: {
+    type: String
   },
-  user_id:{
+  user_id: {
     type: mongoose.Types.ObjectId,
     ref: "users"
   },
-  image:{
-      type:String,
-      default:null
+  image: {
+    type: String,
+    default: null
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));

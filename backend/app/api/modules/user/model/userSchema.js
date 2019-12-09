@@ -34,12 +34,12 @@ var userSchema = mongoose.Schema(
     lat: {
       type: String,
       required: false,
-      default:null
+      default: null
     },
     long: {
       type: String,
       required: false,
-      default:null
+      default: null
     },
     isVerified: {
       type: Boolean,
@@ -55,7 +55,7 @@ var userSchema = mongoose.Schema(
     },
     gender: {
       type: String,
-      default:null
+      default: null
     },
     password: {
       type: String,
@@ -63,19 +63,23 @@ var userSchema = mongoose.Schema(
     },
     isActive: {
       type: Boolean,
-      default:true
+      default: true
     },
     isDeleted: {
       type: Boolean,
       default: false
     },
-    deviceToken:{
-        type:String,
-        default:null
+    deviceToken: {
+      type: String,
+      default: null
+    },
+    profilepic: {
+      type: String,
+      default: null
     }
   },
   { timestamps: true }
-)
+);
 
 userSchema.pre("save", function(next) {
   var users = this;
@@ -91,11 +95,15 @@ userSchema.pre("save", function(next) {
   });
 });
 
-
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
-  console.log(this.password, "candidatePassword", typeof(candidatePassword),typeof(this.password));
+  console.log(
+    this.password,
+    "candidatePassword",
+    typeof candidatePassword,
+    typeof this.password
+  );
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    console.log("============",err,isMatch)
+    console.log("============", err, isMatch);
     if (err) return cb(err);
     cb(null, isMatch);
   });
