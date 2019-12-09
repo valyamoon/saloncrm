@@ -2,6 +2,7 @@
 
 var express = require("express");
 var bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload");
 var path = require("path");
 var http = require("http");
 var https = require("https");
@@ -28,6 +29,7 @@ global.__debug = function() {
 
 var app = express();
 app.use(cors());
+app.use(fileUpload());
 
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -48,6 +50,7 @@ app.use(bodyParser.json());
 
 // routes
 app.use("/uploads", express.static(path.join(__dirname, "./app/uploads")));
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/modules/dashboard")));
 app.use(express.static(path.join(__dirname, "public/dist")));
@@ -76,4 +79,8 @@ app.use("/api", require("./app/api/routes")(express));
 var port = process.env.PORT || config.port;
 app.listen(port).timeout = 1800000; //30 min
 console.log("Available on:", config.backendBaseUrl);
+module.exports.urlInUser = {
+   url : config.backendBaseUrl
+}
+
 //logger.info("Listening on " + config.backendBaseUrl);

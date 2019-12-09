@@ -24,7 +24,7 @@ function ensureAuthorized(req, res, next) {
     if (typeof bearerHeader !== 'undefined') {
         var bearer = bearerHeader.split(" ");
         bearerToken = bearer[1];
-        jwt.verify(bearerToken, "crm@$12&*01", function (err, decoded) {
+        jwt.verify(bearerToken, "saloncrm", function (err, decoded) {
             console.log("decoded ================= ", err, decoded)
             req.user = decoded;
             if (err) {
