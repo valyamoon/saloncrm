@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 
 
 __rootRequire("app/api/modules/user/model/userSchema");
-__rootRequire("app/api/modules/user/model/salonSchema");
+__rootRequire("app/api/modules/salon/model/salonSchema");
 
 
 
