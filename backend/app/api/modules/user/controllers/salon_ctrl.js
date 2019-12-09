@@ -108,6 +108,7 @@ function getSalons(req, res) {
                 )
               );
             } else {
+              console.log(result);
               res.json(
                 Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, result)
               );
