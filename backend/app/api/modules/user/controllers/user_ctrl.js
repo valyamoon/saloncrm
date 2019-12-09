@@ -8,8 +8,6 @@ const jwt = require("jsonwebtoken");
 //const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 
-
-
 const jwtKey = "saloncrm";
 const mkdirp = require("mkdirp");
 const multer = require("multer");
@@ -35,7 +33,7 @@ module.exports = {
   forgotPassword: forgotPassword,
   updateUser: updateUser,
   logoutUser: logoutUser,
-  getAllUsers:getAllUsers
+  getAllUsers: getAllUsers
 };
 
 // /* Function is use to Request Otp
@@ -45,8 +43,6 @@ module.exports = {
 //  * @smartData Enterprises (I) Ltd
 //  * Created Date
 //  */
-
- 
 
 function requestVerification(req, res) {
   console.log(req.body);
@@ -117,90 +113,92 @@ function getCountryCodes(req, res) {
 //  */
 
 function verifyUser(req, res) {
-  console.log("verifyOTP", req.body);
+  console.log("rerere", req.body);
+  let token;
+
   async function verifyUser() {
     try {
-      if (req.body.email || req.body.phone) {
-        let condition = {};
-        if (req.body.email) {
-          condition = { email: req.body.email };
-        } else if (req.body.phone) {
-          condition = { phone: req.body.phone };
-        } else {
-          condition = { email: req.body.email, phone: req.body.phone };
-        }
-        console.log("YAHA AATA");
-        let token;
+      if (req.body.phone || req.body.email) {
+        authy
+          .phones()
+          .verification_check(
+            req.body.phone,
+            req.body.code,
+            req.body.token,
+            async function(err, result) {
+              if (err) {
+                return res.json(
+                  Response(constant.ERROR_CODE, constant.INVALID_OTP, {
+                    isalreadyexist: false,
+                    isVerified: true
+                  })
+                );
+              } else {
+                let condition = {};
 
-        let findUser = await commonQuery.findoneData(users, condition);
-        console.log("FindUser", findUser);
-
-        if (!findUser) {
-          console.log("here");
-          authy
-            .phones()
-            .verification_check(
-              req.body.phone,
-              req.body.code,
-              req.body.token,
-              function(err, result) {
-                if (err) {
-                  return res.json(
-                    Response(constant.SUCCESS_CODE, constant.DATA_NOT_FOUND, {
-                      isalreadyexist: false,
-                      isVerified: true
-                    })
-                  );
+                if (req.body.phone) {
+                  condition = { phone: req.body.phone };
+                } else if (req.body.email) {
+                  condition = { email: req.body.email };
                 } else {
+                  condition = {phone: req.body.phone,email:req.body.email};
+                }
+
+                let findUser = await commonQuery.findoneData(users, condition);
+                if (!findUser) {
                   res.json(
-                    Response(constant.SUCCESS_CODE, constant.USER_VERIFIED, {
+                    Response(constant.SUCCESS_CODE, constant.USER_NOT_FOUND, {
                       user: req.body,
                       isalreadyexist: false,
                       isVerified: true
                     })
                   );
+                } else {
+                  let params = {
+                    _id: findUser._id
+                  };
+
+                  let deviceTokenToUpdate = {
+                    deviceToken: req.body.deviceToken
+                  };
+
+                  let updateDeviceTokenData = await  commonQuery.updateOneDocument(
+                    users,
+                    params,
+                    deviceTokenToUpdate
+                  );
+
+                  if (!updateDeviceTokenData) {
+                    res.json(
+                      Response(
+                        constant.ERROR_CODE,
+                        constant.REQURIED_FIELDS_NOT,
+                        null
+                      )
+                    );
+                  } else {
+                     console.log("updatedDeviceToken",updateDeviceTokenData);
+                    var userUpdatedData = updateDeviceTokenData;
+                  }
+
+                  token = jwt.sign(params, jwtKey, { expiresIn: expiry });
+
+                  res.json(
+                    Response(
+                      constant.SUCCESS_CODE,
+                      constant.USER_ALREADY_EXIST,
+                      {
+                        user: userUpdatedData,
+                        token: token,
+                        isalreadyexist: true,
+                        isVerified: true
+                      }
+                    )
+                  );
                 }
               }
-            );
-        } else {
-          //console.log("formdataispresent", findUser.data);
-
-          let params = {
-            _id: findUser._id
-          };
-
-          let deviceTokenToUpdate = { deviceToken: req.body.deviceToken };
-
-          let updateDeviceTokenData = await commonQuery.updateOneDocument(
-            users,
-            params,
-            deviceTokenToUpdate
+            }
           );
-
-          if (!updateDeviceTokenData) {
-            res.json(
-              Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-            );
-          } else {
-            // console.log("updatedDeviceToken",updateDeviceTokenData);
-            var userUpdatedData = updateDeviceTokenData;
-          }
-
-          token = jwt.sign(params, jwtKey, { expiresIn: expiry });
-
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.USER_ALREADY_EXIST, {
-              user: userUpdatedData,
-              token: token,
-              isalreadyexist: true,
-              isVerified: true
-            })
-          );
-        }
-      } else {
-        res.json(
-          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-        );
       }
     } catch (error) {
       return res.json(
@@ -210,6 +208,101 @@ function verifyUser(req, res) {
   }
   verifyUser().then(function(data) {});
 }
+
+// function verifyUser(req, res) {
+//   console.log("verifyOTP", req.body);
+//   async function verifyUser() {
+//     try {
+//       if (req.body.email || req.body.phone) {
+//         let condition = {};
+//         if (req.body.email) {
+//           condition = { email: req.body.email };
+//         } else if (req.body.phone) {
+//           condition = { phone: req.body.phone };
+//         } else {
+//           condition = { email: req.body.email, phone: req.body.phone };
+//         }
+//         console.log("YAHA AATA");
+//         let token;
+
+//         let findUser = await commonQuery.findoneData(users, condition);
+//         console.log("FindUser", findUser);
+
+//         if (!findUser) {
+//           console.log("here");
+//           authy
+//             .phones()
+//             .verification_check(
+//               req.body.phone,
+//               req.body.code,
+//               req.body.token,
+//               function(err, result) {
+//                 if (err) {
+//                   return res.json(
+//                     Response(constant.SUCCESS_CODE, constant.DATA_NOT_FOUND, {
+//                       isalreadyexist: false,
+//                       isVerified: true
+//                     })
+//                   );
+//                 } else {
+//                   res.json(
+//                     Response(constant.SUCCESS_CODE, constant.USER_VERIFIED, {
+//                       user: req.body,
+//                       isalreadyexist: false,
+//                       isVerified: true
+//                     })
+//                   );
+//                 }
+//               }
+//             );
+//         } else {
+//           //console.log("formdataispresent", findUser.data);
+
+//           let params = {
+//             _id: findUser._id
+//           };
+
+//           let deviceTokenToUpdate = { deviceToken: req.body.deviceToken };
+
+//           let updateDeviceTokenData = await commonQuery.updateOneDocument(
+//             users,
+//             params,
+//             deviceTokenToUpdate
+//           );
+
+//           if (!updateDeviceTokenData) {
+//             res.json(
+//               Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+//             );
+//           } else {
+//             // console.log("updatedDeviceToken",updateDeviceTokenData);
+//             var userUpdatedData = updateDeviceTokenData;
+//           }
+
+//           token = jwt.sign(params, jwtKey, { expiresIn: expiry });
+
+//           res.json(
+//             Response(constant.SUCCESS_CODE, constant.USER_ALREADY_EXIST, {
+//               user: userUpdatedData,
+//               token: token,
+//               isalreadyexist: true,
+//               isVerified: true
+//             })
+//           );
+//         }
+//       } else {
+//         res.json(
+//           Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+//         );
+//       }
+//     } catch (error) {
+//       return res.json(
+//         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+//       );
+//     }
+//   }
+//   verifyUser().then(function(data) {});
+// }
 
 // /* Function is use to register user
 //  * @access private
@@ -431,29 +524,21 @@ function login(req, res) {
 }
 
 function updateUser(req, res) {
-
- // console.log("InUpdate USer",req);
-  console.log("InUpdate USer CHeck",req.files);
+  // console.log("InUpdate USer",req);
+  console.log("InUpdate USer CHeck", req.files);
 
   async function updateUser() {
-
-
-
-    
     console.log("Innnnn");
     var image_path;
-    let updatedUserData={}
+    let updatedUserData = {};
     try {
-
-    
       if (req.body && req.body._id) {
         let condition = { _id: req.body._id, isDeleted: false, isActive: true };
 
-        if(req.files){
-
+        if (req.files) {
           mkdirp(constant.PROFILEIMAGE, async function(err) {
             let timeStamp = Date.now();
-  
+
             let extension;
             if (err) {
               return res.json(
@@ -465,80 +550,82 @@ function updateUser(req, res) {
               if (req.files) {
                 extension = req.files.profilepic.name.split(".");
                 let imgOriginalName = req.files.profilepic.name;
-                path = constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
+                path =
+                  constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
                 db_path = webUrl + timeStamp + "_" + imgOriginalName;
-  
               }
               if (db_path) {
                 //image_path= db_path;
                 image_path = db_path;
-                console.log("CHHHHHHHHHHHHHH",updatedUserData)
+                console.log("CHHHHHHHHHHHHHH", updatedUserData);
               }
-              if (path != '') {
+              if (path != "") {
                 let extensionArray = ["jpg", "jpeg", "png", "jfif"];
                 let format = extension[extension.length - 1];
                 if (extensionArray.includes(format)) {
-                    let result = await commonQuery.fileUpload(path, (req.files.profilepic.data)).then( async data=>{
-                     console.log('dtatatatatat 464',data)
-                      if(data.status){
-                         updatedUserData = {
+                  let result = await commonQuery
+                    .fileUpload(path, req.files.profilepic.data)
+                    .then(async data => {
+                      console.log("dtatatatatat 464", data);
+                      if (data.status) {
+                        updatedUserData = {
                           firstName: req.body.firstName,
                           lastName: req.body.lastName,
                           address: req.body.address,
-                          profilepic:image_path
-                          
+                          profilepic: image_path
                         };
-                        console.log("updatedUserDataImage",updatedUserData);
+                        console.log("updatedUserDataImage", updatedUserData);
                         let userUpdated = await commonQuery.updateOneDocument(
                           users,
                           condition,
                           updatedUserData
                         );
-                
+
                         if (!userUpdated) {
                           res.json(
-                            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+                            Response(
+                              constant.ERROR_CODE,
+                              constant.REQURIED_FIELDS_NOT,
+                              null
+                            )
                           );
                         } else {
                           console.log("updatedUser", userUpdated);
                           //delete userUpdated.password;
                           res.json(
-                            Response(constant.SUCCESS_CODE, constant.USER_UPDATED, userUpdated)
+                            Response(
+                              constant.SUCCESS_CODE,
+                              constant.USER_UPDATED,
+                              userUpdated
+                            )
                           );
                         }
-                      }else{
-                        console.log("updatedUser nottttttttttttttttt", );
-  
+                      } else {
+                        console.log("updatedUser nottttttttttttttttt");
                       }
                     });
-                    console.log("ImageKaResult",result);
+                  console.log("ImageKaResult", result);
+                } else {
+                  return res.json(
+                    Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED)
+                  );
                 }
-                else {
-                    return res.json(Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED));
-                }
-            } 
-  
-  
+              }
             }
           });
-  
-
-
-        }
-        else if(!req.files){
+        } else if (!req.files) {
           updatedUserData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             address: req.body.address
-            
           };
-          console.log("updatedUserDataImage",updatedUserData);
+          console.log("updatedUserDataImage", updatedUserData);
           let userUpdated = await commonQuery.updateOneDocument(
             users,
             condition,
             updatedUserData
           );
-  
+
           if (!userUpdated) {
             res.json(
               Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
@@ -547,18 +634,14 @@ function updateUser(req, res) {
             console.log("updatedUser", userUpdated);
             //delete userUpdated.password;
             res.json(
-              Response(constant.SUCCESS_CODE, constant.USER_UPDATED, userUpdated)
+              Response(
+                constant.SUCCESS_CODE,
+                constant.USER_UPDATED,
+                userUpdated
+              )
             );
           }
-
-
-
-
         }
-
-       
-
-     
       } else {
         res.json(
           Response(constant.SUCCESS_CODE, constant.REQURIED_FIELDS_NOT, null)
@@ -612,44 +695,41 @@ function logoutUser(req, res) {
   logoutUser().then(function(data) {});
 }
 
-
-function getAllUsers(req,res){
+function getAllUsers(req, res) {
   console.log(req.query);
-async function getAllUsers(){
+  async function getAllUsers() {
+    let pageSize = +req.query.pageSize || +req.body.pageSize;
+    let currentPage = +req.query.page || req.body.page;
 
-  let pageSize =  +req.query.pageSize || +req.body.pageSize;
-  let currentPage = +req.query.page || req.body.page;
+    console.log("InUserPageSize", pageSize);
+    console.log("currentPage", currentPage);
 
-
-  console.log("InUserPageSize",pageSize);
-  console.log("currentPage",currentPage);
-
-  try{
-
-    if(req.body){
-      let condition = {};
-      let fethedUsers = await commonQuery.fetch_all_paginated(users, condition, pageSize,currentPage);
-
-      if(!fethedUsers){
-        res.json(
-          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+    try {
+      if (req.body) {
+        let condition = {};
+        let fethedUsers = await commonQuery.fetch_all_paginated(
+          users,
+          condition,
+          pageSize,
+          currentPage
         );
+
+        if (!fethedUsers) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_USERS,
+              fethedUsers
+            )
+          );
+        }
       }
-      else{
-        res.json(Response(constant.SUCCESS_CODE,constant.FETCHED_ALL_USERS,fethedUsers));
-      }
-
-
-    }
-
-
-  }
-  catch(error){
-
+    } catch (error) {}
   }
 
-}
-
-getAllUsers().then(function(){});
-
+  getAllUsers().then(function() {});
 }

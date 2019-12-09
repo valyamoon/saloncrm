@@ -46,5 +46,6 @@ module.exports = {
   SALONS_FOUND: "Solons Nearby Found",
   USER_LOGGED_OUT: "User logged Out Successfully",
   FILE_UNSUPPORTED:"File type is not supported",
-  FETCHED_ALL_USERS:"Fetched All Users Successfully"
+  FETCHED_ALL_USERS:"Fetched All Users Successfully",
+  INVALID_OTP:"Invalid OTP"
 };

@@ -13,11 +13,11 @@ var serviceSchema = mongoose.Schema({
     type: Boolean,
     default: true
   },
-  isDeleted: {
+  price: {
     type: Boolean,
     default: false
   },
-  contact: {
+  duration: {
     type: String
   },
   salonaddress: {
