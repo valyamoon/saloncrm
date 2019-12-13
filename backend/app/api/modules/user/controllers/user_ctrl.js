@@ -16,6 +16,8 @@ const expiry = "1h";
 const countryData = require("country-data").countries;
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
+const reviewratings = require("../../salon/model/salonreviewsratingSchema");
+
 const roles = require("../model/rolesSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
@@ -33,7 +35,8 @@ module.exports = {
   forgotPassword: forgotPassword,
   updateUser: updateUser,
   logoutUser: logoutUser,
-  getAllUsers: getAllUsers
+  getAllUsers: getAllUsers,
+  addReviewAndRatings: addReviewAndRatings
 };
 
 // /* Function is use to Request Otp
@@ -45,11 +48,9 @@ module.exports = {
 //  */
 
 function requestVerification(req, res) {
-  console.log(req.body);
   async function requestVerification() {
     try {
       if (req.body.phone && req.body.code) {
-        console.log(req.body.phone, req.body.code);
         authy
           .phones()
           .verification_start(
@@ -95,7 +96,6 @@ function requestVerification(req, res) {
 //  */
 
 function getCountryCodes(req, res) {
-  console.log("isithere");
   async function getCountryCodes() {
     res.json(
       Response(constant.SUCCESS_CODE, constant.CODES_FETCHED, countryData.all)
@@ -113,13 +113,11 @@ function getCountryCodes(req, res) {
 //  */
 
 function verifyUser(req, res) {
-  console.log("rerere", req.body);
   let token;
 
   async function verifyUser() {
     try {
       if (req.body.phone) {
-        console.log("vvvvv");
         authy
           .phones()
           .verification_check(
@@ -135,9 +133,7 @@ function verifyUser(req, res) {
                   })
                 );
               } else {
-                let condition = { phone: req.body.phone};
-
-                console.log("svghsvhsv");
+                let condition = { phone: req.body.phone };
 
                 // if (req.body.phone) {
                 //   condition = { phone: req.body.phone };
@@ -146,8 +142,6 @@ function verifyUser(req, res) {
                 // } else {
                 //   condition = {phone: req.body.phone,email:req.body.email};
                 // }
-
-                console.log("cpm",condition);
 
                 let findUser = await commonQuery.findoneData(users, condition);
                 if (!findUser) {
@@ -167,7 +161,7 @@ function verifyUser(req, res) {
                     deviceToken: req.body.deviceToken
                   };
 
-                  let updateDeviceTokenData = await  commonQuery.updateOneDocument(
+                  let updateDeviceTokenData = await commonQuery.updateOneDocument(
                     users,
                     params,
                     deviceTokenToUpdate
@@ -182,7 +176,6 @@ function verifyUser(req, res) {
                       )
                     );
                   } else {
-                     console.log("updatedDeviceToken",updateDeviceTokenData);
                     var userUpdatedData = updateDeviceTokenData;
                   }
 
@@ -204,13 +197,8 @@ function verifyUser(req, res) {
               }
             }
           );
-      }
-      else if(req.body.email){
-        let condition = { email: req.body.email};
-
-        console.log("svghsvhsv");
-
-        console.log("cpm",condition);
+      } else if (req.body.email) {
+        let condition = { email: req.body.email };
 
         let findUser = await commonQuery.findoneData(users, condition);
         if (!findUser) {
@@ -230,7 +218,7 @@ function verifyUser(req, res) {
             deviceToken: req.body.deviceToken
           };
 
-          let updateDeviceTokenData = await  commonQuery.updateOneDocument(
+          let updateDeviceTokenData = await commonQuery.updateOneDocument(
             users,
             params,
             deviceTokenToUpdate
@@ -238,35 +226,23 @@ function verifyUser(req, res) {
 
           if (!updateDeviceTokenData) {
             res.json(
-              Response(
-                constant.ERROR_CODE,
-                constant.REQURIED_FIELDS_NOT,
-                null
-              )
+              Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
             );
           } else {
-             console.log("updatedDeviceToken",updateDeviceTokenData);
             var userUpdatedData = updateDeviceTokenData;
           }
 
           token = jwt.sign(params, jwtKey, { expiresIn: expiry });
 
           res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.USER_ALREADY_EXIST,
-              {
-                user: userUpdatedData,
-                token: token,
-                isalreadyexist: true,
-                isVerified: true
-              }
-            )
+            Response(constant.SUCCESS_CODE, constant.USER_ALREADY_EXIST, {
+              user: userUpdatedData,
+              token: token,
+              isalreadyexist: true,
+              isVerified: true
+            })
           );
         }
-
-
-
       }
     } catch (error) {
       return res.json(
@@ -381,24 +357,20 @@ function verifyUser(req, res) {
 //  */
 
 function registerUser(req, res) {
-  console.log("comingData", req.body);
-
   async function registerUser() {
     let roleid;
 
     try {
       if (req.body && req.body.email) {
-        console.log("istrue");
         let rolesCheckCondition = { name: req.body.role };
         let role = await commonQuery.findoneData(roles, rolesCheckCondition);
-        console.log("ROLE", role);
+
         if (!role) {
           return res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
           roleid = role._id;
-          console.log("ROLEID", roleid);
         }
         try {
           let condition = {};
@@ -409,17 +381,10 @@ function registerUser(req, res) {
           } else {
             condition = { email: req.body.phone, phone: req.body.phone };
           }
-          console.log("email and password", req.body.email, req.body.phone);
-
-          console.log("Inhere", condition);
 
           let checkUser = await commonQuery.findoneData(users, condition);
 
-          console.log("haikya", checkUser);
-
           if (!checkUser) {
-            console.log(checkUser);
-
             var newUser = new users({
               phone: req.body.phone,
               code: req.body.code,
@@ -436,13 +401,12 @@ function registerUser(req, res) {
               password: req.body.password,
               isActive: req.body.isActive
             });
-            console.log(newUser);
+
             try {
               let saveUser = await commonQuery.InsertIntoCollection(
                 users,
                 newUser
               );
-              console.log("saveUser", saveUser);
 
               if (!saveUser) {
                 res.json(
@@ -518,27 +482,22 @@ function registerUser(req, res) {
 //  */
 
 function login(req, res) {
-  console.log("inLogin", req.body);
   async function login() {
     try {
       if (req.body.email && req.body.password) {
-        console.log("In here");
         let conditionToCheck = { email: req.body.email };
         let findUser = await commonQuery.findoneData(users, conditionToCheck);
-        console.log("FIND USER", findUser);
+
         if (!findUser) {
           res.json(
             Response(constant.ERROR_CODE, constant.INVALID_LOGIN_DETAILS, null)
           );
         } else {
-          console.log("Inelse");
-          console.log("InselsePass", req.body.password);
           findUser.comparePassword(req.body.password, async function(
             err,
             isMatch
           ) {
             if (err) {
-              console.log("Inerror", err);
               return res.json(
                 Response(
                   constant.ERROR_CODE,
@@ -547,15 +506,12 @@ function login(req, res) {
                 )
               );
             } else if (isMatch) {
-              console.log("InMatch");
-
               let params = {
                 _id: findUser._id
               };
               let token = jwt.sign(params, "saloncrm", { expiresIn: "1h" });
 
               delete findUser["password"];
-              console.log("here", findUser);
 
               let finalObjectToBeSend = {
                 token: token,
@@ -571,7 +527,6 @@ function login(req, res) {
                 );
               }
             } else {
-              console.log("InFinalElse");
               return res.json(
                 Response(constant.ERROR_CODE, constant.USER_NOT_FOUND)
               );
@@ -582,7 +537,6 @@ function login(req, res) {
         return res.json(Response(constant.ERROR_CODE, constant.USER_NOT_FOUND));
       }
     } catch (error) {
-      console.log(error);
       return res.json(
         Response(constant.ERROR_CODE, constant.INVALID_LOGIN_DETAILS, error)
       );
@@ -592,11 +546,7 @@ function login(req, res) {
 }
 
 function updateUser(req, res) {
-  // console.log("InUpdate USer",req);
-  console.log("InUpdate USer CHeck", req.files);
-
   async function updateUser() {
-    console.log("Innnnn");
     var image_path;
     let updatedUserData = {};
     try {
@@ -625,7 +575,6 @@ function updateUser(req, res) {
               if (db_path) {
                 //image_path= db_path;
                 image_path = db_path;
-                console.log("CHHHHHHHHHHHHHH", updatedUserData);
               }
               if (path != "") {
                 let extensionArray = ["jpg", "jpeg", "png", "jfif"];
@@ -634,7 +583,6 @@ function updateUser(req, res) {
                   let result = await commonQuery
                     .fileUpload(path, req.files.profilepic.data)
                     .then(async data => {
-                      console.log("dtatatatatat 464", data);
                       if (data.status) {
                         updatedUserData = {
                           firstName: req.body.firstName,
@@ -642,7 +590,7 @@ function updateUser(req, res) {
                           address: req.body.address,
                           profilepic: image_path
                         };
-                        console.log("updatedUserDataImage", updatedUserData);
+
                         let userUpdated = await commonQuery.updateOneDocument(
                           users,
                           condition,
@@ -658,7 +606,6 @@ function updateUser(req, res) {
                             )
                           );
                         } else {
-                          console.log("updatedUser", userUpdated);
                           //delete userUpdated.password;
                           res.json(
                             Response(
@@ -669,10 +616,8 @@ function updateUser(req, res) {
                           );
                         }
                       } else {
-                        console.log("updatedUser nottttttttttttttttt");
                       }
                     });
-                  console.log("ImageKaResult", result);
                 } else {
                   return res.json(
                     Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED)
@@ -687,7 +632,7 @@ function updateUser(req, res) {
             lastName: req.body.lastName,
             address: req.body.address
           };
-          console.log("updatedUserDataImage", updatedUserData);
+
           let userUpdated = await commonQuery.updateOneDocument(
             users,
             condition,
@@ -699,7 +644,6 @@ function updateUser(req, res) {
               Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
             );
           } else {
-            console.log("updatedUser", userUpdated);
             //delete userUpdated.password;
             res.json(
               Response(
@@ -715,7 +659,11 @@ function updateUser(req, res) {
           Response(constant.SUCCESS_CODE, constant.REQURIED_FIELDS_NOT, null)
         );
       }
-    } catch (error) {}
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
   }
   updateUser().then(function() {});
 }
@@ -726,7 +674,6 @@ function forgotPassword() {
 }
 
 function logoutUser(req, res) {
-  console.log(req.body);
   async function logoutUser() {
     try {
       if (req.body && req.body._id) {
@@ -758,19 +705,19 @@ function logoutUser(req, res) {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
   }
   logoutUser().then(function(data) {});
 }
 
 function getAllUsers(req, res) {
-  console.log(req.query);
   async function getAllUsers() {
     let pageSize = +req.query.pageSize || +req.body.pageSize;
     let currentPage = +req.query.page || req.body.page;
-
-    console.log("InUserPageSize", pageSize);
-    console.log("currentPage", currentPage);
 
     try {
       if (req.body) {
@@ -796,8 +743,56 @@ function getAllUsers(req, res) {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
   }
 
   getAllUsers().then(function() {});
+}
+
+function addReviewAndRatings(req, res) {
+  async function addReviewAndRatings() {
+    try {
+      if (req.body) {
+        let condition = {
+          _id: req.body.salon_id,
+          isActive: true,
+          isDeleted: false
+        };
+        let reviewRating = new reviewratings({
+          comments: req.body.comments,
+          ratings: req.body.ratings,
+          user_id: req.body.user_id,
+          salon_id: req.body.salon_id
+        });
+
+        let saveReviewAndRatings = await commonQuery.InsertIntoCollection(
+          reviewratings,
+          reviewRating
+        );
+
+        if (!saveReviewAndRatings) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              saveReviewAndRatings
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addReviewAndRatings().then(function() {});
 }

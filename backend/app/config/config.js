@@ -2,15 +2,15 @@
 
 const config = {
   local: {
-    port: 3001,
+    port: 3000,
     db: {
       user: "",
       password: "",
       url: "mongodb://localhost:27017/salonCRM"
     },
-    baseUrl: "http://localhost:3001/",
-    backendBaseUrl: "http://localhost:3001/",
-    imageBaseUrl: "http://localhost:3001/",
+    baseUrl: "http://localhost:3000/",
+    backendBaseUrl: "http://localhost:3000/",
+    imageBaseUrl: "http://localhost:3000/",
     env: "local",
     smtp: {
       service: "gmail",

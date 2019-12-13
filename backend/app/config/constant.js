@@ -47,5 +47,11 @@ module.exports = {
   USER_LOGGED_OUT: "User logged Out Successfully",
   FILE_UNSUPPORTED:"File type is not supported",
   FETCHED_ALL_USERS:"Fetched All Users Successfully",
-  INVALID_OTP:"Invalid OTP"
+  INVALID_OTP:"Invalid OTP",
+  ADDED_SUCCESS:"Added Successfully",
+  CATEGORIES_ADDED: "Categories Added Successfully",
+  FAILED_TO_PROCESS:"Failed TO Process Your Request",
+  FETCHED_ALL_DATA:"Fetched All Data Successfully",
+  REMOVED_ALL_DATA:"Removed The Data Successfully",
+  
 };

@@ -51,7 +51,8 @@ var userSchema = mongoose.Schema(
     },
     role_id: {
       type: mongoose.Types.ObjectId,
-      ref: "roles"
+      ref: "roles",
+      default:null
     },
     gender: {
       type: String,
