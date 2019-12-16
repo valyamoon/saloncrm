@@ -10,19 +10,26 @@ var serviceSchema = mongoose.Schema({
     default: true
   },
   price: {
-    type: Boolean,
+    type: Number,
     default: false
   },
   duration: {
     type: Number
   },
-  user_id: {
+  salon_id: {
     type: mongoose.Types.ObjectId,
-    ref: "users"
+    ref: "salons"
+  },
+  category_id:{
+    type: mongoose.Types.ObjectId,
+    ref: "categories"
   },
   logo: {
     type: String,
     default: null
+  },
+  description:{
+    type:String
   }
 });
 var service = (module.exports = mongoose.model("service", serviceSchema));
