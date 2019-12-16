@@ -7,6 +7,8 @@ __rootRequire("app/api/modules/salon/model/salonSchema");
 
 
 
+
+
 const config = require("./config.js").get(process.env.NODE_ENV);
 
 mongoose.Promise = global.Promise;

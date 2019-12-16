@@ -51,7 +51,8 @@ var userSchema = mongoose.Schema(
     },
     role_id: {
       type: mongoose.Types.ObjectId,
-      ref: "roles"
+      ref: "roles",
+      default:null
     },
     gender: {
       type: String,
@@ -59,11 +60,11 @@ var userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      default: "xyzzqurk"
+      default: null
     },
     isActive: {
       type: Boolean,
-      default: true
+      default: false
     },
     isDeleted: {
       type: Boolean,

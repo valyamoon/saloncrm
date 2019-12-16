@@ -8,7 +8,10 @@ const jwt = require("jsonwebtoken");
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
 const roles = require("../../user/model/rolesSchema");
-const salon = require("../model/salonSchema");
+const salons = require("../model/salonSchema");
+const categories = require("../../admin/model/categoriesSchema");
+const reviewratings = require("../model/salonreviewsratingSchema");
+const services = require("../model/servicesSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
@@ -19,12 +22,12 @@ const commonQuery = require("../../../../lib/commonQuery.js");
 module.exports = {
   saveSalonDetails: saveSalonDetails,
   getSalons: getSalons,
-  addServices:addServices
+  addServices: addServices,
+  getSalonDetails: getSalonDetails,
+  getReviewsAndRatingsList: getReviewsAndRatingsList
 };
 
 function saveSalonDetails(req, res) {
-  console.log(req.body);
-
   async function saveSalonDetails() {
     try {
       if (req.body && req.body.user_id) {
@@ -36,17 +39,15 @@ function saveSalonDetails(req, res) {
         let checkUser = await commonQuery.findoneData(users, conditon);
 
         if (!checkUser) {
-         
         } else {
-          
           let locations = {};
           let long = req.body.long;
-          console.log(long);
+
           let lat = req.body.lat;
-          console.log(lat);
+
           locations = [long, lat];
-         
-          let salonData = new salon({
+
+          let salonData = new salons({
             name: req.body.name,
             location: locations,
             contact: req.body.contact,
@@ -54,16 +55,13 @@ function saveSalonDetails(req, res) {
             user_id: req.body.user_id,
             image: req.body.image
           });
-          
 
           let saveSalon = await commonQuery.InsertIntoCollection(
-            salon,
+            salons,
             salonData
           );
-          console.log("saveSalon", saveSalon);
 
           if (!saveSalon) {
-            console.log("NAHI AAYA");
           } else {
             res.json(
               Response(
@@ -86,32 +84,32 @@ function saveSalonDetails(req, res) {
 }
 
 function getSalons(req, res) {
-  //console.log("InREQUEST", req.query);
-  let pageSize = +req.query.pageSize || +req.body.pageSize;
-  let currentPage = +req.query.page || req.body.page;
-  
-  console.log(req.body);
-  async function getSalons() {
-  
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+  let distanceToCover;
 
+  distanceToCover = req.body.distance ? req.body.distance : 500;
+
+  async function getSalons() {
     try {
       if (req.body && req.body.lat && req.body.long) {
-
-
-        
-
-
-      //  { $or:[ {'_id':objId}, {'name':param}, {'nickname':param} ]}
+        //  { $or:[ {'_id':objId}, {'name':param}, {'nickname':param} ]}
         let conditon = {
           location: {
             $geoWithin: {
-              $centerSphere: [[req.body.long, req.body.lat], 500 / 3963.2]
+              $centerSphere: [
+                [req.body.long, req.body.lat],
+                distanceToCover / 3963.2
+              ]
             }
           },
-          name:new RegExp(req.body.name, 'gi')
-        }
+          name: new RegExp(req.body.name, "gi"),
+          isActive:true,
+          isDeleted:false
+        };
         let salonLists = await commonQuery.fetch_all_paginated(
-          salon,
+          salons,
           conditon,
           pageSize,
           currentPage
@@ -127,16 +125,14 @@ function getSalons(req, res) {
           );
         }
       } else if (req.body.name) {
-       
-        let conditon = { name: req.body.name };
+        let conditon = { name: req.body.name,isActive:true,isDeleted:false };
         let salonList = await commonQuery.fetch_all_paginated(
-          salon,
+          salons,
           conditon,
           pageSize,
           currentPage
         );
 
-        
         if (!salonList) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
@@ -146,10 +142,33 @@ function getSalons(req, res) {
             Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, salonList)
           );
         }
+      } else if (req.body.gtp && req.body.ltp) {
+        let conditon = { price: { $gte: +req.body.gtp, $lt: +req.body.ltp },isActive:true,isDeleted:false };
+
+        let priceRangeSalons = await commonQuery.fetch_all_paginated_price(
+          services,
+          conditon,
+          pageSize,
+          currentPage
+        );
+
+        if (!priceRangeSalons) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_USERS,
+              priceRangeSalons
+            )
+          );
+        }
       } else {
-        let conditon = {};
+        let conditon = {isDeleted:false,isActive:true};
         let salonLists = await commonQuery.fetch_all_paginated(
-          salon,
+          salons,
           conditon,
           pageSize,
           currentPage
@@ -176,18 +195,118 @@ function getSalons(req, res) {
 }
 
 function addServices(req, res) {
-
-  console.log(req.body);
-
-  async function addServices(){
-
-
-
-
-
-
+  async function addServices() {
+    try {
+      if (req.body.salon_id) {
+        let newService = new services({
+          name: req.body.name,
+          category_id: req.body.category_id,
+          salon_id: req.body.salon_id,
+          price: req.body.price,
+          duration: req.body.duration
+        });
+        let serviceAdded = await commonQuery.InsertIntoCollection(
+          services,
+          newService
+        );
+        if (!serviceAdded) {
+          return res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              serviceAdded
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
   }
 
-  addServices().then(function(){});
-
+  addServices().then(function() {});
 }
+
+function getSalonDetails(req, res) {
+  async function getSalonDetails() {
+    try {
+      if (req.body && req.body.salon_id) {
+        let conditon = { _id: mongoose.Types.ObjectId(req.body.salon_id),isActive:true,isDeleted:false };
+
+        let salonDetails = await commonQuery.salonDetailsFetch(
+          salons,
+          "reviewratings",
+          "_id",
+          "salon_id",
+          conditon
+        );
+        if (!salonDetails) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              salonDetails
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getSalonDetails().then(function() {});
+}
+
+function getReviewsAndRatingsList(req, res) {
+  async function getReviewsAndRatingsList() {
+    try {
+      if (req.body.salon_id) {
+        let pageSize = +req.body.pageSize;
+        let page = +req.body.page;
+
+        let conditon = { salon_id: mongoose.Types.ObjectId(req.body.salon_id),isActive:true,isDeleted:false };
+
+        let reviewratingsList = await commonQuery.findAll(
+          reviewratings,
+          conditon,
+          pageSize,
+          page
+        );
+
+        if (!reviewratingsList) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              reviewratingsList
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getReviewsAndRatingsList().then(function() {});
+}
+
