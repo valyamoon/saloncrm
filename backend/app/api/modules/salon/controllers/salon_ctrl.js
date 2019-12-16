@@ -104,7 +104,9 @@ function getSalons(req, res) {
               ]
             }
           },
-          name: new RegExp(req.body.name, "gi")
+          name: new RegExp(req.body.name, "gi"),
+          isActive:true,
+          isDeleted:false
         };
         let salonLists = await commonQuery.fetch_all_paginated(
           salons,
@@ -123,7 +125,7 @@ function getSalons(req, res) {
           );
         }
       } else if (req.body.name) {
-        let conditon = { name: req.body.name };
+        let conditon = { name: req.body.name,isActive:true,isDeleted:false };
         let salonList = await commonQuery.fetch_all_paginated(
           salons,
           conditon,
@@ -141,7 +143,7 @@ function getSalons(req, res) {
           );
         }
       } else if (req.body.gtp && req.body.ltp) {
-        let conditon = { price: { $gte: +req.body.gtp, $lt: +req.body.ltp } };
+        let conditon = { price: { $gte: +req.body.gtp, $lt: +req.body.ltp },isActive:true,isDeleted:false };
 
         let priceRangeSalons = await commonQuery.fetch_all_paginated_price(
           services,
@@ -164,7 +166,7 @@ function getSalons(req, res) {
           );
         }
       } else {
-        let conditon = {};
+        let conditon = {isDeleted:false,isActive:true};
         let salonLists = await commonQuery.fetch_all_paginated(
           salons,
           conditon,
@@ -235,7 +237,7 @@ function getSalonDetails(req, res) {
   async function getSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
-        let conditon = { _id: mongoose.Types.ObjectId(req.body.salon_id) };
+        let conditon = { _id: mongoose.Types.ObjectId(req.body.salon_id),isActive:true,isDeleted:false };
 
         let salonDetails = await commonQuery.salonDetailsFetch(
           salons,
@@ -275,7 +277,7 @@ function getReviewsAndRatingsList(req, res) {
         let pageSize = +req.body.pageSize;
         let page = +req.body.page;
 
-        let conditon = { salon_id: mongoose.Types.ObjectId(req.body.salon_id) };
+        let conditon = { salon_id: mongoose.Types.ObjectId(req.body.salon_id),isActive:true,isDeleted:false };
 
         let reviewratingsList = await commonQuery.findAll(
           reviewratings,
@@ -307,3 +309,4 @@ function getReviewsAndRatingsList(req, res) {
 
   getReviewsAndRatingsList().then(function() {});
 }
+

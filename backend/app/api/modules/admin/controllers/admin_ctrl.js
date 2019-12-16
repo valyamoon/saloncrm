@@ -20,10 +20,11 @@ const Config = require("../../../../config/config").get(
 const commonQuery = require("../../../../lib/commonQuery.js");
 
 module.exports = {
-  addCategories: addCategories
+  addCategories: addCategories,
+  getSalonsRequestList: getSalonsRequestList,
+  acceptSalonRequest: acceptSalonRequest,
+  suspendSalon: suspendSalon
 };
-
-function addAdmin() {}
 
 function addCategories(req, res) {
   async function addCategories() {
@@ -60,4 +61,138 @@ function addCategories(req, res) {
     }
   }
   addCategories().then(function() {});
+}
+
+function getSalonsRequestList(req, res) {
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+  async function getSalonsRequestList() {
+    try {
+      if (req.body) {
+        let condition = { isActive: false, isDeleted: false };
+
+        let listOfSalons = await commonQuery.fetch_all_paginated(
+          salons,
+          condition,
+          pageSize,
+          currentPage
+        );
+        if (!listOfSalons) {
+          res.json({ msg: "error" });
+        } else {
+          res.json({ data: listOfSalons });
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getSalonsRequestList().then(function() {});
+}
+
+function acceptSalonRequest(req, res) {
+  async function acceptSalonRequest() {
+    try {
+      if (req.body.salonid) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.salonid),
+          isActive: false
+        };
+        let activeCondition = {
+          isActive: true
+        };
+
+        let acceptSalonRequest = await commonQuery.updateOneDocument(
+          salons,
+          condition,
+          activeCondition
+        );
+
+        if (!acceptSalonRequest) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.SALON_REQUEST_ACCEPTED,
+              acceptSalonRequest
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  acceptSalonRequest().then(function() {});
+}
+
+function suspendSalon(req, res) {
+  console.log(req.body);
+  async function suspendSalon() {
+    try {
+      if (req.body.salonid) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.salonid),
+          isActive: true
+        };
+        let activeCondition = {
+          isActive: false
+        };
+
+        let suspendedSalon = await commonQuery.updateOneDocument(
+          salons,
+          condition,
+          activeCondition
+        );
+
+        if (!suspendedSalon) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+          );
+        } else {
+          let user_id = suspendSalon.user_id;
+          console.log(user_id);
+
+          let condition = { _id: mongoose.Types.ObjectId(user_id) };
+          let deactivateLogin = await commonQuery.updateOneDocument(
+            users,
+            condition,
+            activeCondition
+          );
+
+          console.log("------------------",deactivateLogin);
+
+          if (!deactivateLogin) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+            );
+          } else {
+            res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.SALON_SUSPENDED,
+                suspendedSalon
+              )
+            );
+          }
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  suspendSalon().then(function() {});
 }

@@ -53,5 +53,9 @@ module.exports = {
   FAILED_TO_PROCESS:"Failed TO Process Your Request",
   FETCHED_ALL_DATA:"Fetched All Data Successfully",
   REMOVED_ALL_DATA:"Removed The Data Successfully",
+  USER_DELETED: "User Deleted Successfully",
+  SALON_REQUEST_ACCEPTED:"Salon Request Accepted Successfully",
+  REQUEST_SEND_FOR_APPROVAL:"Your request has been sent successfully. Please wait for approval",
+  SALON_SUSPENDED:"Salon Suspended Successfully"
   
 };

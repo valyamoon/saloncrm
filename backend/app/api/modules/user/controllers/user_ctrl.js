@@ -36,7 +36,9 @@ module.exports = {
   updateUser: updateUser,
   logoutUser: logoutUser,
   getAllUsers: getAllUsers,
-  addReviewAndRatings: addReviewAndRatings
+  addReviewAndRatings: addReviewAndRatings,
+  softDeleteUser: softDeleteUser,
+  getDetailsOfUser:getDetailsOfUser
 };
 
 // /* Function is use to Request Otp
@@ -359,9 +361,19 @@ function verifyUser(req, res) {
 function registerUser(req, res) {
   async function registerUser() {
     let roleid;
+    let isActiveStatus;
 
     try {
       if (req.body && req.body.email) {
+
+        if(req.body.role==="user"){
+            isActiveStatus =  true;
+        }
+        else{
+          isActiveStatus =  false;
+        }
+
+
         let rolesCheckCondition = { name: req.body.role };
         let role = await commonQuery.findoneData(roles, rolesCheckCondition);
 
@@ -399,7 +411,7 @@ function registerUser(req, res) {
               gender: req.body.gender,
               role_id: roleid,
               password: req.body.password,
-              isActive: req.body.isActive
+              isActive: isActiveStatus
             });
 
             try {
@@ -606,7 +618,7 @@ function updateUser(req, res) {
                             )
                           );
                         } else {
-                          //delete userUpdated.password;
+                          delete userUpdated.password;
                           res.json(
                             Response(
                               constant.SUCCESS_CODE,
@@ -644,7 +656,7 @@ function updateUser(req, res) {
               Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
             );
           } else {
-            //delete userUpdated.password;
+            delete userUpdated.password;
             res.json(
               Response(
                 constant.SUCCESS_CODE,
@@ -696,6 +708,7 @@ function logoutUser(req, res) {
             params,
             deviceTokenToUpdate
           );
+          delete updateDeviceTokenData.password;
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -716,29 +729,42 @@ function logoutUser(req, res) {
 
 function getAllUsers(req, res) {
   async function getAllUsers() {
-    let pageSize = +req.query.pageSize || +req.body.pageSize;
-    let currentPage = +req.query.page || req.body.page;
+    let pageSize =
+      +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
 
     try {
       if (req.body) {
-        let condition = {};
-        let fethedUsers = await commonQuery.fetch_all_paginated(
+        let rolesCheckCondition = { name: "user" };
+        let role = await commonQuery.findoneData(roles, rolesCheckCondition);
+        //console.log("ROLE", role);
+
+        let condition = {
+          isDeleted: false,
+          isActive: true,
+          role_id: mongoose.Types.ObjectId(role._id)
+        };
+        var fethedUsersNew = await commonQuery.fetch_all_paginated(
           users,
           condition,
           pageSize,
           currentPage
         );
 
-        if (!fethedUsers) {
+        if (!fethedUsersNew) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
+          fethedUsersNew.forEach(function(v) {
+            v.password = undefined;
+          });
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_USERS,
-              fethedUsers
+              fethedUsersNew
             )
           );
         }
@@ -795,4 +821,105 @@ function addReviewAndRatings(req, res) {
     }
   }
   addReviewAndRatings().then(function() {});
+}
+
+function softDeleteUser(req, res) {
+
+  async function softDeleteUser() {
+    try {
+      if (req.body.userid) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.userid) };
+    
+        let fetchUser = await commonQuery.findoneData(users, condition);
+      
+        if (!fetchUser) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          let deleteUser = {
+            isDeleted: true,
+            isActive: false
+          };
+
+          let deleteUserSoft = await commonQuery.updateOneDocument(
+            users,
+            condition,
+            deleteUser
+          );
+          if (!deleteUserSoft) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+            );
+          } else {
+            delete deleteUserSoft.password;
+
+            res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.USER_DELETED,
+                deleteUserSoft
+              )
+            );
+          }
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  softDeleteUser().then(function() {});
+}
+
+function getDetailsOfUser(req,res){
+
+
+  console.log(req.body);
+
+
+  async function getDetailsOfUser(){
+
+    try{
+
+      if(req.body.userid){
+
+
+        let condition = {_id:mongoose.Types.ObjectId(req.body.userid),isActive:true,isDeleted:false};
+
+        let userDetails = await commonQuery.findoneData(users,condition);
+
+        if(!userDetails){
+
+        
+          return res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+          );
+
+        } 
+        else{
+          
+          userDetails.password =  undefined;
+
+          res.json(Response(constant.SUCCESS_CODE,constant.FETCHED_ALL_DATA,userDetails));
+
+
+        }
+
+
+      }
+
+    }
+    catch(error){
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+
+
+  }
+  getDetailsOfUser().then(function(){});
+
+
 }

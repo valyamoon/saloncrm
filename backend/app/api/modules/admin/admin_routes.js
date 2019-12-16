@@ -8,6 +8,10 @@ module.exports = function(router) {
   
   
     router.post("/addcategories", admin.addCategories);
+    router.post("/salonsrequest", admin.getSalonsRequestList);
+    router.post("/acceptrequest",admin.acceptSalonRequest);
+    router.post("/suspendsalon",admin.suspendSalon);
+
 
   
     // router.get('/listUser', middlewares, user.getUserList);
