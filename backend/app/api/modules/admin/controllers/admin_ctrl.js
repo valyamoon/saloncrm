@@ -137,7 +137,7 @@ function acceptSalonRequest(req, res) {
 }
 
 function suspendSalon(req, res) {
-  console.log(req.body);
+  console.log("sssssssssssssss",req.body);
   async function suspendSalon() {
     try {
       if (req.body.salonid) {
@@ -154,15 +154,18 @@ function suspendSalon(req, res) {
           condition,
           activeCondition
         );
+        console.log("-=------",suspendedSalon);
 
         if (!suspendedSalon) {
           res.json(
             Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
           );
         } else {
-          let user_id = suspendSalon.user_id;
-          console.log(user_id);
-
+          let user_id = suspendedSalon.user_id;
+          console.log("----------",user_id);
+          let activeCondition = {
+            isActive: false
+          };
           let condition = { _id: mongoose.Types.ObjectId(user_id) };
           let deactivateLogin = await commonQuery.updateOneDocument(
             users,
