@@ -497,7 +497,7 @@ function login(req, res) {
   async function login() {
     try {
       if (req.body.email && req.body.password) {
-        let conditionToCheck = { email: req.body.email };
+        let conditionToCheck = { email: req.body.email ,isActive:true, isDeleted:false};
         let findUser = await commonQuery.findoneData(users, conditionToCheck);
 
         if (!findUser) {
