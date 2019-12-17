@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
 
 const jwt = require("jsonwebtoken");
+const nodemailer =  require("nodemailer");
+
+const mailer = require("../../../../lib/mailer");
 
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
@@ -117,13 +120,53 @@ function acceptSalonRequest(req, res) {
             Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
           );
         } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.SALON_REQUEST_ACCEPTED,
-              acceptSalonRequest
-            )
+          let user_id = acceptSalonRequest.user_id;
+          console.log("----------", user_id);
+          let activeCondition = {
+            isActive: true
+          };
+          let condition = { _id: mongoose.Types.ObjectId(user_id) };
+          let activeSalonLogin = await commonQuery.updateOneDocument(
+            users,
+            condition,
+            activeCondition
           );
+          if (!activeSalonLogin) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+            );
+          } else {
+            console.log("ELSE ME AAYTA",activeSalonLogin);
+
+
+            return new Promise(function(resolve,reject){
+
+              mailer.sendMail(activeSalonLogin.email, function(err,res){
+
+                if(err){
+
+                }
+                else{
+
+                  res.json(
+                    Response(
+                      constant.SUCCESS_CODE,
+                      constant.SALON_REQUEST_ACCEPTED,
+                      acceptSalonRequest
+                    )
+                  );
+
+                }
+
+              })
+
+
+
+            })
+
+
+           
+          }
         }
       }
     } catch (error) {
@@ -137,7 +180,6 @@ function acceptSalonRequest(req, res) {
 }
 
 function suspendSalon(req, res) {
-  console.log("sssssssssssssss",req.body);
   async function suspendSalon() {
     try {
       if (req.body.salonid) {
@@ -154,7 +196,7 @@ function suspendSalon(req, res) {
           condition,
           activeCondition
         );
-        console.log("-=------",suspendedSalon);
+        console.log("-=------", suspendedSalon);
 
         if (!suspendedSalon) {
           res.json(
@@ -162,7 +204,7 @@ function suspendSalon(req, res) {
           );
         } else {
           let user_id = suspendedSalon.user_id;
-          console.log("----------",user_id);
+          console.log("----------", user_id);
           let activeCondition = {
             isActive: false
           };
@@ -173,7 +215,7 @@ function suspendSalon(req, res) {
             activeCondition
           );
 
-          console.log("------------------",deactivateLogin);
+          console.log("------------------", deactivateLogin);
 
           if (!deactivateLogin) {
             res.json(
