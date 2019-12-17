@@ -14,10 +14,10 @@ const config = {
     env: "local",
     smtp: {
       service: "gmail",
-      username: "",
-      password: "",
+      username: "salon.sdn@gmail.com",
+      password: "Smartdata@123",
       mailUsername: "",
-      host: "",
+      host: "gmail.com",
       mailUsername: "",
       verificationMail: ""
     }
