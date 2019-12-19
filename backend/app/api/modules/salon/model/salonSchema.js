@@ -6,8 +6,11 @@ var salonSchema = mongoose.Schema({
     required: false
   },
   location: {
-    type: [Number],
-    default: [0, 0]
+    type: {
+      type: String,
+      default: "Point"
+    },
+    coordinates: [Number]
   },
   isActive: {
     type: Boolean,
@@ -25,11 +28,11 @@ var salonSchema = mongoose.Schema({
   },
   opentime: {
     type: String,
-    default:null
+    default: null
   },
   closetime: {
     type: String,
-    default:null
+    default: null
   },
   user_id: {
     type: mongoose.Types.ObjectId,

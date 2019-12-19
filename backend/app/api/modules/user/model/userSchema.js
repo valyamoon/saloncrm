@@ -60,7 +60,7 @@ var userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      default: null
+      default: "f"
     },
     isActive: {
       type: Boolean,

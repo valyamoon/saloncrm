@@ -11,7 +11,9 @@ module.exports = function(router) {
   router.post("/searchsalon", salon.getSalons);
   router.post('/addservice',salon.addServices);
   router.post('/salon',salon.getSalonDetails);
-  router.post('/reviewsratings',salon.getReviewsAndRatingsList)
+  router.post('/reviewsratings',salon.getReviewsAndRatingsList);
+  router.post('/addpromocode',salon.addPromocodes);
+  router.post('/promocodes',salon.getPromoCodes);
 
 
   // router.get('/listUser', middlewares, user.getUserList);

@@ -11,7 +11,6 @@ const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 const jwtKey = "saloncrm";
 const mkdirp = require("mkdirp");
 const multer = require("multer");
-const uploads = multer({ dest: "uploads/" }).single("profilepic");
 const expiry = "1h";
 const countryData = require("country-data").countries;
 const constant = require("../../../../config/constant.js");
@@ -38,7 +37,7 @@ module.exports = {
   getAllUsers: getAllUsers,
   addReviewAndRatings: addReviewAndRatings,
   softDeleteUser: softDeleteUser,
-  getDetailsOfUser:getDetailsOfUser
+  getDetailsOfUser: getDetailsOfUser
 };
 
 // /* Function is use to Request Otp
@@ -48,7 +47,6 @@ module.exports = {
 //  * @smartData Enterprises (I) Ltd
 //  * Created Date
 //  */
-
 function requestVerification(req, res) {
   async function requestVerification() {
     try {
@@ -255,101 +253,6 @@ function verifyUser(req, res) {
   verifyUser().then(function(data) {});
 }
 
-// function verifyUser(req, res) {
-//   console.log("verifyOTP", req.body);
-//   async function verifyUser() {
-//     try {
-//       if (req.body.email || req.body.phone) {
-//         let condition = {};
-//         if (req.body.email) {
-//           condition = { email: req.body.email };
-//         } else if (req.body.phone) {
-//           condition = { phone: req.body.phone };
-//         } else {
-//           condition = { email: req.body.email, phone: req.body.phone };
-//         }
-//         console.log("YAHA AATA");
-//         let token;
-
-//         let findUser = await commonQuery.findoneData(users, condition);
-//         console.log("FindUser", findUser);
-
-//         if (!findUser) {
-//           console.log("here");
-//           authy
-//             .phones()
-//             .verification_check(
-//               req.body.phone,
-//               req.body.code,
-//               req.body.token,
-//               function(err, result) {
-//                 if (err) {
-//                   return res.json(
-//                     Response(constant.SUCCESS_CODE, constant.DATA_NOT_FOUND, {
-//                       isalreadyexist: false,
-//                       isVerified: true
-//                     })
-//                   );
-//                 } else {
-//                   res.json(
-//                     Response(constant.SUCCESS_CODE, constant.USER_VERIFIED, {
-//                       user: req.body,
-//                       isalreadyexist: false,
-//                       isVerified: true
-//                     })
-//                   );
-//                 }
-//               }
-//             );
-//         } else {
-//           //console.log("formdataispresent", findUser.data);
-
-//           let params = {
-//             _id: findUser._id
-//           };
-
-//           let deviceTokenToUpdate = { deviceToken: req.body.deviceToken };
-
-//           let updateDeviceTokenData = await commonQuery.updateOneDocument(
-//             users,
-//             params,
-//             deviceTokenToUpdate
-//           );
-
-//           if (!updateDeviceTokenData) {
-//             res.json(
-//               Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-//             );
-//           } else {
-//             // console.log("updatedDeviceToken",updateDeviceTokenData);
-//             var userUpdatedData = updateDeviceTokenData;
-//           }
-
-//           token = jwt.sign(params, jwtKey, { expiresIn: expiry });
-
-//           res.json(
-//             Response(constant.SUCCESS_CODE, constant.USER_ALREADY_EXIST, {
-//               user: userUpdatedData,
-//               token: token,
-//               isalreadyexist: true,
-//               isVerified: true
-//             })
-//           );
-//         }
-//       } else {
-//         res.json(
-//           Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-//         );
-//       }
-//     } catch (error) {
-//       return res.json(
-//         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-//       );
-//     }
-//   }
-//   verifyUser().then(function(data) {});
-// }
-
 // /* Function is use to register user
 //  * @access private
 //  * @return json
@@ -365,14 +268,11 @@ function registerUser(req, res) {
 
     try {
       if (req.body && req.body.email) {
-
-        if(req.body.role==="user"){
-            isActiveStatus =  true;
+        if (req.body.role === "user" || req.body.role === "admin") {
+          isActiveStatus = true;
+        } else {
+          isActiveStatus = false;
         }
-        else{
-          isActiveStatus =  false;
-        }
-
 
         let rolesCheckCondition = { name: req.body.role };
         let role = await commonQuery.findoneData(roles, rolesCheckCondition);
@@ -429,6 +329,7 @@ function registerUser(req, res) {
                   )
                 );
               } else {
+                saveUser.password = undefined;
                 let params = {
                   _id: saveUser._id
                 };
@@ -497,7 +398,11 @@ function login(req, res) {
   async function login() {
     try {
       if (req.body.email && req.body.password) {
-        let conditionToCheck = { email: req.body.email ,isActive:true, isDeleted:false};
+        let conditionToCheck = {
+          email: req.body.email,
+          isActive: true,
+          isDeleted: false
+        };
         let findUser = await commonQuery.findoneData(users, conditionToCheck);
 
         if (!findUser) {
@@ -523,7 +428,7 @@ function login(req, res) {
               };
               let token = jwt.sign(params, "saloncrm", { expiresIn: "1h" });
 
-              delete findUser["password"];
+              findUser.password = undefined;
 
               let finalObjectToBeSend = {
                 token: token,
@@ -556,7 +461,13 @@ function login(req, res) {
   }
   login().then(function(data) {});
 }
-
+/**
+ * Function is use to Update User Data
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function updateUser(req, res) {
   async function updateUser() {
     var image_path;
@@ -680,11 +591,25 @@ function updateUser(req, res) {
   updateUser().then(function() {});
 }
 
+/**
+ * Function is use to reset password
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function forgotPassword() {
   async function forgotPassword() {}
   forgotPassword().then(function(data) {});
 }
-
+/**
+ * Function is use to logout user
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function logoutUser(req, res) {
   async function logoutUser() {
     try {
@@ -726,7 +651,13 @@ function logoutUser(req, res) {
   }
   logoutUser().then(function(data) {});
 }
-
+/**
+ * Function is use to Fetch List of All Users
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function getAllUsers(req, res) {
   async function getAllUsers() {
     let pageSize =
@@ -737,7 +668,6 @@ function getAllUsers(req, res) {
       if (req.body) {
         let rolesCheckCondition = { name: "user" };
         let role = await commonQuery.findoneData(roles, rolesCheckCondition);
-        //console.log("ROLE", role);
 
         let condition = {
           isDeleted: false,
@@ -779,6 +709,14 @@ function getAllUsers(req, res) {
   getAllUsers().then(function() {});
 }
 
+
+/**
+ * Function is use to Add review and ratings
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function addReviewAndRatings(req, res) {
   async function addReviewAndRatings() {
     try {
@@ -822,16 +760,21 @@ function addReviewAndRatings(req, res) {
   }
   addReviewAndRatings().then(function() {});
 }
-
+/**
+ * Function is use to delete User
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function softDeleteUser(req, res) {
-
   async function softDeleteUser() {
     try {
       if (req.body.userid) {
         let condition = { _id: mongoose.Types.ObjectId(req.body.userid) };
-    
+
         let fetchUser = await commonQuery.findoneData(users, condition);
-      
+
         if (!fetchUser) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
@@ -873,53 +816,48 @@ function softDeleteUser(req, res) {
   softDeleteUser().then(function() {});
 }
 
-function getDetailsOfUser(req,res){
+/**
+ * Function is use to Fetch Details of user
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
 
-  console.log(req.body);
+function getDetailsOfUser(req, res) {
+  async function getDetailsOfUser() {
+    try {
+      if (req.body.userid) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.userid),
+          isActive: true,
+          isDeleted: false
+        };
 
+        let userDetails = await commonQuery.findoneData(users, condition);
 
-  async function getDetailsOfUser(){
-
-    try{
-
-      if(req.body.userid){
-
-
-        let condition = {_id:mongoose.Types.ObjectId(req.body.userid),isActive:true,isDeleted:false};
-
-        let userDetails = await commonQuery.findoneData(users,condition);
-
-        if(!userDetails){
-
-        
+        if (!userDetails) {
           return res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
           );
+        } else {
+          userDetails.password = undefined;
 
-        } 
-        else{
-          
-          userDetails.password =  undefined;
-
-          res.json(Response(constant.SUCCESS_CODE,constant.FETCHED_ALL_DATA,userDetails));
-
-
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              userDetails
+            )
+          );
         }
-
-
       }
-
-    }
-    catch(error){
+    } catch (error) {
       return res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
       );
     }
-
-
   }
-  getDetailsOfUser().then(function(){});
-
-
+  getDetailsOfUser().then(function() {});
 }

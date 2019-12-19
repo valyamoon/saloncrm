@@ -9,6 +9,7 @@ const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
 const roles = require("../../user/model/rolesSchema");
 const salons = require("../model/salonSchema");
+const promocodes = require("../model/promocodeSchema");
 const categories = require("../../admin/model/categoriesSchema");
 const reviewratings = require("../model/salonreviewsratingSchema");
 const services = require("../model/servicesSchema");
@@ -24,34 +25,44 @@ module.exports = {
   getSalons: getSalons,
   addServices: addServices,
   getSalonDetails: getSalonDetails,
-  getReviewsAndRatingsList: getReviewsAndRatingsList
+  getReviewsAndRatingsList: getReviewsAndRatingsList,
+  addPromocodes: addPromocodes,
+  getPromoCodes: getPromoCodes
 };
 
+/**
+ * Function is use to Save salon Data
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function saveSalonDetails(req, res) {
   async function saveSalonDetails() {
     try {
       if (req.body && req.body.user_id) {
         let conditon = {
           _id: req.body.user_id,
-          isActive: true,
+          isActive: false,
           isDeleted: false
         };
+
         let checkUser = await commonQuery.findoneData(users, conditon);
 
         if (!checkUser) {
         } else {
-          let locations = {};
-          let long = req.body.long;
+          let coordinates = [req.body.lat, req.body.long];
 
-          let lat = req.body.lat;
-
-          locations = [long, lat];
+          let locations = {
+            type: "Point",
+            coordinates: coordinates
+          };
 
           let salonData = new salons({
             name: req.body.name,
             location: locations,
             contact: req.body.contact,
-            address: req.body.address,
+            salonaddress: req.body.salonaddress,
             user_id: req.body.user_id,
             image: req.body.image
           });
@@ -66,7 +77,7 @@ function saveSalonDetails(req, res) {
             res.json(
               Response(
                 constant.SUCCESS_CODE,
-                constant.NEW_USER_SAVE_SUCCESS,
+                constant.NEW_DATA_ADDED,
                 saveSalon
               )
             );
@@ -82,105 +93,55 @@ function saveSalonDetails(req, res) {
 
   saveSalonDetails().then(function(data) {});
 }
-
+/**
+ * Function is use to Fetch salon Data
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function getSalons(req, res) {
-  let pageSize =
-    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
-  let distanceToCover;
-
-  distanceToCover = req.body.distance ? req.body.distance : 500;
-
   async function getSalons() {
     try {
-      if (req.body && req.body.lat && req.body.long) {
-        //  { $or:[ {'_id':objId}, {'name':param}, {'nickname':param} ]}
-        let conditon = {
-          location: {
-            $geoWithin: {
-              $centerSphere: [
-                [req.body.long, req.body.lat],
-                distanceToCover / 3963.2
-              ]
-            }
-          },
-          name: new RegExp(req.body.name, "gi"),
-          isActive:true,
-          isDeleted:false
+      if (req.body && req.body.categoryid) {
+        let lat = +req.body.lat;
+        let long = +req.body.long;
+        let name = req.body.name;
+        let pageSize = +req.body.pageSize;
+        let page = +req.body.page;
+        let distanceToCover = req.body.distance;
+        let condition = {
+          category_id: mongoose.Types.ObjectId(req.body.categoryid)
         };
-        let salonLists = await commonQuery.fetch_all_paginated(
-          salons,
-          conditon,
-          pageSize,
-          currentPage
-        );
 
-        if (!salonLists) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-          );
-        } else {
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, salonLists)
-          );
-        }
-      } else if (req.body.name) {
-        let conditon = { name: req.body.name,isActive:true,isDeleted:false };
-        let salonList = await commonQuery.fetch_all_paginated(
-          salons,
-          conditon,
+        let salonList = await commonQuery.fetch_all_salons(
+          services,
+          condition,
           pageSize,
-          currentPage
+          page,
+          lat,
+          long,
+          "salons",
+          "salon_id",
+          "_id",
+          "reviewratings",
+          "_id",
+          "salon_id",
+          distanceToCover,
+          name
         );
 
         if (!salonList) {
           res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-          );
-        } else {
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, salonList)
-          );
-        }
-      } else if (req.body.gtp && req.body.ltp) {
-        let conditon = { price: { $gte: +req.body.gtp, $lt: +req.body.ltp },isActive:true,isDeleted:false };
-
-        let priceRangeSalons = await commonQuery.fetch_all_paginated_price(
-          services,
-          conditon,
-          pageSize,
-          currentPage
-        );
-
-        if (!priceRangeSalons) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
           res.json(
             Response(
               constant.SUCCESS_CODE,
-              constant.FETCHED_ALL_USERS,
-              priceRangeSalons
+              constant.FETCHED_ALL_DATA,
+              salonList
             )
-          );
-        }
-      } else {
-        let conditon = {isDeleted:false,isActive:true};
-        let salonLists = await commonQuery.fetch_all_paginated(
-          salons,
-          conditon,
-          pageSize,
-          currentPage
-        );
-
-        if (salonLists) {
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.SALONS_FOUND, salonLists)
-          );
-        } else {
-          res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
           );
         }
       }
@@ -190,62 +151,34 @@ function getSalons(req, res) {
       );
     }
   }
-
   getSalons().then(function() {});
 }
-
-function addServices(req, res) {
-  async function addServices() {
-    try {
-      if (req.body.salon_id) {
-        let newService = new services({
-          name: req.body.name,
-          category_id: req.body.category_id,
-          salon_id: req.body.salon_id,
-          price: req.body.price,
-          duration: req.body.duration
-        });
-        let serviceAdded = await commonQuery.InsertIntoCollection(
-          services,
-          newService
-        );
-        if (!serviceAdded) {
-          return res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-          );
-        } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.ADDED_SUCCESS,
-              serviceAdded
-            )
-          );
-        }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
-    }
-  }
-
-  addServices().then(function() {});
-}
-
+/**
+ * Function is use to Fetch salon Details
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function getSalonDetails(req, res) {
+  console.log("sssss", req.body);
   async function getSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
-        let conditon = { _id: mongoose.Types.ObjectId(req.body.salon_id),isActive:true,isDeleted:false };
-
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.salon_id),
+          isActive: true,
+          isDeleted: false
+        };
+        console.log("cpm", condition);
         let salonDetails = await commonQuery.salonDetailsFetch(
           salons,
           "reviewratings",
           "_id",
           "salon_id",
-          conditon
+          condition
         );
+        console.log(salonDetails);
         if (!salonDetails) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
@@ -269,7 +202,13 @@ function getSalonDetails(req, res) {
 
   getSalonDetails().then(function() {});
 }
-
+/**
+ * Function is use to Fetch Reviews and ratings of salon
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function getReviewsAndRatingsList(req, res) {
   async function getReviewsAndRatingsList() {
     try {
@@ -277,7 +216,11 @@ function getReviewsAndRatingsList(req, res) {
         let pageSize = +req.body.pageSize;
         let page = +req.body.page;
 
-        let conditon = { salon_id: mongoose.Types.ObjectId(req.body.salon_id),isActive:true,isDeleted:false };
+        let conditon = {
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+          isActive: true,
+          isDeleted: false
+        };
 
         let reviewratingsList = await commonQuery.findAll(
           reviewratings,
@@ -309,4 +252,123 @@ function getReviewsAndRatingsList(req, res) {
 
   getReviewsAndRatingsList().then(function() {});
 }
+/**
+ * Function is use to Add services with respect to salon
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+function addServices(req, res) {
+  console.log(req.body);
 
+  async function addServices() {
+    try {
+      if (req.body && req.body.categoryid) {
+        let newService = new services({
+          name: req.body.name,
+          price: req.body.price,
+          duration: req.body.duration,
+          category_id: req.body.categoryid,
+          salon_id: req.body.salonid,
+          logo: req.body.logo
+        });
+
+        let addService = await commonQuery.InsertIntoCollection(
+          services,
+          newService
+        );
+
+        if (!addService) {
+          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+        } else {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, addService)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addServices().then(function() {});
+}
+/**
+ * Function is use to Add Promocodes or Discount
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+function addPromocodes(req, res) {
+  console.log("inpromo", req.body);
+  async function addPromocodes() {
+    try {
+      if (req.body && req.body.name) {
+        let newPromoCode = new promocodes({
+          name: req.body.name,
+          value: req.body.value,
+          description: req.body.description,
+          salon_id: req.body.salon_id
+        });
+        let addPromo = await commonQuery.InsertIntoCollection(
+          promocodes,
+          newPromoCode
+        );
+        if (!addPromo) {
+          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+        } else {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, addPromo)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addPromocodes().then(function() {});
+}
+/**
+ * Function is use to Fetch promocode with respect to salon
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function getPromoCodes(req, res) {
+  async function getPromoCodes() {
+    try {
+      if (req.body && req.body.salon_id) {
+        let conditon = { salon_id: mongoose.Types.ObjectId(req.body.salon_id) };
+
+        let fetchPromoCodes = await commonQuery.findAll(promocodes, conditon);
+        if (!fetchPromoCodes) {
+          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+        } else {
+          // fetchPromoCodes.forEach(function(v){ delete v.salon_id; delete v.usedbyusers; ret });
+
+          fetchPromoCodes.forEach(function(v) {
+            console.log("v", v);
+            v.salon_id = undefined;
+            v.usedbyusers = undefined;
+          });
+
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              fetchPromoCodes
+            )
+          );
+        }
+      }
+    } catch (error) {}
+  }
+  getPromoCodes().then(function() {});
+}
