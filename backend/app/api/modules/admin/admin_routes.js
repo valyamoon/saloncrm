@@ -11,6 +11,7 @@ module.exports = function(router) {
     router.post("/salonsrequest", admin.getSalonsRequestList);
     router.post("/acceptrequest",admin.acceptSalonRequest);
     router.post("/suspendsalon",admin.suspendSalon);
+    router.post("/categories",admin.getCategories);
 
 
   

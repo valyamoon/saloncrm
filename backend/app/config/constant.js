@@ -56,6 +56,8 @@ module.exports = {
   USER_DELETED: "User Deleted Successfully",
   SALON_REQUEST_ACCEPTED:"Salon Request Accepted Successfully",
   REQUEST_SEND_FOR_APPROVAL:"Your request has been sent successfully. Please wait for approval",
-  SALON_SUSPENDED:"Salon Suspended Successfully"
+  SALON_SUSPENDED:"Salon Suspended Successfully",
+  FAILED_TO_ADD:"Failed To Add",
+  NEW_DATA_ADDED:"Data Added Successfully"
   
 };
