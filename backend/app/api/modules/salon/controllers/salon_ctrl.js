@@ -107,8 +107,8 @@ function getSalons(req, res) {
         let lat = +req.body.lat;
         let long = +req.body.long;
         let name = req.body.name;
-        let pageSize = +req.body.pageSize;
-        let page = +req.body.page;
+        let pageSize = +req.body.pageSize ||+req.body.pageSize ? req.body.pageSize : 10;
+        let page = +req.body.page ||+req.body.page ? req.body.page : 1;
         let distanceToCover = req.body.distance;
         let condition = {
           category_id: mongoose.Types.ObjectId(req.body.categoryid)
@@ -125,7 +125,7 @@ function getSalons(req, res) {
           "salon_id",
           "_id",
           "reviewratings",
-          "_id",
+          "salon_id",
           "salon_id",
           distanceToCover,
           name
@@ -170,13 +170,16 @@ function getSalonDetails(req, res) {
           isActive: true,
           isDeleted: false
         };
-        console.log("cpm", condition);
+        //console.log("cpm", condition);
         let salonDetails = await commonQuery.salonDetailsFetch(
           salons,
           "reviewratings",
           "_id",
           "salon_id",
-          condition
+          condition,
+          "reviewratings",
+          "services",
+          "categories"
         );
         console.log(salonDetails);
         if (!salonDetails) {
@@ -210,24 +213,25 @@ function getSalonDetails(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getReviewsAndRatingsList(req, res) {
+  console.log(req.body);
   async function getReviewsAndRatingsList() {
     try {
       if (req.body.salon_id) {
-        let pageSize = +req.body.pageSize;
-        let page = +req.body.page;
+        let pageSize = +req.body.pageSize|| +req.body.pageSize ? req.body.pageSize : 10;
+        let page = +req.body.page  || +req.body.page ? req.body.page : 1;
 
         let conditon = {
-          salon_id: mongoose.Types.ObjectId(req.body.salon_id),
-          isActive: true,
-          isDeleted: false
+          salon_id: req.body.salon_id
         };
 
-        let reviewratingsList = await commonQuery.findAll(
+        let reviewratingsList = await commonQuery.fetch_all_paginated(
           reviewratings,
           conditon,
           pageSize,
           page
         );
+
+        console.log(reviewratingsList);
 
         if (!reviewratingsList) {
           res.json(
