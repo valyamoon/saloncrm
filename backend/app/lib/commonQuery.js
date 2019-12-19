@@ -38,6 +38,8 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
   distance,
   name
 ) {
+
+  console.log(second_fromTable,second_localFieldVal,second_foreignFieldVal);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
@@ -74,7 +76,8 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
           foreignField: second_foreignFieldVal,
           as: "ratings"
         }
-      },
+      }
+      ,
       {
         $project: {
           _id: "$salons._id",
@@ -695,7 +698,10 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
   fromTable,
   localFieldVal,
   foreignFieldVal,
-  condition
+  condition,
+  second_fromTable,
+  third_fromTable,
+  fourth_fromTable
 ) {
   console.log(fromTable, localFieldVal, foreignFieldVal, condition);
   return new Promise(function(resolve, reject) {
@@ -705,7 +711,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
         },
         {
           $lookup: {
-            from: "reviewsratings",
+            from:  second_fromTable,
             localField: "_id",
             foreignField: "salon_id",
             as: "reviewsratings"
@@ -713,7 +719,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
         },
         {
           $lookup: {
-            from: "reviewratings",
+            from:  second_fromTable,
             let: { salon_id: "$_id" },
             pipeline: [
               {
@@ -756,7 +762,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
         },
         {
           $lookup: {
-            from: "services",
+            from: third_fromTable,
             let: { salon_id: "$_id" },
             pipeline: [
               {
@@ -785,7 +791,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
               },
               {
                 $lookup: {
-                  from: "categories",
+                  from:fourth_fromTable,
                   let: { cat_id: "$_id.category_id" },
                   pipeline: [
                     {
@@ -992,7 +998,7 @@ commonQuery.fetch_all_paginated_price = function fetch_all_paginated_price(
 
 commonQuery.fetch_all_paginated = function fetch_all_paginated(
   model,
-  cond = {},
+  cond,
   pageSize,
   page
 ) {
@@ -1009,6 +1015,7 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
     }
 
     let postQuery = model.find(cond);
+    //console.log(pos)
 
     if (pageSizes && currentPage) {
       postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);

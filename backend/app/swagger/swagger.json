@@ -7,7 +7,7 @@
       "url": "https://opensource.org/licenses/MIT"
     },
     "version": "1.0.0",
-    "host": "172.10.230.180:3000",
+    "host": "localhost:3000",
     "basePath": "/api",
     "schemes": [
       "http",
@@ -57,13 +57,13 @@
           }
         }
       },
-      "/user/UserSocialLoginAndRegistration": {
+      "/verifyotp": {
         "post": {
           "tags": [
             "User Module"
           ],
-          "summary": "Add User by Super Admin",
-          "description": "Add User by Super Admin",
+          "summary": "Verify the otp",
+          "description": "Verify the otp",
           "parameters": [
             {
               "name": "body",
@@ -71,7 +71,7 @@
               "description": "Add User by Super Admin",
               "required": "true",
               "schema": {
-                "$ref": "#definitions/UserSocialLoginAndRegistration"
+                "$ref": "#definitions/verifyUser"
               }
             }
           ],
@@ -94,13 +94,13 @@
           }
         }
       },
-      "/user/addUserManager": {
+      "/register": {
         "post": {
           "tags": [
             "User Module"
           ],
-          "summary": "Add User by Super Admin",
-          "description": "Add User by Super Admin",
+          "summary": "Register User",
+          "description": "Register User add role as user for user and admin/salon for respective registerations",
           "parameters": [
             {
               "name": "body",
@@ -108,7 +108,7 @@
               "description": "Add User by Super Admin",
               "required": "true",
               "schema": {
-                "$ref": "#definitions/addUserManager"
+                "$ref": "#definitions/registerUser"
               }
             }
           ],
@@ -131,21 +131,21 @@
           }
         }
       },
-      "/user/editUserManager": {
+      "/updateuser": {
         "post": {
           "tags": [
             "User Module"
           ],
-          "summary": "edit manager by Super Admin",
-          "description": "Add User by Super Admin",
+          "summary": "Update User data",
+          "description": "Update User data",
           "parameters": [
             {
               "name": "body",
               "in": "body",
-              "description": "Add User by Super Admin",
+              "description": "Update user data",
               "required": "true",
               "schema": {
-                "$ref": "#definitions/editUserManager"
+                "$ref": "#definitions/updateUser"
               }
             }
           ],
@@ -168,13 +168,13 @@
           }
         }
       },
-      "/user/deleteManager": {
+      "/logout": {
         "post": {
           "tags": [
             "User Module"
           ],
-          "summary": "edit manager by Super Admin",
-          "description": "Add User by Super Admin",
+          "summary": "logout user",
+          "description": "logout user",
           "parameters": [
             {
               "name": "body",
@@ -182,7 +182,7 @@
               "description": "Add User by Super Admin",
               "required": "true",
               "schema": {
-                "$ref": "#definitions/deleteManager"
+                "$ref": "#definitions/logoutUser"
               }
             }
           ],
@@ -205,21 +205,21 @@
           }
         }
       },
-      "/user/activeDeactivateManager": {
+      "/users": {
         "post": {
           "tags": [
             "User Module"
           ],
-          "summary": "edit manager by Super Admin",
-          "description": "Add User by Super Admin",
+          "summary": "Get List of all users",
+          "description": "Get List of all users",
           "parameters": [
             {
               "name": "body",
               "in": "body",
-              "description": "Add User by Super Admin",
+              "description": "Get List of all users",
               "required": "true",
               "schema": {
-                "$ref": "#definitions/activeDeactivateManager"
+                "$ref": "#definitions/getAllUsers"
               }
             }
           ],
@@ -242,10 +242,10 @@
           }
         }
       },                          
-      "/user/editProfile": {
+      "/login": {
         "post": {
           "tags": [
-            "User Details Module"
+            "User Module"
           ],
           "summary": "Api endpoint for upload image",
           "description": "Image uploading on server test",
@@ -1886,47 +1886,38 @@
           },
           "code": {
             "type": "string"
+          },
+          "via":{
+              "type":"string"
           }
         }
       },
-      "UserSocialLoginAndRegistration": {
+      "verifyUser": {
         "type": "object",
         "properties": {
-          "firstName": {
+          "phone": {
             "type": "string"
           },
-          "lastName": {
+          "code": {
             "type": "string"
           },
-          "email": {
+          "token": {
+            "type": "string"
+          }   
+        }
+      },
+      "registerUser": {
+        "type": "object",
+        "properties": {
+          "phone": {
             "type": "string"
           },
-          "country": {
-            "type": "string"
-          },
-          "city": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          },
-          "mobileNumber": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "name": {
+          "code": {
             "type": "string"
           },
           "loggedInVia": {
             "type": "string"
-          }        
-        }
-      },
-      "addUserManager": {
-        "type": "object",
-        "properties": {
+          },
           "firstName": {
             "type": "string"
           },
@@ -1936,33 +1927,27 @@
           "email": {
             "type": "string"
           },
-          "password": {
-            "type": "string"
-          },
-          "country": {
-            "type": "string"
-          },
-          "city": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          },
-          "mobileNumber": {
-            "type": "string"
-          },
           "address": {
             "type": "string"
           },
-          "createdby_id": {
+          "lat": {
             "type": "string"
           },
-          "userRoleId": {
+          "long": {
             "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "password":{
+            "type": "string" 
           }
         }
       },
-      "editUserManager": {
+      "updateUser": {
         "type": "object",
         "properties": {
           "firstName": {
@@ -1971,44 +1956,29 @@
           "lastName": {
             "type": "string"
           },
-          "email": {
-            "type": "string"
-          },
-          "country": {
-            "type": "string"
-          },
-          "city": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          },
-          "mobileNumber": {
-            "type": "string"
+          "profilepic": {
+            "type": "file"
           },
           "address": {
-            "type": "string"
-          },
-          "user_id": {
             "type": "string"
           }
         }
       },
-      "deleteManager": {
+      "logoutUser": {
         "type": "object",
         "properties": {
-          "id": {
+          "_id": {
             "type": "string"
           }
         }
       }, 
-      "activeDeactivateManager": {
+      "getAllUsers": {
         "type": "object",
         "properties": {
-          "user_id": {
+          "pageSize": {
             "type": "string"
           },
-          "status": {
+          "page": {
             "type": "boolean"
           }
         }
