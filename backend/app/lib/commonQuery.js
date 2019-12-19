@@ -22,6 +22,89 @@ var commonQuery = {};
  * @smartData Enterprises (I) Ltd
  * Created Date 22-Jan-2018
  */
+commonQuery.fetch_all_salons = function fetch_all_salons(
+  model,
+  cond = {},
+  pageSize,
+  page,
+  lat,
+  long,
+  fromTable,
+  localFieldVal,
+  foreignFieldVal,
+  second_fromTable,
+  second_localFieldVal,
+  second_foreignFieldVal,
+  distance,
+  name
+) {
+  return new Promise(function(resolve, reject) {
+    let pageSizes = pageSize;
+    let currentPage = page;
+
+    let postQuery = model.aggregate([
+      { $match: cond },
+      {
+        $lookup: {
+          from: fromTable,
+          localField: localFieldVal,
+          foreignField: foreignFieldVal,
+          as: "salons"
+        }
+      },
+      { $unwind: "$salons" },
+      {
+        $match: {
+          "salons.location": {
+            $geoWithin: {
+              $centerSphere: [[lat, long], distance / 3963.2]
+            }
+          }
+        }
+      },
+      {
+        $match: {
+          "salons.name": new RegExp(name ? name : " ", "gi")
+        }
+      },
+      {
+        $lookup: {
+          from: second_fromTable,
+          localField: second_localFieldVal,
+          foreignField: second_foreignFieldVal,
+          as: "ratings"
+        }
+      },
+      {
+        $project: {
+          _id: "$salons._id",
+          name: "$salons.name",
+          location: "$salons.location",
+          address: "$salons.salonaddress",
+          contact: "$salons.contact",
+          image: "$salons.image",
+          avgRatings: { $avg: "$ratings.ratings" }
+        }
+      }
+    ]);
+
+    if (pageSizes && currentPage) {
+      postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
+    }
+    postQuery
+      .then(result => {
+       // console.log("999999999999999999999", result);
+
+
+        resolve(result);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 commonQuery.findoneData = async function findoneData(
   model,
   condition,
@@ -37,34 +120,6 @@ commonQuery.findoneData = async function findoneData(
     });
   });
 };
-
-// commonQuery.findSalonsBasedOnPrice = async function findSalonsBasedOnPrice(
-//   model,
-//   condition,
-//   pageSize,
-//   page
-// ) {
-
-//   // let salonid = "salon_id"
-//   let pageSizes = pageSize;
-//   let currentPage = page;
-
-//   return new Promise(function(resolve, reject) {
-//     let postQuery = model.find(condition);
-
-//     if (pageSizes && currentPage) {
-//       postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
-//     }
-//     postQuery.exec(function(err, data) {
-//       if (err) {
-
-//         reject(err);
-//       } else {
-//         resolve(data);
-//       }
-//     });
-//   });
-// };
 
 commonQuery.findAll = async function findAll(model, condition, pageSize, page) {
   let user = "_id";
@@ -610,7 +665,6 @@ commonQuery.aggregateFunc = function aggregateFunc(
   condition
 ) {
   return new Promise(function(resolve, reject) {
-    console.log("YAAAAAAAAAAAAAAAAA");
     model
       .aggregate([
         {
@@ -643,53 +697,139 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
   foreignFieldVal,
   condition
 ) {
+  console.log(fromTable, localFieldVal, foreignFieldVal, condition);
   return new Promise(function(resolve, reject) {
-    console.log("YAAAAAAAAAAAAAAAAA");
     model
       .aggregate([
-        {
-          $match: condition
+        { $match: condition
         },
         {
           $lookup: {
-            from: fromTable,
-            localField: localFieldVal,
-            foreignField: foreignFieldVal,
-            as: "finaldata"
+            from: "reviewsratings",
+            localField: "_id",
+            foreignField: "salon_id",
+            as: "reviewsratings"
           }
         },
-        { $unwind: "$finaldata" },
-
+        {
+          $lookup: {
+            from: "reviewratings",
+            let: { salon_id: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [{ $eq: ["$salon_id", "$$salon_id"] }]
+                  }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  rating: {
+                    $first: {
+                      $divide: [
+                        {
+                          $trunc: {
+                            $multiply: [
+                              {
+                                $avg: "$ratings"
+                              },
+                              100
+                            ]
+                          }
+                        },
+                        100
+                      ]
+                    }
+                  }
+                }
+              }
+            ],
+            as: "allRating"
+          }
+        },
+        {
+          $unwind: {
+            path: "$allRating"
+          }
+        },
+        {
+          $lookup: {
+            from: "services",
+            let: { salon_id: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$salon_id", "$$salon_id"]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                $group: {
+                  _id: { category_id: "$category_id" },
+                  services: {
+                    $push: {
+                      name: "$name",
+                      price: "$price",
+                      duration: "$duration",
+                      id: "$_id"
+                    }
+                  }
+                }
+              },
+              {
+                $lookup: {
+                  from: "categories",
+                  let: { cat_id: "$_id.category_id" },
+                  pipeline: [
+                    {
+                      $match: {
+                        $expr: {
+                          $and: [
+                            {
+                              $eq: ["$_id", "$$cat_id"]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  as: "saloncategory"
+                }
+              },
+              {
+                $unwind: {
+                  path: "$saloncategory"
+                }
+              },
+              {
+                $project: {
+                  _id: "$_id.category_id",
+                  catname: "$saloncategory.catname",
+                  services: "$services"
+                }
+              }
+            ],
+            as: "category"
+          }
+        },
         {
           $project: {
-            _id: "$_id",
+            name: 1,
+            image: 1,
+            address: "$salonaddress",
+            location:1,
             opentime: 1,
             closetime: 1,
-            image: 1,
-            name: 1,
-            location: 1,
-            finaldata: "$finaldata"
-          }
-        },
-        {
-          $group: {
-            _id: "$finaldata.salon_id",
-            avgRatings: { $avg: "$finaldata.ratings" },
-            image: {
-              $first: "$image"
-            },
-            name: {
-              $first: "$name"
-            },
-            location: {
-              $first: "$location"
-            },
-            opentime: {
-              $first: "$opentime"
-            },
-            closetime: {
-              $first: "$closetime"
-            }
+            contact:1,
+            avgRatings: "$allRating.rating",
+            categories: "$category"
           }
         }
       ])
@@ -698,7 +838,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
           console.log(err);
           reject(err);
         } else {
-          resolve(data);
+          resolve(data[0]);
         }
       });
   });
@@ -802,7 +942,6 @@ commonQuery.findData = function findData(model, cond, fetchVal) {
 };
 
 commonQuery.fileUpload = function fileUpload(imagePath, buffer) {
-  console.log("imagePath", imagePath, buffer);
   return new Promise((resolve, reject) => {
     try {
       let tempObj = {
@@ -830,13 +969,11 @@ commonQuery.fetch_all_paginated_price = function fetch_all_paginated_price(
   pageSize,
   page
 ) {
-  console.log("inFETCHALLPAGINATED", cond, pageSize, page);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
 
     let postQuery = model.find(cond).populate("category_id");
-    console.log("postQuery", postQuery);
 
     if (pageSizes && currentPage) {
       postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
@@ -900,7 +1037,6 @@ commonQuery.multiLookup = function multiLookup(
   third_fromTable,
   third_foreignFieldVal
 ) {
-  console.log(condition);
   return new Promise(function(resolve, reject) {
     model
       .aggregate([
@@ -1028,7 +1164,6 @@ commonQuery.getSalonsBasedOnRatings = function getSalonsBasedOnRatings(
         if (err) {
           reject(err);
         } else {
-          console.log("INHERE", data);
           resolve(data);
         }
       });
