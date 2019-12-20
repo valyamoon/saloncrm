@@ -18,6 +18,7 @@ module.exports = function(router) {
   router.post('/addreviewrating',user.addReviewAndRatings);
   router.post('/deleteuser',user.softDeleteUser);
   router.post('/userdetail',user.getDetailsOfUser);
+  router.post('/charge',user.userPayment)
 
 
   // router.get('/listUser', middlewares, user.getUserList);

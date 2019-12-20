@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 //const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
-
+const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 const jwtKey = "saloncrm";
 const mkdirp = require("mkdirp");
 const multer = require("multer");
@@ -15,6 +15,7 @@ const expiry = "1h";
 const countryData = require("country-data").countries;
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
+const salons = require("../../salon/model/salonSchema");
 const reviewratings = require("../../salon/model/salonreviewsratingSchema");
 
 const roles = require("../model/rolesSchema");
@@ -37,7 +38,8 @@ module.exports = {
   getAllUsers: getAllUsers,
   addReviewAndRatings: addReviewAndRatings,
   softDeleteUser: softDeleteUser,
-  getDetailsOfUser: getDetailsOfUser
+  getDetailsOfUser: getDetailsOfUser,
+  userPayment: userPayment
 };
 
 // /* Function is use to Request Otp
@@ -709,7 +711,6 @@ function getAllUsers(req, res) {
   getAllUsers().then(function() {});
 }
 
-
 /**
  * Function is use to Add review and ratings
  * @access private
@@ -718,14 +719,15 @@ function getAllUsers(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function addReviewAndRatings(req, res) {
+  console.log(req.body);
   async function addReviewAndRatings() {
     try {
-      if (req.body) {
-        let condition = {
-          _id: req.body.salon_id,
-          isActive: true,
-          isDeleted: false
-        };
+      if (req.body.salon_id && req.body) {
+        // let condition = {
+        //   _id: req.body.salon_id,
+        //   isActive: false,
+        //   isDeleted: false
+        // };
         let reviewRating = new reviewratings({
           comments: req.body.comments,
           ratings: req.body.ratings,
@@ -733,16 +735,36 @@ function addReviewAndRatings(req, res) {
           salon_id: req.body.salon_id
         });
 
+        console.log(reviewRating);
+
         let saveReviewAndRatings = await commonQuery.InsertIntoCollection(
           reviewratings,
           reviewRating
         );
-
+        console.log(saveReviewAndRatings);
         if (!saveReviewAndRatings) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
+          let condition = { _id: mongoose.Types.ObjectId(req.body.salon_id) };
+          console.log(condition);
+          let updateCondition = { isreviewadded: true };
+          console.log("condition", updateCondition);
+          let updateSalonData = await commonQuery.updateOneDocument(
+            salons,
+            condition,
+            updateCondition
+          );
+
+          console.log("updateSalonData", updateSalonData);
+
+          if (!updateSalonData) {
+            console.log("ERROR");
+          } else {
+            console.log("salondataupdated");
+          }
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -824,7 +846,6 @@ function softDeleteUser(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 
-
 function getDetailsOfUser(req, res) {
   async function getDetailsOfUser() {
     try {
@@ -861,3 +882,79 @@ function getDetailsOfUser(req, res) {
   }
   getDetailsOfUser().then(function() {});
 }
+
+/**
+ * Function is use to Pay to Salon
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function userPayment(req, res) {
+  console.log(req.body);
+  async function userPayment() {
+    //**********
+    //   //
+    //   { date: '2019-12-20T17:26:55.029Z',
+    // user_id: '5dfc6c9f7811131ea68087c4',
+    // time: '2019-12-20T17:26:56.805Z',
+    // stripeEmail: 'salon.sdn@gmail.com',
+    // promocode_id: '',
+    // salon_id: '5dfc7062448be621427b91e8',
+    // stripeToken: 'tok_1Frk6lKEPNVh8nfQAkGILmwW',
+    // services: [ '5dfc7092448be621427b91ea' ],
+    // totalAmt: 30 }
+    //
+    //
+    //
+    //*****/
+
+    let amount = +req.body.totalAmt*100; // 500 cents means $5
+    console.log("Amount", amount,req.body.stripeEmail);
+
+    stripe.charges.create(
+      {
+        amount: amount,
+        currency: "usd",
+        source: req.body.stripeToken,
+        description: "Charge for" + req.body.stripeEmail,
+        shipping: {
+          name: 'Jenny Rosen',
+          address: {
+            line1: '510 Townsend St',
+            postal_code: '98140',
+            city: 'San Francisco',
+            state: 'CA',
+            country: 'US',
+          }
+        }
+      },
+      function(err, charge) {
+        if (err) {
+          console.log(err);
+        } else {
+          
+        }
+      }
+    );
+  }
+
+  userPayment().then(function() {});
+}
+
+
+
+// function bookAppointment(req,res){
+
+
+//   async function bookAppointment(){
+
+
+
+
+//   }
+
+//   bookAppointment().then(function(){})
+
+// }
