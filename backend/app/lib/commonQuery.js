@@ -9,6 +9,8 @@ var constant = require("../config/constant");
 var mongoose = require("mongoose");
 var fs = require("fs");
 
+
+
 var path = require("path");
 var async = require("async");
 
@@ -54,7 +56,12 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
           as: "salons"
         }
       },
-      { $unwind: "$salons" },
+      { $unwind: "$salons" }, 
+      {
+        $match: {
+          "salons.isservicesadded":"true"
+        }
+      },
       {
         $match: {
           "salons.location": {
@@ -64,6 +71,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
           }
         }
       },
+   
       {
         $match: {
           "salons.name": new RegExp(name ? name : " ", "gi")
@@ -284,6 +292,9 @@ commonQuery.updateOneDocument = function updateOneDocument(
   updateCond,
   updateData
 ) {
+
+
+
   return new Promise(function(resolve, reject) {
     model
       .findOneAndUpdate(
@@ -1190,5 +1201,66 @@ commonQuery.getSalonOnPrice = function getSalonOnPrice() {
     });
   });
 };
+
+commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
+  model,
+  cond,
+  pageSize,
+  page
+) {
+  //console.log("inFETCHALLPAGINATED",model,cond,pageSize.page);
+  return new Promise(function(resolve, reject) {
+    let pageSizes = pageSize;
+    let currentPage = page;
+    //  console.log("pageSizes",pageSizes);
+    // console.log("currentPage",currentPage);
+    if (cond) {
+      cond = cond;
+    } else {
+      cond = {};
+    }
+
+    let postQuery = model.aggregate([
+      {
+        $lookup:
+          {
+            from: "users",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "users"
+          }
+     },
+     {$unwind:"$users"},
+     {
+         $project: {
+           ratings:"$ratings",
+           comments:"$comments",
+           firstName:"$users.firstName",
+           lastName:"$users.lastName",
+           profilepic:"$users.profilepic",
+           createdAt:"$createdAt"  
+         }
+      }
+   ]);
+    //console.log(pos)
+
+    if (pageSizes && currentPage) {
+      postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
+    }
+    postQuery
+      .then(result => {
+        console.log(result);
+        resolve(result);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+
+
+
 
 module.exports = commonQuery;

@@ -3,6 +3,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
+const stripe =  require('stripe')("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 var path = require("path");
 var http = require("http");
 var https = require("https");

@@ -64,7 +64,13 @@ function saveSalonDetails(req, res) {
             contact: req.body.contact,
             salonaddress: req.body.salonaddress,
             user_id: req.body.user_id,
-            image: req.body.image
+            image: req.body.image,
+            opentime: req.body.opentime,
+            closetime: req.body.closetime,
+            isActive: false,
+            isDeleted: false,
+            isreviewadded: false,
+            isservicesadded: false
           });
 
           let saveSalon = await commonQuery.InsertIntoCollection(
@@ -74,6 +80,13 @@ function saveSalonDetails(req, res) {
 
           if (!saveSalon) {
           } else {
+            // saveSalon.forEach(function(v) {
+            //   v.isActive = undefined;
+            //   v.saveSalon = undefined;
+            //   v.isservicesadded = undefined;
+            //   v.isreviewadded = undefined;
+            // });
+
             res.json(
               Response(
                 constant.SUCCESS_CODE,
@@ -107,8 +120,9 @@ function getSalons(req, res) {
         let lat = +req.body.lat;
         let long = +req.body.long;
         let name = req.body.name;
-        let pageSize = +req.body.pageSize ||+req.body.pageSize ? req.body.pageSize : 10;
-        let page = +req.body.page ||+req.body.page ? req.body.page : 1;
+        let pageSize =
+          +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+        let page = +req.body.page || +req.body.page ? req.body.page : 1;
         let distanceToCover = req.body.distance;
         let condition = {
           category_id: mongoose.Types.ObjectId(req.body.categoryid)
@@ -217,14 +231,15 @@ function getReviewsAndRatingsList(req, res) {
   async function getReviewsAndRatingsList() {
     try {
       if (req.body.salon_id) {
-        let pageSize = +req.body.pageSize|| +req.body.pageSize ? req.body.pageSize : 10;
-        let page = +req.body.page  || +req.body.page ? req.body.page : 1;
+        let pageSize =
+          +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+        let page = +req.body.page || +req.body.page ? req.body.page : 1;
 
         let conditon = {
           salon_id: req.body.salon_id
         };
 
-        let reviewratingsList = await commonQuery.fetch_all_paginated(
+        let reviewratingsList = await commonQuery.fetch_ReviewRatings(
           reviewratings,
           conditon,
           pageSize,
@@ -238,6 +253,8 @@ function getReviewsAndRatingsList(req, res) {
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
+          console.log(reviewratingsList);
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -268,13 +285,13 @@ function addServices(req, res) {
 
   async function addServices() {
     try {
-      if (req.body && req.body.categoryid) {
+      if (req.body && req.body.category_id) {
         let newService = new services({
           name: req.body.name,
           price: req.body.price,
           duration: req.body.duration,
-          category_id: req.body.categoryid,
-          salon_id: req.body.salonid,
+          category_id: req.body.category_id,
+          salon_id: req.body.salon_id,
           logo: req.body.logo
         });
 
@@ -282,10 +299,25 @@ function addServices(req, res) {
           services,
           newService
         );
+        console.log(addService);
 
         if (!addService) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
+          let condition = { _id: req.body.salon_id };
+
+          let updateCondition = { isservicesadded: true };
+
+          let updateSalonData = await commonQuery.updateOneDocument(
+            salons,
+            condition,
+            updateCondition
+          );
+          if (!updateSalonData) {
+          } else {
+            console.log("salondataupdated");
+          }
+
           res.json(
             Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, addService)
           );
@@ -358,7 +390,6 @@ function getPromoCodes(req, res) {
           // fetchPromoCodes.forEach(function(v){ delete v.salon_id; delete v.usedbyusers; ret });
 
           fetchPromoCodes.forEach(function(v) {
-            console.log("v", v);
             v.salon_id = undefined;
             v.usedbyusers = undefined;
           });

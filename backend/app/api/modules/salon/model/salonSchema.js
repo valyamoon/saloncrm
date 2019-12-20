@@ -27,11 +27,11 @@ var salonSchema = mongoose.Schema({
     type: String
   },
   opentime: {
-    type: String,
+    type: Number,
     default: null
   },
   closetime: {
-    type: String,
+    type: Number,
     default: null
   },
   user_id: {
@@ -41,6 +41,14 @@ var salonSchema = mongoose.Schema({
   image: {
     type: String,
     default: null
+  },
+  isreviewadded: {
+    type: String,
+    default: false
+  },
+  isservicesadded: {
+    type: String,
+    default: false
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));
