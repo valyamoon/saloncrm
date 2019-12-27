@@ -414,7 +414,8 @@
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
             /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
             /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-            var routes = [{ path: 'salon', loadChildren: function () { return __webpack_require__.e(/*! import() | app-salon-salon-module */ "app-salon-salon-module").then(__webpack_require__.bind(null, /*! ../app/salon/salon.module */ "./src/app/salon/salon.module.ts")).then(function (m) { return m.SalonModule; }); } },
+            var routes = [{ path: '', redirectTo: 'admin', pathMatch: 'full' },
+                { path: 'salon', loadChildren: function () { return __webpack_require__.e(/*! import() | app-salon-salon-module */ "app-salon-salon-module").then(__webpack_require__.bind(null, /*! ../app/salon/salon.module */ "./src/app/salon/salon.module.ts")).then(function (m) { return m.SalonModule; }); } },
                 { path: 'admin', loadChildren: function () { return __webpack_require__.e(/*! import() | app-admin-admin-module */ "app-admin-admin-module").then(__webpack_require__.bind(null, /*! ../app/admin/admin.module */ "./src/app/admin/admin.module.ts")).then(function (m) { return m.AdminModule; }); } },
                 { path: 'user', loadChildren: function () { return __webpack_require__.e(/*! import() | app-user-user-module */ "app-user-user-module").then(__webpack_require__.bind(null, /*! ../app/user/user.module */ "./src/app/user/user.module.ts")).then(function (m) { return m.UserModule; }); } }];
             //{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
