@@ -364,7 +364,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const routes = [{ path: 'salon', loadChildren: () => __webpack_require__.e(/*! import() | app-salon-salon-module */ "app-salon-salon-module").then(__webpack_require__.bind(null, /*! ../app/salon/salon.module */ "./src/app/salon/salon.module.ts")).then(m => m.SalonModule) },
+const routes = [{ path: '', redirectTo: 'admin', pathMatch: 'full' },
+    { path: 'salon', loadChildren: () => __webpack_require__.e(/*! import() | app-salon-salon-module */ "app-salon-salon-module").then(__webpack_require__.bind(null, /*! ../app/salon/salon.module */ "./src/app/salon/salon.module.ts")).then(m => m.SalonModule) },
     { path: 'admin', loadChildren: () => __webpack_require__.e(/*! import() | app-admin-admin-module */ "app-admin-admin-module").then(__webpack_require__.bind(null, /*! ../app/admin/admin.module */ "./src/app/admin/admin.module.ts")).then(m => m.AdminModule) },
     { path: 'user', loadChildren: () => __webpack_require__.e(/*! import() | app-user-user-module */ "app-user-user-module").then(__webpack_require__.bind(null, /*! ../app/user/user.module */ "./src/app/user/user.module.ts")).then(m => m.UserModule) }];
 //{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
