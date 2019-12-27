@@ -49,6 +49,10 @@ var salonSchema = mongoose.Schema({
   isservicesadded: {
     type: String,
     default: false
+  },
+  employees:{
+    type:[mongoose.Types.ObjectId],
+    ref:"employees"
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));

@@ -50,7 +50,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true ,limit:'50mb'}));
 
 // routes
-app.use("/uploads", express.static(path.join(__dirname, "./app/uploads")));
+//app.use("/uploads", express.static(path.join(__dirname, "./app/uploads")));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/modules/dashboard")));
