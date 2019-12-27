@@ -54,7 +54,7 @@ app.use(bodyParser.json({ extended: true ,limit:'50mb'}));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/modules/dashboard")));
-app.use(express.static(path.join(__dirname, "public/dist")));
+app.use(express.static(path.join(__dirname, "public/frontend")));
 // All api requests
 app.use(function(req, res, next) {
   // CORS headers
