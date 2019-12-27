@@ -6,13 +6,16 @@ const utility = require("../../../../lib/utility.js");
 const jwt = require("jsonwebtoken");
 
 const constant = require("../../../../config/constant.js");
+
 const users = mongoose.model("users");
 const roles = require("../../user/model/rolesSchema");
 const salons = require("../model/salonSchema");
 const promocodes = require("../model/promocodeSchema");
+const employees = require("../model/employeeSchema");
 const categories = require("../../admin/model/categoriesSchema");
+const salonservices = require("../model/salonservicesSchema");
 const reviewratings = require("../model/salonreviewsratingSchema");
-const services = require("../model/servicesSchema");
+const services = require("../../admin/model/servicesSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
@@ -23,11 +26,15 @@ const commonQuery = require("../../../../lib/commonQuery.js");
 module.exports = {
   saveSalonDetails: saveSalonDetails,
   getSalons: getSalons,
-  addServices: addServices,
+  addSalonServices: addSalonServices,
   getSalonDetails: getSalonDetails,
   getReviewsAndRatingsList: getReviewsAndRatingsList,
   addPromocodes: addPromocodes,
-  getPromoCodes: getPromoCodes
+  getPromoCodes: getPromoCodes,
+  getSalonServices: getSalonServices,
+  addEmployeeToSalon: addEmployeeToSalon,
+  addServicesToEmployee: addServicesToEmployee,
+  removeServiceToEmployee: removeServiceToEmployee
 };
 
 /**
@@ -65,8 +72,8 @@ function saveSalonDetails(req, res) {
             salonaddress: req.body.salonaddress,
             user_id: req.body.user_id,
             image: req.body.image,
-            opentime: req.body.opentime,
-            closetime: req.body.closetime,
+            opentime: +req.body.opentime,
+            closetime: +req.body.closetime,
             isActive: false,
             isDeleted: false,
             isreviewadded: false,
@@ -113,60 +120,95 @@ function saveSalonDetails(req, res) {
  * Created by SmartData
  * @smartData Enterprises (I) Ltd
  */
+// function getSalons(req, res) {
+//   console.log("hddjdjd",req.body)
+//   async function getSalons() {
+//     try {
+//       if (req.body && req.body.category_id) {
+//         let lat = +req.body.lat;
+//         let long = +req.body.long;
+//         let name = req.body.name;
+//         let pageSize = +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
+//         let page = +req.body.page || +req.body.page ? req.body.page : +1;
+//         let distanceToCover = req.body.distance;
+//         let condition = {
+//           category_id: mongoose.Types.ObjectId(req.body.category_id)
+//         };
+
+//         console.log(lat,long,name,pageSize,page,condition);
+
+//         let salonList = await commonQuery.fetch_all_salons(
+//           services,
+//           condition,
+//           pageSize,
+//           page,
+//           lat,
+//           long,
+//           "salons",
+//           "salon_id",
+//           "_id",
+//           "reviewratings",
+//           "salon_id",
+//           "salon_id",
+//           distanceToCover,
+//           name
+//         );
+
+//         if (!salonList) {
+//           res.json(
+//             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+//           );
+//         } else {
+//           res.json(
+//             Response(
+//               constant.SUCCESS_CODE,
+//               constant.FETCHED_ALL_DATA,
+//               salonList
+//             )
+//           );
+//         }
+//       }
+//     } catch (error) {
+//       return res.json(
+//         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+//       );
+//     }
+//   }
+//   getSalons().then(function() {});
+// }
+
 function getSalons(req, res) {
+  console.log(req.body);
+
   async function getSalons() {
     try {
-      if (req.body && req.body.categoryid) {
+      console.log("HIiiii");
+      if (req.body && req.body.services_id) {
         let lat = +req.body.lat;
         let long = +req.body.long;
         let name = req.body.name;
         let pageSize =
-          +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-        let page = +req.body.page || +req.body.page ? req.body.page : 1;
+          +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
+        let page = +req.body.page || +req.body.page ? req.body.page : +1;
         let distanceToCover = req.body.distance;
-        let condition = {
-          category_id: mongoose.Types.ObjectId(req.body.categoryid)
-        };
+        let dynamicQuery = req.body.services_id;
+        console.log("sssssss",dynamicQuery);
+        console.log("sssxxx",lat,long,name)
+  
 
-        let salonList = await commonQuery.fetch_all_salons(
-          services,
-          condition,
-          pageSize,
-          page,
-          lat,
-          long,
-          "salons",
-          "salon_id",
-          "_id",
-          "reviewratings",
-          "salon_id",
-          "salon_id",
-          distanceToCover,
-          name
-        );
-
+        let salonList = await commonQuery.fetch_near_salons(salons,pageSize,page,dynamicQuery,distanceToCover,lat,long);
         if (!salonList) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
         } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.FETCHED_ALL_DATA,
-              salonList
-            )
-          );
+          console.log(salonList);
+          res.json({data:salonList})
         }
       }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
-    }
+    } catch (error) {}
   }
+
   getSalons().then(function() {});
 }
+
 /**
  * Function is use to Fetch salon Details
  * @access private
@@ -280,29 +322,28 @@ function getReviewsAndRatingsList(req, res) {
  * Created by SmartData
  * @smartData Enterprises (I) Ltd
  */
-function addServices(req, res) {
+function addSalonServices(req, res) {
   console.log(req.body);
 
-  async function addServices() {
+  async function addSalonServices() {
     try {
-      if (req.body && req.body.category_id) {
-        let newService = new services({
-          name: req.body.name,
+      if (req.body.salon_id && req.body) {
+        let newsalonService = new salonservices({
           price: req.body.price,
           duration: req.body.duration,
-          category_id: req.body.category_id,
           salon_id: req.body.salon_id,
-          logo: req.body.logo
+          service_id: req.body.service_id
         });
 
-        let addService = await commonQuery.InsertIntoCollection(
-          services,
-          newService
+        let saveServiceToSalon = await commonQuery.InsertIntoCollection(
+          salonservices,
+          newsalonService
         );
-        console.log(addService);
 
-        if (!addService) {
-          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+        if (!saveServiceToSalon) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
+          );
         } else {
           let condition = { _id: req.body.salon_id };
 
@@ -319,18 +360,20 @@ function addServices(req, res) {
           }
 
           res.json(
-            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, addService)
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              saveServiceToSalon
+            )
           );
         }
       }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
-    }
+    } catch (error) {}
   }
-  addServices().then(function() {});
+
+  addSalonServices().then(function() {});
 }
+
 /**
  * Function is use to Add Promocodes or Discount
  * @access private
@@ -406,4 +449,125 @@ function getPromoCodes(req, res) {
     } catch (error) {}
   }
   getPromoCodes().then(function() {});
+}
+
+function getSalonServices(req, res) {
+  console.log(req.body);
+  async function getSalonServices() {
+    try {
+      if (req.body && req.body.salon_id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.salon_id) };
+        let getsalonservice = await commonQuery.fetch_salon_services(
+          salons,
+          condition
+        );
+        if (!getsalonservice) {
+        } else {
+          console.log(getsalonservice);
+          res.json({ data: getsalonservice });
+        }
+      }
+    } catch (error) {}
+  }
+
+  getSalonServices().then(function() {});
+}
+
+function addEmployeeToSalon(req, res) {
+  console.log(req.body);
+  async function addEmployeeToSalon() {
+    try {
+      if (req.body.salon_id && req.body) {
+        let newEmployee = new employees({
+          name: req.body.name,
+          salon_id: req.body.salon_id
+        });
+
+        let saveEmployee = await commonQuery.InsertIntoCollection(
+          employees,
+          newEmployee
+        );
+        console.log("saveEMployee", saveEmployee);
+        if (!saveEmployee) {
+          res.json({ error: "ERROR" });
+        } else {
+          let salonUpdate = await commonQuery.addEmployeeToSalon(
+            salons,
+            req.body.salon_id,
+            saveEmployee._id
+          );
+
+          if (!salonUpdate) {
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
+          } else {
+          }
+
+          res.json({ data: saveEmployee });
+        }
+
+        console.log(newEmployee);
+      }
+    } catch (error) {}
+  }
+  addEmployeeToSalon().then(function() {});
+}
+
+function addServicesToEmployee(req, res) {
+  console.log(req.body);
+  async function addServicesToEmployee() {
+    try {
+      if (req.body.employee_id && req.body) {
+        let tempSev = [];
+        req.body.salonservices_id.forEach(function(v) {
+          tempSev.push(mongoose.Types.ObjectId(v));
+        });
+
+        let empId = req.body.employee_id;
+
+        let addEmpService = await commonQuery.addServiceToEmployee(
+          employees,
+          empId,
+          tempSev
+        );
+
+        if (!addEmpService) {
+        } else {
+          res.json({ data: addEmpService });
+          console.log(addEmpService);
+        }
+      }
+    } catch (error) {}
+  }
+
+  addServicesToEmployee().then(function() {});
+}
+
+function removeServiceToEmployee(req, res) {
+  console.log(req.body);
+  async function removeServiceToEmployee() {
+    try {
+      if (req.body.employee_id && req.body) {
+        // let tempSev = [];
+        // req.body.salonservices_id.forEach(function(v) {
+        //   tempSev.push(mongoose.Types.ObjectId(v));
+        // });
+
+        let empId = req.body.employee_id;
+
+        let addEmpService = await commonQuery.removeServiceToEmp(
+          employees,
+          empId,
+          mongoose.Types.ObjectId(req.body.salonservices_id)
+        );
+
+        if (!addEmpService) {
+        } else {
+          res.json({ data: addEmpService });
+          console.log(addEmpService);
+        }
+      }
+    } catch (error) {}
+  }
+
+  removeServiceToEmployee().then(function() {});
 }

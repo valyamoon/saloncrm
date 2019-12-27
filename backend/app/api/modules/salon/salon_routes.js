@@ -9,11 +9,16 @@ module.exports = function(router) {
 
   router.post("/addsalon", salon.saveSalonDetails);
   router.post("/searchsalon", salon.getSalons);
-  router.post('/addservice',salon.addServices);
+  router.post('/addsalonservices',salon.addSalonServices);
   router.post('/salon',salon.getSalonDetails);
   router.post('/reviewsratings',salon.getReviewsAndRatingsList);
   router.post('/addpromocode',salon.addPromocodes);
   router.post('/promocodes',salon.getPromoCodes);
+  router.post('/salonservices',salon.getSalonServices);
+  router.post('/addemployee',salon.addEmployeeToSalon);
+  router.post('/assignservice',salon.addServicesToEmployee);
+  router.post('/removeservice',salon.removeServiceToEmployee);
+  
 
 
   // router.get('/listUser', middlewares, user.getUserList);

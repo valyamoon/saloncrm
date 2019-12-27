@@ -1,0 +1,44 @@
+
+<div class="login-section">
+
+    <div class="login-section-inner">
+<div class="login-left">
+<img src="../../../assets/images/logo.svg">
+</div>
+<div class="login-right">
+    <form [formGroup]="adminLogin">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="InputEmail">Email address</label>
+                        <input type="email" formControlName="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
+                            placeholder="Enter email">
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="InputPassword">Password</label>
+                        <input type="password" formControlName="password" class="form-control" id="exampleInputPassword1"
+                            placeholder="Password">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                        <button [disabled]="adminLogin.invalid" (click)="loginAdmin(adminLogin.value)" class="btn btn-primary btn-sign-in">LOGIN</button>
+                    </div>
+                <div class="col-md-12">
+                    <div class="sign-up">
+                       Forgot password ?  <a href="">Reset password</a>
+                    </div>
+                </div>
+              
+            </div>
+        </form>
+</div>
+     
+
+
+    </div>
+</div>
+
+<notifier-container></notifier-container>

@@ -9,8 +9,6 @@ var constant = require("../config/constant");
 var mongoose = require("mongoose");
 var fs = require("fs");
 
-
-
 var path = require("path");
 var async = require("async");
 
@@ -40,8 +38,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
   distance,
   name
 ) {
-
-  console.log(second_fromTable,second_localFieldVal,second_foreignFieldVal);
+  console.log(second_fromTable, second_localFieldVal, second_foreignFieldVal);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
@@ -56,10 +53,10 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
           as: "salons"
         }
       },
-      { $unwind: "$salons" }, 
+      { $unwind: "$salons" },
       {
         $match: {
-          "salons.isservicesadded":"true"
+          "salons.isservicesadded": "true"
         }
       },
       {
@@ -71,7 +68,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
           }
         }
       },
-   
+
       {
         $match: {
           "salons.name": new RegExp(name ? name : " ", "gi")
@@ -84,8 +81,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
           foreignField: second_foreignFieldVal,
           as: "ratings"
         }
-      }
-      ,
+      },
       {
         $project: {
           _id: "$salons._id",
@@ -104,9 +100,119 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
     }
     postQuery
       .then(result => {
-       // console.log("999999999999999999999", result);
+        // console.log("999999999999999999999", result);
 
+        resolve(result);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
 
+commonQuery.fetch_near_salons = function fetch_near_salons(
+  model,
+  pageSize,
+  page,
+  dynamicQuery,
+  distance,
+  lat,
+  long
+) {
+  console.log("Inquery1", page);
+  console.log("Inquery2", pageSize);
+  console.log("Inquery3", lat);
+  console.log("Inquery4", long);
+  console.log("Inquery5", dynamicQuery);
+  console.log("Inquery6", distance);
+
+  return new Promise(function(resolve, reject) {
+    let pageSizes = pageSize;
+    let currentPage = page;
+
+    let serviceQuery = [];
+    console.log("lenght", dynamicQuery.length);
+    // q["$and"].push({ services_id: { $in: dynamicQuery.split(",") } });
+    //  if(dynamicQuery.length > 0){
+    //   q["$and"].push({ services_id: {$in: dynamicQuery.split(",") }});
+    // }
+    dynamicQuery.forEach(async function(v) {
+      serviceQuery.push(mongoose.Types.ObjectId(v));
+      console.log(serviceQuery);
+    });
+
+    console.log("qqq", serviceQuery);
+
+    let postQuery = model.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [long, lat]
+          },
+          spherical: true,
+          distanceField: "dist.calculated",
+          distanceMultiplier: 0.000621371
+        }
+      },
+      {
+        $match: {
+          isservicesadded: "true"
+        }
+      },
+      {
+        $lookup: {
+          from: "salonservices",
+          localField: "_id",
+          foreignField: "salon_id",
+          as: "serviceArray"
+        }
+      },
+
+      {
+        $match: {
+          "serviceArray.service_id": {
+            $in: serviceQuery
+          }
+        }
+      },
+
+      {
+        $lookup: {
+          from: "services",
+          localField: "serviceArray.service_id",
+          foreignField: "_id",
+          as: "servicesData"
+        }
+      },
+      {
+        $lookup: {
+          from: "reviewratings",
+          localField: "serviceArray.salon_id",
+          foreignField: "salon_id",
+          as: "reviewsRatings"
+        }
+      },
+
+      {
+        $project: {
+          name: 1,
+          salonaddress: 1,
+          image: 1,
+          avgRatings: { $avg: "$reviewsRatings.ratings" },
+          distance: "$dist.calculated"
+        }
+      }
+    ]);
+    console.log("postQuery", JSON.stringify(postQuery));
+    if (pageSizes && currentPage) {
+      postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
+    }
+    postQuery
+      .then(result => {
+        // console.log("999999999999999999999", result);
+        console.log("RESULT", result);
         resolve(result);
       })
       .catch(error => {
@@ -292,9 +398,6 @@ commonQuery.updateOneDocument = function updateOneDocument(
   updateCond,
   updateData
 ) {
-
-
-
   return new Promise(function(resolve, reject) {
     model
       .findOneAndUpdate(
@@ -718,11 +821,10 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
   return new Promise(function(resolve, reject) {
     model
       .aggregate([
-        { $match: condition
-        },
+        { $match: condition },
         {
           $lookup: {
-            from:  second_fromTable,
+            from: second_fromTable,
             localField: "_id",
             foreignField: "salon_id",
             as: "reviewsratings"
@@ -730,7 +832,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
         },
         {
           $lookup: {
-            from:  second_fromTable,
+            from: second_fromTable,
             let: { salon_id: "$_id" },
             pipeline: [
               {
@@ -802,7 +904,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
               },
               {
                 $lookup: {
-                  from:fourth_fromTable,
+                  from: fourth_fromTable,
                   let: { cat_id: "$_id.category_id" },
                   pipeline: [
                     {
@@ -841,10 +943,10 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
             name: 1,
             image: 1,
             address: "$salonaddress",
-            location:1,
+            location: 1,
             opentime: 1,
             closetime: 1,
-            contact:1,
+            contact: 1,
             avgRatings: "$allRating.rating",
             categories: "$category"
           }
@@ -1222,26 +1324,25 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
 
     let postQuery = model.aggregate([
       {
-        $lookup:
-          {
-            from: "users",
-            localField: "user_id",
-            foreignField: "_id",
-            as: "users"
-          }
-     },
-     {$unwind:"$users"},
-     {
-         $project: {
-           ratings:"$ratings",
-           comments:"$comments",
-           firstName:"$users.firstName",
-           lastName:"$users.lastName",
-           profilepic:"$users.profilepic",
-           createdAt:"$createdAt"  
-         }
+        $lookup: {
+          from: "users",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "users"
+        }
+      },
+      { $unwind: "$users" },
+      {
+        $project: {
+          ratings: "$ratings",
+          comments: "$comments",
+          firstName: "$users.firstName",
+          lastName: "$users.lastName",
+          profilepic: "$users.profilepic",
+          createdAt: "$createdAt"
+        }
       }
-   ]);
+    ]);
     //console.log(pos)
 
     if (pageSizes && currentPage) {
@@ -1259,8 +1360,180 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
   });
 };
 
+commonQuery.addServicesInCategories = function addServicesInCategories(
+  model,
+  category_id,
+  service_id
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .findByIdAndUpdate(
+        category_id,
+        { $push: { services: service_id } },
+        { safe: true, upsert: true }
+      )
+      .exec(function(err, userData) {
+        console.log("userData", userData);
+        if (err) {
+          console.log("errrrrrr", err);
+          reject(err);
+        } else {
+          resolve(userData);
+        }
+      });
+  });
+};
 
+commonQuery.addEmployeeToSalon = function addEmployeeToSalon(
+  model,
+  salon_id,
+  employee_id
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .findByIdAndUpdate(
+        salon_id,
+        { $push: { employees: employee_id } },
+        { safe: true, upsert: true }
+      )
+      .exec(function(err, userData) {
+        console.log("userData", userData);
+        if (err) {
+          console.log("errrrrrr", err);
+          reject(err);
+        } else {
+          resolve(userData);
+        }
+      });
+  });
+};
 
+commonQuery.removeServicesInCategories = function removeServicesInCategories(
+  model,
+  category_id,
+  service_id
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .findByIdAndUpdate(
+        category_id,
+        { $pull: { services: service_id } },
+        { safe: true, upsert: true }
+      )
+      .exec(function(err, userData) {
+        console.log("userData", userData);
+        if (err) {
+          console.log("errrrrrr", err);
+          reject(err);
+        } else {
+          resolve(userData);
+        }
+      });
+  });
+};
 
+commonQuery.fetch_categories = function fetch_categories(
+  model,
+  fromTable,
+  localFieldVal,
+  foreignFieldVal
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .aggregate([
+        {
+          $lookup: {
+            from: fromTable,
+            localField: localFieldVal,
+            foreignField: foreignFieldVal,
+            as: "services"
+          }
+        }
+      ])
+      .exec(function(err, data) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+  });
+};
+
+commonQuery.fetch_salon_services = function fetch_salon_services(
+  model,
+  condition
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .aggregate([
+        { $match: condition },
+        {
+          $lookup: {
+            from: "salonservices",
+            localField: "_id",
+            foreignField: "salon_id",
+            as: "salonservices"
+          }
+        },
+        {
+          $lookup: {
+            from: "services",
+            localField: "salonservices.service_id",
+            foreignField: "_id",
+            as: "services"
+          }
+        }
+      ])
+      .exec(function(err, data) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+  });
+};
+commonQuery.addServiceToEmployee = function addServiceToEmployee(
+  model,
+  empId,
+  dataToAdd
+) {
+  console.log("dataToAdd", dataToAdd);
+  return new Promise(function(resolve, reject) {
+    model
+      .update({ _id: empId }, { $addToSet: { salonservices_id: dataToAdd } })
+      .exec(function(err, data) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+  });
+};
+
+commonQuery.removeServiceToEmp = function removeServiceToEmp(
+  model,
+  empId,
+  dataToRemove
+) {
+  console.log("dataToRemove", dataToRemove);
+  return new Promise(function(resolve, reject) {
+    model
+      .update({ _id: empId }, { $pull: { salonservices_id: dataToRemove } })
+      .exec(function(err, data) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+  });
+};
 
 module.exports = commonQuery;

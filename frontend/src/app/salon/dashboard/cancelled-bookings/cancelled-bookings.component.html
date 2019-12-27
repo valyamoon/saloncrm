@@ -1,0 +1,235 @@
+
+<body class="app sidebar-mini rtl">
+ 
+        <nav class="navbar navbar-expand-lg navbar-dark  logo-left">
+            <div class="mobile-logo">
+                
+                <ul class="navbar-nav">
+        
+                    <li class="nav-item d-lg-block">
+                        <button class="header-post-btn">
+                                <div class="masthead-search-indicator"></div>
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown d-lg-block">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                           <span class="badge badge-light">
+                               <img src="../../../assets/images/prof-img.jpg">
+                           </span>
+                     </a>
+                     <div class="dropdown-menu dropdown-menu-right">
+                           <a class="dropdown-item" href="#">Edit Profile</a>
+                           <a class="dropdown-item" href="#">Change Password</a>
+                           <a class="dropdown-item" href="#">Logout</a>
+                     </div>
+                   </li>
+             </ul>
+                
+                  <button class="navbar-toggler" type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                
+           </div>
+             <button type="button" class="hamburger-menu app-sidebar__toggle" data-toggle="sidebar" aria-label="Hide Sidebar" (click)="toggleSidebar()"  href="javascript:void(0)">
+                    <!-- <span class="bar-top"></span>
+                    <span class="bar-mid"></span>
+                    <span class="bar-bot"></span> -->
+                    <img src="../../../assets/images/menu-arrow.png">
+                    </button>
+            
+            <a class="navbar-brand abs-center-x d-xl-block" href="#"><img src="../../../assets/images/logo.svg" alt=""/></a>
+            
+            
+                 
+            <div class="header-menu transition right-sidebar navbar-collapse" id="rightSidebar"> 
+                <ul class="navbar-nav left-nav d-none-menu">
+               
+                    <!-- <li class="nav-item d-lg-block">
+                        <a class="nav-link" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="21" viewBox="0 0 17 21">
+                                <image id="notification" width="17" height="21" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAVCAYAAACg/AXsAAAA50lEQVQ4jaWUPwrCMBTGP/9MgiKI6OKoSweVTg5CLyA4eAG9krdw9QZeQHsPhQ7FoYOfFBKN7Us09Qcl5L2PHyEvFCRd357kVa3WnEsQ8JPAlq3DTr/QKe5f2CQjALtCbavqZYTjbUimlElV33knS5KZRaDJVM4qib8INLFNEv4o0ITSdGaOSUlMpem0PSUdSVIZU9L0lDSkkww8JUNJsvCUvPNqTBOSD88R5/mx+U4OngLNQUuiigJNVCN5rvDQTC65ZA2g+4ckySVSowXgCKBn1G4AVgDupbTj9zgneSKZqDXfl3MknlUYZ6hvlXpUAAAAAElFTkSuQmCC"/>
+                            </svg>
+                        </a>
+                    </li> -->
+                </ul>
+                
+                <ul class="navbar-nav d-none-menu">
+    <!--     
+                            <li class="nav-item d-lg-block">
+                                    <a class="nav-link p-0" href="#">
+                                        <form action="" class="masthead-search">
+                                            <label for="masthead-search-toggle" class="masthead-search-toggle">Toggle Search</label>
+                                            <input type="checkbox" id="masthead-search-toggle" class="isHidden"/>
+                                            <div class="masthead-search-indicator"></div>
+                                            <div class="masthead-search-search">
+                                              <label for="masthead-search-search" class="isHidden">Search</label>
+                                              <input type="search" id="masthead-search-search"/>
+                                            </div>
+                                          </form>
+                                    </a>
+                                </li> -->
+                    
+                     <li class="nav-item dropdown d-lg-block">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                            <span class="badge badge-light">
+                                <img src="../../../assets/images/prof-img.jpg">
+                            </span>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Edit Profile</a>
+                            <a class="dropdown-item" href="#">Change Password</a>
+                            <a class="dropdown-item" href="#">Logout</a>
+                      </div>
+                    </li>
+              </ul>
+              <ul class="search-notif-mob">
+                <li>
+                    <input type="search" placeholder="type here to search.." id="masthead-search-search"/>
+                    <button type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+                        <image id="magnifying-glass" width="20" height="20" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABgUlEQVQ4ja2UPUscYRhFj2YxrIigW+U/mDpJaSsSAxFJJaTRbCAhjSCKCFpErNKElCFVKhvxL0SsLE0hglhYKZtA0LAQT3jx2WV33BndxQuXGWbe58z7cZ/pU8loEJgFpoDHQAWoAQfANvAN+J0taigLnAE+AQ+BLWAXOAdGgCfANPAAWAC+diQmYHjRa22qQy3PW11WV9V/Me7GmMbNTMBmc0BZvwjofCfgoHqa98UCL6m/1EoW+EY9K1hmngfUE3W59X1/nGY6gD95J5ejOvA96pvqj2j86BLWUKobywIrEY1elOrKkd0msBY560UjsfSLVmDqgKc9AlPYf2aXnNrpZUy9G5WAV8BOW406HLFZ6TI279RL9VGnTnkdyX9+R9i4Wlc/5LVe8kZAFyO0nUClmFk9WvVtETB5LtrpWP2oTqrP1Al1TT2MZb4P2JVaLQImj0af7qkXMZO/6r66ntmzBGuD3mW/0i+r6H0bNB39bbq8ZcCXuH5uxOa+XFWP/gOTjt3QTnqGnQAAAABJRU5ErkJggg=="/>
+                    </svg>
+                </button>				  
+                </li>
+                <li>
+                    <a class="nav-link" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="21" viewBox="0 0 17 21">
+                            <image id="notification" width="17" height="21" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAVCAYAAACg/AXsAAAA50lEQVQ4jaWUPwrCMBTGP/9MgiKI6OKoSweVTg5CLyA4eAG9krdw9QZeQHsPhQ7FoYOfFBKN7Us09Qcl5L2PHyEvFCRd357kVa3WnEsQ8JPAlq3DTr/QKe5f2CQjALtCbavqZYTjbUimlElV33knS5KZRaDJVM4qib8INLFNEv4o0ITSdGaOSUlMpem0PSUdSVIZU9L0lDSkkww8JUNJsvCUvPNqTBOSD88R5/mx+U4OngLNQUuiigJNVCN5rvDQTC65ZA2g+4ckySVSowXgCKBn1G4AVgDupbTj9zgneSKZqDXfl3MknlUYZ6hvlXpUAAAAAElFTkSuQmCC"/>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+          </div>
+        </nav>
+              
+        
+              
+        <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+        <aside class="app-sidebar">
+                
+                <ul class="app-menu">
+                <li>
+                    <a class="app-menu__item active" href="#">
+                        <span class="app-menu__label">Dashboard</span>
+                        <!-- <span class="menu-top-curve">
+                            <img src="images/menu-top-curve.png">
+                        </span>
+                        <span class="menu-bottom-curve">
+                                <img src="images/menu-bottom-curve.png">
+                            </span> -->
+                    </a>
+                </li>
+        
+                <li>
+                  <a class="app-menu__item" href="#">
+                        <span class="app-menu__label">Business profile</span>
+                       
+                    </a>
+                </li>
+                <li>
+                  <a class="app-menu__item" href="#">
+                        <span class="app-menu__label">Manage Services</span>
+                     
+                    </a>
+                </li>
+                     <li>
+                  <a class="app-menu__item" href="#">
+                        <span class="app-menu__label">Manage Time Slots</span>
+                     
+                    </a>
+                </li>
+                     <li>
+                  <a class="app-menu__item" href="#">
+                        <span class="app-menu__label">New Bookings</span>
+                     
+                    </a>
+                </li>
+                     <li>
+                  <a class="app-menu__item" href="#">
+                        <span class="app-menu__label">Payments History</span>
+               
+                    </a>
+                </li>
+                <li>
+                        <a class="app-menu__item" href="#">
+                            <span class="app-menu__label">Account Info</span>
+                     
+                        </a>
+                    </li>
+                    <li>
+                            <a class="app-menu__item" href="#">
+                                <span class="app-menu__label">Cancelled Bookings</span>
+                         
+                            </a>
+                        </li>
+              </ul>
+            </aside>
+              
+        
+        <div class="main-wraper app-content">
+            <div class="project-detail-wraper">
+              <div class="project-name-header">
+                
+                    <div class="project-heading">
+                       BOOKING DETAILS
+                    </div>
+                </div>
+                
+              <div class="box">
+                    <div class="dash-box-content">
+                         
+                        <div class="dash-graph-large m25">
+                                <div class="box-header with-border">
+                                        <h2 class="box-title">Cancelled Bookings</h2>
+                                    </div>
+                                    <div class="box-body table-sec">
+                                            <div class="table-responsive  dashboard-table">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                            <th>Booking cancelled</th>
+                                                            <th>Reason</th>
+                                                            <th>Status</th>
+                                                            <th>Amount Refund</th>
+                                                            <!-- <th>View</th> -->
+                                                           
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                    <td>104, Rudy Base, New York, NY-22334</td>
+                                                                <td>Lorem ipsum dolor</td>
+                                                             
+                                                                <td>status</td>
+                                                                <td>12334</td>
+                                                                <!-- <td>
+                                                                    
+                                                                        <i class="fa fa-eye" aria-hidden="true"></i>                                                                                        
+
+                                                                </td> -->
+                                                                
+                                                            </tr>
+                                                         
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                    </div>
+                        </div>
+                    </div>
+              
+          
+              </div>
+            </div>
+        </div>
+        
+              
+              
+    <!--         
+         jQuery (necessary for Bootstrap's JavaScript plugins)
+           <script src="js/jquery-3.2.1.min.js"></script> 
+          Include all compiled plugins (below), or include individual files as needed 
+            <script src="js/popper.min.js"></script>
+            <script src="js/bootstrap.js"></script>  -->
+          
+              
+        
+              
+          </body>
