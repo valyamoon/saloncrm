@@ -12,7 +12,8 @@ module.exports = function(router) {
     router.post("/acceptrequest",admin.acceptSalonRequest);
     router.post("/suspendsalon",admin.suspendSalon);
     router.post("/categories",admin.getCategories);
-
+    router.post('/addservices',admin.addServices);
+    router.post('/removeservices',admin.removeServices);
 
   
     // router.get('/listUser', middlewares, user.getUserList);

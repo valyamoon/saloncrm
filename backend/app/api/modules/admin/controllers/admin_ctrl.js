@@ -15,7 +15,7 @@ const roles = require("../../user/model/rolesSchema");
 const salons = require("../../salon/model/salonSchema");
 const categories = require("../../admin/model/categoriesSchema");
 const reviewratings = require("../../salon/model/salonreviewsratingSchema");
-const services = require("../../salon/model/servicesSchema");
+const services = require("../model/servicesSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
@@ -28,7 +28,9 @@ module.exports = {
   getSalonsRequestList: getSalonsRequestList,
   acceptSalonRequest: acceptSalonRequest,
   suspendSalon: suspendSalon,
-  getCategories: getCategories
+  getCategories: getCategories,
+  addServices: addServices,
+  removeServices: removeServices
 };
 
 /**
@@ -87,7 +89,10 @@ function getSalonsRequestList(req, res) {
   async function getSalonsRequestList() {
     try {
       if (req.body) {
-        let condition = { isActive: false, isDeleted: false };
+        let condition = {
+          isActive: false,
+          isDeleted: false
+        };
 
         let listOfSalons = await commonQuery.fetch_all_paginated(
           salons,
@@ -96,9 +101,17 @@ function getSalonsRequestList(req, res) {
           currentPage
         );
         if (!listOfSalons) {
-          res.json({ msg: "error" });
+          return res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
+          );
         } else {
-          res.json({ data: listOfSalons });
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              listOfSalons
+            )
+          );
         }
       }
     } catch (error) {
@@ -147,7 +160,9 @@ function acceptSalonRequest(req, res) {
           let activeCondition = {
             isActive: true
           };
-          let condition = { _id: mongoose.Types.ObjectId(user_id) };
+          let condition = {
+            _id: mongoose.Types.ObjectId(user_id)
+          };
           let activeSalonLogin = await commonQuery.updateOneDocument(
             users,
             condition,
@@ -226,7 +241,9 @@ function suspendSalon(req, res) {
           let activeCondition = {
             isActive: false
           };
-          let condition = { _id: mongoose.Types.ObjectId(user_id) };
+          let condition = {
+            _id: mongoose.Types.ObjectId(user_id)
+          };
           let deactivateLogin = await commonQuery.updateOneDocument(
             users,
             condition,
@@ -280,19 +297,28 @@ function suspendSalon(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getCategories(req, res) {
+  console.log("--", req.body);
   async function getCategories() {
     try {
       if (req.body.type === "categories") {
-        let categoriesList = await commonQuery.fetch_all(categories);
+        let categoriesList = await commonQuery.fetch_categories(
+          categories,
+          "services",
+          "services",
+          "_id"
+        );
         if (!categoriesList) {
           res.json(
-            Response(
-              constant.ERROR_CODE,
-              constant.DATA_NOT_FOUND,
-              categoriesList
-            )
+            Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
           );
         } else {
+          categoriesList.forEach(function(v) {
+            v.services.forEach(function(v) {
+              delete v.isActive;
+              delete v.isDeleted;
+            });
+          });
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -304,5 +330,115 @@ function getCategories(req, res) {
       }
     } catch (error) {}
   }
-  getCategories().then(function() {});
+  getCategories().then(function() {
+    return res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+    );
+  });
+}
+
+/**
+ * Function is use to Add services in categories
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function addServices(req, res) {
+  async function addServices() {
+    try {
+      if (req.body && req.body.category_id) {
+        let newService = new services({
+          name: req.body.name,
+          category_id: req.body.category_id,
+          logo: req.body.logo,
+          description: req.body.description
+        });
+
+        let saveService = await commonQuery.InsertIntoCollection(
+          services,
+          newService
+        );
+        if (!saveService) {
+        } else {
+          let categoryUpdate = await commonQuery.addServicesInCategories(
+            categories,
+            req.body.category_id,
+            saveService._id
+          );
+
+          if (!categoryUpdate) {
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
+          } else {
+          }
+
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveService)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  addServices().then(function() {});
+}
+
+/**
+ * Function is use to Remove services in categories and soft delete
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function removeServices(req, res) {
+  async function removeServices() {
+    try {
+      if (req.body && req.body.service_id) {
+        let condition = { _id: req.body.service_id };
+
+        let removeCondition = { isActive: false, isDeleted: true };
+
+        let removeService = await commonQuery.updateOneDocument(
+          services,
+          condition,
+          removeCondition
+        );
+
+        if (!removeService) {
+          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
+        } else {
+          let categoryUpdate = await commonQuery.removeServicesInCategories(
+            categories,
+            removeService.category_id,
+            req.body.service_id
+          );
+
+          if (!categoryUpdate) {
+          } else {
+            console.log(categoryUpdate);
+          }
+
+          res.json(
+            Response(
+              constant.ERROR_CODE,
+              constant.DELETED_SUCCESS,
+              removeService
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  removeServices().then(function() {});
 }

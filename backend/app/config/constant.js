@@ -58,6 +58,7 @@ module.exports = {
   REQUEST_SEND_FOR_APPROVAL:"Your request has been sent successfully. Please wait for approval",
   SALON_SUSPENDED:"Salon Suspended Successfully",
   FAILED_TO_ADD:"Failed To Add",
-  NEW_DATA_ADDED:"Data Added Successfully"
+  NEW_DATA_ADDED:"Data Added Successfully",
+  DELETED_SUCCESS:"Data Deleted Successfully"
   
 };
