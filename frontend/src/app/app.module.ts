@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import{ReactiveFormsModule,FormsModule} from '@angular/forms';
-import { NotifierModule } from "angular-notifier";
+import {ToastrModule} from 'ngx-toastr';
+
 //import {CoreModule} from '../app/core/core.module';
 
 import { SalonComponent } from './salon/salon.component';
@@ -28,8 +30,9 @@ import{RouterModule} from '@angular/router';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    ToastrModule.forRoot(),
     HttpClientModule,
-    NotifierModule,
+    BrowserAnimationsModule,
     RouterModule
   ],
   providers: [],
