@@ -1,0 +1,45 @@
+#dashboardWrapper{
+    top:0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    left: 0;
+    
+
+    #mainSection{
+        display: flex;
+        margin-top: 5px;
+        
+        .selectorSection{
+            padding: 0;
+            background-color:#783A87;
+            
+
+            .menus-app{
+
+                display: flex;
+                flex-direction: column;
+                
+
+                .selectors{
+                    padding: 10px;
+                    color:white;
+                    text-decoration: none;
+                    
+                }
+                .active{
+                    background: white;
+                    color:#783A87;
+                }
+
+            }
+
+
+        }
+        .selectedSection{
+
+        }
+    }
+
+
+}
