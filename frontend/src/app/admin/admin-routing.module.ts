@@ -6,6 +6,7 @@ import { AuthService } from "../admin/auth.service";
 import { AuthGuard } from "../admin/auth.guard";
 import { SalonlistComponent } from "./admin-dashboard/salonlist/salonlist.component";
 import { UserlistComponent } from "./admin-dashboard/userlist/userlist.component";
+import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
 
 // const routes: Routes = [{path:'',component:AdminloginComponent},
 
@@ -24,7 +25,8 @@ const routes: Routes = [
     children: [
       { path: "salonlist", component: SalonlistComponent },
       { path: "userlist", component: UserlistComponent },
-      { path: "", redirectTo: "salonlist", pathMatch: "full" }
+      {path:"dashboard",component:DashboardComponent},
+      { path: "", redirectTo: "dashboard", pathMatch: "full" }
     ]
   }
 ];
