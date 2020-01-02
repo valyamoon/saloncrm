@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup,FormBuilder, Validators} from '@angular/forms';
 import {AdminService} from './admin.service';
-import {NotifierService} from 'angular-notifier';
+import{ToastrService} from 'ngx-toastr'
+import {AuthService} from '../auth.service';
+
 import {Router} from '@angular/router';
 
 
@@ -15,7 +17,7 @@ export class AdminloginComponent implements OnInit {
   adminLogin:FormGroup;
   
 
-  constructor(private router:Router,private fb:FormBuilder, private adminServ:AdminService,private notifier:NotifierService) { }
+  constructor(private toastServ:ToastrService, private router:Router,private fb:FormBuilder, private adminServ:AdminService, private authServ:AuthService) { }
 
   ngOnInit() {
 
@@ -36,10 +38,21 @@ export class AdminloginComponent implements OnInit {
   loginAdmin(data){
     this.adminServ.login(data).subscribe((data:any)=>{
 
-      if(data){
+      if(data.code === 200){
+        
+        this.toastServ.success('Logged In Successfully','',{
+          timeOut:3000
+        });
+        console.log("data",data);
+        this.authServ.sendToken(data.data.token);
 
-        this.notifier.notify("success", "You are awesome! I mean it!");
-        this.router.navigate([''])
+        this.router.navigate(['admin/home'])
+      }
+      else{
+
+        this.toastServ.error('Invalid Login details', '', {
+          timeOut: 3000
+        });
 
       }
 

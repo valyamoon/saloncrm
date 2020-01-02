@@ -417,7 +417,8 @@
             var routes = [{ path: '', redirectTo: 'admin', pathMatch: 'full' },
                 { path: 'salon', loadChildren: function () { return __webpack_require__.e(/*! import() | app-salon-salon-module */ "app-salon-salon-module").then(__webpack_require__.bind(null, /*! ../app/salon/salon.module */ "./src/app/salon/salon.module.ts")).then(function (m) { return m.SalonModule; }); } },
                 { path: 'admin', loadChildren: function () { return __webpack_require__.e(/*! import() | app-admin-admin-module */ "app-admin-admin-module").then(__webpack_require__.bind(null, /*! ../app/admin/admin.module */ "./src/app/admin/admin.module.ts")).then(function (m) { return m.AdminModule; }); } },
-                { path: 'user', loadChildren: function () { return __webpack_require__.e(/*! import() | app-user-user-module */ "app-user-user-module").then(__webpack_require__.bind(null, /*! ../app/user/user.module */ "./src/app/user/user.module.ts")).then(function (m) { return m.UserModule; }); } }];
+                { path: 'user', loadChildren: function () { return __webpack_require__.e(/*! import() | app-user-user-module */ "app-user-user-module").then(__webpack_require__.bind(null, /*! ../app/user/user.module */ "./src/app/user/user.module.ts")).then(function (m) { return m.UserModule; }); } },
+                { path: '**', loadChildren: function () { return __webpack_require__.e(/*! import() | app-admin-admin-module */ "app-admin-admin-module").then(__webpack_require__.bind(null, /*! ../app/admin/admin.module */ "./src/app/admin/admin.module.ts")).then(function (m) { return m.AdminModule; }); } }];
             //{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
             var AppRoutingModule = /** @class */ (function () {
                 function AppRoutingModule() {
@@ -483,13 +484,14 @@
             /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
             /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
             /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-            /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
-            /* harmony import */ var angular_notifier__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! angular-notifier */ "./node_modules/angular-notifier/fesm2015/angular-notifier.js");
-            /* harmony import */ var _salon_salon_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./salon/salon.component */ "./src/app/salon/salon.component.ts");
-            /* harmony import */ var _user_user_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./user/user.component */ "./src/app/user/user.component.ts");
-            /* harmony import */ var _admin_admin_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./admin/admin.component */ "./src/app/admin/admin.component.ts");
-            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
-            /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+            /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm2015/animations.js");
+            /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+            /* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm2015/ngx-toastr.js");
+            /* harmony import */ var _salon_salon_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./salon/salon.component */ "./src/app/salon/salon.component.ts");
+            /* harmony import */ var _user_user_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./user/user.component */ "./src/app/user/user.component.ts");
+            /* harmony import */ var _admin_admin_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./admin/admin.component */ "./src/app/admin/admin.component.ts");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
             //import {CoreModule} from '../app/core/core.module';
             var AppModule = /** @class */ (function () {
                 function AppModule() {
@@ -500,18 +502,19 @@
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
                     declarations: [
                         _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
-                        _salon_salon_component__WEBPACK_IMPORTED_MODULE_7__["SalonComponent"],
-                        _user_user_component__WEBPACK_IMPORTED_MODULE_8__["UserComponent"],
-                        _admin_admin_component__WEBPACK_IMPORTED_MODULE_9__["AdminComponent"],
+                        _salon_salon_component__WEBPACK_IMPORTED_MODULE_8__["SalonComponent"],
+                        _user_user_component__WEBPACK_IMPORTED_MODULE_9__["UserComponent"],
+                        _admin_admin_component__WEBPACK_IMPORTED_MODULE_10__["AdminComponent"],
                     ],
                     imports: [
                         _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                         _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
-                        _angular_forms__WEBPACK_IMPORTED_MODULE_5__["ReactiveFormsModule"],
-                        _angular_forms__WEBPACK_IMPORTED_MODULE_5__["FormsModule"],
-                        _angular_common_http__WEBPACK_IMPORTED_MODULE_10__["HttpClientModule"],
-                        angular_notifier__WEBPACK_IMPORTED_MODULE_6__["NotifierModule"],
-                        _angular_router__WEBPACK_IMPORTED_MODULE_11__["RouterModule"]
+                        _angular_forms__WEBPACK_IMPORTED_MODULE_6__["ReactiveFormsModule"],
+                        _angular_forms__WEBPACK_IMPORTED_MODULE_6__["FormsModule"],
+                        ngx_toastr__WEBPACK_IMPORTED_MODULE_7__["ToastrModule"].forRoot(),
+                        _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"],
+                        _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__["BrowserAnimationsModule"],
+                        _angular_router__WEBPACK_IMPORTED_MODULE_12__["RouterModule"]
                     ],
                     providers: [],
                     bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
