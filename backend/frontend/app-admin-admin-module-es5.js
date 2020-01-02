@@ -1660,7 +1660,29 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<router-outlet></router-outlet>\n");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div id=\"dashboardWrapper\">\n  <div id=\"navigationBar\">\n    <app-header></app-header>\n  </div>\n\n  <div id=\"mainSection\">\n    <div class=\"selectorSection col-lg-2 col-md-2 col-sm-6\">\n     <div class=\"menus-app\">\n    \n      <a class=\"selectors\" routerLink=\"dashboard\" routerLinkActive=\"active\">Dashboard</a>\n       <a class=\"selectors\" routerLink=\"salonlist\" routerLinkActive=\"active\">Salons</a>\n       <a  class=\"selectors\" routerLink=\"userlist\" routerLinkActive=\"active\">Users</a>\n     </div>\n    </div>\n    <div class=\"selectedSection col-lg-10 col-md-10 col-sm-6\">\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/dashboard/dashboard.component.html": 
+        /*!****************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/dashboard/dashboard.component.html ***!
+          \****************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<p>dashboard works!</p>\n");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/header/header.component.html": 
+        /*!**********************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/header/header.component.html ***!
+          \**********************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"header\">\n  <div class=\"headerSection col-lg-12 col-sm-12 col-md-12\">\n    <div class=\"logo col-lg-6 col-sm-12 col-md-6\" ></div>\n    <div class=\"detailSection col-lg-6 col-sm-12 col-md-6\">\n      <div class=\"profilePic\">\n        <img src=\"\" height=\"16\" width=\"16\" />\n      </div>\n\n      <div class=\"username\">\n        NADIM SHAH\n      </div>\n      <div class=\"logoutbutton\">\n       <div class=\"logout\" (click)=\"showLogoutButton()\">\n           <span id=\"downArrow\"></span>\n        </div>\n        <div class=\"logoutItem\" *ngIf=\"showLogout\" (click)=\"logout()\" >Logout</div>\n      </div>\n\n    </div>\n  </div>\n</div>\n");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/salonlist/salonlist.component.html": 
@@ -1671,7 +1693,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<h1>HI SALON</h1>\n");
+            /* harmony default export */ __webpack_exports__["default"] = ("");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/userlist/userlist.component.html": 
@@ -1704,7 +1726,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2FkbWluLWRhc2hib2FyZC9hZG1pbi1kYXNoYm9hcmQuY29tcG9uZW50LnNjc3MifQ== */");
+            /* harmony default export */ __webpack_exports__["default"] = ("#dashboardWrapper {\n  top: 0;\n  left: 0;\n  position: absolute;\n  right: 0;\n  left: 0;\n}\n#dashboardWrapper #mainSection {\n  display: flex;\n  margin-top: 5px;\n}\n#dashboardWrapper #mainSection .selectorSection {\n  padding: 0;\n  background-color: #783A87;\n}\n#dashboardWrapper #mainSection .selectorSection .menus-app {\n  display: flex;\n  flex-direction: column;\n}\n#dashboardWrapper #mainSection .selectorSection .menus-app .selectors {\n  padding: 10px;\n  color: white;\n  text-decoration: none;\n}\n#dashboardWrapper #mainSection .selectorSection .menus-app .active {\n  background: white;\n  color: #783A87;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL25hZGltc2hhaC9EZXNrdG9wL05FV1NBTE9OR0lUL01FQU4tc2Fsb25jcm0vZnJvbnRlbmQvc3JjL2FwcC9hZG1pbi9hZG1pbi1kYXNoYm9hcmQvYWRtaW4tZGFzaGJvYXJkLmNvbXBvbmVudC5zY3NzIiwic3JjL2FwcC9hZG1pbi9hZG1pbi1kYXNoYm9hcmQvYWRtaW4tZGFzaGJvYXJkLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksTUFBQTtFQUNBLE9BQUE7RUFDQSxrQkFBQTtFQUNBLFFBQUE7RUFDQSxPQUFBO0FDQ0o7QURFSTtFQUNJLGFBQUE7RUFDQSxlQUFBO0FDQVI7QURFUTtFQUNJLFVBQUE7RUFDQSx5QkFBQTtBQ0FaO0FER1k7RUFFSSxhQUFBO0VBQ0Esc0JBQUE7QUNGaEI7QURLZ0I7RUFDSSxhQUFBO0VBQ0EsWUFBQTtFQUNBLHFCQUFBO0FDSHBCO0FETWdCO0VBQ0ksaUJBQUE7RUFDQSxjQUFBO0FDSnBCIiwiZmlsZSI6InNyYy9hcHAvYWRtaW4vYWRtaW4tZGFzaGJvYXJkL2FkbWluLWRhc2hib2FyZC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIiNkYXNoYm9hcmRXcmFwcGVye1xuICAgIHRvcDowO1xuICAgIGxlZnQ6IDA7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIHJpZ2h0OiAwO1xuICAgIGxlZnQ6IDA7XG4gICAgXG5cbiAgICAjbWFpblNlY3Rpb257XG4gICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgIG1hcmdpbi10b3A6IDVweDtcbiAgICAgICAgXG4gICAgICAgIC5zZWxlY3RvclNlY3Rpb257XG4gICAgICAgICAgICBwYWRkaW5nOiAwO1xuICAgICAgICAgICAgYmFja2dyb3VuZC1jb2xvcjojNzgzQTg3O1xuICAgICAgICAgICAgXG5cbiAgICAgICAgICAgIC5tZW51cy1hcHB7XG5cbiAgICAgICAgICAgICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgICAgICAgICAgIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gICAgICAgICAgICAgICAgXG5cbiAgICAgICAgICAgICAgICAuc2VsZWN0b3Jze1xuICAgICAgICAgICAgICAgICAgICBwYWRkaW5nOiAxMHB4O1xuICAgICAgICAgICAgICAgICAgICBjb2xvcjp3aGl0ZTtcbiAgICAgICAgICAgICAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xuICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLmFjdGl2ZXtcbiAgICAgICAgICAgICAgICAgICAgYmFja2dyb3VuZDogd2hpdGU7XG4gICAgICAgICAgICAgICAgICAgIGNvbG9yOiM3ODNBODc7XG4gICAgICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICB9XG5cblxuICAgICAgICB9XG4gICAgICAgIC5zZWxlY3RlZFNlY3Rpb257XG5cbiAgICAgICAgfVxuICAgIH1cblxuXG59IiwiI2Rhc2hib2FyZFdyYXBwZXIge1xuICB0b3A6IDA7XG4gIGxlZnQ6IDA7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgcmlnaHQ6IDA7XG4gIGxlZnQ6IDA7XG59XG4jZGFzaGJvYXJkV3JhcHBlciAjbWFpblNlY3Rpb24ge1xuICBkaXNwbGF5OiBmbGV4O1xuICBtYXJnaW4tdG9wOiA1cHg7XG59XG4jZGFzaGJvYXJkV3JhcHBlciAjbWFpblNlY3Rpb24gLnNlbGVjdG9yU2VjdGlvbiB7XG4gIHBhZGRpbmc6IDA7XG4gIGJhY2tncm91bmQtY29sb3I6ICM3ODNBODc7XG59XG4jZGFzaGJvYXJkV3JhcHBlciAjbWFpblNlY3Rpb24gLnNlbGVjdG9yU2VjdGlvbiAubWVudXMtYXBwIHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbn1cbiNkYXNoYm9hcmRXcmFwcGVyICNtYWluU2VjdGlvbiAuc2VsZWN0b3JTZWN0aW9uIC5tZW51cy1hcHAgLnNlbGVjdG9ycyB7XG4gIHBhZGRpbmc6IDEwcHg7XG4gIGNvbG9yOiB3aGl0ZTtcbiAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xufVxuI2Rhc2hib2FyZFdyYXBwZXIgI21haW5TZWN0aW9uIC5zZWxlY3RvclNlY3Rpb24gLm1lbnVzLWFwcCAuYWN0aXZlIHtcbiAgYmFja2dyb3VuZDogd2hpdGU7XG4gIGNvbG9yOiAjNzgzQTg3O1xufSJdfQ== */");
             /***/ 
         }),
         /***/ "./src/app/admin/admin-dashboard/admin-dashboard.component.ts": 
@@ -1732,6 +1754,93 @@
                     styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./admin-dashboard.component.scss */ "./src/app/admin/admin-dashboard/admin-dashboard.component.scss")).default]
                 })
             ], AdminDashboardComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/admin-dashboard/dashboard/dashboard.component.css": 
+        /*!*************************************************************************!*\
+          !*** ./src/app/admin/admin-dashboard/dashboard/dashboard.component.css ***!
+          \*************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2FkbWluLWRhc2hib2FyZC9kYXNoYm9hcmQvZGFzaGJvYXJkLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/admin-dashboard/dashboard/dashboard.component.ts": 
+        /*!************************************************************************!*\
+          !*** ./src/app/admin/admin-dashboard/dashboard/dashboard.component.ts ***!
+          \************************************************************************/
+        /*! exports provided: DashboardComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DashboardComponent", function () { return DashboardComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var DashboardComponent = /** @class */ (function () {
+                function DashboardComponent() {
+                }
+                DashboardComponent.prototype.ngOnInit = function () {
+                };
+                return DashboardComponent;
+            }());
+            DashboardComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-dashboard',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./dashboard.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/dashboard/dashboard.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./dashboard.component.css */ "./src/app/admin/admin-dashboard/dashboard/dashboard.component.css")).default]
+                })
+            ], DashboardComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/admin-dashboard/header/header.component.scss": 
+        /*!********************************************************************!*\
+          !*** ./src/app/admin/admin-dashboard/header/header.component.scss ***!
+          \********************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = (".header {\n  box-shadow: 1px 2px 1px 2px lightgray;\n  padding: 5px;\n}\n.header .headerSection {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 5px;\n}\n.header .headerSection .logo {\n  background-image: url('logo.svg');\n  width: 200px;\n  height: 2em;\n  background-repeat: no-repeat;\n}\n.header .headerSection .detailSection {\n  display: flex;\n  /* justify-content: space-between; */\n  align-items: center;\n  justify-content: flex-end;\n  padding: 0;\n}\n.header .headerSection .detailSection .logoutbutton .logout {\n  height: 35px;\n  width: 35px;\n  border: 1px solid lightgray;\n  border-radius: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: 5px;\n  cursor: pointer;\n}\n.header .headerSection .detailSection .logoutbutton .logout #downArrow {\n  border: solid black;\n  border-width: 0 3px 3px 0;\n  display: inline-block;\n  padding: 3px;\n  transform: rotate(45deg);\n  -webkit-transform: rotate(45deg);\n}\n.header .headerSection .detailSection .logoutbutton .logoutItem {\n  position: absolute;\n  height: 20px;\n  cursor: pointer;\n  right: 2px;\n  text-align: center;\n  align-items: center;\n  padding: 15px;\n  box-shadow: 1px 2px 2px 1px lightgrey;\n  background: white;\n  border-radius: 5px;\n  display: flex;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL25hZGltc2hhaC9EZXNrdG9wL05FV1NBTE9OR0lUL01FQU4tc2Fsb25jcm0vZnJvbnRlbmQvc3JjL2FwcC9hZG1pbi9hZG1pbi1kYXNoYm9hcmQvaGVhZGVyL2hlYWRlci5jb21wb25lbnQuc2NzcyIsInNyYy9hcHAvYWRtaW4vYWRtaW4tZGFzaGJvYXJkL2hlYWRlci9oZWFkZXIuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSSxxQ0FBQTtFQUNBLFlBQUE7QUNDSjtBRENJO0VBQ0ksYUFBQTtFQUNBLDhCQUFBO0VBQ0EsbUJBQUE7RUFDQSxZQUFBO0FDQ1I7QURFUTtFQUNJLGlDQUFBO0VBQ0EsWUFBQTtFQUNBLFdBQUE7RUFDQSw0QkFBQTtBQ0FaO0FESVE7RUFFSSxhQUFBO0VBQ0Esb0NBQUE7RUFDQSxtQkFBQTtFQUNBLHlCQUFBO0VBQ0EsVUFBQTtBQ0haO0FEY2dCO0VBQ0ksWUFBQTtFQUNBLFdBQUE7RUFDQSwyQkFBQTtFQUNBLG1CQUFBO0VBQ0EsYUFBQTtFQUNBLG1CQUFBO0VBQ0EsdUJBQUE7RUFDQSxnQkFBQTtFQUNBLGVBQUE7QUNacEI7QURjb0I7RUFFSSxtQkFBQTtFQUNBLHlCQUFBO0VBQ0EscUJBQUE7RUFDQSxZQUFBO0VBQ0Esd0JBQUE7RUFDQSxnQ0FBQTtBQ2J4QjtBRHFCZ0I7RUFDSSxrQkFBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0VBQ0EsVUFBQTtFQUNBLGtCQUFBO0VBQ0EsbUJBQUE7RUFDQSxhQUFBO0VBQ0EscUNBQUE7RUFDQSxpQkFBQTtFQUNBLGtCQUFBO0VBQ0EsYUFBQTtBQ25CcEIiLCJmaWxlIjoic3JjL2FwcC9hZG1pbi9hZG1pbi1kYXNoYm9hcmQvaGVhZGVyL2hlYWRlci5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5oZWFkZXJ7XG4gICAgYm94LXNoYWRvdzogMXB4IDJweCAxcHggMnB4IGxpZ2h0Z3JheTtcbiAgICBwYWRkaW5nOiA1cHg7XG5cbiAgICAuaGVhZGVyU2VjdGlvbntcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICAgICAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgICAgICBwYWRkaW5nOiA1cHg7XG5cblxuICAgICAgICAubG9nb3tcbiAgICAgICAgICAgIGJhY2tncm91bmQtaW1hZ2U6IHVybCgnLi4vLi4vLi4vLi4vYXNzZXRzL2ltYWdlcy9sb2dvLnN2ZycpO1xuICAgICAgICAgICAgd2lkdGg6IDIwMHB4O1xuICAgICAgICAgICAgaGVpZ2h0OiAyZW07XG4gICAgICAgICAgICBiYWNrZ3JvdW5kLXJlcGVhdDogbm8tcmVwZWF0O1xuICAgICAgICAgIFxuXG4gICAgICAgIH1cbiAgICAgICAgLmRldGFpbFNlY3Rpb257XG5cbiAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICAvKiBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47ICovXG4gICAgICAgICAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgICAgICAgICAganVzdGlmeS1jb250ZW50OiBmbGV4LWVuZDtcbiAgICAgICAgICAgIHBhZGRpbmc6IDA7XG4gICAgICAgICAgICAucHJvZmlsZVBpY3tcblxuICAgICAgICAgICAgfVxuICAgICAgICAgICAgLnVzZXJuYW1le1xuXG5cbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIC5sb2dvdXRidXR0b257XG4gICAgICAgICAgICAgIFxuXG4gICAgICAgICAgICAgICAgLmxvZ291dHtcbiAgICAgICAgICAgICAgICAgICAgaGVpZ2h0OiAzNXB4O1xuICAgICAgICAgICAgICAgICAgICB3aWR0aDogMzVweDtcbiAgICAgICAgICAgICAgICAgICAgYm9yZGVyOiAxcHggc29saWQgbGlnaHRncmF5O1xuICAgICAgICAgICAgICAgICAgICBib3JkZXItcmFkaXVzOiAyNXB4O1xuICAgICAgICAgICAgICAgICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgICAgICAgICAgICAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgICAgICAgICAgICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLWxlZnQ6IDVweDtcbiAgICAgICAgICAgICAgICAgICAgY3Vyc29yOiBwb2ludGVyO1xuXG4gICAgICAgICAgICAgICAgICAgICNkb3duQXJyb3d7XG5cbiAgICAgICAgICAgICAgICAgICAgICAgIGJvcmRlcjogc29saWQgYmxhY2s7XG4gICAgICAgICAgICAgICAgICAgICAgICBib3JkZXItd2lkdGg6IDAgM3B4IDNweCAwO1xuICAgICAgICAgICAgICAgICAgICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICAgICAgICAgICAgICAgICAgICAgICAgcGFkZGluZzogM3B4O1xuICAgICAgICAgICAgICAgICAgICAgICAgdHJhbnNmb3JtOiByb3RhdGUoNDVkZWcpO1xuICAgICAgICAgICAgICAgICAgICAgICAgLXdlYmtpdC10cmFuc2Zvcm06IHJvdGF0ZSg0NWRlZyk7XG5cbiAgICAgICAgICAgICAgICAgICAgfVxuXG5cblxuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgLmxvZ291dEl0ZW17XG4gICAgICAgICAgICAgICAgICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICAgICAgICAgICAgICAgICAgaGVpZ2h0OiAyMHB4O1xuICAgICAgICAgICAgICAgICAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgICAgICAgICAgICAgICAgIHJpZ2h0OiAycHg7XG4gICAgICAgICAgICAgICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICAgICAgICAgICAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICAgICAgICAgICAgICAgICAgcGFkZGluZzogMTVweDtcbiAgICAgICAgICAgICAgICAgICAgYm94LXNoYWRvdzogMXB4IDJweCAycHggMXB4IGxpZ2h0Z3JleTtcbiAgICAgICAgICAgICAgICAgICAgYmFja2dyb3VuZDogd2hpdGU7XG4gICAgICAgICAgICAgICAgICAgIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgICAgICAgICAgICAgICAgICAgZGlzcGxheTogZmxleDtcblxuICAgICAgICAgICAgICAgIH1cblxuXG4gICAgICAgICAgICB9XG5cblxuXG4gICAgICAgIH1cblxuXG5cbiAgICB9XG5cbn1cblxuXG5cbiIsIi5oZWFkZXIge1xuICBib3gtc2hhZG93OiAxcHggMnB4IDFweCAycHggbGlnaHRncmF5O1xuICBwYWRkaW5nOiA1cHg7XG59XG4uaGVhZGVyIC5oZWFkZXJTZWN0aW9uIHtcbiAgZGlzcGxheTogZmxleDtcbiAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICBhbGlnbi1pdGVtczogY2VudGVyO1xuICBwYWRkaW5nOiA1cHg7XG59XG4uaGVhZGVyIC5oZWFkZXJTZWN0aW9uIC5sb2dvIHtcbiAgYmFja2dyb3VuZC1pbWFnZTogdXJsKFwiLi4vLi4vLi4vLi4vYXNzZXRzL2ltYWdlcy9sb2dvLnN2Z1wiKTtcbiAgd2lkdGg6IDIwMHB4O1xuICBoZWlnaHQ6IDJlbTtcbiAgYmFja2dyb3VuZC1yZXBlYXQ6IG5vLXJlcGVhdDtcbn1cbi5oZWFkZXIgLmhlYWRlclNlY3Rpb24gLmRldGFpbFNlY3Rpb24ge1xuICBkaXNwbGF5OiBmbGV4O1xuICAvKiBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47ICovXG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIGp1c3RpZnktY29udGVudDogZmxleC1lbmQ7XG4gIHBhZGRpbmc6IDA7XG59XG4uaGVhZGVyIC5oZWFkZXJTZWN0aW9uIC5kZXRhaWxTZWN0aW9uIC5sb2dvdXRidXR0b24gLmxvZ291dCB7XG4gIGhlaWdodDogMzVweDtcbiAgd2lkdGg6IDM1cHg7XG4gIGJvcmRlcjogMXB4IHNvbGlkIGxpZ2h0Z3JheTtcbiAgYm9yZGVyLXJhZGl1czogMjVweDtcbiAgZGlzcGxheTogZmxleDtcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gIG1hcmdpbi1sZWZ0OiA1cHg7XG4gIGN1cnNvcjogcG9pbnRlcjtcbn1cbi5oZWFkZXIgLmhlYWRlclNlY3Rpb24gLmRldGFpbFNlY3Rpb24gLmxvZ291dGJ1dHRvbiAubG9nb3V0ICNkb3duQXJyb3cge1xuICBib3JkZXI6IHNvbGlkIGJsYWNrO1xuICBib3JkZXItd2lkdGg6IDAgM3B4IDNweCAwO1xuICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gIHBhZGRpbmc6IDNweDtcbiAgdHJhbnNmb3JtOiByb3RhdGUoNDVkZWcpO1xuICAtd2Via2l0LXRyYW5zZm9ybTogcm90YXRlKDQ1ZGVnKTtcbn1cbi5oZWFkZXIgLmhlYWRlclNlY3Rpb24gLmRldGFpbFNlY3Rpb24gLmxvZ291dGJ1dHRvbiAubG9nb3V0SXRlbSB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgaGVpZ2h0OiAyMHB4O1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gIHJpZ2h0OiAycHg7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgcGFkZGluZzogMTVweDtcbiAgYm94LXNoYWRvdzogMXB4IDJweCAycHggMXB4IGxpZ2h0Z3JleTtcbiAgYmFja2dyb3VuZDogd2hpdGU7XG4gIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgZGlzcGxheTogZmxleDtcbn0iXX0= */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/admin-dashboard/header/header.component.ts": 
+        /*!******************************************************************!*\
+          !*** ./src/app/admin/admin-dashboard/header/header.component.ts ***!
+          \******************************************************************/
+        /*! exports provided: HeaderComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderComponent", function () { return HeaderComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../auth.service */ "./src/app/admin/auth.service.ts");
+            var HeaderComponent = /** @class */ (function () {
+                function HeaderComponent(authServ) {
+                    this.authServ = authServ;
+                }
+                HeaderComponent.prototype.ngOnInit = function () {
+                };
+                HeaderComponent.prototype.showLogoutButton = function () {
+                    this.showLogout = true;
+                };
+                HeaderComponent.prototype.logout = function () {
+                    this.authServ.logout();
+                };
+                return HeaderComponent;
+            }());
+            HeaderComponent.ctorParameters = function () { return [
+                { type: _auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"] }
+            ]; };
+            HeaderComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-header',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./header.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/admin-dashboard/header/header.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./header.component.scss */ "./src/app/admin/admin-dashboard/header/header.component.scss")).default]
+                })
+            ], HeaderComponent);
             /***/ 
         }),
         /***/ "./src/app/admin/admin-dashboard/salonlist/salonlist.component.css": 
@@ -1828,6 +1937,7 @@
             /* harmony import */ var _admin_auth_guard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../admin/auth.guard */ "./src/app/admin/auth.guard.ts");
             /* harmony import */ var _admin_dashboard_salonlist_salonlist_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./admin-dashboard/salonlist/salonlist.component */ "./src/app/admin/admin-dashboard/salonlist/salonlist.component.ts");
             /* harmony import */ var _admin_dashboard_userlist_userlist_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./admin-dashboard/userlist/userlist.component */ "./src/app/admin/admin-dashboard/userlist/userlist.component.ts");
+            /* harmony import */ var _admin_dashboard_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./admin-dashboard/dashboard/dashboard.component */ "./src/app/admin/admin-dashboard/dashboard/dashboard.component.ts");
             // const routes: Routes = [{path:'',component:AdminloginComponent},
             // {path:'home',component:AdminDashboardComponent,canActivate:[AuthGuard],children: [{path:'userlist',loadChildren:() => import('../admin/admin-dashboard/users-list/users-list.module').then(m=>m.UsersListModule)},
             // {path:'salonlist',loadChildren:() => import('../admin/admin-dashboard/salons-list/salons-list.module').then(m=>m.SalonsListModule)},
@@ -1842,7 +1952,8 @@
                     children: [
                         { path: "salonlist", component: _admin_dashboard_salonlist_salonlist_component__WEBPACK_IMPORTED_MODULE_7__["SalonlistComponent"] },
                         { path: "userlist", component: _admin_dashboard_userlist_userlist_component__WEBPACK_IMPORTED_MODULE_8__["UserlistComponent"] },
-                        { path: "", redirectTo: "salonlist", pathMatch: "full" }
+                        { path: "dashboard", component: _admin_dashboard_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_9__["DashboardComponent"] },
+                        { path: "", redirectTo: "dashboard", pathMatch: "full" }
                     ]
                 }
             ];
@@ -1881,6 +1992,8 @@
             /* harmony import */ var _admin_dashboard_admin_dashboard_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./admin-dashboard/admin-dashboard.component */ "./src/app/admin/admin-dashboard/admin-dashboard.component.ts");
             /* harmony import */ var _admin_dashboard_userlist_userlist_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./admin-dashboard/userlist/userlist.component */ "./src/app/admin/admin-dashboard/userlist/userlist.component.ts");
             /* harmony import */ var _admin_dashboard_salonlist_salonlist_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./admin-dashboard/salonlist/salonlist.component */ "./src/app/admin/admin-dashboard/salonlist/salonlist.component.ts");
+            /* harmony import */ var _admin_dashboard_header_header_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./admin-dashboard/header/header.component */ "./src/app/admin/admin-dashboard/header/header.component.ts");
+            /* harmony import */ var _admin_dashboard_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./admin-dashboard/dashboard/dashboard.component */ "./src/app/admin/admin-dashboard/dashboard/dashboard.component.ts");
             var AdminModule = /** @class */ (function () {
                 function AdminModule() {
                 }
@@ -1888,7 +2001,7 @@
             }());
             AdminModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-                    declarations: [_adminlogin_adminlogin_component__WEBPACK_IMPORTED_MODULE_8__["AdminloginComponent"], _admin_dashboard_admin_dashboard_component__WEBPACK_IMPORTED_MODULE_9__["AdminDashboardComponent"], _admin_dashboard_userlist_userlist_component__WEBPACK_IMPORTED_MODULE_10__["UserlistComponent"], _admin_dashboard_salonlist_salonlist_component__WEBPACK_IMPORTED_MODULE_11__["SalonlistComponent"]],
+                    declarations: [_adminlogin_adminlogin_component__WEBPACK_IMPORTED_MODULE_8__["AdminloginComponent"], _admin_dashboard_admin_dashboard_component__WEBPACK_IMPORTED_MODULE_9__["AdminDashboardComponent"], _admin_dashboard_userlist_userlist_component__WEBPACK_IMPORTED_MODULE_10__["UserlistComponent"], _admin_dashboard_salonlist_salonlist_component__WEBPACK_IMPORTED_MODULE_11__["SalonlistComponent"], _admin_dashboard_header_header_component__WEBPACK_IMPORTED_MODULE_12__["HeaderComponent"], _admin_dashboard_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_13__["DashboardComponent"]],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
                         _admin_routing_module__WEBPACK_IMPORTED_MODULE_7__["AdminRoutingModule"],

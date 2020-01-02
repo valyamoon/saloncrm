@@ -10,6 +10,8 @@ import { AdminloginComponent } from './adminlogin/adminlogin.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { UserlistComponent } from './admin-dashboard/userlist/userlist.component';
 import { SalonlistComponent } from './admin-dashboard/salonlist/salonlist.component';
+import { HeaderComponent } from './admin-dashboard/header/header.component';
+import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
 
 
 
@@ -17,7 +19,7 @@ import { SalonlistComponent } from './admin-dashboard/salonlist/salonlist.compon
 
 
 @NgModule({
-  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent],
+  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent, HeaderComponent, DashboardComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
