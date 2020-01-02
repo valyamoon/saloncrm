@@ -7,11 +7,17 @@ import {NotifierModule} from 'angular-notifier'
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminloginComponent } from './adminlogin/adminlogin.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { UserlistComponent } from './admin-dashboard/userlist/userlist.component';
+import { SalonlistComponent } from './admin-dashboard/salonlist/salonlist.component';
+
+
+
+
 
 
 @NgModule({
-  declarations: [ AdminloginComponent, DashboardComponent],
+  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
