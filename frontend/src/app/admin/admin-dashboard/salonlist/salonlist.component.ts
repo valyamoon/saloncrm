@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AdminServService} from '../admin-serv.service';
 
 @Component({
   selector: 'app-salonlist',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SalonlistComponent implements OnInit {
 
-  constructor() { }
+  constructor(private adminServ:AdminServService) { }
 
   ngOnInit() {
+    this.getActiveSalonsList();
   }
+
+
+  getActiveSalonsList(){
+    this.adminServ.getSalonsList().subscribe((data)=>{
+
+      console.log("Hiiiiiiiiiiiiiiii",data['data']['data']);
+
+
+
+    })
+  }
+
 
 }

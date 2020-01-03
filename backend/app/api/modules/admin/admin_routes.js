@@ -14,6 +14,11 @@ module.exports = function(router) {
     router.post("/categories",admin.getCategories);
     router.post('/addservices',admin.addServices);
     router.post('/removeservices',admin.removeServices);
+    router.post('/addrole',admin.addRoles);
+    router.post('/roles',admin.getRoles);
+    router.post('/activesalons',admin.getActiveSalonsList);
+
+
 
   
     // router.get('/listUser', middlewares, user.getUserList);

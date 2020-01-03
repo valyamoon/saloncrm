@@ -119,7 +119,7 @@ function getCountryCodes(req, res) {
 
 function verifyUser(req, res) {
     let token;
-
+    console.log("IN VERIFy", req.body);
     async function verifyUser() {
         try {
             if (req.body.phone) {
@@ -205,12 +205,18 @@ function verifyUser(req, res) {
                             }
                         }
                     );
-            } else if (req.body.email) {
+            } else if (req.body.email|| req.body.socialLoginId) {
+                    console.log("DHHHHHHHHH");
+                
+                // let condition = {
+                //     email: req.body.email,socialLoginId:req.body.socialLoginId
+                // };
                 let condition = {
-                    email: req.body.email
-                };
-
+                    $or:[ {email:req.body.email}, {socialLoginId:req.body.socialLoginId}]
+                }
+                console.log(condition);
                 let findUser = await commonQuery.findoneData(users, condition);
+                console.log("findUser",findUser);
                 if (!findUser) {
                     res.json(
                         Response(constant.SUCCESS_CODE, constant.USER_NOT_FOUND, {
@@ -274,6 +280,7 @@ function verifyUser(req, res) {
 //  */
 
 function registerUser(req, res) {
+    console.log("IN Register", req.body);
     async function registerUser() {
         let roleid;
         let isActiveStatus;
@@ -332,7 +339,8 @@ function registerUser(req, res) {
                             gender: req.body.gender,
                             role_id: roleid,
                             password: req.body.password,
-                            isActive: isActiveStatus
+                            isActive: isActiveStatus,
+                            socialLoginId:req.body.socialLoginId
                         });
 
                         try {

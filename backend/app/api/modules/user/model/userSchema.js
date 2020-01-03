@@ -77,6 +77,10 @@ var userSchema = mongoose.Schema(
     profilepic: {
       type: String,
       default: null
+    },
+    socialLoginId:{
+      type:String,
+      default:null
     }
   },
   { timestamps: true }

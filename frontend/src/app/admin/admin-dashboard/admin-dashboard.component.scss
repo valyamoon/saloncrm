@@ -1,45 +1,78 @@
-#dashboardWrapper{
-    top:0;
-    left: 0;
-    position: absolute;
-    right: 0;
-    left: 0;
+#dashboardWrapper {
+  top: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  left: 0;
+  .hamburgerIcon {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    cursor: pointer;
+    position: relative;
     
-
-    #mainSection{
-        display: flex;
-        margin-top: 5px;
-        
-        .selectorSection{
-            padding: 0;
-            background-color:#783A87;
-            
-
-            .menus-app{
-
-                display: flex;
-                flex-direction: column;
-                
-
-                .selectors{
-                    padding: 10px;
-                    color:white;
-                    text-decoration: none;
-                    
-                }
-                .active{
-                    background: white;
-                    color:#783A87;
-                }
-
-            }
-
-
-        }
-        .selectedSection{
-
-        }
+    .bar1,
+    .bar2,
+    .bar3 {
+      width: 35px;
+      height: 5px;
+      background-color: #333;
+      margin: 2px 0;
+      transition: 0.4s;
     }
+    .bar1.change {
+      -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+      transform: rotate(-45deg) translate(-9px, 4px);
+    }
+    
+    .bar2.change {opacity: 0;}
+    
+    .bar3.change {
+      -webkit-transform: rotate(45deg) translate(-8px, -8px);
+      transform: rotate(45deg) translate(-8px, -4px);
+    }
+  }
+  #mainSection {
+    display: flex;
+    margin-top: 5px;
+    justify-content: space-between;
 
 
+    .selectorSection {
+      padding: 0;
+      width: 15%;
+      background-color: #783a87;
+      position: relative;
+    transition: 1s;
+
+     
+      .menus-app {
+        display: flex;
+        flex-direction: column;
+
+      
+
+        .selectors {
+          padding: 10px;
+          color: white;
+          text-decoration: none;
+        }
+        .active {
+          background: white;
+          color: #783a87;
+        }
+      }
+    }
+    .selectorSection.danger{
+      right: 14%;
+     transition: 1s;
+      width: 0;
+    }
+    .selectedSection {
+      width: 85%;
+    }
+    .selectedSection.fullShow{
+       width: 95% !important;
+    }
+  }
 }
