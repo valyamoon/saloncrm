@@ -3,16 +3,32 @@
     <app-header></app-header>
   </div>
 
+  <div class="hamburgerIcon" (click)="showSelection(data)">
+    <div class="bar1" [ngClass]="isSelectorShown ? 'bar1' : 'change'"></div>
+    <div class="bar2" [ngClass]="isSelectorShown ? 'bar2' : 'change'"></div>
+    <div class="bar3" [ngClass]="isSelectorShown ? 'bar3' : 'change'"></div>
+  </div>
   <div id="mainSection">
-    <div class="selectorSection col-lg-2 col-md-2 col-sm-6">
-     <div class="menus-app">
-    
-      <a class="selectors" routerLink="dashboard" routerLinkActive="active">Dashboard</a>
-       <a class="selectors" routerLink="salonlist" routerLinkActive="active">Salons</a>
-       <a  class="selectors" routerLink="userlist" routerLinkActive="active">Users</a>
-     </div>
+    <div
+      class="selectorSection"
+      [ngClass]="isSelectorShown ? 'selectorSection' : 'danger'"
+    >
+      <div class="menus-app">
+        <a class="selectors" routerLink="dashboard" routerLinkActive="active"
+          >Dashboard</a
+        >
+        <a class="selectors" routerLink="salonlist" routerLinkActive="active"
+          >Salons</a
+        >
+        <a class="selectors" routerLink="userlist" routerLinkActive="active"
+          >Users</a
+        >
+      </div>
     </div>
-    <div class="selectedSection col-lg-10 col-md-10 col-sm-6">
+    <div
+      class="selectedSection"
+      [ngClass]="isSelectorShown ? 'selectedSection' : 'fullShow'"
+    >
       <router-outlet></router-outlet>
     </div>
   </div>
