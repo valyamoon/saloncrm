@@ -1119,7 +1119,7 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
-    //  console.log("pageSizes",pageSizes);
+     console.log("pageSizes",cond);
     // console.log("currentPage",currentPage);
     if (cond) {
       cond = cond;
@@ -1128,7 +1128,18 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
     }
 
     let postQuery = model.find(cond);
-    //console.log(pos)
+    var countNumber;
+     model.countDocuments(cond).exec(async function(err,res){
+      if(err){
+        console.log(err);
+      }
+      else{
+        console.log("RES",res)
+        countNumber =  res
+        console.log("coun",countNumber);
+      }
+    });
+  
 
     if (pageSizes && currentPage) {
       postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
@@ -1136,7 +1147,12 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
     postQuery
       .then(result => {
         console.log(result);
-        resolve(result);
+        let dataToPass = {
+          data:result,
+          count:countNumber
+        }
+        console.log("DATATOPASS",dataToPass);
+        resolve(dataToPass);
       })
       .catch(error => {
         console.log(error);
