@@ -30,7 +30,10 @@ module.exports = {
   suspendSalon: suspendSalon,
   getCategories: getCategories,
   addServices: addServices,
-  removeServices: removeServices
+  removeServices: removeServices,
+  addRoles:addRoles,
+  getRoles:getRoles,
+  getActiveSalonsList:getActiveSalonsList
 };
 
 /**
@@ -100,16 +103,29 @@ function getSalonsRequestList(req, res) {
           pageSize,
           currentPage
         );
+        console.log("LISTOFSALONS",listOfSalons);
         if (!listOfSalons) {
           return res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
           );
         } else {
+          listOfSalons.data.forEach(function(c){
+            c.user_id = undefined;
+            c._id = undefined;
+            c.isservicesadded = undefined;
+            c.isreviewadded = undefined;
+            
+          })
+          let dataToPass = {
+            data:listOfSalons.data,
+            count:listOfSalons.count
+          }
           res.json(
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
-              listOfSalons
+              dataToPass
+              
             )
           );
         }
@@ -123,6 +139,10 @@ function getSalonsRequestList(req, res) {
 
   getSalonsRequestList().then(function() {});
 }
+
+
+
+
 
 /**
  * Function is use to Accept salon request
@@ -441,4 +461,125 @@ function removeServices(req, res) {
   }
 
   removeServices().then(function() {});
+}
+
+
+function addRoles(req,res){
+console.log(req.body);
+  async function addRoles(){
+
+
+    try{
+      if(req.body&&req.body.role){
+        let newRole =  new roles({
+          name:req.body.role
+        })
+        let saveRole =  await commonQuery.InsertIntoCollection(roles,newRole);
+        if(!saveRole){
+          res.json(Response(constant.ERROR_CODE,constant.FAILED_TO_ADD,null));
+        }
+        else{
+
+          res.json(Response(constant.SUCCESS_CODE,constant.ADDED_SUCCESS,saveRole));
+         }
+
+
+
+      }
+    }
+    catch(error){
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+
+
+  }
+  addRoles().then(function(){})
+
+}
+
+function getRoles(req,res){
+
+  async function getRoles(){
+
+    try{
+      if(req.body && req.body.type === "roles"){
+
+      let rolesList  = await commonQuery.fetch_all(roles);
+      if(!rolesList){
+        res.json(Response(constant.ERROR_CODE,constant.FAILED_TO_ADD,null));
+      }
+      else{
+        rolesList.forEach(function(v){
+          v.isDeleted= undefined;
+          v.status= undefined;
+        })
+
+        res.json(Response(constant.SUCCESS_CODE,constant.ADDED_SUCCESS,rolesList));
+
+
+      }
+
+
+      }
+
+
+    }
+    catch(error){
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+
+  }
+  getRoles().then(function(){})
+
+
+}
+
+
+function getActiveSalonsList(req,res){
+
+  async function getActiveSalonsList(){
+
+    try{
+
+      if(req.body&& req.body.type === "activesalons"){
+        let condition = {isActive:true, isDeleted:false};
+        let activeSalonsList =  await commonQuery.fetch_all(salons,condition);
+        if(!activeSalonsList){
+          res.json(Response(constant.ERROR_CODE,constant.FAILED_TO_ADD,null));
+        }
+        else{
+          activeSalonsList.forEach(function(v){
+            v.isDeleted= undefined;
+            v.isActive= undefined;
+            v.isreviewadded = undefined;
+            v.isservicesadded =  undefined;
+            v.employees =  undefined;
+            v.user_id = undefined;
+            v.location = undefined;
+            
+          })
+  
+          res.json(Response(constant.SUCCESS_CODE,constant.ADDED_SUCCESS,activeSalonsList));
+        }
+
+      }
+
+
+    }
+    catch(error){
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+
+
+
+  }
+getActiveSalonsList().then(function(){})
+
+
 }

@@ -12,7 +12,6 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit() {
   }
   showSelection(data){
-    console.log("HIIIIIIIIIIIIII");
     this.isSelectorShown =  !this.isSelectorShown;
 
     data.classList.toggle("change");
