@@ -1,7 +1,5 @@
 module.exports = function(router) {
   var user = require("./controllers/user_ctrl");
-
-  // var utils = __rootRequire('app/lib/util');
   var utils = require("../../../lib/util");
   var middlewares = [utils.ensureAuthorized];
   console.log("two-------------");
@@ -19,8 +17,5 @@ module.exports = function(router) {
   router.post('/deleteuser',user.softDeleteUser);
   router.post('/userdetail',user.getDetailsOfUser);
   router.post('/charge',user.userPayment)
-
-
-  // router.get('/listUser', middlewares, user.getUserList);
   return router;
 };
