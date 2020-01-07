@@ -39,7 +39,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("\n\n\n\n<router-outlet></router-outlet>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<router-outlet></router-outlet>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/salon/salon.component.html": 
@@ -487,12 +487,14 @@
             /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm2015/animations.js");
             /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
             /* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm2015/ngx-toastr.js");
-            /* harmony import */ var _salon_salon_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./salon/salon.component */ "./src/app/salon/salon.component.ts");
-            /* harmony import */ var _user_user_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./user/user.component */ "./src/app/user/user.component.ts");
-            /* harmony import */ var _admin_admin_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./admin/admin.component */ "./src/app/admin/admin.component.ts");
-            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
-            /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-            //import {CoreModule} from '../app/core/core.module';
+            /* harmony import */ var _agm_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @agm/core */ "./node_modules/@agm/core/fesm2015/agm-core.js");
+            /* harmony import */ var _salon_salon_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./salon/salon.component */ "./src/app/salon/salon.component.ts");
+            /* harmony import */ var _user_user_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./user/user.component */ "./src/app/user/user.component.ts");
+            /* harmony import */ var _admin_admin_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./admin/admin.component */ "./src/app/admin/admin.component.ts");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+            // import LatLng = google.maps.LatLng;
+            // import {LocationPickerModule} from "ng-location-picker";
             var AppModule = /** @class */ (function () {
                 function AppModule() {
                 }
@@ -502,19 +504,22 @@
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
                     declarations: [
                         _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
-                        _salon_salon_component__WEBPACK_IMPORTED_MODULE_8__["SalonComponent"],
-                        _user_user_component__WEBPACK_IMPORTED_MODULE_9__["UserComponent"],
-                        _admin_admin_component__WEBPACK_IMPORTED_MODULE_10__["AdminComponent"],
+                        _salon_salon_component__WEBPACK_IMPORTED_MODULE_9__["SalonComponent"],
+                        _user_user_component__WEBPACK_IMPORTED_MODULE_10__["UserComponent"],
+                        _admin_admin_component__WEBPACK_IMPORTED_MODULE_11__["AdminComponent"],
                     ],
                     imports: [
                         _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                         _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
                         _angular_forms__WEBPACK_IMPORTED_MODULE_6__["ReactiveFormsModule"],
+                        _agm_core__WEBPACK_IMPORTED_MODULE_8__["AgmCoreModule"].forRoot({
+                            apiKey: 'AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg'
+                        }),
                         _angular_forms__WEBPACK_IMPORTED_MODULE_6__["FormsModule"],
                         ngx_toastr__WEBPACK_IMPORTED_MODULE_7__["ToastrModule"].forRoot(),
-                        _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"],
+                        _angular_common_http__WEBPACK_IMPORTED_MODULE_12__["HttpClientModule"],
                         _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__["BrowserAnimationsModule"],
-                        _angular_router__WEBPACK_IMPORTED_MODULE_12__["RouterModule"]
+                        _angular_router__WEBPACK_IMPORTED_MODULE_13__["RouterModule"]
                     ],
                     providers: [],
                     bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]

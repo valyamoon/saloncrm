@@ -5,13 +5,15 @@
 <div class="login-left">
 <img src="../../../assets/images/logo.svg">
 </div>
+
 <div class="login-right">
-    <form>
+    <div class="headerText">{{headerText}}</div>
+    <form [formGroup]="salonLoginForm">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="InputEmail">Email address</label>
-                        <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
+                        <input type="email" formControlName="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
                             placeholder="Enter email">
 
                     </div>
@@ -19,18 +21,24 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="InputPassword">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1"
+                        <input type="password" formControlName="password" class="form-control" id="exampleInputPassword1"
                             placeholder="Password">
                     </div>
                 </div>
                 <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary btn-sign-in">SIGN IN</button>
+                        <button type="submit" [disabled]="salonLoginForm.invalid" (click)="salonLogin(salonLoginForm.value)" *ngIf="isLogin" class="btn btn-primary btn-sign-in">LOGIN</button>
+                        <button type="submit" [disabled]="salonLoginForm.invalid" (click)="salonRegister(salonLoginForm.value)" *ngIf="!isLogin" class="btn btn-primary btn-sign-in">REGISTER</button>
                     </div>
-                <div class="col-md-12">
+                <div class="col-md-12" *ngIf="isLogin">
                     <div class="sign-up">
-                       Don't have an account ?  <a href="">SIGN UP</a>
+                       Don't have an account ?  <a (click)="goToSignUp()" >SIGN UP</a>
                     </div>
                 </div>
+                <div class="col-md-12" *ngIf="!isLogin">
+                        <div class="sign-up">
+                           Already have an account ?  <a (click)="goToLogin()" >LOGIN</a>
+                        </div>
+                    </div>
               
             </div>
         </form>

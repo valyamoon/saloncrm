@@ -78,6 +78,10 @@ var userSchema = mongoose.Schema(
       type: String,
       default: null
     },
+    isApproved:{
+      type:Boolean,
+      default:false
+    },
     socialLoginId:{
       type:String,
       default:null
@@ -101,14 +105,9 @@ userSchema.pre("save", function(next) {
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
-  console.log(
-    this.password,
-    "candidatePassword",
-    typeof candidatePassword,
-    typeof this.password
-  );
+
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    console.log("============", err, isMatch);
+  
     if (err) return cb(err);
     cb(null, isMatch);
   });

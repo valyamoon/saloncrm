@@ -13,10 +13,24 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
   }
-
+/**
+ * Function is use to Pay to show logout button
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
   showLogoutButton(){
     this.showLogout =  true;
   }
+
+  /**
+ * Function is use to Pay to logout admin
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
   logout(){
     this.authServ.logout();
   }
