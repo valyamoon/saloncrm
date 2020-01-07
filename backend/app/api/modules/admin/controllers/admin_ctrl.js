@@ -31,9 +31,9 @@ module.exports = {
   getCategories: getCategories,
   addServices: addServices,
   removeServices: removeServices,
-  addRoles:addRoles,
-  getRoles:getRoles,
-  getActiveSalonsList:getActiveSalonsList
+  addRoles: addRoles,
+  getRoles: getRoles,
+  getActiveSalonsList: getActiveSalonsList
 };
 
 /**
@@ -103,29 +103,27 @@ function getSalonsRequestList(req, res) {
           pageSize,
           currentPage
         );
-        console.log("LISTOFSALONS",listOfSalons);
+
         if (!listOfSalons) {
           return res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
           );
         } else {
-          listOfSalons.data.forEach(function(c){
+          listOfSalons.data.forEach(function(c) {
             c.user_id = undefined;
             c._id = undefined;
             c.isservicesadded = undefined;
             c.isreviewadded = undefined;
-            
-          })
+          });
           let dataToPass = {
-            data:listOfSalons.data,
-            count:listOfSalons.count
-          }
+            data: listOfSalons.data,
+            count: listOfSalons.count
+          };
           res.json(
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
               dataToPass
-              
             )
           );
         }
@@ -139,10 +137,6 @@ function getSalonsRequestList(req, res) {
 
   getSalonsRequestList().then(function() {});
 }
-
-
-
-
 
 /**
  * Function is use to Accept salon request
@@ -161,7 +155,8 @@ function acceptSalonRequest(req, res) {
           isActive: false
         };
         let activeCondition = {
-          isActive: true
+          isActive: true,
+          isApproved: true
         };
 
         let acceptSalonRequest = await commonQuery.updateOneDocument(
@@ -317,7 +312,6 @@ function suspendSalon(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getCategories(req, res) {
-  console.log("--", req.body);
   async function getCategories() {
     try {
       if (req.body.type === "categories") {
@@ -441,7 +435,6 @@ function removeServices(req, res) {
 
           if (!categoryUpdate) {
           } else {
-            console.log(categoryUpdate);
           }
 
           res.json(
@@ -464,122 +457,114 @@ function removeServices(req, res) {
 }
 
 
-function addRoles(req,res){
-console.log(req.body);
-  async function addRoles(){
+/**
+ * Function is use to add roles(Currently we have only three roles Admin, Salon, User)
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
-
-    try{
-      if(req.body&&req.body.role){
-        let newRole =  new roles({
-          name:req.body.role
-        })
-        let saveRole =  await commonQuery.InsertIntoCollection(roles,newRole);
-        if(!saveRole){
-          res.json(Response(constant.ERROR_CODE,constant.FAILED_TO_ADD,null));
+function addRoles(req, res) {
+  async function addRoles() {
+    try {
+      if (req.body && req.body.role) {
+        let newRole = new roles({
+          name: req.body.role
+        });
+        let saveRole = await commonQuery.InsertIntoCollection(roles, newRole);
+        if (!saveRole) {
+          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+        } else {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveRole)
+          );
         }
-        else{
-
-          res.json(Response(constant.SUCCESS_CODE,constant.ADDED_SUCCESS,saveRole));
-         }
-
-
-
       }
-    }
-    catch(error){
+    } catch (error) {
       return res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
       );
     }
-
-
   }
-  addRoles().then(function(){})
-
+  addRoles().then(function() {});
 }
+/**
+ * Function is use to get list of Roles
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+function getRoles(req, res) {
+  async function getRoles() {
+    try {
+      if (req.body && req.body.type === "roles") {
+        let rolesList = await commonQuery.fetch_all(roles);
+        if (!rolesList) {
+          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+        } else {
+          rolesList.forEach(function(v) {
+            v.isDeleted = undefined;
+            v.status = undefined;
+          });
 
-function getRoles(req,res){
-
-  async function getRoles(){
-
-    try{
-      if(req.body && req.body.type === "roles"){
-
-      let rolesList  = await commonQuery.fetch_all(roles);
-      if(!rolesList){
-        res.json(Response(constant.ERROR_CODE,constant.FAILED_TO_ADD,null));
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, rolesList)
+          );
+        }
       }
-      else{
-        rolesList.forEach(function(v){
-          v.isDeleted= undefined;
-          v.status= undefined;
-        })
-
-        res.json(Response(constant.SUCCESS_CODE,constant.ADDED_SUCCESS,rolesList));
-
-
-      }
-
-
-      }
-
-
-    }
-    catch(error){
+    } catch (error) {
       return res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
       );
     }
-
   }
-  getRoles().then(function(){})
-
-
+  getRoles().then(function() {});
 }
 
+/**
+ * Function is use to get list of Approved or active salons
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
-function getActiveSalonsList(req,res){
 
-  async function getActiveSalonsList(){
-
-    try{
-
-      if(req.body&& req.body.type === "activesalons"){
-        let condition = {isActive:true, isDeleted:false};
-        let activeSalonsList =  await commonQuery.fetch_all(salons,condition);
-        if(!activeSalonsList){
-          res.json(Response(constant.ERROR_CODE,constant.FAILED_TO_ADD,null));
-        }
-        else{
-          activeSalonsList.forEach(function(v){
-            v.isDeleted= undefined;
-            v.isActive= undefined;
+function getActiveSalonsList(req, res) {
+  async function getActiveSalonsList() {
+    try {
+      if (req.body && req.body.type === "activesalons") {
+        let condition = { isActive: true, isDeleted: false };
+        let activeSalonsList = await commonQuery.fetch_all(salons, condition);
+        if (!activeSalonsList) {
+          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+        } else {
+          activeSalonsList.forEach(function(v) {
+            v.isDeleted = undefined;
+            v.isActive = undefined;
             v.isreviewadded = undefined;
-            v.isservicesadded =  undefined;
-            v.employees =  undefined;
+            v.isservicesadded = undefined;
+            v.employees = undefined;
             v.user_id = undefined;
             v.location = undefined;
-            
-          })
-  
-          res.json(Response(constant.SUCCESS_CODE,constant.ADDED_SUCCESS,activeSalonsList));
+          });
+
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              activeSalonsList
+            )
+          );
         }
-
       }
-
-
-    }
-    catch(error){
+    } catch (error) {
       return res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
       );
     }
-
-
-
   }
-getActiveSalonsList().then(function(){})
-
-
+  getActiveSalonsList().then(function() {});
 }

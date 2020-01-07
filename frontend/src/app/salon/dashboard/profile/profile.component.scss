@@ -1,0 +1,35 @@
+.profileOverlay{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top:0;
+    right: 0;
+    z-index: 10;
+    background-color: #333;
+    opacity: 0.9;
+    height: 100%;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    #profileArea{
+        padding: 10px;
+        background-color: white;
+        opacity: 1;
+        z-index: 11;
+        border-radius: 10px;
+        .salonDetailSave{
+
+
+            .fields{
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+            }
+            .image{
+                display: none;
+            }
+
+        }
+    }
+}

@@ -87,13 +87,6 @@ function saveSalonDetails(req, res) {
 
           if (!saveSalon) {
           } else {
-            // saveSalon.forEach(function(v) {
-            //   v.isActive = undefined;
-            //   v.saveSalon = undefined;
-            //   v.isservicesadded = undefined;
-            //   v.isreviewadded = undefined;
-            // });
-
             res.json(
               Response(
                 constant.SUCCESS_CODE,
@@ -114,75 +107,16 @@ function saveSalonDetails(req, res) {
   saveSalonDetails().then(function(data) {});
 }
 /**
- * Function is use to Fetch salon Data
+ * Function is use to Fetch salon List(This is going to change as per new requirement)
  * @access private
  * @return json
  * Created by SmartData
  * @smartData Enterprises (I) Ltd
  */
-// function getSalons(req, res) {
-//   console.log("hddjdjd",req.body)
-//   async function getSalons() {
-//     try {
-//       if (req.body && req.body.category_id) {
-//         let lat = +req.body.lat;
-//         let long = +req.body.long;
-//         let name = req.body.name;
-//         let pageSize = +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
-//         let page = +req.body.page || +req.body.page ? req.body.page : +1;
-//         let distanceToCover = req.body.distance;
-//         let condition = {
-//           category_id: mongoose.Types.ObjectId(req.body.category_id)
-//         };
-
-//         console.log(lat,long,name,pageSize,page,condition);
-
-//         let salonList = await commonQuery.fetch_all_salons(
-//           services,
-//           condition,
-//           pageSize,
-//           page,
-//           lat,
-//           long,
-//           "salons",
-//           "salon_id",
-//           "_id",
-//           "reviewratings",
-//           "salon_id",
-//           "salon_id",
-//           distanceToCover,
-//           name
-//         );
-
-//         if (!salonList) {
-//           res.json(
-//             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-//           );
-//         } else {
-//           res.json(
-//             Response(
-//               constant.SUCCESS_CODE,
-//               constant.FETCHED_ALL_DATA,
-//               salonList
-//             )
-//           );
-//         }
-//       }
-//     } catch (error) {
-//       return res.json(
-//         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-//       );
-//     }
-//   }
-//   getSalons().then(function() {});
-// }
 
 function getSalons(req, res) {
-  console.log(req.body);
-
   async function getSalons() {
     try {
-      console.log("HIiiii");
       if (req.body && req.body.services_id) {
         let lat = +req.body.lat;
         let long = +req.body.long;
@@ -192,18 +126,32 @@ function getSalons(req, res) {
         let page = +req.body.page || +req.body.page ? req.body.page : +1;
         let distanceToCover = req.body.distance;
         let dynamicQuery = req.body.services_id;
-        console.log("sssssss",dynamicQuery);
-        console.log("sssxxx",lat,long,name)
-  
 
-        let salonList = await commonQuery.fetch_near_salons(salons,pageSize,page,dynamicQuery,distanceToCover,lat,long);
+        let salonList = await commonQuery.fetch_near_salons(
+          salons,
+          pageSize,
+          page,
+          dynamicQuery,
+          distanceToCover,
+          lat,
+          long
+        );
         if (!salonList) {
         } else {
-          console.log(salonList);
-          res.json({data:salonList})
+          return res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              salonList
+            )
+          );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
   }
 
   getSalons().then(function() {});
@@ -217,7 +165,6 @@ function getSalons(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getSalonDetails(req, res) {
-  console.log("sssss", req.body);
   async function getSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -226,7 +173,7 @@ function getSalonDetails(req, res) {
           isActive: true,
           isDeleted: false
         };
-        //console.log("cpm", condition);
+
         let salonDetails = await commonQuery.salonDetailsFetch(
           salons,
           "reviewratings",
@@ -237,7 +184,7 @@ function getSalonDetails(req, res) {
           "services",
           "categories"
         );
-        console.log(salonDetails);
+
         if (!salonDetails) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
@@ -269,7 +216,6 @@ function getSalonDetails(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getReviewsAndRatingsList(req, res) {
-  console.log(req.body);
   async function getReviewsAndRatingsList() {
     try {
       if (req.body.salon_id) {
@@ -288,15 +234,11 @@ function getReviewsAndRatingsList(req, res) {
           page
         );
 
-        console.log(reviewratingsList);
-
         if (!reviewratingsList) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
-          console.log(reviewratingsList);
-
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -323,8 +265,6 @@ function getReviewsAndRatingsList(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function addSalonServices(req, res) {
-  console.log(req.body);
-
   async function addSalonServices() {
     try {
       if (req.body.salon_id && req.body) {
@@ -356,7 +296,6 @@ function addSalonServices(req, res) {
           );
           if (!updateSalonData) {
           } else {
-            console.log("salondataupdated");
           }
 
           res.json(
@@ -382,7 +321,6 @@ function addSalonServices(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function addPromocodes(req, res) {
-  console.log("inpromo", req.body);
   async function addPromocodes() {
     try {
       if (req.body && req.body.name) {
@@ -450,9 +388,15 @@ function getPromoCodes(req, res) {
   }
   getPromoCodes().then(function() {});
 }
+/**
+ * Function is use to Fetch salon services chosen by salon
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
 function getSalonServices(req, res) {
-  console.log(req.body);
   async function getSalonServices() {
     try {
       if (req.body && req.body.salon_id) {
@@ -462,19 +406,37 @@ function getSalonServices(req, res) {
           condition
         );
         if (!getsalonservice) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
         } else {
-          console.log(getsalonservice);
-          res.json({ data: getsalonservice });
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              getsalonservice
+            )
+          );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      res.json(
+        Response(constant.INTERNAL_ERROR, constant.REQURIED_FIELDS_NOT, null)
+      );
+    }
   }
 
   getSalonServices().then(function() {});
 }
 
+/**
+ * Function is use to add employee to salon
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function addEmployeeToSalon(req, res) {
-  console.log(req.body);
   async function addEmployeeToSalon() {
     try {
       if (req.body.salon_id && req.body) {
@@ -487,9 +449,11 @@ function addEmployeeToSalon(req, res) {
           employees,
           newEmployee
         );
-        console.log("saveEMployee", saveEmployee);
+
         if (!saveEmployee) {
-          res.json({ error: "ERROR" });
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
         } else {
           let salonUpdate = await commonQuery.addEmployeeToSalon(
             salons,
@@ -498,22 +462,31 @@ function addEmployeeToSalon(req, res) {
           );
 
           if (!salonUpdate) {
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error);
           } else {
           }
 
-          res.json({ data: saveEmployee });
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              saveEmployee
+            )
+          );
         }
-
-        console.log(newEmployee);
       }
     } catch (error) {}
   }
   addEmployeeToSalon().then(function() {});
 }
-
+/**
+ * Function is use to assign services to employee
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 function addServicesToEmployee(req, res) {
-  console.log(req.body);
   async function addServicesToEmployee() {
     try {
       if (req.body.employee_id && req.body) {
@@ -531,27 +504,41 @@ function addServicesToEmployee(req, res) {
         );
 
         if (!addEmpService) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
         } else {
-          res.json({ data: addEmpService });
-          console.log(addEmpService);
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              addEmpService
+            )
+          );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+      );
+    }
   }
 
   addServicesToEmployee().then(function() {});
 }
 
+/**
+ * Function is use to remove service to employee
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function removeServiceToEmployee(req, res) {
-  console.log(req.body);
   async function removeServiceToEmployee() {
     try {
       if (req.body.employee_id && req.body) {
-        // let tempSev = [];
-        // req.body.salonservices_id.forEach(function(v) {
-        //   tempSev.push(mongoose.Types.ObjectId(v));
-        // });
-
         let empId = req.body.employee_id;
 
         let addEmpService = await commonQuery.removeServiceToEmp(
@@ -561,12 +548,24 @@ function removeServiceToEmployee(req, res) {
         );
 
         if (!addEmpService) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
         } else {
-          res.json({ data: addEmpService });
-          console.log(addEmpService);
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              addEmpService
+            )
+          );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+      );
+    }
   }
 
   removeServiceToEmployee().then(function() {});

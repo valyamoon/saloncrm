@@ -5,8 +5,6 @@ module.exports = function(router) {
     var utils = require("../../../lib/util");
     var middlewares = [utils.ensureAuthorized];
     console.log("two-------------");
-  
-  
     router.post("/addcategories", admin.addCategories);
     router.post("/salonsrequest", admin.getSalonsRequestList);
     router.post("/acceptrequest",admin.acceptSalonRequest);
@@ -17,10 +15,5 @@ module.exports = function(router) {
     router.post('/addrole',admin.addRoles);
     router.post('/roles',admin.getRoles);
     router.post('/activesalons',admin.getActiveSalonsList);
-
-
-
-  
-    // router.get('/listUser', middlewares, user.getUserList);
     return router;
   };
