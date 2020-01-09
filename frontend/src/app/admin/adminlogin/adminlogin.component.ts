@@ -39,7 +39,12 @@ export class AdminloginComponent implements OnInit {
  */
 
   loginAdmin(data) {
-    this.adminServ.login(data).subscribe((data: any) => {
+    let dataToPass = {
+      email:data.email,
+      password:data.password,
+      role:"admin"
+    }
+    this.adminServ.login(dataToPass).subscribe((data: any) => {
       if (data.code === 200) {
         this.toastServ.success("Logged In Successfully", "", {
           timeOut: 3000
@@ -53,6 +58,10 @@ export class AdminloginComponent implements OnInit {
           timeOut: 3000
         });
       }
+    },error=>{
+      this.toastServ.error("Failed to Login", error, {
+        timeOut: 3000
+      });
     });
   }
 }

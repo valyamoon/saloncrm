@@ -66,7 +66,12 @@ export class LoginComponent implements OnInit {
    */
 
   salonLogin(data) {
-    this.logServ.loginSalon(data).subscribe((data: any) => {
+    let dataToPass= {
+      email:data.email,
+      password:data.password,
+      role:"salon"
+    }
+    this.logServ.loginSalon(dataToPass).subscribe((data: any) => {
       if (data.code === 200) {
         this.toastServ.success("Logged In Successfully", "", {
           timeOut: 3000
@@ -82,6 +87,11 @@ export class LoginComponent implements OnInit {
           timeOut: 3000
         });
       }
+    },error=>{
+      this.toastServ.error("Failed to login", error, {
+        timeOut: 3000
+      });
+
     });
   }
   /**

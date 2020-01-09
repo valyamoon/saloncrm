@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
     let data;
     this.adminServ.getSalonsRequest(data).subscribe(data => {
       this.SalonRequestList = data["data"]["data"];
+      console.log(this.SalonRequestList);
     });
   }
 }
