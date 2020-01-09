@@ -10,9 +10,12 @@ import { AuthService } from "../../auth.service";
 })
 export class ProfileComponent implements OnInit {
   submitSalonDetails: FormGroup;
+  numberPattern =/^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
   lng: any;
-  user_id: any;
+ private user_id: any;
+  selectedFile: File;
+  url: any;
 
   constructor(
     private authServ: AuthService,
@@ -30,20 +33,32 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.submitSalonDetails = this.fb.group({
       name: ["", Validators.required],
-      contact: ["", Validators.required],
+      contact: ["", [Validators.required, Validators.pattern(this.numberPattern)]],
       salonaddress: ["", Validators.required]
     });
 
     this.authServ.currentIds.subscribe(data => {
-      localStorage.setItem("userId", JSON.stringify(data));
+     // sessionStorage.setItem("userId", data);
+      this.user_id = data;
     });
   }
   uploadImage(event) {
-    console.log("event", event);
+    this.selectedFile = event.target.files;
+    console.log("SelectedFile", this.selectedFile);
+    var reader = new FileReader();
+
+    reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+    reader.onload = event => {
+      // called once readAsDataURL is completed
+     // this.url = event.target.result;
+      //console.log("IMAGEURL", this.url);
+    };
   }
   submitSalon(data) {
-    this.user_id = localStorage.getItem("userId");
-
+    console.log("datais",data);
+    //this.user_id = sessionStorage.getItem("userId");
+    console.log(this.user_id);
     let dataToPass = {
       name: data.name,
       salonaddress: data.salonaddress,
@@ -52,6 +67,7 @@ export class ProfileComponent implements OnInit {
       long: this.lng,
       user_id: this.user_id
     };
+    console.log("DATATOPASS",dataToPass);
     this.commServ.saveSalonDetails(dataToPass).subscribe(data => {
       console.log("USERSAVED", data);
     });

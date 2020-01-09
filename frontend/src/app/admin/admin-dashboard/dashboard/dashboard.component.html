@@ -3,22 +3,22 @@
   <table class="table">
     <thead>
       <tr>
-        <th>#</th>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Age</th>
-        <th>City</th>
-        <th>Country</th>
+        <th>Sr.No</th>
+        <th>Name</th>
+        <th>Salon Address</th>
+        <th>Contact</th>
+        <th>Status</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Anna</td>
-        <td>Pitt</td>
-        <td>35</td>
-        <td>New York</td>
-        <td>USA</td>
+      <tr *ngFor="let item of SalonRequestList;let i = index">
+        <td>{{i+1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.salonaddress}}</td>
+        <td>{{item.contact}}</td>
+        <td>{{item.isActive}}</td>
+        <td><button class="btn btn-primary btn-sign-in">Approve</button></td>
       </tr>
     </tbody>
   </table>

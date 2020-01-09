@@ -422,16 +422,36 @@ function registerUser(req, res) {
 //  */
 
 function login(req, res) {
+  console.log("inHJEre",req.body);
   async function login() {
     try {
       if (req.body.email && req.body.password) {
+        let isactivecondition;
+        if(req.body.role === "salon"){
+          isactivecondition = false;
+        }
+        else if(req.body.role === 'admin'){
+          isactivecondition = true;
+        }
+        let roleCondition ={name:req.body.role};
+        let fetchRoleId = await commonQuery.findoneData(roles,roleCondition);
+        console.log("roleUID",fetchRoleId);
+        let roleId =  mongoose.Types.ObjectId(fetchRoleId._id);
+        console.log(roleId);
+
         let conditionToCheck = {
           email: req.body.email,
-          isActive: false,
-          isApproved: false,
-          isDeleted: false
+          isActive: isactivecondition,
+          isDeleted: false,
+          role_id:roleId
         };
+
+   
+
+
+
         let findUser = await commonQuery.findoneData(users, conditionToCheck);
+        console.log("findUser",findUser); 
 
         if (!findUser) {
           res.json(
