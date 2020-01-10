@@ -61,24 +61,60 @@
       </div> -->
 
 <div class="profileOverlay">
+  <div id="profileArea">
+    <h2>Add Salon Details</h2>
+    <form [formGroup]="submitSalonDetails" class="salonDetailSave">
+      <input
+        type="text"
+        class="form-control fields"
+        placeholder="Name"
+        formControlName="name"
+      />
+      <!-- <input type="file" class="image" placeholder="image" id="imageUpload">
+            <button class="btn btn-primary btn-sign-in "  (click)="uploadImage($event)">Upload</button> -->
 
-    <div id="profileArea">
-        <h2> Add Salon Details</h2>
-        <form [formGroup]="submitSalonDetails" class="salonDetailSave">
-            <input type="text" class="form-control fields" placeholder="Name" formControlName="name">
-            <input type="file" class="image" placeholder="image" #file>
-            <button class="btn btn-primary btn-sign-in " (click)="uploadImage($event)">Upload</button>
+      <input
+        style="display: none"
+        type="file"
+        accept="image/*"
+        (change)="uploadImage($event)"
+        #fileInput
+      />
+      <button class="btn btn-primary btn-sign-in" (click)="fileInput.click()">
+        Select File
+      </button>
 
-            <input type="text" class="form-control fields" placeholder="Contact" formControlName="contact">
-            <input type="text" class="form-control fields" placeholder="Address" formControlName="salonaddress">
-            <button class="btn btn-primary btn-sign-in" [disabled]="submitSalonDetails.invalid" (click)="submitSalon(submitSalonDetails.value)">Submit</button>
+      <input
+        type="text"
+        class="form-control fields"
+        placeholder="Contact"
+        formControlName="contact"
+      />
+      <div
+        *ngIf="contact.invalid && (contact.dirty || contact.touched)"
+        class="erroralert"
+      >
+        <div *ngIf="contact.invalid">
+          Invalid Contact Number
+        </div>
+      </div>
+      <input
+        type="text"
+        class="form-control fields"
+        placeholder="Address"
+        formControlName="salonaddress"
+      />
+      <button
+        class="btn btn-primary btn-sign-in"
+        [disabled]="submitSalonDetails.invalid"
+        (click)="submitSalon(submitSalonDetails.value)"
+      >
+        Submit
+      </button>
 
-            <agm-map [latitude]="lat" [longitude]="lng"> 
-                    <agm-marker [latitude]="lat" [longitude]="lng">
-                     </agm-marker> 
-            </agm-map>
-        </form>
-    </div>
-
-
+      <agm-map [latitude]="lat" [longitude]="lng">
+        <agm-marker [latitude]="lat" [longitude]="lng"> </agm-marker>
+      </agm-map>
+    </form>
+  </div>
 </div>

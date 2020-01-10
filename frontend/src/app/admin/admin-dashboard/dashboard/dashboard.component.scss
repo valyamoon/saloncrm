@@ -1,0 +1,71 @@
+table {
+    width: 100%;
+  }
+#cards{
+    display: flex;
+    justify-content:space-between;
+    margin-bottom: 15px;
+    height: 4em;
+
+    .card{
+        flex-grow: 1;
+        z-index: 0;
+        width: 30%;
+        height: 4em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 5px;
+        background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+        border-color: transparent;
+        .cardText{
+            color:white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+    }
+
+
+}
+
+
+
+#paginationCard{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .itemPerPage{
+
+    }
+    .paginator{
+        display: flex;
+        align-items: center;
+        justify-content:space-between;
+        margin-left: 10px;
+        .pageNumber{
+            padding: 2px 5px 2px 5px;
+            font-size: 10px;
+            border: 1px solid  #783A87;
+            align-items: center;
+            display: flex;
+            cursor: pointer;
+            justify-content: center;
+            border-radius: 5px;
+          
+        }
+        .prevnextBtn{
+            background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+    border-color: transparent;
+    color:white;
+    border-radius: 10px;
+        }
+    }
+  
+
+}
+.btn-sign-in{
+    width: 50% !important;
+    margin-bottom: 5px;
+}
