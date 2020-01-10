@@ -10,6 +10,7 @@ import { AuthService } from "../../auth.service";
 })
 export class ProfileComponent implements OnInit {
   submitSalonDetails: FormGroup;
+  showNow:boolean =  false;
   numberPattern =/^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
   lng: any;

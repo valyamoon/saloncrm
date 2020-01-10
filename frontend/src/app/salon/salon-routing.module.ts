@@ -5,6 +5,8 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import { ProfileComponent } from './dashboard/profile/profile.component';
 import { AuthGuard } from '../salon/auth.guard';
 import { AuthService } from '../salon/auth.service';
+import { ManageServiceComponent } from './dashboard/manage-service/manage-service.component';
+import { ManageEmployeeComponent } from './dashboard/manage-employee/manage-employee.component';
 
 
 
@@ -16,8 +18,8 @@ children:[
  
   {path:'profile',component:ProfileComponent},
   {path:'',redirectTo:'profile',pathMatch:'full'},
-  // {path:'time',component:TimeComponent},
-  // {path:'booking',component:BookingsComponent},
+   {path:'manage-service',component:ManageServiceComponent},
+  {path:'manage-employee',component:ManageEmployeeComponent},
   // {path:'payment',component:PaymentComponent},
   // {path:'account',component:AccountComponent},
   // {path:'cancelled',component:CancelledBookingsComponent},
