@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(pos => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
+        console.log("DDD",this.lat,this.lng);
       });
     }
   }
@@ -37,11 +38,19 @@ export class ProfileComponent implements OnInit {
       salonaddress: ["", Validators.required]
     });
 
-    this.authServ.currentIds.subscribe(data => {
-     // sessionStorage.setItem("userId", data);
-      this.user_id = data;
-    });
+  //   this.authServ.currentIds.subscribe(data => {
+  //  //  sessionStorage.setItem("userId", data);
+  //     this.user_id = data;
+  //   });
+  this.user_id = sessionStorage.getItem('userId');
+  console.log(this.user_id);
   }
+
+  get contact() { return this.submitSalonDetails.get('contact'); }
+
+
+
+
   uploadImage(event) {
     this.selectedFile = event.target.files;
     console.log("SelectedFile", this.selectedFile);
@@ -50,9 +59,6 @@ export class ProfileComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]); // read file as data url
 
     reader.onload = event => {
-      // called once readAsDataURL is completed
-     // this.url = event.target.result;
-      //console.log("IMAGEURL", this.url);
     };
   }
   submitSalon(data) {
@@ -72,4 +78,9 @@ export class ProfileComponent implements OnInit {
       console.log("USERSAVED", data);
     });
   }
+
+  
+
+
+
 }

@@ -426,13 +426,13 @@ function login(req, res) {
   async function login() {
     try {
       if (req.body.email && req.body.password) {
-        let isactivecondition;
-        if(req.body.role === "salon"){
-          isactivecondition = false;
-        }
-        else if(req.body.role === 'admin'){
-          isactivecondition = true;
-        }
+       // let isactivecondition;
+        // if(req.body.role === "salon"){
+        //   isactivecondition = false;
+        // }
+        // else if(req.body.role === 'admin'){
+        //   isactivecondition = true;
+        // }
         let roleCondition ={name:req.body.role};
         let fetchRoleId = await commonQuery.findoneData(roles,roleCondition);
         console.log("roleUID",fetchRoleId);
@@ -441,7 +441,6 @@ function login(req, res) {
 
         let conditionToCheck = {
           email: req.body.email,
-          isActive: isactivecondition,
           isDeleted: false,
           role_id:roleId
         };

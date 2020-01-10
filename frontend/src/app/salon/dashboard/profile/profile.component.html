@@ -80,7 +80,9 @@
         (change)="uploadImage($event)"
         #fileInput
       />
-      <button class="btn btn-primary btn-sign-in" (click)="fileInput.click()">Select File</button>
+      <button class="btn btn-primary btn-sign-in" (click)="fileInput.click()">
+        Select File
+      </button>
 
       <input
         type="text"
@@ -88,6 +90,14 @@
         placeholder="Contact"
         formControlName="contact"
       />
+      <div
+        *ngIf="contact.invalid && (contact.dirty || contact.touched)"
+        class="erroralert"
+      >
+        <div *ngIf="contact.invalid">
+          Invalid Contact Number
+        </div>
+      </div>
       <input
         type="text"
         class="form-control fields"
