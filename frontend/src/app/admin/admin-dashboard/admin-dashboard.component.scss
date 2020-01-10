@@ -41,9 +41,12 @@
     .selectorSection {
       padding: 0;
       width: 15%;
-      background-color: #783a87;
+      background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+      border-color: transparent;
       position: relative;
-    transition: 1s;
+      transition: 1s; 
+      margin-top: 5px;
+      max-height: 400px;
 
      
       .menus-app {
@@ -60,6 +63,9 @@
         .active {
           background: white;
           color: #783a87;
+          margin-top: 5px;
+          border-top-left-radius: 20px;
+          border-bottom-left-radius: 20px;
         }
       }
     }

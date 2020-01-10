@@ -34,7 +34,8 @@ module.exports = {
   getSalonServices: getSalonServices,
   addEmployeeToSalon: addEmployeeToSalon,
   addServicesToEmployee: addServicesToEmployee,
-  removeServiceToEmployee: removeServiceToEmployee
+  removeServiceToEmployee: removeServiceToEmployee,
+  getCategoriesAndServicesOfSalon: getCategoriesAndServicesOfSalon
 };
 
 /**
@@ -165,6 +166,7 @@ function getSalons(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getSalonDetails(req, res) {
+  console.log(req.body);
   async function getSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -173,23 +175,32 @@ function getSalonDetails(req, res) {
           isActive: true,
           isDeleted: false
         };
+        // let condition = {
+        //   "servvv.salon_id": mongoose.Types.ObjectId(req.body.salon_id)
+        // };
 
-        let salonDetails = await commonQuery.salonDetailsFetch(
+        // let salonDetails = await commonQuery.salonDetailsFetch(
+        //   salons,
+        //   "reviewratings",
+        //   "_id",
+        //   "salon_id",
+        //   condition,
+        //   "reviewratings",
+        //   "services",
+        //   "categories"
+        // );
+        let salonDetails = await commonQuery.getSalonDetailsQuery(
           salons,
-          "reviewratings",
-          "_id",
-          "salon_id",
-          condition,
-          "reviewratings",
-          "services",
-          "categories"
+          condition
         );
-
         if (!salonDetails) {
           res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
+         
+    
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -265,14 +276,52 @@ function getReviewsAndRatingsList(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function addSalonServices(req, res) {
+  console.log(req.body);
   async function addSalonServices() {
     try {
+      let serviceName;
+      let categoryName;
       if (req.body.salon_id && req.body) {
+        let servCondition = {
+          _id: mongoose.Types.ObjectId(req.body.service_id)
+        };
+        let isserviceName = await commonQuery.findoneData(
+          services,
+          servCondition
+        );
+        console.log("serviceName", serviceName);
+        if (!isserviceName) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          serviceName = isserviceName.name;
+        }
+
+        let catCondition = {
+          _id: mongoose.Types.ObjectId(req.body.category_id)
+        };
+        let iscategorynname = await commonQuery.findoneData(
+          categories,
+          catCondition
+        );
+        console.log("serviceName", iscategorynname);
+        if (!iscategorynname) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
+        } else {
+          categoryName = iscategorynname.catname;
+        }
+
         let newsalonService = new salonservices({
           price: req.body.price,
           duration: req.body.duration,
           salon_id: req.body.salon_id,
-          service_id: req.body.service_id
+          service_id: req.body.service_id,
+          category_id: req.body.category_id,
+          servicename: serviceName,
+          categoryname: categoryName
         });
 
         let saveServiceToSalon = await commonQuery.InsertIntoCollection(
@@ -571,4 +620,31 @@ function removeServiceToEmployee(req, res) {
   removeServiceToEmployee().then(function() {});
 }
 
+function getCategoriesAndServicesOfSalon(req, res) {
+  async function getCategoriesAndServicesOfSalon() {
+    try {
+      if (req.body && req.body.salon_id) {
+        let condition = {
+          "servvv.salon_id": mongoose.Types.ObjectId(req.body.salon_id)
+        };
+        let catgoriesList = await commonQuery.fetchCategories(
+          categories,
+          condition
+        );
+        if (!catgoriesList) {
+        } else {
+         
 
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              catgoriesList
+            )
+          );
+        }
+      }
+    } catch (error) {}
+  }
+  getCategoriesAndServicesOfSalon().then(function() {});
+}

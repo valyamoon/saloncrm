@@ -33,8 +33,7 @@ module.exports = {
     removeServices: removeServices,
     addRoles: addRoles,
     getRoles: getRoles,
-    getActiveSalonsList: getActiveSalonsList,
-    getServiceList: getServiceList
+    getActiveSalonsList: getActiveSalonsList
 };
 
 /**
@@ -97,6 +96,9 @@ function getSalonsRequestList(req, res) {
                     isDeleted: false
                 };
 
+                let count = await commonQuery.findCount(salons, condition);
+                console.log("count", count);
+
                 let listOfSalons = await commonQuery.fetch_all_paginated(
                     salons,
                     condition,
@@ -104,21 +106,22 @@ function getSalonsRequestList(req, res) {
                     currentPage
                 );
 
+
                 if (!listOfSalons) {
                     return res.json(
                         Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
                     );
                 } else {
-                    listOfSalons.data.forEach(function(c) {
-                        c.user_id = undefined;
-                        c._id = undefined;
+                    listOfSalons.forEach(function(c) {
                         c.isservicesadded = undefined;
                         c.isreviewadded = undefined;
                     });
                     let dataToPass = {
-                        data: listOfSalons.data,
-                        count: listOfSalons.count
-                    };
+                        data: listOfSalons,
+                        countNumber: count
+                    }
+
+                    console.log("DATATOPASS", dataToPass);
                     res.json(
                         Response(
                             constant.SUCCESS_CODE,
@@ -147,12 +150,12 @@ function getSalonsRequestList(req, res) {
  */
 
 function acceptSalonRequest(req, res) {
+    console.log("Acctp", req.body.salon_id);
     async function acceptSalonRequest() {
         try {
-            if (req.body.salonid) {
+            if (req.body.salon_id) {
                 let condition = {
-                    _id: mongoose.Types.ObjectId(req.body.salonid),
-                    isActive: false
+                    _id: mongoose.Types.ObjectId(req.body.salon_id)
                 };
                 let activeCondition = {
                     isActive: true,
@@ -164,16 +167,18 @@ function acceptSalonRequest(req, res) {
                     condition,
                     activeCondition
                 );
-
-                if (!acceptSalonRequest) {
+                console.log("Axcc", acceptSalonRequest)
+                if (!acceptSalonRequest || acceptSalonRequest === null) {
                     res.json(
                         Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
                     );
                 } else {
                     let user_id = acceptSalonRequest.user_id;
+                    console.log("USER?I", user_id);
 
                     let activeCondition = {
-                        isActive: true
+                        isActive: true,
+                        isApproved: true
                     };
                     let condition = {
                         _id: mongoose.Types.ObjectId(user_id)
@@ -561,6 +566,42 @@ function getActiveSalonsList(req, res) {
     getActiveSalonsList().then(function() {});
 }
 
+
+
+
+
+
+/**
+ * Function is use to get list service provided by admin
+ * @access private
+ * @return json
+ * Created by Rashmi Ranjan
+ * @smartData Enterprises (I) Ltd
+ * Created On 09/01/2020
+ */
+
+async function getServiceList(req, res) {
+    try {
+        let condition = {
+            "isDeleted": false,
+            "isActive": true
+        }
+        let serviceList = await commonQuery.fetch_all(services, condition);
+        res.json(
+            Response(
+                constant.SUCCESS_CODE,
+                constant.FETCHED_ALL_DATA,
+                serviceList
+            )
+        );
+    } catch (error) {
+        return res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+        );
+    }
+    // console.log("serviceList", serviceList);
+    // }
+}
 /**
  * Function is use to get list service provided by admin
  * @access private

@@ -19,6 +19,12 @@ var salonServicesSchema = mongoose.Schema({
   duration: {
     type: String
   }
+  ,servicename:{
+    type:String
+  },
+  categoryname:{
+    type:String
+  }
 });
 var salonservices = (module.exports = mongoose.model(
   "salonservices",
