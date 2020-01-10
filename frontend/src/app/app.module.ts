@@ -5,11 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import{ReactiveFormsModule,FormsModule} from '@angular/forms';
+import{MatPaginatorModule,MatTableModule} from '@angular/material';
+
+
 import {ToastrModule} from 'ngx-toastr';
 import {} from 'googlemaps';
 import { AgmCoreModule } from '@agm/core'; 
-// import LatLng = google.maps.LatLng;
-// import {LocationPickerModule} from "ng-location-picker";
+import LatLng = google.maps.LatLng;
+ import {LocationPickerModule} from "ng-location-picker";
 
 
 import { SalonComponent } from './salon/salon.component';
@@ -39,7 +42,9 @@ import{RouterModule} from '@angular/router';
     ToastrModule.forRoot(),
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterModule
+    RouterModule,
+    MatPaginatorModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

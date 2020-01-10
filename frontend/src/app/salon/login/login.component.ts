@@ -77,6 +77,8 @@ export class LoginComponent implements OnInit {
           timeOut: 3000
         });
         this.userData = data.data;
+        console.log("USER DATA",this.userData['userInfo'].isA);
+        sessionStorage.setItem("userId",data.data['userInfo']['_id']);
         this.authServ.sendIdS(data.data["userInfo"]["_id"]);
         //(data.data['userInfo']['_id']);
 

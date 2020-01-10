@@ -25,6 +25,9 @@ export class AdminServService {
   getSalonsRequest(data){
     return this.http.post(this.baseUrl+"/salonsrequest",data);
   }
+  approveSalonRequests(data){
+    return this.http.post(this.baseUrl+ "/acceptrequest",data);
+  }
 
 
 }

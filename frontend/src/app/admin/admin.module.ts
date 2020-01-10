@@ -11,6 +11,7 @@ import { UserlistComponent } from './admin-dashboard/userlist/userlist.component
 import { SalonlistComponent } from './admin-dashboard/salonlist/salonlist.component';
 import { HeaderComponent } from './admin-dashboard/header/header.component';
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+import{MatPaginatorModule,MatTableModule,MatSlideToggleModule} from '@angular/material';
 
 
 
@@ -26,8 +27,10 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
     ReactiveFormsModule,
     HttpClientModule,
     NotifierModule,
-    RouterModule
-    
+    RouterModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSlideToggleModule
   ]
 })
 export class AdminModule { }

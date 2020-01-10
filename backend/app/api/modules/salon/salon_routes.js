@@ -15,6 +15,7 @@ module.exports = function(router) {
   router.post("/addemployee", salon.addEmployeeToSalon);
   router.post("/assignservice", salon.addServicesToEmployee);
   router.post("/removeservice", salon.removeServiceToEmployee);
+  router.post('/saloncategories',salon.getCategoriesAndServicesOfSalon);
   // router.get('/listUser', middlewares, user.getUserList);
   return router;
 };

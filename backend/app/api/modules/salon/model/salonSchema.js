@@ -53,6 +53,10 @@ var salonSchema = mongoose.Schema({
   employees:{
     type:[mongoose.Types.ObjectId],
     ref:"employees"
+  },
+  isApproved:{
+    type:Boolean,
+    default:false
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));
