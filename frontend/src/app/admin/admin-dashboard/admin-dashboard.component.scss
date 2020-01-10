@@ -45,6 +45,7 @@
       border-color: transparent;
       position: relative;
       transition: 1s; 
+      margin-top: 5px;
       max-height: 400px;
 
      
@@ -62,6 +63,7 @@
         .active {
           background: white;
           color: #783a87;
+          margin-top: 5px;
           border-top-left-radius: 20px;
           border-bottom-left-radius: 20px;
         }
