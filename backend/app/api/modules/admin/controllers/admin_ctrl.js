@@ -33,7 +33,10 @@ module.exports = {
   removeServices: removeServices,
   addRoles: addRoles,
   getRoles: getRoles,
-  getActiveSalonsList: getActiveSalonsList
+  getActiveSalonsList: getActiveSalonsList,
+  fetchActiveUsersCount: fetchActiveUsersCount,
+  fetchActiveSalonsCount: fetchActiveSalonsCount,
+  fetchActiveUsersList: fetchActiveUsersList
 };
 
 /**
@@ -94,11 +97,12 @@ function getSalonsRequestList(req, res) {
       if (req.body) {
         let condition = {
           isActive: false,
-          isDeleted: false
+          isDeleted: false,
+          isDeclined: false
         };
-        
-        let count   = await commonQuery.findCount(salons,condition);
-        console.log("count",count);
+
+        let count = await commonQuery.findCount(salons, condition);
+        console.log("count", count);
 
         let listOfSalons = await commonQuery.fetch_all_paginated(
           salons,
@@ -106,7 +110,6 @@ function getSalonsRequestList(req, res) {
           pageSize,
           currentPage
         );
-
 
         if (!listOfSalons) {
           return res.json(
@@ -118,11 +121,11 @@ function getSalonsRequestList(req, res) {
             c.isreviewadded = undefined;
           });
           let dataToPass = {
-            data:listOfSalons,
-            countNumber:count
-          }
-        
-          console.log("DATATOPASS",dataToPass);
+            data: listOfSalons,
+            countNumber: count
+          };
+
+          console.log("DATATOPASS", dataToPass);
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -151,7 +154,7 @@ function getSalonsRequestList(req, res) {
  */
 
 function acceptSalonRequest(req, res) {
-  console.log("Acctp",req.body.salon_id);
+  console.log("Acctp", req.body.salon_id);
   async function acceptSalonRequest() {
     try {
       if (req.body.salon_id) {
@@ -168,18 +171,18 @@ function acceptSalonRequest(req, res) {
           condition,
           activeCondition
         );
-          console.log("Axcc",acceptSalonRequest)
+        console.log("Axcc", acceptSalonRequest);
         if (!acceptSalonRequest || acceptSalonRequest === null) {
           res.json(
             Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
           );
         } else {
           let user_id = acceptSalonRequest.user_id;
-          console.log("USER?I",user_id);
+          console.log("USER?I", user_id);
 
           let activeCondition = {
             isActive: true,
-            isApproved:true
+            isApproved: true
           };
           let condition = {
             _id: mongoose.Types.ObjectId(user_id)
@@ -235,15 +238,16 @@ function acceptSalonRequest(req, res) {
  */
 
 function suspendSalon(req, res) {
+  console.log(req.body);
   async function suspendSalon() {
     try {
-      if (req.body.salonid) {
+      if (req.body.salon_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.salonid),
-          isActive: true
+          _id: mongoose.Types.ObjectId(req.body.salon_id)
         };
         let activeCondition = {
-          isActive: false
+          isActive: false,
+          isDeclined: true
         };
 
         let suspendedSalon = await commonQuery.updateOneDocument(
@@ -354,7 +358,7 @@ function getCategories(req, res) {
       );
     }
   }
-  getCategories().then(function() { });
+  getCategories().then(function() {});
 }
 
 /**
@@ -420,9 +424,14 @@ function removeServices(req, res) {
   async function removeServices() {
     try {
       if (req.body && req.body.service_id) {
-        let condition = { _id: req.body.service_id };
+        let condition = {
+          _id: req.body.service_id
+        };
 
-        let removeCondition = { isActive: false, isDeleted: true };
+        let removeCondition = {
+          isActive: false,
+          isDeleted: true
+        };
 
         let removeService = await commonQuery.updateOneDocument(
           services,
@@ -461,7 +470,6 @@ function removeServices(req, res) {
 
   removeServices().then(function() {});
 }
-
 
 /**
  * Function is use to add roles(Currently we have only three roles Admin, Salon, User)
@@ -537,23 +545,25 @@ function getRoles(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 
-
 function getActiveSalonsList(req, res) {
   async function getActiveSalonsList() {
     try {
       if (req.body && req.body.type === "activesalons") {
-        let condition = { isActive: true, isDeleted: false };
+        let condition = {
+          isActive: true,
+          isDeleted: false,
+          isApproved: true,
+          isDeclined: false
+        };
         let activeSalonsList = await commonQuery.fetch_all(salons, condition);
         if (!activeSalonsList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
           activeSalonsList.forEach(function(v) {
             v.isDeleted = undefined;
-            v.isActive = undefined;
             v.isreviewadded = undefined;
             v.isservicesadded = undefined;
             v.employees = undefined;
-            v.user_id = undefined;
             v.location = undefined;
           });
 
@@ -573,4 +583,158 @@ function getActiveSalonsList(req, res) {
     }
   }
   getActiveSalonsList().then(function() {});
+}
+
+/**
+ * Function is use to Fetch Active Users Count
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function fetchActiveUsersCount(req, res) {
+  console.log("INSEID", req.body);
+
+  async function fetchActiveUsersCount() {
+    try {
+      if (req.body && req.body.type) {
+        if (req.body.type === "user") {
+          let roleCondition = {
+            name: "user"
+          };
+          let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+          console.log("roleUID", fetchRoleId);
+          let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
+          console.log(roleId);
+
+          let condition = {
+            isActive: true,
+            isDeleted: false,
+            role_id: roleId
+          };
+          let usersCount = await commonQuery.findCount(users, condition);
+          if (!usersCount) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+            );
+          } else {
+            res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.FETCHED_ALL_DATA,
+                usersCount
+              )
+            );
+          }
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  fetchActiveUsersCount().then(function() {});
+}
+/**
+ * Function is use to Fetch Active Salon List
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function fetchActiveSalonsCount(req, res) {
+  console.log("SalonsCount", req.body);
+
+  async function fetchActiveSalonsCount() {
+    try {
+      if (req.body && req.body.type) {
+        if (req.body.type === "salon") {
+          // let roleCondition = {
+          //     name: "salon"
+          // };
+          // let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+          // console.log("roleUID", fetchRoleId);
+          // let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
+
+          let condition = {
+            isActive: true,
+            isDeleted: false,
+            isApproved: true,
+            isDeclined: false
+            // role_id: roleId
+          };
+          let salonsCount = await commonQuery.findCount(salons, condition);
+          console.log("SalonCount", salonsCount);
+          if (!salonsCount) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+            );
+          } else {
+            res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.FETCHED_ALL_DATA,
+                salonsCount
+              )
+            );
+          }
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  fetchActiveSalonsCount().then(function() {});
+}
+
+function fetchActiveUsersList(req,res) {
+  async function fetchActiveUsersList() {
+    try {
+      if (req.body && req.body.type) {
+        if (req.body.type === "user") {
+          let roleCondition = {
+            name: "user"
+          };
+          let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+          console.log("roleUID", fetchRoleId);
+          let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
+          console.log(roleId);
+
+          let condition = {
+            isActive: true,
+            isDeleted: false,
+            role_id: roleId
+          };
+          let usersList = await commonQuery.findData(users, condition);
+          if (!usersList) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+            );
+          } else {
+           
+
+            res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.FETCHED_ALL_DATA,
+                usersList
+              )
+            );
+          }
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  fetchActiveUsersList().then(function() {});
 }

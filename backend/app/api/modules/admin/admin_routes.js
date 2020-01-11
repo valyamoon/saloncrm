@@ -15,5 +15,8 @@ module.exports = function(router) {
     router.post('/addrole',admin.addRoles);
     router.post('/roles',admin.getRoles);
     router.post('/activesalons',admin.getActiveSalonsList);
+    router.post('/userscount',admin.fetchActiveUsersCount);
+    router.post('/salonscount',admin.fetchActiveSalonsCount);
+    router.post('/userslist',admin.fetchActiveUsersList);
     return router;
   };

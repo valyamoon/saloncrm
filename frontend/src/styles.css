@@ -80,6 +80,17 @@ max-width: 100%;
   font-weight:normal;
 }
 
+.erroralert{color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  position: relative;
+  padding:5px 2px;
+  text-align: center;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+}
+
 
 
 /* You can add global styles to this file, and also import other style files */

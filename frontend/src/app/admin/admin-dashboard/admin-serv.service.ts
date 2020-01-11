@@ -29,5 +29,18 @@ export class AdminServService {
     return this.http.post(this.baseUrl+ "/acceptrequest",data);
   }
 
+  getActiveSalonsCount(data){
+    return this.http.post(this.baseUrl+"/salonscount",data)
+  }
+  getActiveUsersCount(data){
+    return this.http.post(this.baseUrl+"/userscount",data)
+  }
+  
+  declineSalonRequest(data){
+    return this.http.post(this.baseUrl+"/suspendsalon",data)
+  }
+  getActiveUsersList(data){
+    return this.http.post(this.baseUrl+"/userslist",data)
+  }
 
 }
