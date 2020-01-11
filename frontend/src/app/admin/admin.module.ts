@@ -12,6 +12,8 @@ import { SalonlistComponent } from './admin-dashboard/salonlist/salonlist.compon
 import { HeaderComponent } from './admin-dashboard/header/header.component';
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
 import{MatPaginatorModule,MatTableModule,MatSlideToggleModule} from '@angular/material';
+import { CategoriesComponent } from './admin-dashboard/categories/categories.component';
+import { ServicesComponent } from './admin-dashboard/services/services.component';
 
 
 
@@ -19,7 +21,7 @@ import{MatPaginatorModule,MatTableModule,MatSlideToggleModule} from '@angular/ma
 
 
 @NgModule({
-  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent, HeaderComponent, DashboardComponent],
+  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent, HeaderComponent, DashboardComponent, CategoriesComponent, ServicesComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

@@ -77,8 +77,11 @@ export class LoginComponent implements OnInit {
           timeOut: 3000
         });
         this.userData = data.data;
-        console.log("USER DATA",this.userData['userInfo'].isA);
+        console.log("sss",this.userData);
+        console.log("USER DATA",this.userData['userInfo'].isApproved);
+        sessionStorage.setItem("isApproved",this.userData['userInfo'].isApproved);
         sessionStorage.setItem("userId",data.data['userInfo']['_id']);
+        sessionStorage.setItem("isSubmitted",this.userData['userInfo'].isSubmitted)
         this.authServ.sendIdS(data.data["userInfo"]["_id"]);
         //(data.data['userInfo']['_id']);
 

@@ -82,6 +82,10 @@ var userSchema = mongoose.Schema(
       type:Boolean,
       default:false
     },
+    isSubmitted:{
+      type:Boolean,
+      default:false
+    },
     socialLoginId:{
       type:String,
       default:null

@@ -1,45 +1,65 @@
-.profileOverlay{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    top:0;
-    right: 0;
-    z-index: 10;
-    background-color: #333;
-    opacity: 0.9;
-    height: 100%;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
+.profileOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  background-color: #333;
+  opacity: 0.9;
+  height: 100%;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 
-    #profileArea{
-        padding: 10px;
-        background-color: white;
-        opacity: 1;
-        z-index: 11;
-        border-radius: 10px;
-        .salonDetailSave{
-
-
-            .fields{
-                    margin-top: 5px;
-                    margin-bottom: 5px;
-            }
-            .image{
-                display: none;
-            }
-
-        }
+  #profileArea {
+    padding: 10px;
+    background-color: white;
+    opacity: 1;
+    z-index: 11;
+    border-radius: 10px;
+    .salonDetailSave {
+      .fields {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+      .image {
+        display: none;
+      }
     }
+
+    .pendingApprovalArea {
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      .pendingText {
+        text-align: center;
+        color: white;
+        background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+        border-color: transparent;
+      }
+      .pendingGIF {
+        height: 100px;
+        width: 100px;
+      }
+    }
+  }
 }
-.erroralert{color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    position: relative;
-    padding:5px 2px;
-    text-align: center;
-    margin-bottom: 10px;
-    border: 1px solid transparent;
-    border-radius: .25rem;
+.erroralert {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  position: relative;
+  padding: 5px 2px;
+  text-align: center;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
 }

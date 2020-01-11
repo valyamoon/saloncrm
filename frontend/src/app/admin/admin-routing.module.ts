@@ -7,6 +7,8 @@ import { AuthGuard } from "../admin/auth.guard";
 import { SalonlistComponent } from "./admin-dashboard/salonlist/salonlist.component";
 import { UserlistComponent } from "./admin-dashboard/userlist/userlist.component";
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+import { CategoriesComponent } from './admin-dashboard/categories/categories.component';
+import { ServicesComponent } from './admin-dashboard/services/services.component';
 
 // const routes: Routes = [{path:'',component:AdminloginComponent},
 
@@ -26,6 +28,8 @@ const routes: Routes = [
       { path: "salonlist", component: SalonlistComponent },
       { path: "userlist", component: UserlistComponent },
       {path:"dashboard",component:DashboardComponent},
+      {path:"services",component:ServicesComponent},
+      {path:"categories",component:CategoriesComponent},
       { path: "", redirectTo: "dashboard", pathMatch: "full" }
     ]
   }
