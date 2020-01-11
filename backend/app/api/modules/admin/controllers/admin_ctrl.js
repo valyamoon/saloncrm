@@ -348,13 +348,13 @@ function getCategories(req, res) {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
   }
-  getCategories().then(function() {
-    return res.json(
-      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-    );
-  });
+  getCategories().then(function() { });
 }
 
 /**
