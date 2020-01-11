@@ -54,7 +54,7 @@ app.use(bodyParser.json({ extended: true ,limit:'50mb'}));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/modules/dashboard")));
-app.use(express.static(path.join(__dirname, "./frontend")));
+app.use(express.static(path.join(__dirname, "frontend")));
 // All api requests
 app.use(function(req, res, next) {
   // CORS headers
@@ -75,6 +75,9 @@ app.use(function(req, res, next) {
 
 app.use("/api", require("./app/api/routes")(express));
 
+app.use((req,res,next)=>{
+  res.sendFile(path.join(__dirname,"frontend","index.html"))
+})
 
 // start server
 var port = process.env.PORT || config.port;
