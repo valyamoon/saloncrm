@@ -1,0 +1,78 @@
+<div id="salonListWrapper">
+  <div class="header">Salons List</div>
+  <div class="table-responsive tablecustom">
+    <div class="mat-elevation-z8" *ngIf="!noRecordFound">
+      <table mat-table [dataSource]="activeSalons">
+        <!-- Position Column -->
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="salonaddress">
+          <th mat-header-cell *matHeaderCellDef>Address</th>
+          <td mat-cell *matCellDef="let element">{{ element.salonaddress }}</td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="contact">
+          <th mat-header-cell *matHeaderCellDef>Contact</th>
+          <td mat-cell *matCellDef="let element">{{ element.contact }}</td>
+        </ng-container>
+        <ng-container matColumnDef="opentime">
+          <th mat-header-cell *matHeaderCellDef>Open Time</th>
+          <td mat-cell *matCellDef="let element">{{ element.opentime }}</td>
+        </ng-container>
+        <ng-container matColumnDef="closetime">
+          <th mat-header-cell *matHeaderCellDef>Close Time</th>
+          <td mat-cell *matCellDef="let element">{{ element.closetime }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isactive">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-slide-toggle
+              [checked]="element.isActive"
+              [disabled]="disabled"
+            ></mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              class="btn btn-primary btn-sign-in btn-sus"
+              (click)="declineSalonRequest(element)"
+            >
+              Suspend
+            </button>
+            <button
+            class="btn btn-primary btn-sign-in btn-sus"
+            (click)="declineSalonRequest(element)"
+          >
+            Detail
+          </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="ActiveSalonsCount"
+        [pageSize]="count"
+        (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 15, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+    <div *ngIf="noRecordsFound" class="noRecords">
+      <div class="noRec">No Records Found</div>
+    </div>
+  </div>
+</div>

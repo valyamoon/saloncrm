@@ -46,13 +46,17 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
+
+  console.log("IN SSALON",req.body);
+
+
   async function saveSalonDetails() {
     try {
       if (req.body && req.body.user_id) {
         let conditon = {
           _id: req.body.user_id,
           isActive: false,
-          isDeleted: false
+          isDeleted: false,
         };
 
         let checkUser = await commonQuery.findoneData(users, conditon);
@@ -88,6 +92,19 @@ function saveSalonDetails(req, res) {
 
           if (!saveSalon) {
           } else {
+
+            let updateCondition =  {isSubmitted:true};
+            let condition = {_id:mongoose.Types.ObjectId(req.body.user_id)};
+            let updateUser =  await commonQuery.updateOneDocument(users,condition,updateCondition);
+            if(!updateUser){
+
+            }
+            else{
+              console.log(updateUser);
+            }
+
+
+
             res.json(
               Response(
                 constant.SUCCESS_CODE,
