@@ -8,7 +8,7 @@ const routes: Routes = [
 {path:'admin',loadChildren:() => import('../app/admin/admin.module').then(m=>m.AdminModule)},
 {path:'',loadChildren:() => import('../app/user/user.module').then(m=>m.UserModule)}
  ,{path:'',redirectTo:'',pathMatch:"full"} 
- ,{path:'**',redirectTo:'user',pathMatch:"full"} ];
+ ,{path:'**',redirectTo:'',pathMatch:"full"} ];
 
 //{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
 
