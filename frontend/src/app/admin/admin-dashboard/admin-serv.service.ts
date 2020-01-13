@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient,HttpHeaders} from '@angular/common/http';
+import {HttpClient,HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
+// import { Observable } from 'rxjs';
+// import 'rxjs/add/operator/catch';
+// import 'rxjs/add/observable/throw';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,7 +22,7 @@ export class AdminServService {
 
   getSalonsList(){
     let data = {"type":"activesalons"}
-   return  this.http.post(this.baseUrl+"/activesalons",data)
+    return  this.http.post(this.baseUrl+"/activesalons",data)
   }
 
   getSalonsRequest(data){
@@ -42,5 +45,11 @@ export class AdminServService {
   getActiveUsersList(data){
     return this.http.post(this.baseUrl+"/userslist",data)
   }
+
+  // errorHandler(error:HttpErrorResponse){
+  //   return Observable.throw(error.message|| "Server Error");
+  // }
+
+
 
 }
