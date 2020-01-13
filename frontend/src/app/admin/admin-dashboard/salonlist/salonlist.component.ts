@@ -34,6 +34,7 @@ export class SalonlistComponent implements OnInit {
 
   ngOnInit() {
     this.getActiveSalonsList();
+    this.getActiveSalonsCount();
   }
 
   /**
