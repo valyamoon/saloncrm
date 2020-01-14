@@ -1620,6 +1620,7 @@ commonQuery.fetch_categories = function fetch_categories(
   return new Promise(function(resolve, reject) {
     model
       .aggregate([
+        {$match:{isActive:true,isDeleted:false}},
         {
           $lookup: {
             from: fromTable,

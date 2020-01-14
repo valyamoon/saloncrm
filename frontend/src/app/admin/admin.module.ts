@@ -14,6 +14,9 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
 import{MatPaginatorModule,MatTableModule,MatSlideToggleModule} from '@angular/material';
 import { CategoriesComponent } from './admin-dashboard/categories/categories.component';
 import { ServicesComponent } from './admin-dashboard/services/services.component';
+import { RolesComponent } from './admin-dashboard/roles/roles.component';
+import { HeaderTextComponent } from './admin-dashboard/header-text/header-text.component';
+import { ConfirmationComponent } from './admin-dashboard/confirmation/confirmation.component';
 
 
 
@@ -21,7 +24,7 @@ import { ServicesComponent } from './admin-dashboard/services/services.component
 
 
 @NgModule({
-  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent, HeaderComponent, DashboardComponent, CategoriesComponent, ServicesComponent],
+  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent, HeaderComponent, DashboardComponent, CategoriesComponent, ServicesComponent, RolesComponent, HeaderTextComponent, ConfirmationComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -33,6 +36,7 @@ import { ServicesComponent } from './admin-dashboard/services/services.component
     MatPaginatorModule,
     MatTableModule,
     MatSlideToggleModule
-  ]
+  ],
+   entryComponents: [ConfirmationComponent],
 })
 export class AdminModule { }

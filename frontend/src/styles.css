@@ -91,7 +91,10 @@ max-width: 100%;
   border-radius: .25rem;
 }
 
-
+.mat-header-cell{
+  font-size: 18px;
+  color:#BC2E65 !important;
+}
 
 /* You can add global styles to this file, and also import other style files */
 /* 
@@ -1970,7 +1973,7 @@ padding-left: 20px;
 
 /* header css end */
 .btn-sign-in{
-  width: 100%;
+
   
   border-color: transparent;
   transition: 0.5s;
