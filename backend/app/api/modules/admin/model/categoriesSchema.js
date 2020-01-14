@@ -9,6 +9,14 @@ var categorySchema = mongoose.Schema({
     type: [mongoose.Types.ObjectId],
     ref: "services"
   }
+  ,isActive:{
+    type:Boolean,
+    default:true
+  },
+  isDeleted:{
+    type:Boolean,
+    default:false
+  }
 });
 var categories = (module.exports = mongoose.model(
   "categories",

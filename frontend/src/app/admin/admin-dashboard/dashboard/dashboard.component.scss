@@ -90,3 +90,13 @@ table {
 .tablecustom{
     margin-top: 15px;
 }
+.headerSection{
+
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    .header{
+        
+        color:purple;
+    }
+}

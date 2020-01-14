@@ -32,6 +32,10 @@ export class DashboardComponent implements OnInit {
     this.getActiveSalonsCount();
     this.getActiveUsersCount();
     //this.checkRequest();
+
+    this.adminServ.setHeaderText("Salons Request");
+
+
   }
 
   /**

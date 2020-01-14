@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from "ngx-toastr";
 @Component({
-  selector: 'app-userlist',
-  templateUrl: './userlist.component.html',
-  styleUrls: ['./userlist.component.scss']
+  selector: "app-userlist",
+  templateUrl: "./userlist.component.html",
+  styleUrls: ["./userlist.component.scss"]
 })
 export class UserlistComponent implements OnInit {
-  activeUsersList:any;
+  activeUsersList: any;
   activeSalons: any;
   noRecordsFound: boolean;
   displayedColumns = [
@@ -23,56 +23,50 @@ export class UserlistComponent implements OnInit {
   count: any = 5;
   pageSize: any = 5;
   ActiveUsersCount: any;
-  disabled:boolean= true;
-  constructor(private adminServ: AdminServService,private toastrServ:ToastrService) {}
+  disabled: boolean = true;
+  constructor(
+    private adminServ: AdminServService,
+    private toastrServ: ToastrService
+  ) {}
 
   ngOnInit() {
     this.getActiveUsersList();
     this.getActiveUsersCount();
+    this.adminServ.setHeaderText("Manage Users");
   }
 
-
-
-  getActiveUsersList(){
+  getActiveUsersList() {
     let dataToPass = {
-      type:"user"
-    }
-      this.adminServ.getActiveUsersList(dataToPass).subscribe((data)=>{
-
-        if(data['code']===200){
-          this.activeUsersList =  data['data']['data'];
-          if(this.activeUsersList.length == 0){
-            this.noRecordsFound = true;
-          }
+      type: "user"
+    };
+    this.adminServ.getActiveUsersList(dataToPass).subscribe(
+      data => {
+        
+        if (data["code"] === 200) {
+          this.activeUsersList = data["data"];
+          // if (this.activeUsersList.length == 0) {
+          //   this.noRecordsFound = true;
+          // }
           console.log(this.activeUsersList);
-          this.toastrServ.success("Users Fetched Successfully","Success",{
-            timeOut:2000
-          })
-
+          this.toastrServ.success("Users Fetched Successfully", "Success", {
+            timeOut: 2000
+          });
+        } else {
+          this.toastrServ.error("Failed To Fetch Users List", "", {
+            timeOut: 2000
+          });
         }
-        else{
-
-          this.toastrServ.error("Failed To Fetch Users List","",{
-            timeOut:2000
-          })
-
-        }
-
-
-      },error=>{
-        this.toastrServ.error("Server Error",error,{
-          timeOut:2000
-        })
-
-
-      })
-
-
+      },
+      error => {
+        this.toastrServ.error("Server Error", error, {
+          timeOut: 2000
+        });
+      }
+    );
   }
 
-  suspendUser(data){
+  suspendUser(data) {
     console.log(data);
-
   }
 
   getActiveUsersCount() {
@@ -101,7 +95,4 @@ export class UserlistComponent implements OnInit {
     this.count = event.pageSize;
     this.getActiveUsersList();
   }
-
-
-
 }

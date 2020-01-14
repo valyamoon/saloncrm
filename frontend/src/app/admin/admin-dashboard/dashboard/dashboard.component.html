@@ -12,6 +12,7 @@
       <h2 >{{ActiveUsersCount}}</h2>
   </div>
 </div>
+<div class="headerSection"> <span class="breadCrumb"></span><app-header-text class="header"></app-header-text></div>
 <div class="table-responsive tablecustom">
   <div class="mat-elevation-z8" *ngIf="!noRecordFound">
     <table mat-table [dataSource]="SalonRequestList">
@@ -68,3 +69,15 @@
 
 
 </div>
+
+
+<!-- <div class="modalSection"  *ngIf="isDeleteDialog">
+        <div class="modal-content-area">
+                          <div><h1>Are you sure you want to delete?</div>
+                            <div><p>warning you are about to delete role!</p></div>
+                            <div class="yesNoBtn">
+                                <button class="btn btn-primary btn-sign-in" (click)="confirm('yes')">Yes</button>
+                                <button class="btn btn-primary btn-sign-in" (click)="reject('no')">No</button>
+                            </div>
+                      </div>
+</div> -->
