@@ -1,0 +1,84 @@
+.categoriesWrapper {
+ 
+  .actionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .headerTextArea {
+      width: 50%;
+    }
+
+    .btnActionArea {
+      width: 50%;
+      display: flex;
+      justify-content: flex-end;
+      .btn-primary-btn {
+        border-color: transparent;
+        transition: 0.5s;
+        background-size: 200% auto;
+        font-size: 13px;
+        border-radius: 8px;
+        height: 35px;
+        color: white;
+        cursor: pointer;
+        font-family: "Roboto";
+        margin-top: 10px;
+        background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%)
+          0% 0% no-repeat padding-box;
+      }
+    }
+  }
+
+  .modalSection {
+   position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+    .modal-content-area{
+        background-color: white;
+        border-radius: 10px;
+        opacity: 1;
+        padding: 10px;
+        width: 30%;
+
+    .header{
+        font-size: 20px;
+        border-bottom: 1px solid lightgray;
+    }   
+        form{
+            display: flex;
+            align-items:center;
+            margin-top: 5px;
+            label{
+                width: 45%;
+                white-space: nowrap;
+                font-size: 15px;
+                margin: 0;
+            }
+        }
+     
+
+    }
+
+
+  }
+}
+
+table{
+    width: 100%;
+}
+.btn-sec{
+    margin-bottom: 5px;
+}

@@ -36,7 +36,13 @@ module.exports = {
   getActiveSalonsList: getActiveSalonsList,
   fetchActiveUsersCount: fetchActiveUsersCount,
   fetchActiveSalonsCount: fetchActiveSalonsCount,
-  fetchActiveUsersList: fetchActiveUsersList
+  fetchActiveUsersList: fetchActiveUsersList,
+  getArchivedCategories: getArchivedCategories,
+  removeCategories: removeCategories,
+  getAdminCategoriesList: getAdminCategoriesList,
+  removeRole: removeRole,
+  updateRole: updateRole,
+  awakeCategory:awakeCategory
 };
 
 /**
@@ -511,10 +517,30 @@ function addRoles(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getRoles(req, res) {
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   async function getRoles() {
     try {
+      let countNumber;
       if (req.body && req.body.type === "roles") {
-        let rolesList = await commonQuery.fetch_all(roles);
+        let condition = { status: true, isDeleted: false };
+
+        let rolesCount = await commonQuery.findCount(roles,condition);
+        console.log("COUNRT", rolesCount);
+        if (rolesCount) {
+          countNumber = rolesCount;
+        } else {
+          countNumber = rolesCount;
+        }
+
+        let rolesList = await commonQuery.fetch_all_paginated(
+          roles,
+          condition,
+          pageSize,
+          currentPage
+        );
+
         if (!rolesList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
@@ -522,9 +548,13 @@ function getRoles(req, res) {
             v.isDeleted = undefined;
             v.status = undefined;
           });
+          let dataToPass = {
+            data: rolesList,
+            count: countNumber
+          };
 
           res.json(
-            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, rolesList)
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, dataToPass)
           );
         }
       }
@@ -694,7 +724,10 @@ function fetchActiveSalonsCount(req, res) {
   fetchActiveSalonsCount().then(function() {});
 }
 
-function fetchActiveUsersList(req,res) {
+function fetchActiveUsersList(req, res) {
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   async function fetchActiveUsersList() {
     try {
       if (req.body && req.body.type) {
@@ -712,14 +745,17 @@ function fetchActiveUsersList(req,res) {
             isDeleted: false,
             role_id: roleId
           };
-          let usersList = await commonQuery.findData(users, condition);
+          let usersList = await commonQuery.fetch_all_paginated(
+            users,
+            condition,
+            pageSize,
+            currentPage
+          );
           if (!usersList) {
             res.json(
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
             );
           } else {
-           
-
             res.json(
               Response(
                 constant.SUCCESS_CODE,
@@ -737,4 +773,274 @@ function fetchActiveUsersList(req,res) {
     }
   }
   fetchActiveUsersList().then(function() {});
+}
+/**
+ * Function is use to remove categories
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function removeCategories(req, res) {
+  async function removeCategories() {
+    try {
+      if (req.body && req.body.category_id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.category_id) };
+        let updateCondition = {
+          isActive: false,
+          isDeleted: true,
+          services: []
+        };
+        let deleteCategory = await commonQuery.updateOneDocument(
+          categories,
+          condition,
+          updateCondition
+        );
+        if (!deleteCategory) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.DELETED_SUCCESS,
+              deleteCategory
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  removeCategories().then(function() {});
+}
+/**
+ * Function is use to get list of archived categories
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function getArchivedCategories(req, res) {
+  console.log(req.body);
+  async function getArchivedCategories() {
+    try {
+      if (req.body && req.body.type === "archive-categories") {
+        let condition = { isActive: false, isDeleted: true, services: [] };
+        let archivedCategories = await commonQuery.fetch_all(
+          categories,
+          condition
+        );
+        if (!archivedCategories) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.DELETED_SUCCESS,
+              archivedCategories
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getArchivedCategories().then(function() {});
+}
+
+/**
+ * Function is use to get list of Admin categories
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function getAdminCategoriesList(req, res) {
+  console.log(req.body);
+  let adminCount;
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+  async function getAdminCategoriesList() {
+    try {
+      if (req.body && req.body.type === "admin-categories") {
+        let condition = { isActive: true, isDeleted: false };
+
+        let adminCategoriesCount = await commonQuery.findCount(
+          categories,
+          condition
+        );
+        if (!adminCategoriesCount) {
+          adminCount = 0;
+        } else {
+          adminCount = adminCategoriesCount;
+        }
+        console.log("ccc", adminCount);
+
+        let adminCategories = await commonQuery.fetch_all_paginated(
+          categories,
+          condition,
+          pageSize,
+          currentPage
+        );
+        if (!adminCategories) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          adminCategories.forEach(function(c) {
+            c.services = undefined;
+          });
+          let dataToPass = {
+            count: adminCount,
+            data: adminCategories
+          };
+
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              dataToPass
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getAdminCategoriesList().then(function() {});
+}
+
+/**
+ * Function is use to remove role
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function removeRole(req, res) {
+  async function removeRole() {
+    try {
+      if (req.body && req.body.role_id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.role_id) };
+        let updateCondition = { status: false, isDeleted: true };
+        let removeRole = await commonQuery.updateOneDocument(
+          roles,
+          condition,
+          updateCondition
+        );
+        if (!removeRole) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.DELETED_SUCCESS,
+              removeRole
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  removeRole().then(function() {});
+}
+
+/**
+ * Function is use to update role
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function updateRole(req, res) {
+  async function updateRole() {
+    try {
+      if (req.body && req.body._id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body._id) };
+        let updateCondition = { name: req.body.name };
+        let updatedRole = await commonQuery.updateOneDocument(
+          roles,
+          condition,
+          updateCondition
+        );
+        if (!updatedRole) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.USER_UPDATED, updatedRole)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+updateRole().then(function(){});
+}
+
+/**
+ * Function is use to awake category
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function awakeCategory(req, res) {
+  async function awakeCategory() {
+    try {
+      if (req.body && req.body._id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body._id) };
+        let updateCondition = { isActive:true,isDeleted:false};
+        let awakeCategories = await commonQuery.updateOneDocument(
+          categories,
+          condition,
+          updateCondition
+        );
+        if (!awakeCategories) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.USER_UPDATED, awakeCategories)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+awakeCategory().then(function(){});
 }

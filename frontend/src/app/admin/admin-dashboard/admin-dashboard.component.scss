@@ -60,9 +60,10 @@
       
 
         .selectors {
-          padding: 10px;
-          color: white;
-          text-decoration: none;
+        padding: 10px;
+    color: white;
+    word-break: break-all;
+    text-decoration: none;
         }
         .active {
           background: white;

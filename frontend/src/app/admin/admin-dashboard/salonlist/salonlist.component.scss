@@ -4,3 +4,31 @@ table{
 .btn-sus{
     margin-bottom: 5px;
 }
+.buttonArea{
+    display: flex;
+    justify-content: space-between;
+}
+.headerSection{
+
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    .header{
+        
+        color:purple;
+    }
+}
+.noRecords{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .noRec{
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 2em;
+    width: 50%;
+    }
+
+}
