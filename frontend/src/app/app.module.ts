@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import{ReactiveFormsModule,FormsModule} from '@angular/forms';
-import{MatPaginatorModule,MatTableModule,MatButtonModule,MatDialogModule} from '@angular/material';
+import{MatPaginatorModule,MatTableModule,MatButtonModule,MatDialogModule,MatSelectModule, MatOptionModule} from '@angular/material';
 
 
 import {ToastrModule} from 'ngx-toastr';
@@ -46,7 +46,9 @@ import{RouterModule} from '@angular/router';
     MatPaginatorModule,
     MatTableModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

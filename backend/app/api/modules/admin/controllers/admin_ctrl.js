@@ -42,7 +42,9 @@ module.exports = {
   getAdminCategoriesList: getAdminCategoriesList,
   removeRole: removeRole,
   updateRole: updateRole,
-  awakeCategory:awakeCategory
+  awakeCategory: awakeCategory,
+  getActiveServices: getActiveServices,
+  getActiveAdminList:getActiveAdminList
 };
 
 /**
@@ -427,6 +429,7 @@ function addServices(req, res) {
  */
 
 function removeServices(req, res) {
+  console.log(req.body);
   async function removeServices() {
     try {
       if (req.body && req.body.service_id) {
@@ -445,6 +448,8 @@ function removeServices(req, res) {
           removeCondition
         );
 
+        console.log("ASSS", removeService);
+
         if (!removeService) {
           Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
         } else {
@@ -460,7 +465,7 @@ function removeServices(req, res) {
 
           res.json(
             Response(
-              constant.ERROR_CODE,
+              constant.SUCCESS_CODE,
               constant.DELETED_SUCCESS,
               removeService
             )
@@ -789,8 +794,7 @@ function removeCategories(req, res) {
         let condition = { _id: mongoose.Types.ObjectId(req.body.category_id) };
         let updateCondition = {
           isActive: false,
-          isDeleted: true,
-          services: []
+          isDeleted: true
         };
         let deleteCategory = await commonQuery.updateOneDocument(
           categories,
@@ -832,7 +836,7 @@ function getArchivedCategories(req, res) {
   async function getArchivedCategories() {
     try {
       if (req.body && req.body.type === "archive-categories") {
-        let condition = { isActive: false, isDeleted: true, services: [] };
+        let condition = { isActive: false, isDeleted: true};
         let archivedCategories = await commonQuery.fetch_all(
           categories,
           condition
@@ -1044,3 +1048,130 @@ function awakeCategory(req, res) {
   }
 awakeCategory().then(function(){});
 }
+
+/**
+ * Function is use to fetch Services
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function getActiveServices(req, res) { 
+  console.log("INSID",req.body);
+  let servicesCount;
+   let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+
+  async function getActiveServices(){ 
+
+    try { 
+      if (req.body.type == "services") { 
+
+        let condition = { isActive: true, isDeleted: false };
+        servicesCount = await commonQuery.findCount(services, condition);
+        if (servicesCount) {
+          servicesCount = servicesCount;
+        }
+        else { 
+          servicesCount = 0;
+        }
+        let servicesList =  await commonQuery.fetch_all_paginated(services,condition,pageSize,currentPage)
+        console.log("ServiceList", servicesList);
+        if (!servicesList) {
+    res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+        else { 
+          let dataToPass = {
+            data: servicesList,
+            count:servicesCount
+          }
+        res.json(
+            Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, dataToPass)
+          );
+        }
+
+      }
+
+
+    }
+    catch (error) { 
+   return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+
+
+  }
+
+  getActiveServices().then(function () { })
+
+}
+
+
+/**
+ * Function is use to fetch All Admins
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function getActiveAdminList(req, res) { 
+  console.log("INSID",req.body);
+  let AdminCount;
+   let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+
+  async function getActiveAdminList(){ 
+
+    try { 
+      if (req.body.type == "admin") { 
+        
+
+        let condition = { isActive: true, isDeleted: false };
+        AdminCount = await commonQuery.findCount(services, condition);
+        if (AdminCount) {
+          AdminCount = AdminCount;
+        }
+        else { 
+          AdminCount = 0;
+        }
+        let servicesList =  await commonQuery.fetch_all_paginated(services,condition,pageSize,currentPage)
+        console.log("ServiceList", servicesList);
+        if (!servicesList) {
+    res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+        else { 
+          let dataToPass = {
+            data: servicesList,
+            count:servicesCount
+          }
+        res.json(
+            Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, dataToPass)
+          );
+        }
+
+      }
+
+
+    }
+    catch (error) { 
+   return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+
+
+  }
+
+  getActiveAdminList().then(function () { })
+
+}
+

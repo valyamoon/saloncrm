@@ -96,6 +96,21 @@ max-width: 100%;
   color:#BC2E65 !important;
 }
 
+.noRecords{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+
+}
+  .noRec{
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 2em;
+    width: 50%;
+    }
 /* You can add global styles to this file, and also import other style files */
 /* 
 body{
