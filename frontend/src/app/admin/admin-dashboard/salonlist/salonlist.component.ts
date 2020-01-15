@@ -24,7 +24,7 @@ export class SalonlistComponent implements OnInit {
   count: any = 5;
   pageSize: any = 5;
   ActiveSalonsCount: any;
-  disabled:boolean;
+  disabled: boolean = true;
   
 
   constructor(

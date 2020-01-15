@@ -10,8 +10,8 @@ module.exports = function(router) {
     router.post("/acceptrequest",admin.acceptSalonRequest);
     router.post("/suspendsalon",admin.suspendSalon);
     router.post("/categories",admin.getCategories);
-    router.post('/addservices',admin.addServices);
-    router.post('/removeservices',admin.removeServices);
+    router.post('/add-service',admin.addServices);
+    router.post('/remove-service',admin.removeServices);
     router.post('/add-role',admin.addRoles);
     router.post('/roles',admin.getRoles);
     router.post('/activesalons',admin.getActiveSalonsList);
@@ -23,7 +23,9 @@ module.exports = function(router) {
     router.post('/admin-categories',admin.getAdminCategoriesList);
     router.post('/remove-role',admin.removeRole);
     router.post('/edit-role',admin.updateRole);
-    router.post('/awake-category',admin.awakeCategory);
+  router.post('/awake-category', admin.awakeCategory);
+  router.post('/active-services', admin.getActiveServices);
+    router.post('/active-admin',admin.getActiveAdminList);
 
     
     return router;
