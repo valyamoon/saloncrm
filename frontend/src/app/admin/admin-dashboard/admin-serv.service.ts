@@ -94,7 +94,17 @@ export class AdminServService {
   awakeCategories(data){
   return this.http.post(this.baseUrl+"/awake-category",data,httpOptions)
   }
-
+  addServices(data) { 
+     return this.http.post(this.baseUrl+"/add-service",data,httpOptions)
+  }
+  removeServices(data) { 
+     return this.http.post(this.baseUrl+"/remove-service",data,httpOptions)
+  }
+  
+  getServices(data) { 
+  return this.http.post(this.baseUrl+"/active-services",data,httpOptions)
+  }
+  
   // errorHandler(error:HttpErrorResponse){
   //   return Observable.throw(error.message|| "Server Error");
   // }

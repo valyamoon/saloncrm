@@ -17,6 +17,7 @@ import { ServicesComponent } from './admin-dashboard/services/services.component
 import { RolesComponent } from './admin-dashboard/roles/roles.component';
 import { HeaderTextComponent } from './admin-dashboard/header-text/header-text.component';
 import { ConfirmationComponent } from './admin-dashboard/confirmation/confirmation.component';
+import { ManageAdminComponent } from './admin-dashboard/manage-admin/manage-admin.component';
 
 
 
@@ -24,7 +25,7 @@ import { ConfirmationComponent } from './admin-dashboard/confirmation/confirmati
 
 
 @NgModule({
-  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent, HeaderComponent, DashboardComponent, CategoriesComponent, ServicesComponent, RolesComponent, HeaderTextComponent, ConfirmationComponent],
+  declarations: [ AdminloginComponent, AdminDashboardComponent, UserlistComponent,SalonlistComponent, HeaderComponent, DashboardComponent, CategoriesComponent, ServicesComponent, RolesComponent, HeaderTextComponent, ConfirmationComponent, ManageAdminComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

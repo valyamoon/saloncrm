@@ -129,8 +129,10 @@ export class RolesComponent implements OnInit {
         role_id: data._id
       };
 
-      this.admnServ.deleteRoles(dataToPass).subscribe(
-        data => {
+    this.admnServ.deleteRoles(dataToPass).subscribe(
+   
+      data => {
+             console.log("INS ERE",data)
           if (data["code"] === 200) {
             this.toastrServ.success("Role Deleted", "Success", {
               timeOut: 2000

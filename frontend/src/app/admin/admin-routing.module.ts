@@ -10,6 +10,7 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
 import { CategoriesComponent } from './admin-dashboard/categories/categories.component';
 import { ServicesComponent } from './admin-dashboard/services/services.component';
 import { RolesComponent } from './admin-dashboard/roles/roles.component';
+import { ManageAdminComponent } from './admin-dashboard/manage-admin/manage-admin.component';
 
 // const routes: Routes = [{path:'',component:AdminloginComponent},
 
@@ -32,6 +33,7 @@ const routes: Routes = [
       {path:"services",component:ServicesComponent},
       {path:"categories",component:CategoriesComponent},
       {path:"roles",component:RolesComponent},
+          {path:"admin",component:ManageAdminComponent},
       { path: "", redirectTo: "dashboard", pathMatch: "full" }
     ]
   }

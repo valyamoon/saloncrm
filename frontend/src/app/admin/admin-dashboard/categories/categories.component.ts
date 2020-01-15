@@ -19,7 +19,7 @@ export class CategoriesComponent implements OnInit {
   displayedColumns = ["catname", "isactive", "action"];
   noRecordsFound: boolean;
   noArchivedRecordsFound:boolean = false;
-  disabled: true;
+    disabled: boolean = true;
   archivedCategoriesList: any;
   archivedCategoriesCount: any;
   showArchived:boolean = false;
@@ -104,7 +104,8 @@ export class CategoriesComponent implements OnInit {
           }
 
           this.toastrSev.success("Catgories Fetched", "Success", {
-            timeOut: 2000
+            timeOut: 2000,
+            progressAnimation:"decreasing"
           });
         } else {
           this.toastrSev.error("Failed To Fetch", "Error", {
