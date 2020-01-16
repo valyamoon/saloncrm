@@ -20,3 +20,24 @@ export class DashboardComponent implements OnInit {
   }
 
 }
+
+
+
+// import { Injectable } from "@angular/core";
+// import { HttpClient, HttpHeaders } from "@angular/common/http";
+// import { environment } from "../../../environments/environment";
+
+// const httpOptions = {
+//   headers: new HttpHeaders({
+//     "Content-Type": "application/json",
+//     Authorization: ""
+//   })
+// };
+// export class SalonService {
+//   baseUrl = environment.backendBaseUrl + "/api";
+
+//   constructor(private http: HttpClient) {}
+//   serviceList(){
+//     return  this.http.post(this.baseUrl + "/servicelist", httpOptions);
+//   }
+// }

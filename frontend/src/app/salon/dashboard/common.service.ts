@@ -15,13 +15,22 @@ const httpOptions = {
 export class CommonService {
   baseUrl = environment.backendBaseUrl + "/api";
 
-  
-  constructor(private http:HttpClient) { }
 
+  constructor(private http: HttpClient) { }
   saveSalonDetails(data){
+    return this.http.post(this.baseUrl + "/addsalon", data,httpOptions);
+  }
+  
+  serviceList(data) {
+    return this.http.post(this.baseUrl + "/servicelist",data, httpOptions);
+  } 
 
-    return this.http.post(this.baseUrl+'/addsalon',data,httpOptions);
+  addSalonService(data){
+    return this.http.post(this.baseUrl + "/addsalonservices", data,httpOptions);
+  }
 
+  removeSalonService(data){
+    return this.http.post(this.baseUrl + "/removesalonservice", data,httpOptions);
   }
 
 
