@@ -28,6 +28,8 @@ module.exports = function(router) {
   router.post("/all-users", admin.fetchActiveUsersAll);
   router.post("/forgot-password", admin.forgotPassword);
   router.post("/servicelist", admin.getServiceList);
+  router.post("/active-user-check", admin.activeUsers);
+  router.post("/deactive-user-check", admin.deactiveUsers);
 
   return router;
 };

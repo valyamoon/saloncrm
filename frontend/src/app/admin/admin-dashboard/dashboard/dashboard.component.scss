@@ -1,102 +1,93 @@
 table {
-    width: 100%;
-  }
-#cards{
-    display: flex;
-    justify-content:space-between;
- 
-
-    .card{
-        flex-grow: 1;
-        z-index: 0;
-        width: 30%;
-  
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 5px;
-        background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
-        border-color: transparent;
-        .cardText{
-            color:white;
-            font-weight: 600;
-            text-align: center;
-            padding-top: 5px;
-            font-size: 12px;
-        }
-        h2{
-            color:white;
-        }
-
-    }
-
-
+  width: 100%;
 }
+#cards {
+  display: flex;
+  justify-content: space-between;
 
+  .card {
+    flex-grow: 1;
+    z-index: 0;
+    width: 30%;
 
-
-#paginationCard{
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    .itemPerPage{
-
-    }
-    .paginator{
-        display: flex;
-        align-items: center;
-        justify-content:space-between;
-        margin-left: 10px;
-        .pageNumber{
-            padding: 2px 5px 2px 5px;
-            font-size: 10px;
-            border: 1px solid  #783A87;
-            align-items: center;
-            display: flex;
-            cursor: pointer;
-            justify-content: center;
-            border-radius: 5px;
-          
-        }
-        .prevnextBtn{
-            background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
-    border-color: transparent;
-    color:white;
-    border-radius: 10px;
-        }
-    }
-  
-
-}
-.btn-sign-in{
-    width: 50% !important;
-    margin-bottom: 5px;
-}
-.noRecords{
-    display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    .noRec{
-    text-align: center;
-    color: #721c24;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    padding: 2em;
-    width: 50%;
+    align-items: center;
+    margin: 5px;
+    background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%) 0%
+      0% no-repeat padding-box;
+    border-color: transparent;
+    padding: 25px;
+    .cardText {
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      padding-top: 5px;
+      font-size: 20px;
     }
-
+    h2 {
+      color: white;
+    }
+  }
 }
-.tablecustom{
-    margin-top: 15px;
-}
-.headerSection{
 
+#paginationCard {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  .itemPerPage {
+  }
+  .paginator {
     display: flex;
     align-items: center;
-    padding-left: 20px;
-    .header{
-        
-        color:purple;
+    justify-content: space-between;
+    margin-left: 10px;
+    .pageNumber {
+      padding: 2px 5px 2px 5px;
+      font-size: 10px;
+      border: 1px solid #783a87;
+      align-items: center;
+      display: flex;
+      cursor: pointer;
+      justify-content: center;
+      border-radius: 5px;
     }
+    .prevnextBtn {
+      background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%)
+        0% 0% no-repeat padding-box;
+      border-color: transparent;
+      color: white;
+      border-radius: 10px;
+    }
+  }
+}
+.btn-sign-in {
+  width: 50% !important;
+  margin-bottom: 5px;
+}
+// .noRecords{
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     .noRec{
+//     text-align: center;
+//     color: #721c24;
+//     background-color: #f8d7da;
+//     border: 1px solid #f5c6cb;
+//     padding: 2em;
+//     width: 50%;
+//     }
+
+// }
+.tablecustom {
+  margin-top: 15px;
+}
+.headerSection {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  .header {
+    color: purple;
+  }
 }
