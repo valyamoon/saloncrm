@@ -21,9 +21,17 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/addsalon", data,httpOptions);
   }
   
-  serviceList() {
-    return this.http.post(this.baseUrl + "/servicelist", httpOptions);
+  serviceList(data) {
+    return this.http.post(this.baseUrl + "/servicelist",data, httpOptions);
   } 
+
+  addSalonService(data){
+    return this.http.post(this.baseUrl + "/addsalonservices", data,httpOptions);
+  }
+
+  removeSalonService(data){
+    return this.http.post(this.baseUrl + "/removesalonservice", data,httpOptions);
+  }
 
 
 

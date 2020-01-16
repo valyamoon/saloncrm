@@ -15,6 +15,7 @@ const roles = require("../../user/model/rolesSchema");
 const salons = require("../../salon/model/salonSchema");
 const categories = require("../../admin/model/categoriesSchema");
 const reviewratings = require("../../salon/model/salonreviewsratingSchema");
+const salonservice = require("../../salon/model/salonservicesSchema");
 const services = require("../model/servicesSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
@@ -22,6 +23,7 @@ const Config = require("../../../../config/config").get(
     process.env.NODE_ENV || "local"
 );
 const commonQuery = require("../../../../lib/commonQuery.js");
+const util = require("../../../../lib/util");
 
 module.exports = {
     addCategories: addCategories,
@@ -33,7 +35,8 @@ module.exports = {
     removeServices: removeServices,
     addRoles: addRoles,
     getRoles: getRoles,
-    getActiveSalonsList: getActiveSalonsList
+    getActiveSalonsList: getActiveSalonsList,
+    getServiceList: getServiceList
 };
 
 /**
@@ -566,11 +569,6 @@ function getActiveSalonsList(req, res) {
     getActiveSalonsList().then(function() {});
 }
 
-
-
-
-
-
 /**
  * Function is use to get list service provided by admin
  * @access private
@@ -579,57 +577,49 @@ function getActiveSalonsList(req, res) {
  * @smartData Enterprises (I) Ltd
  * Created On 09/01/2020
  */
-
 async function getServiceList(req, res) {
-    try {
-        let condition = {
-            "isDeleted": false,
-            "isActive": true
-        }
-        let serviceList = await commonQuery.fetch_all(services, condition);
-        res.json(
-            Response(
-                constant.SUCCESS_CODE,
-                constant.FETCHED_ALL_DATA,
-                serviceList
-            )
-        );
-    } catch (error) {
+    console.log("req.body",req.body);
+    if(req.body.user_id){
+        var salonId = await util.getSalonId(req.body.user_id);
+        let finalServiceArr = [];
+        
+        let salonCond = {
+            "isActive" : true,
+            "isDeleted": false
+        };
+        let pageSize = 100;
+        let page = 1;
+        let serviceList = await commonQuery.fetch_all(services, salonCond);
+      //  console.log("serviceList", serviceList); return;
+        async.each(serviceList, async function(serviceData, firstCB) {
+            let serviceCond = {
+                "salon_id": salonId,
+                "service_id" : serviceData._id,
+                "category_id" : serviceData.category_id
+            }
+            let salonService = await commonQuery.findAll(salonservice, serviceCond);
+            let salonServiceData = {
+                "service" : serviceData,
+                "salonserviceinfo" : salonService
+            }
+            finalServiceArr.push(salonServiceData);
+        }, async function(err, data) {
+            if (err) {
+                console.log("Error @427", err)
+            } else {
+                res.json(
+                    Response(
+                        constant.SUCCESS_CODE,
+                        constant.FETCHED_ALL_DATA,
+                        finalServiceArr
+                    )
+                );
+            }
+        });
+    }else{
         return res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
         );
     }
-    // console.log("serviceList", serviceList);
-    // }
-}
-/**
- * Function is use to get list service provided by admin
- * @access private
- * @return json
- * Created by Rashmi Ranjan
- * @smartData Enterprises (I) Ltd
- * Created On 09/01/2020
- */
-
-async function getServiceList(req, res) {
-    try {
-        let condition = {
-            "isDeleted": false,
-            "isActive": true
-        }
-        let serviceList = await commonQuery.fetch_all(services, condition);
-        res.json(
-            Response(
-                constant.SUCCESS_CODE,
-                constant.FETCHED_ALL_DATA,
-                serviceList
-            )
-        );
-    } catch (error) {
-        return res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-        );
-    }
-    // console.log("serviceList", serviceList);
-    // }
+    
 }

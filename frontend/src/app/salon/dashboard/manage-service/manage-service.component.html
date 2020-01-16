@@ -25,14 +25,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let services of servicesList">
-                                        <td> <input type="checkbox" (change)="sendRequest(services._id, $event.target.checked)" formControlName="service_id" value="{{services._id}}"></td>
-                                        <td>{{services.name}}</td>
-                                        <td>{{services.description}}</td>
-                                        <td><input type="text" class="form-control" formControlName="price" mask="0*.00" (input)="priceChange($event,services._id,i)" onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;"
-                                            /></td>
-                                        <td><input type="text" class="form-control" formControlName="duration" (input)="durationChange($event,services._id,i)" onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;"
-                                            /></td>
+                                    <tr *ngFor="let services of servicesList; let i = index">
+                                        <td> <input type="checkbox" (change)="sendRequest(services.service._id,services.service.category_id, $event.target.checked,i)" [attr.data-index]="i" formControlName="service_id" value="{{services._id}}" [checked]="services.salonserviceinfo.length > 0"></td>
+                                        <td>{{services.service.name}}</td>
+                                        <td>{{services.service.description}}</td>
+                                        <td><input type="text" class="form-control" formControlName="price" mask="0*.00" value="{{ (services.salonserviceinfo.length > 0) ? services.salonserviceinfo[0].price : '' }}" (input)="priceChange($event,services.service._id,i)"
+                                                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;" />
+                                            <!-- <div *ngIf="price.invalid && price.required" class="alert alert-danger">
+
+                                                <div *ngIf="price.errors.required">
+                                                    price is required.
+                                                </div>
+
+                                            </div> -->
+                                        </td>
+                                        <td><input type="text" class="form-control" formControlName="duration" value="{{ (services.salonserviceinfo.length > 0) ? services.salonserviceinfo[0].duration : '' }}" (input)="durationChange($event,services.service._id,i)"
+                                                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;" />
+                                            <!-- <div *ngIf="duration.invalid.required">
+                                                duration is required.
+                                            </div> -->
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

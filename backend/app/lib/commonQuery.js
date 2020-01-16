@@ -122,12 +122,7 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
     lat,
     long
 ) {
-    console.log("Inquery1", page);
-    console.log("Inquery2", pageSize);
-    console.log("Inquery3", lat);
-    console.log("Inquery4", long);
-    console.log("Inquery5", dynamicQuery);
-    console.log("Inquery6", distance);
+
 
     return new Promise(function(resolve, reject) {
         let pageSizes = pageSize;
@@ -231,6 +226,7 @@ commonQuery.findoneData = async function findoneData(
     return new Promise(function(resolve, reject) {
         model.findOne(condition, fetchVal, function(err, data) {
             if (err) {
+                console.log("Erroe @ 234", err);
                 reject(err);
             } else {
                 resolve(data);
@@ -411,12 +407,12 @@ commonQuery.updateOneDocument = function updateOneDocument(
             )
             .lean()
             .exec(function(err, result) {
-                console.log("HHHHHH", err, result);
+                //console.log("HHHHHH", err, result);
                 if (err) {
                     console.log("errerrerrerrerrerr", err);
                     reject(0);
                 } else {
-                    console.log("updatedData", result);
+                    //console.log("updatedData", result);
                     resolve(result);
                 }
             });
@@ -430,12 +426,12 @@ commonQuery.updateOne = function updateOne(model, updateCond, updateData) {
             })
             .lean()
             .exec(async function(err, result) {
-                console.log("HHHHHH", err, result);
+                // console.log("HHHHHH", err, result);
                 if (err) {
                     console.log("errerrerrerrerrerr", err);
                     reject(0);
                 } else {
-                    console.log("updatedData", result);
+                    // console.log("updatedData", result);
                     resolve(result);
                 }
             });
@@ -534,7 +530,7 @@ commonQuery.updateMany = function updateMany(
 commonQuery.fetch_all = function fetch_all(model, cond = {}, fetchd = {}) {
     return new Promise(function(resolve, reject) {
         model.find(cond, fetchd).exec(function(err, userData) {
-            //console.log("userData", userData);
+            // console.log("userData", userData);
             if (err) {
                 console.log("errrrrrr", err);
                 reject(err);
@@ -628,6 +624,7 @@ commonQuery.countData = function countData(model, cond) {
             if (err) {
                 reject(err);
             } else {
+                // console.log("userData", userData)
                 resolve(userData);
             }
         });
@@ -805,533 +802,129 @@ commonQuery.aggregateFunc = function aggregateFunc(
 };
 
 commonQuery.salonDetailsFetch = function salonDetailsFetch(
-model,
-fromTable,
-localFieldVal,
-foreignFieldVal,
-condition,
-second_fromTable,
-third_fromTable,
-fourth_fromTable
+    model,
+    fromTable,
+    localFieldVal,
+    foreignFieldVal,
+    condition,
+    second_fromTable,
+    third_fromTable,
+    fourth_fromTable
 ) {
-console.log(fromTable, localFieldVal, foreignFieldVal, condition);
-return new Promise(function(resolve, reject) {
-    model
-        .aggregate([{
-                $match: condition
-            },
+    console.log(fromTable, localFieldVal, foreignFieldVal, condition);
+    return new Promise(function(resolve, reject) {
+        model
+            .aggregate([{
+                    $match: condition
+                },
 
-            {
-                $lookup: {
-                    from: "reviewratings",
-                    localField: "_id",
-                    foreignField: "salon_id",
-                    as: "ratings"
-                }
-            },
+                {
+                    $lookup: {
+                        from: "reviewratings",
+                        localField: "_id",
+                        foreignField: "salon_id",
+                        as: "ratings"
+                    }
+                },
 
-            {
-                $lookup: {
-                    from: "salonservices",
-                    localField: "_id",
-                    foreignField: "salon_id",
-                    as: "salonserv"
-                }
-            },
+                {
+                    $lookup: {
+                        from: "salonservices",
+                        localField: "_id",
+                        foreignField: "salon_id",
+                        as: "salonserv"
+                    }
+                },
 
-            {
-                $lookup: {
-                    from: "categories",
-                    localField: "salonserv.category_id",
-                    foreignField: "_id",
-                    as: "categoriess"
-                }
-            },
+                {
+                    $lookup: {
+                        from: "categories",
+                        localField: "salonserv.category_id",
+                        foreignField: "_id",
+                        as: "categoriess"
+                    }
+                },
 
-            {
-                $unwind: "$categoriess"
-            },
+                {
+                    $unwind: "$categoriess"
+                },
 
-            {
-                $lookup: {
-                    from: "services",
-                    localField: "categoriess.services",
-                    foreignField: "_id",
-                    as: "servicess"
-                }
-            },
-            {
-                $lookup: {
-                    from: "salonservices",
-                    localField: "servicess._id",
-                    foreignField: "service_id",
-                    as: "pricing"
-                }
-            },
+                {
+                    $lookup: {
+                        from: "services",
+                        localField: "categoriess.services",
+                        foreignField: "_id",
+                        as: "servicess"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "salonservices",
+                        localField: "servicess._id",
+                        foreignField: "service_id",
+                        as: "pricing"
+                    }
+                },
 
-            {
-                $group: {
-                    _id: "$name",
-                    categoryId: { $first: "$categoriess._id" },
-                    salonaddress: { $first: "$salonaddress" },
-                    contact: { $first: "$contact" },
-                    location: { $first: "$location" },
-                    avgRating: { $first: { $avg: "$ratings.ratings" } },
-                    opentime: { $first: "$opentime" },
-                    closetime: { $first: "$closetime" },
-                    image: { $first: "$image" },
-                    category: {
-                        $push: {
-                            category: "$categoriess",
-                            services: "$servicess",
-                            pricing: "$pricing"
+                {
+                    $group: {
+                        _id: "$name",
+                        categoryId: { $first: "$categoriess._id" },
+                        salonaddress: { $first: "$salonaddress" },
+                        contact: { $first: "$contact" },
+                        location: { $first: "$location" },
+                        avgRating: { $first: { $avg: "$ratings.ratings" } },
+                        opentime: { $first: "$opentime" },
+                        closetime: { $first: "$closetime" },
+                        image: { $first: "$image" },
+                        category: {
+                            $push: {
+                                category: "$categoriess",
+                                services: "$servicess",
+                                pricing: "$pricing"
+                            }
                         }
                     }
                 }
-            }
-        ])
+            ]).exec(function(err, data) {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                } else {
+                    // console.log("FINALDATA",data);
+                    let dataToPass = [];
+                    let catergoriesTemp = [];
+                    let finalArray = [];
 
-    //   .aggregate([ {
-    //     $match: condition
-    // }
+                    data.forEach(function(v) {
+                        console.log("V", v);
+                        v.category.forEach(function(c) {
+                            console.log("SSSSSSSSS", c);
+                            catergoriesTemp.push({
+                                categories: c.category.catname,
+                                services: c.services,
+                                prices: c.pricing
+                            });
+                        });
+                        console.log("catergoriesTemp", catergoriesTemp);
+                        dataToPass.name = v._id;
+                        dataToPass.salonaddress = v.salonaddress;
+                        dataToPass.location = v.location;
+                        dataToPass.image = v.image;
+                        dataToPass.opentime = v.opentime;
+                        dataToPass.closetime = v.closetime;
+                    });
 
-    // , {
-    //     $lookup: {
-    //         from: "reviewratings", localField: "_id", foreignField: "salon_id", as: "ratings"
-    //     }
-    // }
-
-    // , {
-    //     $lookup: {
-    //         from: "salonservices", localField: "_id", foreignField: "salon_id", as: "salonserv"
-    //     }
-    // }
-
-    // , {
-    //     $lookup: {
-    //         from: "categories", localField: "salonserv.category_id", foreignField: "_id", as: "categoriess"
-    //     }
-    // }
-
-    // , {
-    //     $unwind: "$categoriess"
-    // }
-
-    // , {
-    //     $lookup: {
-    //         from: "services", localField: "categoriess.services", foreignField: "_id", as: "servicess"
-    //     }
-    // }
-
-    // , {
-    //     $group: {
-    //         _id: {
-    //             categoryId:'$categoriess._id', categoryname:"$categoriess.catname", name:"$name", salonaddress:"$salonaddress", location:"$location", contact:"$contact", avgRatings: {
-    //                 $avg: "$ratings.ratings"
-    //             }
-    //             , services: "$servicess",
-    //             opentime:"$opentime",
-    //             closetime:"$closetime",
-    //             image:"$image",
-
-    //         }
-    //         ,
-    //     }
-    // }
-
-    // ])
-    // .aggregate([
-    //   { $match: condition },
-    //   {
-    //     $lookup: {
-    //       from: second_fromTable,
-    //       localField: "_id",
-    //       foreignField: "salon_id",
-    //       as: "reviewsratings"
-    //     }
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: second_fromTable,
-    //       let: { salon_id: "$_id" },
-    //       pipeline: [
-    //         {
-    //           $match: {
-    //             $expr: {
-    //               $and: [{ $eq: ["$salon_id", "$$salon_id"] }]
-    //             }
-    //           }
-    //         },
-    //         {
-    //           $group: {
-    //             _id: null,
-    //             rating: {
-    //               $first: {
-    //                 $divide: [
-    //                   {
-    //                     $trunc: {
-    //                       $multiply: [
-    //                         {
-    //                           $avg: "$ratings"
-    //                         },
-    //                         100
-    //                       ]
-    //                     }
-    //                   },
-    //                   100
-    //                 ]
-    //               }
-    //             }
-    //           }
-    //         }
-    //       ],
-    //       as: "allRating"
-    //     }
-    //   },
-    //   {
-    //     $unwind: {
-    //       path: "$allRating"
-    //     }
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: third_fromTable,
-    //       let: { salon_id: "$_id" },
-    //       pipeline: [
-    //         {
-    //           $match: {
-    //             $expr: {
-    //               $and: [
-    //                 {
-    //                   $eq: ["$salon_id", "$$salon_id"]
-    //                 }
-    //               ]
-    //             }
-    //           }
-    //         },
-    //         {
-    //           $group: {
-    //             _id: { category_id: "$category_id" },
-    //             services: {
-    //               $push: {
-    //                 name: "$name",
-    //                 price: "$price",
-    //                 duration: "$duration",
-    //                 id: "$_id"
-    //               }
-    //             }
-    //           }
-    //         },
-    //         {
-    //           $lookup: {
-    //             from: fourth_fromTable,
-    //             let: { cat_id: "$_id.category_id" },
-    //             pipeline: [
-    //               {
-    //                 $match: {
-    //                   $expr: {
-    //                     $and: [
-    //                       {
-    //                         $eq: ["$_id", "$$cat_id"]
-    //                       }
-    //                     ]
-    //                   }
-    //                 }
-    //               }
-    //             ],
-    //             as: "saloncategory"
-    //           }
-    //         },
-    //         {
-    //           $unwind: {
-    //             path: "$saloncategory"
-    //           }
-    //         },
-    //         {
-    //           $project: {
-    //             _id: "$_id.category_id",
-    //             catname: "$saloncategory.catname",
-    //             services: "$services"
-    //           }
-    //         }
-    //       ],
-    //       as: "category"
-    //     }
-    //   },
-    //   {
-    //     $project: {
-    //       name: 1,
-    //       image: 1,
-    //       address: "$salonaddress",
-    //       location: 1,
-    //       opentime: 1,
-    //       closetime: 1,
-    //       contact: 1,
-    //       avgRatings: "$allRating.rating",
-    //       categories: "$category"
-    //     }
-    //   }
-    // ])
-    .exec(function(err, data) {
-            if (err) {
-                console.log(err);
-                reject(err);
-            } else {
-                // console.log("FINALDATA",data);
-                let dataToPass = [];
-                let catergoriesTemp = [];
-                let finalArray = [];
-
-
-                data.forEach(function(v) {
-                    console.log("V", v);
-                    v.category.forEach(function(c) {
-                        console.log("SSSSSSSSS", c);
-                        catergoriesTemp.push({ "categories": c.category.catname, "services": c.services, "prices": c.pricing })
-                    })
-                    console.log("catergoriesTemp", catergoriesTemp);
-                    dataToPass.name = v._id;
-                    dataToPass.salonaddress = v.salonaddress;
-                    dataToPass.location = v.location;
-                    dataToPass.image = v.image;
-                    dataToPass.opentime = v.opentime;
-                    dataToPass.closetime = v.closetime;
-
-
-                });
-
-                //dataToPass.push.apply(catergoriesTemp);
-                console.log("DAAA", dataToPass);
-                finalArray = [].concat(dataToPass, catergoriesTemp);
-                //;tempArray.concat(catergoriesTemp);
-                console.log("FInAL ARRYA", finalArray);
-                //console.log("DATATOPASS", data[0]);
-                resolve(finalArray);
-            }
-        }
-    }
-])
-
-//   .aggregate([ {
-//     $match: condition
-// }
-
-// , {
-//     $lookup: {
-//         from: "reviewratings", localField: "_id", foreignField: "salon_id", as: "ratings"
-//     }
-// }
-
-// , {
-//     $lookup: {
-//         from: "salonservices", localField: "_id", foreignField: "salon_id", as: "salonserv"
-//     }
-// }
-
-// , {
-//     $lookup: {
-//         from: "categories", localField: "salonserv.category_id", foreignField: "_id", as: "categoriess"
-//     }
-// }
-
-// , {
-//     $unwind: "$categoriess"
-// }
-
-// , {
-//     $lookup: {
-//         from: "services", localField: "categoriess.services", foreignField: "_id", as: "servicess"
-//     }
-// }
-
-// , {
-//     $group: {
-//         _id: {
-//             categoryId:'$categoriess._id', categoryname:"$categoriess.catname", name:"$name", salonaddress:"$salonaddress", location:"$location", contact:"$contact", avgRatings: {
-//                 $avg: "$ratings.ratings"
-//             }
-//             , services: "$servicess",
-//             opentime:"$opentime",
-//             closetime:"$closetime",
-//             image:"$image",
-
-//         }
-//         ,
-//     }
-// }
-
-// ])
-// .aggregate([
-//   { $match: condition },
-//   {
-//     $lookup: {
-//       from: second_fromTable,
-//       localField: "_id",
-//       foreignField: "salon_id",
-//       as: "reviewsratings"
-//     }
-//   },
-//   {
-//     $lookup: {
-//       from: second_fromTable,
-//       let: { salon_id: "$_id" },
-//       pipeline: [
-//         {
-//           $match: {
-//             $expr: {
-//               $and: [{ $eq: ["$salon_id", "$$salon_id"] }]
-//             }
-//           }
-//         },
-//         {
-//           $group: {
-//             _id: null,
-//             rating: {
-//               $first: {
-//                 $divide: [
-//                   {
-//                     $trunc: {
-//                       $multiply: [
-//                         {
-//                           $avg: "$ratings"
-//                         },
-//                         100
-//                       ]
-//                     }
-//                   },
-//                   100
-//                 ]
-//               }
-//             }
-//           }
-//         }
-//       ],
-//       as: "allRating"
-//     }
-//   },
-//   {
-//     $unwind: {
-//       path: "$allRating"
-//     }
-//   },
-//   {
-//     $lookup: {
-//       from: third_fromTable,
-//       let: { salon_id: "$_id" },
-//       pipeline: [
-//         {
-//           $match: {
-//             $expr: {
-//               $and: [
-//                 {
-//                   $eq: ["$salon_id", "$$salon_id"]
-//                 }
-//               ]
-//             }
-//           }
-//         },
-//         {
-//           $group: {
-//             _id: { category_id: "$category_id" },
-//             services: {
-//               $push: {
-//                 name: "$name",
-//                 price: "$price",
-//                 duration: "$duration",
-//                 id: "$_id"
-//               }
-//             }
-//           }
-//         },
-//         {
-//           $lookup: {
-//             from: fourth_fromTable,
-//             let: { cat_id: "$_id.category_id" },
-//             pipeline: [
-//               {
-//                 $match: {
-//                   $expr: {
-//                     $and: [
-//                       {
-//                         $eq: ["$_id", "$$cat_id"]
-//                       }
-//                     ]
-//                   }
-//                 }
-//               }
-//             ],
-//             as: "saloncategory"
-//           }
-//         },
-//         {
-//           $unwind: {
-//             path: "$saloncategory"
-//           }
-//         },
-//         {
-//           $project: {
-//             _id: "$_id.category_id",
-//             catname: "$saloncategory.catname",
-//             services: "$services"
-//           }
-//         }
-//       ],
-//       as: "category"
-//     }
-//   },
-//   {
-//     $project: {
-//       name: 1,
-//       image: 1,
-//       address: "$salonaddress",
-//       location: 1,
-//       opentime: 1,
-//       closetime: 1,
-//       contact: 1,
-//       avgRatings: "$allRating.rating",
-//       categories: "$category"
-//     }
-//   }
-// ])
-.exec(function(err, data) {
-    if (err) {
-        console.log(err);
-        reject(err);
-    } else {
-        // console.log("FINALDATA",data);
-        let dataToPass = [];
-        let catergoriesTemp = [];
-        let finalArray = [];
-
-        data.forEach(function(v) {
-            console.log("V", v);
-            v.category.forEach(function(c) {
-                console.log("SSSSSSSSS", c);
-                catergoriesTemp.push({
-                    categories: c.category.catname,
-                    services: c.services,
-                    prices: c.pricing
-                });
+                    //dataToPass.push.apply(catergoriesTemp);
+                    console.log("DAAA", dataToPass);
+                    finalArray = [].concat(dataToPass, catergoriesTemp);
+                    //;tempArray.concat(catergoriesTemp);
+                    console.log("FInAL ARRYA", finalArray);
+                    //console.log("DATATOPASS", data[0]);
+                    resolve(finalArray);
+                }
             });
-            console.log("catergoriesTemp", catergoriesTemp);
-            dataToPass.name = v._id;
-            dataToPass.salonaddress = v.salonaddress;
-            dataToPass.location = v.location;
-            dataToPass.image = v.image;
-            dataToPass.opentime = v.opentime;
-            dataToPass.closetime = v.closetime;
-        });
-
-        //dataToPass.push.apply(catergoriesTemp);
-        console.log("DAAA", dataToPass);
-        finalArray = [].concat(dataToPass, catergoriesTemp);
-        //;tempArray.concat(catergoriesTemp);
-        console.log("FInAL ARRYA", finalArray);
-        //console.log("DATATOPASS", data[0]);
-        resolve(finalArray);
-    }
-});
-});
+    });
 };
 
 commonQuery.doubleLookup = function doubleLookup(
@@ -1682,7 +1275,7 @@ commonQuery.getSalonsBasedOnRatings = function getSalonsBasedOnRatings(
 commonQuery.getSalonOnPrice = function getSalonOnPrice() {
     return new Promise(function(resolve, reject) {
         model.find(cond, fetchd).exec(function(err, userData) {
-            console.log("userData", userData);
+            // console.log("userData", userData);
             if (err) {
                 console.log("errrrrrr", err);
                 reject(err);
@@ -1759,7 +1352,7 @@ commonQuery.addServicesInCategories = function addServicesInCategories(
                 category_id, { $push: { services: service_id } }, { safe: true, upsert: true }
             )
             .exec(function(err, userData) {
-                console.log("userData", userData);
+                // console.log("userData", userData);
                 if (err) {
                     console.log("errrrrrr", err);
                     reject(err);
