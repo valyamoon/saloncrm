@@ -19,32 +19,35 @@ const services = require("../model/servicesSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
-  process.env.NODE_ENV || "local"
+    process.env.NODE_ENV || "local"
 );
 const commonQuery = require("../../../../lib/commonQuery.js");
 
 module.exports = {
-  addCategories: addCategories,
-  getSalonsRequestList: getSalonsRequestList,
-  acceptSalonRequest: acceptSalonRequest,
-  suspendSalon: suspendSalon,
-  getCategories: getCategories,
-  addServices: addServices,
-  removeServices: removeServices,
-  addRoles: addRoles,
-  getRoles: getRoles,
-  getActiveSalonsList: getActiveSalonsList,
-  fetchActiveUsersCount: fetchActiveUsersCount,
-  fetchActiveSalonsCount: fetchActiveSalonsCount,
-  fetchActiveUsersList: fetchActiveUsersList,
-  getArchivedCategories: getArchivedCategories,
-  removeCategories: removeCategories,
-  getAdminCategoriesList: getAdminCategoriesList,
-  removeRole: removeRole,
-  updateRole: updateRole,
-  awakeCategory: awakeCategory,
-  getActiveServices: getActiveServices,
-  getActiveAdminList:getActiveAdminList
+    addCategories: addCategories,
+    getSalonsRequestList: getSalonsRequestList,
+    acceptSalonRequest: acceptSalonRequest,
+    suspendSalon: suspendSalon,
+    getCategories: getCategories,
+    addServices: addServices,
+    removeServices: removeServices,
+    addRoles: addRoles,
+    getRoles: getRoles,
+    getActiveSalonsList: getActiveSalonsList,
+    fetchActiveUsersCount: fetchActiveUsersCount,
+    fetchActiveSalonsCount: fetchActiveSalonsCount,
+    fetchActiveUsersList: fetchActiveUsersList,
+    getArchivedCategories: getArchivedCategories,
+    removeCategories: removeCategories,
+    getAdminCategoriesList: getAdminCategoriesList,
+    removeRole: removeRole,
+    updateRole: updateRole,
+    awakeCategory: awakeCategory,
+    getActiveServices: getActiveServices,
+    getActiveAdminList: getActiveAdminList,
+    // checkAuthorisation: checkAuthorisation,
+    fetchActiveUsersAll: fetchActiveUsersAll,
+    forgotPassword: forgotPassword
 };
 
 /**
@@ -55,39 +58,39 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function addCategories(req, res) {
-  async function addCategories() {
-    try {
-      if (req.body.catname) {
-        let newCategory = new categories({
-          catname: req.body.catname
-        });
+    async function addCategories() {
+        try {
+            if (req.body.catname) {
+                let newCategory = new categories({
+                    catname: req.body.catname
+                });
 
-        let addCategory = await commonQuery.InsertIntoCollection(
-          categories,
-          newCategory
-        );
+                let addCategory = await commonQuery.InsertIntoCollection(
+                    categories,
+                    newCategory
+                );
 
-        if (!addCategory) {
-          return res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, error)
-          );
-        } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.CATEGORIES_ADDED,
-              addCategory
-            )
-          );
+                if (!addCategory) {
+                    return res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, error)
+                    );
+                } else {
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.CATEGORIES_ADDED,
+                            addCategory
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  addCategories().then(function() {});
+    addCategories().then(function() {});
 }
 /**
  * Function is use to get salon list which need to be approved by Admin
@@ -97,60 +100,59 @@ function addCategories(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getSalonsRequestList(req, res) {
-  let pageSize =
-    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
-  async function getSalonsRequestList() {
-    try {
-      if (req.body) {
-        let condition = {
-          isActive: false,
-          isDeleted: false,
-          isDeclined: false
-        };
+    let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+    async function getSalonsRequestList() {
+        try {
+            if (req.body) {
+                let condition = {
+                    isActive: false,
+                    isDeleted: false,
+                    isDeclined: false
+                };
 
-        let count = await commonQuery.findCount(salons, condition);
-        console.log("count", count);
+                let count = await commonQuery.findCount(salons, condition);
+                console.log("count", count);
 
-        let listOfSalons = await commonQuery.fetch_all_paginated(
-          salons,
-          condition,
-          pageSize,
-          currentPage
-        );
+                let listOfSalons = await commonQuery.fetch_all_paginated(
+                    salons,
+                    condition,
+                    pageSize,
+                    currentPage
+                );
 
-        if (!listOfSalons) {
-          return res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
-          );
-        } else {
-          listOfSalons.forEach(function(c) {
-            c.isservicesadded = undefined;
-            c.isreviewadded = undefined;
-          });
-          let dataToPass = {
-            data: listOfSalons,
-            countNumber: count
-          };
+                if (!listOfSalons) {
+                    return res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
+                    );
+                } else {
+                    listOfSalons.forEach(function(c) {
+                        c.isservicesadded = undefined;
+                        c.isreviewadded = undefined;
+                    });
+                    let dataToPass = {
+                        data: listOfSalons,
+                        countNumber: count
+                    };
 
-          console.log("DATATOPASS", dataToPass);
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.FETCHED_ALL_DATA,
-              dataToPass
-            )
-          );
+                    console.log("DATATOPASS", dataToPass);
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.FETCHED_ALL_DATA,
+                            dataToPass
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
 
-  getSalonsRequestList().then(function() {});
+    getSalonsRequestList().then(function() {});
 }
 
 /**
@@ -162,80 +164,78 @@ function getSalonsRequestList(req, res) {
  */
 
 function acceptSalonRequest(req, res) {
-  console.log("Acctp", req.body.salon_id);
-  async function acceptSalonRequest() {
-    try {
-      if (req.body.salon_id) {
-        let condition = {
-          _id: mongoose.Types.ObjectId(req.body.salon_id)
-        };
-        let activeCondition = {
-          isActive: true,
-          isApproved: true
-        };
+    console.log("Acctp", req.body.salon_id);
+    async function acceptSalonRequest() {
+        try {
+            if (req.body.salon_id) {
+                let condition = {
+                    _id: mongoose.Types.ObjectId(req.body.salon_id)
+                };
+                let activeCondition = {
+                    isActive: true,
+                    isApproved: true
+                };
 
-        let acceptSalonRequest = await commonQuery.updateOneDocument(
-          salons,
-          condition,
-          activeCondition
-        );
-        console.log("Axcc", acceptSalonRequest);
-        if (!acceptSalonRequest || acceptSalonRequest === null) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
-          );
-        } else {
-          let user_id = acceptSalonRequest.user_id;
-          console.log("USER?I", user_id);
+                let acceptSalonRequest = await commonQuery.updateOneDocument(
+                    salons,
+                    condition,
+                    activeCondition
+                );
+                console.log("Axcc", acceptSalonRequest);
+                if (!acceptSalonRequest || acceptSalonRequest === null) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+                    );
+                } else {
+                    let user_id = acceptSalonRequest.user_id;
+                    console.log("USER?I", user_id);
 
-          let activeCondition = {
-            isActive: true,
-            isApproved: true
-          };
-          let condition = {
-            _id: mongoose.Types.ObjectId(user_id)
-          };
-          let activeSalonLogin = await commonQuery.updateOneDocument(
-            users,
-            condition,
-            activeCondition
-          );
-          if (!activeSalonLogin) {
-            res.json(
-              Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
-            );
-          } else {
-            let messagetTemplate = {
-              subject: messageTemplates.acceptSalonRequest["subject"],
-              message: messageTemplates.acceptSalonRequest["message"]
-            };
+                    let activeCondition = {
+                        isActive: true,
+                        isApproved: true
+                    };
+                    let condition = {
+                        _id: mongoose.Types.ObjectId(user_id)
+                    };
+                    let activeSalonLogin = await commonQuery.updateOneDocument(
+                        users,
+                        condition,
+                        activeCondition
+                    );
+                    if (!activeSalonLogin) {
+                        res.json(
+                            Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+                        );
+                    } else {
+                        let messagetTemplate = {
+                            subject: messageTemplates.acceptSalonRequest["subject"],
+                            message: messageTemplates.acceptSalonRequest["message"]
+                        };
 
-            let sendEmailConfirmation = await mailer.sendMail(
-              activeSalonLogin.email,
-              messagetTemplate
-            );
+                        let sendEmailConfirmation = await mailer.sendMail(
+                            activeSalonLogin.email,
+                            messagetTemplate
+                        );
 
-            if (!sendEmailConfirmation) {
-            } else {
+                        if (!sendEmailConfirmation) {} else {}
+                        res.json(
+                            Response(
+                                constant.SUCCESS_CODE,
+                                constant.SALON_REQUEST_ACCEPTED,
+                                acceptSalonRequest
+                            )
+                        );
+                    }
+                }
             }
-            res.json(
-              Response(
-                constant.SUCCESS_CODE,
-                constant.SALON_REQUEST_ACCEPTED,
-                acceptSalonRequest
-              )
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
             );
-          }
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
 
-  acceptSalonRequest().then(function() {});
+    acceptSalonRequest().then(function() {});
 }
 /**
  * Function is use to suspend Salon on subsription expiry
@@ -246,80 +246,79 @@ function acceptSalonRequest(req, res) {
  */
 
 function suspendSalon(req, res) {
-  console.log(req.body);
-  async function suspendSalon() {
-    try {
-      if (req.body.salon_id) {
-        let condition = {
-          _id: mongoose.Types.ObjectId(req.body.salon_id)
-        };
-        let activeCondition = {
-          isActive: false,
-          isDeclined: true
-        };
+    console.log(req.body);
+    async function suspendSalon() {
+        try {
+            if (req.body.salon_id) {
+                let condition = {
+                    _id: mongoose.Types.ObjectId(req.body.salon_id)
+                };
+                let activeCondition = {
+                    isActive: false,
+                    isDeclined: true,
+                    isApproved: false
+                };
 
-        let suspendedSalon = await commonQuery.updateOneDocument(
-          salons,
-          condition,
-          activeCondition
-        );
+                let suspendedSalon = await commonQuery.updateOneDocument(
+                    salons,
+                    condition,
+                    activeCondition
+                );
 
-        if (!suspendedSalon) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
-          );
-        } else {
-          let user_id = suspendedSalon.user_id;
+                if (!suspendedSalon) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+                    );
+                } else {
+                    let user_id = suspendedSalon.user_id;
 
-          let activeCondition = {
-            isActive: false
-          };
-          let condition = {
-            _id: mongoose.Types.ObjectId(user_id)
-          };
-          let deactivateLogin = await commonQuery.updateOneDocument(
-            users,
-            condition,
-            activeCondition
-          );
+                    let activeCondition = {
+                        isActive: false
+                    };
+                    let condition = {
+                        _id: mongoose.Types.ObjectId(user_id)
+                    };
+                    let deactivateLogin = await commonQuery.updateOneDocument(
+                        users,
+                        condition,
+                        activeCondition
+                    );
 
-          if (!deactivateLogin) {
-            res.json(
-              Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
-            );
-          } else {
-            let messagetTemplate = {
-              subject: messageTemplates.accountSuspended["subject"],
-              message: messageTemplates.accountSuspended["message"]
-            };
+                    if (!deactivateLogin) {
+                        res.json(
+                            Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
+                        );
+                    } else {
+                        let messagetTemplate = {
+                            subject: messageTemplates.accountSuspended["subject"],
+                            message: messageTemplates.accountSuspended["message"]
+                        };
 
-            let sendEmailConfirmation = await mailer.sendMail(
-              deactivateLogin.email,
-              messagetTemplate
-            );
+                        let sendEmailConfirmation = await mailer.sendMail(
+                            deactivateLogin.email,
+                            messagetTemplate
+                        );
 
-            if (!sendEmailConfirmation) {
-            } else {
+                        if (!sendEmailConfirmation) {} else {}
+
+                        res.json(
+                            Response(
+                                constant.SUCCESS_CODE,
+                                constant.SALON_SUSPENDED,
+                                suspendedSalon
+                            )
+                        );
+                    }
+                }
             }
-
-            res.json(
-              Response(
-                constant.SUCCESS_CODE,
-                constant.SALON_SUSPENDED,
-                suspendedSalon
-              )
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
             );
-          }
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
 
-  suspendSalon().then(function() {});
+    suspendSalon().then(function() {});
 }
 
 /**
@@ -330,43 +329,43 @@ function suspendSalon(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getCategories(req, res) {
-  async function getCategories() {
-    try {
-      if (req.body.type === "categories") {
-        let categoriesList = await commonQuery.fetch_categories(
-          categories,
-          "services",
-          "services",
-          "_id"
-        );
-        if (!categoriesList) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
-          );
-        } else {
-          categoriesList.forEach(function(v) {
-            v.services.forEach(function(v) {
-              delete v.isActive;
-              delete v.isDeleted;
-            });
-          });
+    async function getCategories() {
+        try {
+            if (req.body.type === "categories") {
+                let categoriesList = await commonQuery.fetch_categories(
+                    categories,
+                    "services",
+                    "services",
+                    "_id"
+                );
+                if (!categoriesList) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
+                    );
+                } else {
+                    categoriesList.forEach(function(v) {
+                        v.services.forEach(function(v) {
+                            delete v.isActive;
+                            delete v.isDeleted;
+                        });
+                    });
 
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.FETCHED_ALL_DATA,
-              categoriesList
-            )
-          );
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.FETCHED_ALL_DATA,
+                            categoriesList
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  getCategories().then(function() {});
+    getCategories().then(function() {});
 }
 
 /**
@@ -378,46 +377,44 @@ function getCategories(req, res) {
  */
 
 function addServices(req, res) {
-  async function addServices() {
-    try {
-      if (req.body && req.body.category_id) {
-        let newService = new services({
-          name: req.body.name,
-          category_id: req.body.category_id,
-          logo: req.body.logo,
-          description: req.body.description
-        });
+    async function addServices() {
+        try {
+            if (req.body && req.body.category_id) {
+                let newService = new services({
+                    name: req.body.name,
+                    category_id: req.body.category_id,
+                    logo: req.body.logo,
+                    description: req.body.description
+                });
 
-        let saveService = await commonQuery.InsertIntoCollection(
-          services,
-          newService
-        );
-        if (!saveService) {
-        } else {
-          let categoryUpdate = await commonQuery.addServicesInCategories(
-            categories,
-            req.body.category_id,
-            saveService._id
-          );
+                let saveService = await commonQuery.InsertIntoCollection(
+                    services,
+                    newService
+                );
+                if (!saveService) {} else {
+                    let categoryUpdate = await commonQuery.addServicesInCategories(
+                        categories,
+                        req.body.category_id,
+                        saveService._id
+                    );
 
-          if (!categoryUpdate) {
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
-          } else {
-          }
+                    if (!categoryUpdate) {
+                        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
+                    } else {}
 
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveService)
-          );
+                    res.json(
+                        Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveService)
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
 
-  addServices().then(function() {});
+    addServices().then(function() {});
 }
 
 /**
@@ -429,57 +426,55 @@ function addServices(req, res) {
  */
 
 function removeServices(req, res) {
-  console.log(req.body);
-  async function removeServices() {
-    try {
-      if (req.body && req.body.service_id) {
-        let condition = {
-          _id: req.body.service_id
-        };
+    console.log(req.body);
+    async function removeServices() {
+        try {
+            if (req.body && req.body.service_id) {
+                let condition = {
+                    _id: req.body.service_id
+                };
 
-        let removeCondition = {
-          isActive: false,
-          isDeleted: true
-        };
+                let removeCondition = {
+                    isActive: false,
+                    isDeleted: true
+                };
 
-        let removeService = await commonQuery.updateOneDocument(
-          services,
-          condition,
-          removeCondition
-        );
+                let removeService = await commonQuery.updateOneDocument(
+                    services,
+                    condition,
+                    removeCondition
+                );
 
-        console.log("ASSS", removeService);
+                console.log("ASSS", removeService);
 
-        if (!removeService) {
-          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
-        } else {
-          let categoryUpdate = await commonQuery.removeServicesInCategories(
-            categories,
-            removeService.category_id,
-            req.body.service_id
-          );
+                if (!removeService) {
+                    Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
+                } else {
+                    let categoryUpdate = await commonQuery.removeServicesInCategories(
+                        categories,
+                        removeService.category_id,
+                        req.body.service_id
+                    );
 
-          if (!categoryUpdate) {
-          } else {
-          }
+                    if (!categoryUpdate) {} else {}
 
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.DELETED_SUCCESS,
-              removeService
-            )
-          );
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.DELETED_SUCCESS,
+                            removeService
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
 
-  removeServices().then(function() {});
+    removeServices().then(function() {});
 }
 
 /**
@@ -491,28 +486,28 @@ function removeServices(req, res) {
  */
 
 function addRoles(req, res) {
-  async function addRoles() {
-    try {
-      if (req.body && req.body.role) {
-        let newRole = new roles({
-          name: req.body.role
-        });
-        let saveRole = await commonQuery.InsertIntoCollection(roles, newRole);
-        if (!saveRole) {
-          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
-        } else {
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveRole)
-          );
+    async function addRoles() {
+        try {
+            if (req.body && req.body.role) {
+                let newRole = new roles({
+                    name: req.body.role
+                });
+                let saveRole = await commonQuery.InsertIntoCollection(roles, newRole);
+                if (!saveRole) {
+                    res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+                } else {
+                    res.json(
+                        Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveRole)
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  addRoles().then(function() {});
+    addRoles().then(function() {});
 }
 /**
  * Function is use to get list of Roles
@@ -522,54 +517,56 @@ function addRoles(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getRoles(req, res) {
-  let pageSize =
-    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
-  async function getRoles() {
-    try {
-      let countNumber;
-      if (req.body && req.body.type === "roles") {
-        let condition = { status: true, isDeleted: false };
+    let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+    async function getRoles() {
+        try {
+            let countNumber;
+            if (req.body && req.body.type === "roles") {
+                let condition = {
+                    status: true,
+                    isDeleted: false
+                };
 
-        let rolesCount = await commonQuery.findCount(roles,condition);
-        console.log("COUNRT", rolesCount);
-        if (rolesCount) {
-          countNumber = rolesCount;
-        } else {
-          countNumber = rolesCount;
+                let rolesCount = await commonQuery.findCount(roles, condition);
+                console.log("COUNRT", rolesCount);
+                if (rolesCount) {
+                    countNumber = rolesCount;
+                } else {
+                    countNumber = rolesCount;
+                }
+
+                let rolesList = await commonQuery.fetch_all_paginated(
+                    roles,
+                    condition,
+                    pageSize,
+                    currentPage
+                );
+
+                if (!rolesList) {
+                    res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+                } else {
+                    rolesList.forEach(function(v) {
+                        v.isDeleted = undefined;
+                        v.status = undefined;
+                    });
+                    let dataToPass = {
+                        data: rolesList,
+                        count: countNumber
+                    };
+
+                    res.json(
+                        Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, dataToPass)
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-
-        let rolesList = await commonQuery.fetch_all_paginated(
-          roles,
-          condition,
-          pageSize,
-          currentPage
-        );
-
-        if (!rolesList) {
-          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
-        } else {
-          rolesList.forEach(function(v) {
-            v.isDeleted = undefined;
-            v.status = undefined;
-          });
-          let dataToPass = {
-            data: rolesList,
-            count: countNumber
-          };
-
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, dataToPass)
-          );
-        }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  getRoles().then(function() {});
+    getRoles().then(function() {});
 }
 
 /**
@@ -581,43 +578,43 @@ function getRoles(req, res) {
  */
 
 function getActiveSalonsList(req, res) {
-  async function getActiveSalonsList() {
-    try {
-      if (req.body && req.body.type === "activesalons") {
-        let condition = {
-          isActive: true,
-          isDeleted: false,
-          isApproved: true,
-          isDeclined: false
-        };
-        let activeSalonsList = await commonQuery.fetch_all(salons, condition);
-        if (!activeSalonsList) {
-          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
-        } else {
-          activeSalonsList.forEach(function(v) {
-            v.isDeleted = undefined;
-            v.isreviewadded = undefined;
-            v.isservicesadded = undefined;
-            v.employees = undefined;
-            v.location = undefined;
-          });
+    async function getActiveSalonsList() {
+        try {
+            if (req.body && req.body.type === "activesalons") {
+                let condition = {
+                    isActive: true,
+                    isDeleted: false,
+                    isApproved: true,
+                    isDeclined: false
+                };
+                let activeSalonsList = await commonQuery.fetch_all(salons, condition);
+                if (!activeSalonsList) {
+                    res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+                } else {
+                    activeSalonsList.forEach(function(v) {
+                        v.isDeleted = undefined;
+                        v.isreviewadded = undefined;
+                        v.isservicesadded = undefined;
+                        v.employees = undefined;
+                        v.location = undefined;
+                    });
 
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.ADDED_SUCCESS,
-              activeSalonsList
-            )
-          );
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.ADDED_SUCCESS,
+                            activeSalonsList
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  getActiveSalonsList().then(function() {});
+    getActiveSalonsList().then(function() {});
 }
 
 /**
@@ -629,49 +626,49 @@ function getActiveSalonsList(req, res) {
  */
 
 function fetchActiveUsersCount(req, res) {
-  console.log("INSEID", req.body);
+    console.log("INSEID", req.body);
 
-  async function fetchActiveUsersCount() {
-    try {
-      if (req.body && req.body.type) {
-        if (req.body.type === "user") {
-          let roleCondition = {
-            name: "user"
-          };
-          let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-          console.log("roleUID", fetchRoleId);
-          let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
-          console.log(roleId);
+    async function fetchActiveUsersCount() {
+        try {
+            if (req.body && req.body.type) {
+                if (req.body.type === "user") {
+                    let roleCondition = {
+                        name: "user"
+                    };
+                    let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+                    console.log("roleUID", fetchRoleId);
+                    let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
+                    console.log(roleId);
 
-          let condition = {
-            isActive: true,
-            isDeleted: false,
-            role_id: roleId
-          };
-          let usersCount = await commonQuery.findCount(users, condition);
-          if (!usersCount) {
-            res.json(
-              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    let condition = {
+                        isActive: true,
+                        isDeleted: false,
+                        role_id: roleId
+                    };
+                    let usersCount = await commonQuery.findCount(users, condition);
+                    if (!usersCount) {
+                        res.json(
+                            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                        );
+                    } else {
+                        res.json(
+                            Response(
+                                constant.SUCCESS_CODE,
+                                constant.FETCHED_ALL_DATA,
+                                usersCount
+                            )
+                        );
+                    }
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
             );
-          } else {
-            res.json(
-              Response(
-                constant.SUCCESS_CODE,
-                constant.FETCHED_ALL_DATA,
-                usersCount
-              )
-            );
-          }
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
 
-  fetchActiveUsersCount().then(function() {});
+    fetchActiveUsersCount().then(function() {});
 }
 /**
  * Function is use to Fetch Active Salon List
@@ -682,102 +679,101 @@ function fetchActiveUsersCount(req, res) {
  */
 
 function fetchActiveSalonsCount(req, res) {
-  console.log("SalonsCount", req.body);
+    console.log("SalonsCount", req.body);
 
-  async function fetchActiveSalonsCount() {
-    try {
-      if (req.body && req.body.type) {
-        if (req.body.type === "salon") {
-          // let roleCondition = {
-          //     name: "salon"
-          // };
-          // let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-          // console.log("roleUID", fetchRoleId);
-          // let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
+    async function fetchActiveSalonsCount() {
+        try {
+            if (req.body && req.body.type) {
+                if (req.body.type === "salon") {
+                    // let roleCondition = {
+                    //     name: "salon"
+                    // };
+                    // let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+                    // console.log("roleUID", fetchRoleId);
+                    // let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
 
-          let condition = {
-            isActive: true,
-            isDeleted: false,
-            isApproved: true,
-            isDeclined: false
-            // role_id: roleId
-          };
-          let salonsCount = await commonQuery.findCount(salons, condition);
-          console.log("SalonCount", salonsCount);
-          if (!salonsCount) {
-            res.json(
-              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    let condition = {
+                        isActive: true,
+                        isDeleted: false,
+                        isApproved: true,
+                        isDeclined: false
+                            // role_id: roleId
+                    };
+                    let salonsCount = await commonQuery.findCount(salons, condition);
+                    console.log("SalonCount", salonsCount);
+                    if (!salonsCount) {
+                        res.json(
+                            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                        );
+                    } else {
+                        res.json(
+                            Response(
+                                constant.SUCCESS_CODE,
+                                constant.FETCHED_ALL_DATA,
+                                salonsCount
+                            )
+                        );
+                    }
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
             );
-          } else {
-            res.json(
-              Response(
-                constant.SUCCESS_CODE,
-                constant.FETCHED_ALL_DATA,
-                salonsCount
-              )
-            );
-          }
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
 
-  fetchActiveSalonsCount().then(function() {});
+    fetchActiveSalonsCount().then(function() {});
 }
 
 function fetchActiveUsersList(req, res) {
-  let pageSize =
-    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
-  async function fetchActiveUsersList() {
-    try {
-      if (req.body && req.body.type) {
-        if (req.body.type === "user") {
-          let roleCondition = {
-            name: "user"
-          };
-          let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-          console.log("roleUID", fetchRoleId);
-          let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
-          console.log(roleId);
+    let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+    async function fetchActiveUsersList() {
+        try {
+            if (req.body && req.body.type) {
+                if (req.body.type === "user") {
+                    let roleCondition = {
+                        name: "user"
+                    };
+                    let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+                    console.log("roleUID", fetchRoleId);
+                    let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
+                    console.log(roleId);
 
-          let condition = {
-            isActive: true,
-            isDeleted: false,
-            role_id: roleId
-          };
-          let usersList = await commonQuery.fetch_all_paginated(
-            users,
-            condition,
-            pageSize,
-            currentPage
-          );
-          if (!usersList) {
-            res.json(
-              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    let condition = {
+                        isActive: true,
+                        isDeleted: false,
+                        role_id: roleId
+                    };
+                    let usersList = await commonQuery.fetch_all_paginated(
+                        users,
+                        condition,
+                        pageSize,
+                        currentPage
+                    );
+                    if (!usersList) {
+                        res.json(
+                            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                        );
+                    } else {
+                        res.json(
+                            Response(
+                                constant.SUCCESS_CODE,
+                                constant.FETCHED_ALL_DATA,
+                                usersList
+                            )
+                        );
+                    }
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
             );
-          } else {
-            res.json(
-              Response(
-                constant.SUCCESS_CODE,
-                constant.FETCHED_ALL_DATA,
-                usersList
-              )
-            );
-          }
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  fetchActiveUsersList().then(function() {});
+    fetchActiveUsersList().then(function() {});
 }
 /**
  * Function is use to remove categories
@@ -788,40 +784,42 @@ function fetchActiveUsersList(req, res) {
  */
 
 function removeCategories(req, res) {
-  async function removeCategories() {
-    try {
-      if (req.body && req.body.category_id) {
-        let condition = { _id: mongoose.Types.ObjectId(req.body.category_id) };
-        let updateCondition = {
-          isActive: false,
-          isDeleted: true
-        };
-        let deleteCategory = await commonQuery.updateOneDocument(
-          categories,
-          condition,
-          updateCondition
-        );
-        if (!deleteCategory) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.DELETED_SUCCESS,
-              deleteCategory
-            )
-          );
+    async function removeCategories() {
+        try {
+            if (req.body && req.body.category_id) {
+                let condition = {
+                    _id: mongoose.Types.ObjectId(req.body.category_id)
+                };
+                let updateCondition = {
+                    isActive: false,
+                    isDeleted: true
+                };
+                let deleteCategory = await commonQuery.updateOneDocument(
+                    categories,
+                    condition,
+                    updateCondition
+                );
+                if (!deleteCategory) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.DELETED_SUCCESS,
+                            deleteCategory
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  removeCategories().then(function() {});
+    removeCategories().then(function() {});
 }
 /**
  * Function is use to get list of archived categories
@@ -832,36 +830,39 @@ function removeCategories(req, res) {
  */
 
 function getArchivedCategories(req, res) {
-  console.log(req.body);
-  async function getArchivedCategories() {
-    try {
-      if (req.body && req.body.type === "archive-categories") {
-        let condition = { isActive: false, isDeleted: true};
-        let archivedCategories = await commonQuery.fetch_all(
-          categories,
-          condition
-        );
-        if (!archivedCategories) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.DELETED_SUCCESS,
-              archivedCategories
-            )
-          );
+    console.log(req.body);
+    async function getArchivedCategories() {
+        try {
+            if (req.body && req.body.type === "archive-categories") {
+                let condition = {
+                    isActive: false,
+                    isDeleted: true
+                };
+                let archivedCategories = await commonQuery.fetch_all(
+                    categories,
+                    condition
+                );
+                if (!archivedCategories) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.DELETED_SUCCESS,
+                            archivedCategories
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  getArchivedCategories().then(function() {});
+    getArchivedCategories().then(function() {});
 }
 
 /**
@@ -873,62 +874,64 @@ function getArchivedCategories(req, res) {
  */
 
 function getAdminCategoriesList(req, res) {
-  console.log(req.body);
-  let adminCount;
-  let pageSize =
-    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
-  async function getAdminCategoriesList() {
-    try {
-      if (req.body && req.body.type === "admin-categories") {
-        let condition = { isActive: true, isDeleted: false };
+    console.log(req.body);
+    let adminCount;
+    let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+    async function getAdminCategoriesList() {
+        try {
+            if (req.body && req.body.type === "admin-categories") {
+                let condition = {
+                    isActive: true,
+                    isDeleted: false
+                };
 
-        let adminCategoriesCount = await commonQuery.findCount(
-          categories,
-          condition
-        );
-        if (!adminCategoriesCount) {
-          adminCount = 0;
-        } else {
-          adminCount = adminCategoriesCount;
+                let adminCategoriesCount = await commonQuery.findCount(
+                    categories,
+                    condition
+                );
+                if (!adminCategoriesCount) {
+                    adminCount = 0;
+                } else {
+                    adminCount = adminCategoriesCount;
+                }
+                console.log("ccc", adminCount);
+
+                let adminCategories = await commonQuery.fetch_all_paginated(
+                    categories,
+                    condition,
+                    pageSize,
+                    currentPage
+                );
+                if (!adminCategories) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    adminCategories.forEach(function(c) {
+                        c.services = undefined;
+                    });
+                    let dataToPass = {
+                        count: adminCount,
+                        data: adminCategories
+                    };
+
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.FETCHED_ALL_DATA,
+                            dataToPass
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-        console.log("ccc", adminCount);
-
-        let adminCategories = await commonQuery.fetch_all_paginated(
-          categories,
-          condition,
-          pageSize,
-          currentPage
-        );
-        if (!adminCategories) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        } else {
-          adminCategories.forEach(function(c) {
-            c.services = undefined;
-          });
-          let dataToPass = {
-            count: adminCount,
-            data: adminCategories
-          };
-
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.FETCHED_ALL_DATA,
-              dataToPass
-            )
-          );
-        }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  getAdminCategoriesList().then(function() {});
+    getAdminCategoriesList().then(function() {});
 }
 
 /**
@@ -940,37 +943,42 @@ function getAdminCategoriesList(req, res) {
  */
 
 function removeRole(req, res) {
-  async function removeRole() {
-    try {
-      if (req.body && req.body.role_id) {
-        let condition = { _id: mongoose.Types.ObjectId(req.body.role_id) };
-        let updateCondition = { status: false, isDeleted: true };
-        let removeRole = await commonQuery.updateOneDocument(
-          roles,
-          condition,
-          updateCondition
-        );
-        if (!removeRole) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.DELETED_SUCCESS,
-              removeRole
-            )
-          );
+    async function removeRole() {
+        try {
+            if (req.body && req.body.role_id) {
+                let condition = {
+                    _id: mongoose.Types.ObjectId(req.body.role_id)
+                };
+                let updateCondition = {
+                    status: false,
+                    isDeleted: true
+                };
+                let removeRole = await commonQuery.updateOneDocument(
+                    roles,
+                    condition,
+                    updateCondition
+                );
+                if (!removeRole) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.DELETED_SUCCESS,
+                            removeRole
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-  removeRole().then(function() {});
+    removeRole().then(function() {});
 }
 
 /**
@@ -982,33 +990,37 @@ function removeRole(req, res) {
  */
 
 function updateRole(req, res) {
-  async function updateRole() {
-    try {
-      if (req.body && req.body._id) {
-        let condition = { _id: mongoose.Types.ObjectId(req.body._id) };
-        let updateCondition = { name: req.body.name };
-        let updatedRole = await commonQuery.updateOneDocument(
-          roles,
-          condition,
-          updateCondition
-        );
-        if (!updatedRole) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        } else {
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.USER_UPDATED, updatedRole)
-          );
+    async function updateRole() {
+        try {
+            if (req.body && req.body._id) {
+                let condition = {
+                    _id: mongoose.Types.ObjectId(req.body._id)
+                };
+                let updateCondition = {
+                    name: req.body.name
+                };
+                let updatedRole = await commonQuery.updateOneDocument(
+                    roles,
+                    condition,
+                    updateCondition
+                );
+                if (!updatedRole) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    res.json(
+                        Response(constant.SUCCESS_CODE, constant.USER_UPDATED, updatedRole)
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-updateRole().then(function(){});
+    updateRole().then(function() {});
 }
 
 /**
@@ -1020,33 +1032,42 @@ updateRole().then(function(){});
  */
 
 function awakeCategory(req, res) {
-  async function awakeCategory() {
-    try {
-      if (req.body && req.body._id) {
-        let condition = { _id: mongoose.Types.ObjectId(req.body._id) };
-        let updateCondition = { isActive:true,isDeleted:false};
-        let awakeCategories = await commonQuery.updateOneDocument(
-          categories,
-          condition,
-          updateCondition
-        );
-        if (!awakeCategories) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        } else {
-          res.json(
-            Response(constant.SUCCESS_CODE, constant.USER_UPDATED, awakeCategories)
-          );
+    async function awakeCategory() {
+        try {
+            if (req.body && req.body._id) {
+                let condition = {
+                    _id: mongoose.Types.ObjectId(req.body._id)
+                };
+                let updateCondition = {
+                    isActive: true,
+                    isDeleted: false
+                };
+                let awakeCategories = await commonQuery.updateOneDocument(
+                    categories,
+                    condition,
+                    updateCondition
+                );
+                if (!awakeCategories) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.USER_UPDATED,
+                            awakeCategories
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-      }
-    } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
     }
-  }
-awakeCategory().then(function(){});
+    awakeCategory().then(function() {});
 }
 
 /**
@@ -1057,60 +1078,59 @@ awakeCategory().then(function(){});
  * @smartData Enterprises (I) Ltd
  */
 
-function getActiveServices(req, res) { 
-  console.log("INSID",req.body);
-  let servicesCount;
-   let pageSize =
-    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+function getActiveServices(req, res) {
+    console.log("INSID", req.body);
+    let servicesCount;
+    let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
 
-  async function getActiveServices(){ 
-
-    try { 
-      if (req.body.type == "services") { 
-
-        let condition = { isActive: true, isDeleted: false };
-        servicesCount = await commonQuery.findCount(services, condition);
-        if (servicesCount) {
-          servicesCount = servicesCount;
+    async function getActiveServices() {
+        try {
+            if (req.body.type == "services") {
+                let condition = {
+                    isActive: true,
+                    isDeleted: false
+                };
+                servicesCount = await commonQuery.findCount(services, condition);
+                if (servicesCount) {
+                    servicesCount = servicesCount;
+                } else {
+                    servicesCount = 0;
+                }
+                let servicesList = await commonQuery.fetch_all_paginated(
+                    services,
+                    condition,
+                    pageSize,
+                    currentPage
+                );
+                console.log("ServiceList", servicesList);
+                if (!servicesList) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    let dataToPass = {
+                        data: servicesList,
+                        count: servicesCount
+                    };
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.FETCHED_ALL_DATA,
+                            dataToPass
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-        else { 
-          servicesCount = 0;
-        }
-        let servicesList =  await commonQuery.fetch_all_paginated(services,condition,pageSize,currentPage)
-        console.log("ServiceList", servicesList);
-        if (!servicesList) {
-    res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        }
-        else { 
-          let dataToPass = {
-            data: servicesList,
-            count:servicesCount
-          }
-        res.json(
-            Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, dataToPass)
-          );
-        }
-
-      }
-
-
     }
-    catch (error) { 
-   return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
-    }
 
-
-  }
-
-  getActiveServices().then(function () { })
-
+    getActiveServices().then(function() {});
 }
-
 
 /**
  * Function is use to fetch All Admins
@@ -1120,58 +1140,255 @@ function getActiveServices(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 
-function getActiveAdminList(req, res) { 
-  console.log("INSID",req.body);
-  let AdminCount;
-   let pageSize =
-    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
-  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+function getActiveAdminList(req, res) {
+    console.log("INSID", req.body);
+    let AdminCount;
+    let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
 
-  async function getActiveAdminList(){ 
-
-    try { 
-      if (req.body.type == "admin") { 
-        
-
-        let condition = { isActive: true, isDeleted: false };
-        AdminCount = await commonQuery.findCount(services, condition);
-        if (AdminCount) {
-          AdminCount = AdminCount;
+    async function getActiveAdminList() {
+        try {
+            if (req.body.type == "admin") {
+                let condition = {
+                    isActive: true,
+                    isDeleted: false
+                };
+                AdminCount = await commonQuery.findCount(services, condition);
+                if (AdminCount) {
+                    AdminCount = AdminCount;
+                } else {
+                    AdminCount = 0;
+                }
+                let servicesList = await commonQuery.fetch_all_paginated(
+                    services,
+                    condition,
+                    pageSize,
+                    currentPage
+                );
+                console.log("ServiceList", servicesList);
+                if (!servicesList) {
+                    res.json(
+                        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                    );
+                } else {
+                    let dataToPass = {
+                        data: servicesList,
+                        count: servicesCount
+                    };
+                    res.json(
+                        Response(
+                            constant.SUCCESS_CODE,
+                            constant.FETCHED_ALL_DATA,
+                            dataToPass
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
         }
-        else { 
-          AdminCount = 0;
-        }
-        let servicesList =  await commonQuery.fetch_all_paginated(services,condition,pageSize,currentPage)
-        console.log("ServiceList", servicesList);
-        if (!servicesList) {
-    res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
-          );
-        }
-        else { 
-          let dataToPass = {
-            data: servicesList,
-            count:servicesCount
-          }
-        res.json(
-            Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, dataToPass)
-          );
-        }
-
-      }
-
-
     }
-    catch (error) { 
-   return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
-    }
 
-
-  }
-
-  getActiveAdminList().then(function () { })
-
+    getActiveAdminList().then(function() {});
 }
 
+/**
+ * Function is use to fetch All Active Users List
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function fetchActiveUsersAll(req, res) {
+    console.log("www", req.body);
+    let model;
+    let count;
+    let countCondition;
+    let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+    let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+    async function fetchActiveUsersAll() {
+        try {
+            if (req.body && req.body.type) {
+                console.log(req.body.type);
+                if (req.body.type) {
+                    let roleCondition = {
+                        name: req.body.type
+                    };
+
+                    if (req.body.type == "user") {
+                        countCondition = {
+                            isActive: true,
+                            isDeleted: false
+                        };
+                        model = users;
+                    } else if (req.body.type == "salon") {
+                        countCondition = {
+                            isActive: true,
+                            isDeleted: false,
+                            isApproved: true
+                        };
+                        model = salons;
+                    } else if (req.body.type == "admin") {
+                        countCondition = {
+                            isActive: true,
+                            isDeleted: false
+                        };
+                        model = users;
+                    }
+
+                    let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+                    console.log("roleUID", fetchRoleId);
+                    let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
+                    console.log(roleId);
+
+                    let condition = {
+                        isActive: true,
+                        isDeleted: false,
+                        role_id: roleId
+                    };
+
+                    let fetchCount = await commonQuery.findCount(model, condition);
+                    if (fetchCount) {
+                        count = fetchCount;
+                    }
+                    let usersList = await commonQuery.fetch_all_paginated(
+                        model,
+                        condition,
+                        pageSize,
+                        currentPage
+                    );
+                    if (!usersList) {
+                        res.json(
+                            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+                        );
+                    } else {
+                        let dataToPass = {
+                            data: usersList,
+                            count: count
+                        };
+                        res.json(
+                            Response(
+                                constant.SUCCESS_CODE,
+                                constant.FETCHED_ALL_DATA,
+                                dataToPass
+                            )
+                        );
+                    }
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+            );
+        }
+    }
+    fetchActiveUsersAll().then(function() {});
+}
+
+/**
+ * Function is use to restore password if forgotten
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
+function forgotPassword(req, res) {
+    async function forgot_password() {
+        try {
+            if (!req.body.email) {
+                res.json(
+                    Error(
+                        constant.statusCode.error,
+                        constant.validateMsg.requiredFieldsMissing,
+                        constant.validateMsg.requiredFieldsMissing
+                    )
+                );
+            } else if (req.body.email && !validator.isEmail(req.body.email)) {
+                res.json(
+                    Error(
+                        constant.statusCode.error,
+                        constant.validateMsg.invalidEmail,
+                        constant.validateMsg.invalidEmail
+                    )
+                );
+            } else {
+                var model = users;
+                var condition = {
+                    email: req.body.email,
+                    isDeleted: false,
+                    isActive: true
+                };
+                var userObj = await query.findoneData(model, condition, fields);
+                console.log("userObjuserObj++++++++", userObj);
+                if (userObj.data) {
+                    var condition = {
+                        _id: userObj.data._id
+                    };
+                    var updateData = {
+                        resetkey: ""
+                    };
+                    updateData.resetkey = utility.uuid.v1();
+                    console.log("data for resetkey updateData", updateData);
+
+                    let updateKey = await query.updateOneDocument(
+                        model,
+                        condition,
+                        updateData
+                    );
+                    if (updateKey.data._id) {
+                        var baseUrl = config.baseUrl;
+                        var userMailData = {
+                            userId: userObj.data._id,
+                            email: userObj.data.email ? userObj.data.email : "",
+                            firstName: userObj.data.firstName ? userObj.data.firstName : "",
+                            lastName: userObj.data.lastName ? userObj.data.lastName : "",
+                            userName: userObj.data.userName ? userObj.data.userName : "",
+                            link: baseUrl + "#/create-password/" + updateKey.data.resetkey
+                        };
+                        let obj = {
+                            data: userMailData,
+                            mailType: constant.varibleType.FORGET_PASSWORD //"Forget Password"
+                        };
+                        console.log("data for forget password==========", obj);
+                        let sendMail = await sendEmailFunction(obj);
+                        if (sendMail) {
+                            console.log("sendMailsendMail==========");
+                            res.json(
+                                Response(
+                                    constant.statusCode.ok,
+                                    constant.messages.forgotPasswordSuccess
+                                )
+                            );
+                        } else {
+                            res.json(
+                                Response(
+                                    constant.statusCode.internalservererror,
+                                    constant.validateMsg.internalError
+                                )
+                            );
+                        }
+                    }
+                } else {
+                    res.json(
+                        Response(
+                            constant.statusCode.notFound,
+                            constant.validateMsg.emailNotExist
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            return res.json(
+                Response(
+                    constant.statusCode.notFound,
+                    constant.validateMsg.notificationNotSent
+                )
+            );
+        }
+    }
+    forgot_password().then(data => {});
+}

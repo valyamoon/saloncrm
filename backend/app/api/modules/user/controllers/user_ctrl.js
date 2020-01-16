@@ -422,35 +422,31 @@ function registerUser(req, res) {
 //  */
 
 function login(req, res) {
-  console.log("inHJEre",req.body);
+  console.log("inHJEre", req.body);
   async function login() {
     try {
       if (req.body.email && req.body.password) {
-       // let isactivecondition;
+        // let isactivecondition;
         // if(req.body.role === "salon"){
         //   isactivecondition = false;
         // }
         // else if(req.body.role === 'admin'){
         //   isactivecondition = true;
         // }
-        let roleCondition ={name:req.body.role};
-        let fetchRoleId = await commonQuery.findoneData(roles,roleCondition);
-        console.log("roleUID",fetchRoleId);
-        let roleId =  mongoose.Types.ObjectId(fetchRoleId._id);
+        let roleCondition = { name: req.body.role };
+        let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
+        console.log("roleUID", fetchRoleId);
+        let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
         console.log(roleId);
 
         let conditionToCheck = {
           email: req.body.email,
           isDeleted: false,
-          role_id:roleId
+          role_id: roleId
         };
 
-   
-
-
-
         let findUser = await commonQuery.findoneData(users, conditionToCheck);
-        console.log("findUser",findUser); 
+        console.log("findUser", findUser);
 
         if (!findUser) {
           res.json(
@@ -473,7 +469,7 @@ function login(req, res) {
               let params = {
                 _id: findUser._id
               };
-              let token = jwt.sign(params, "saloncrm", {
+              let token = jwt.sign(params, jwtKey, {
                 expiresIn: "1h"
               });
 

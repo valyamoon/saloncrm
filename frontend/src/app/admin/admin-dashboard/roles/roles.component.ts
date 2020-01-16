@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
-import {ConfirmationComponent} from '../confirmation/confirmation.component';
+import { ConfirmationComponent } from "../confirmation/confirmation.component";
 import { ToastrService } from "ngx-toastr";
-import {MatDialog} from '@angular/material';
+import { MatDialog } from "@angular/material";
 
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
@@ -25,11 +25,11 @@ export class RolesComponent implements OnInit {
   adminCategoriesCount: any;
   page: any = 1;
   displayedColumns = ["name", "action"];
-  disabled: true;
+  disabled: boolean = true;
   modalHeaderText: any;
   isAdd: boolean;
   role_id: any;
-  result:any;
+  result: any;
   public popoverTitle: string = "Popover title";
   public popoverMessage: string = "Popover description";
   public confirmClicked: boolean = false;
@@ -72,9 +72,6 @@ export class RolesComponent implements OnInit {
     console.log(this.isConfirm);
     this.isDeleteDialog = false;
   }
-
-
-
 
   fetchRoles() {
     let dataToPass = {
@@ -123,35 +120,32 @@ export class RolesComponent implements OnInit {
     this.isAddModal = true;
   }
 
-  deleteRole(data):void {
-
-      let dataToPass = {
-        role_id: data._id
-      };
+  deleteRole(data): void {
+    let dataToPass = {
+      role_id: data._id
+    };
 
     this.admnServ.deleteRoles(dataToPass).subscribe(
-   
       data => {
-             console.log("INS ERE",data)
-          if (data["code"] === 200) {
-            this.toastrServ.success("Role Deleted", "Success", {
-              timeOut: 2000
-            });
+        console.log("INS ERE", data);
+        if (data["code"] === 200) {
+          this.toastrServ.success("Role Deleted", "Success", {
+            timeOut: 2000
+          });
 
-            this.fetchRoles();
-          } else {
-            this.toastrServ.error("Failed To Delete", "Error", {
-              timeOut: 2000
-            });
-          }
-        },
-        error => {
-          this.toastrServ.error("Server Error", error.error, {
+          this.fetchRoles();
+        } else {
+          this.toastrServ.error("Failed To Delete", "Error", {
             timeOut: 2000
           });
         }
-      );
-    
+      },
+      error => {
+        this.toastrServ.error("Server Error", error.error, {
+          timeOut: 2000
+        });
+      }
+    );
   }
 
   dismissModal() {
