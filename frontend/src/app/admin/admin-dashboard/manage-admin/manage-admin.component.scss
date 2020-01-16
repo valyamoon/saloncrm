@@ -34,12 +34,14 @@
       }
       form {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         margin-top: 5px;
         label {
           width: 45%;
           white-space: nowrap;
-          font-size: 15px;
+          margin: 5px;
+          font-size: 18px;
+          font-weight: 600;
           margin: 0;
         }
       }
