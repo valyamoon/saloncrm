@@ -1,1 +1,44 @@
-<p>manage-admin works!</p>
+<div class="admin-manage-wrapper">
+  <div class="header">
+    <app-header-text></app-header-text>
+    <div class="actionButtons">
+      <button class="btn btn-primary btn-sign-in" (click)="openRegisterModal()">
+        Register Admin
+      </button>
+    </div>
+  </div>
+
+  <div class="modalSection" *ngIf="isAddModal">
+    <div class="modal-content-area">
+      <div class="header">
+        {{ modalHeaderText }}
+      </div>
+      <form [formGroup]="registerAdminForm">
+        <label>Email:</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter Email"
+          formControlName="email"
+        />
+        <label>Password:</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter Email"
+          formControlName="password"
+        />
+      </form>
+      <button
+        class="btn btn-primary btn-sign-in"
+        [disabled]="registerAdminForm.invalid"
+        (click)="registerUser(registerAdminForm.value)"
+      >
+        Add
+      </button>
+      <button class="btn btn-primary btn-sign-in" (click)="dismissModal()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
