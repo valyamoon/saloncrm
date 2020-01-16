@@ -8,15 +8,19 @@
     display: flex;
     flex-direction: column;
     padding: 5px;
+    margin: 5px;
+    width: 20%;
     cursor: pointer;
     position: relative;
-    
+
     .bar1,
     .bar2,
     .bar3 {
       width: 35px;
       height: 5px;
-      background-color: #333;
+      background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%)
+        0% 0% no-repeat padding-box;
+      border-color: transparent;
       margin: 2px 0;
       transition: 0.4s;
     }
@@ -24,9 +28,11 @@
       -webkit-transform: rotate(-45deg) translate(-9px, 6px);
       transform: rotate(-45deg) translate(-9px, 4px);
     }
-    
-    .bar2.change {opacity: 0;}
-    
+
+    .bar2.change {
+      opacity: 0;
+    }
+
     .bar3.change {
       -webkit-transform: rotate(45deg) translate(-8px, -8px);
       transform: rotate(45deg) translate(-8px, -4px);
@@ -37,27 +43,26 @@
     margin-top: 5px;
     justify-content: space-between;
 
-
     .selectorSection {
       padding: 0;
       width: 15%;
-      background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+      background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%)
+        0% 0% no-repeat padding-box;
       border-color: transparent;
       position: relative;
-      transition: 1s; 
+      transition: 1s;
       margin-top: 5px;
-      max-height: 400px;
 
-     
+      min-height: 400px;
+
       .menus-app {
         display: flex;
         flex-direction: column;
 
-      
-
         .selectors {
           padding: 10px;
           color: white;
+          word-break: break-all;
           text-decoration: none;
         }
         .active {
@@ -69,16 +74,16 @@
         }
       }
     }
-    .selectorSection.danger{
+    .selectorSection.danger {
       right: 14%;
-     transition: 1s;
+      transition: 1s;
       width: 0;
     }
     .selectedSection {
       width: 85%;
     }
-    .selectedSection.fullShow{
-       width: 95% !important;
+    .selectedSection.fullShow {
+      width: 100% !important;
     }
   }
 }

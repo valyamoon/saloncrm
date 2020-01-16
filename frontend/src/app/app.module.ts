@@ -1,42 +1,39 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { MyInterceptor } from "./my-interceptor";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import {
+  MatPaginatorModule,
+  MatTableModule,
+  MatButtonModule,
+  MatDialogModule,
+  MatSelectModule,
+  MatOptionModule
+} from "@angular/material";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import{ReactiveFormsModule,FormsModule} from '@angular/forms';
-import{MatPaginatorModule,MatTableModule} from '@angular/material';
-
-
-import {ToastrModule} from 'ngx-toastr';
-import {} from 'googlemaps';
-import { AgmCoreModule } from '@agm/core'; 
+import { ToastrModule } from "ngx-toastr";
+import { } from "googlemaps";
+import { AgmCoreModule } from "@agm/core";
 import LatLng = google.maps.LatLng;
- import {LocationPickerModule} from "ng-location-picker";
+import { LocationPickerModule } from "ng-location-picker";
 
-
-import { SalonComponent } from './salon/salon.component';
-import { UserComponent } from './user/user.component';
-import { AdminComponent } from './admin/admin.component';
-import { HttpClientModule } from '@angular/common/http';
-import{RouterModule} from '@angular/router';
-
+import { SalonComponent } from "./salon/salon.component";
+import { UserComponent } from "./user/user.component";
+import { AdminComponent } from "./admin/admin.component";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SalonComponent,
-    UserComponent,
-    AdminComponent,
-
-   
-  ],
+  declarations: [AppComponent, SalonComponent, UserComponent, AdminComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg'
+      apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg"
     }),
     FormsModule,
     ToastrModule.forRoot(),
@@ -44,9 +41,19 @@ import{RouterModule} from '@angular/router';
     BrowserAnimationsModule,
     RouterModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatOptionModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

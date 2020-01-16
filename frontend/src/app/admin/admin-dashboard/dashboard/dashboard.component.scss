@@ -4,14 +4,13 @@ table {
 #cards{
     display: flex;
     justify-content:space-between;
-    margin-bottom: 15px;
-    height: 4em;
+ 
 
     .card{
         flex-grow: 1;
         z-index: 0;
         width: 30%;
-        height: 4em;
+  
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -22,7 +21,12 @@ table {
         .cardText{
             color:white;
             font-weight: 600;
-            font-size: 18px;
+            text-align: center;
+            padding-top: 5px;
+            font-size: 12px;
+        }
+        h2{
+            color:white;
         }
 
     }
@@ -68,4 +72,31 @@ table {
 .btn-sign-in{
     width: 50% !important;
     margin-bottom: 5px;
+}
+.noRecords{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .noRec{
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 2em;
+    width: 50%;
+    }
+
+}
+.tablecustom{
+    margin-top: 15px;
+}
+.headerSection{
+
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    .header{
+        
+        color:purple;
+    }
 }

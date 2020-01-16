@@ -39,7 +39,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
     name
 ) {
     console.log(second_fromTable, second_localFieldVal, second_foreignFieldVal);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let pageSizes = pageSize;
         let currentPage = page;
 
@@ -124,7 +124,7 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
 ) {
 
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let pageSizes = pageSize;
         let currentPage = page;
 
@@ -134,7 +134,7 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
         //  if(dynamicQuery.length > 0){
         //   q["$and"].push({ services_id: {$in: dynamicQuery.split(",") }});
         // }
-        dynamicQuery.forEach(async function(v) {
+        dynamicQuery.forEach(async function (v) {
             serviceQuery.push(mongoose.Types.ObjectId(v));
             console.log(serviceQuery);
         });
@@ -142,64 +142,64 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
         console.log("qqq", serviceQuery);
 
         let postQuery = model.aggregate([{
-                $geoNear: {
-                    near: {
-                        type: "Point",
-                        coordinates: [long, lat]
-                    },
-                    spherical: true,
-                    distanceField: "dist.calculated",
-                    distanceMultiplier: 0.000621371
-                }
-            },
-            {
-                $match: {
-                    isservicesadded: "true"
-                }
-            },
-            {
-                $lookup: {
-                    from: "salonservices",
-                    localField: "_id",
-                    foreignField: "salon_id",
-                    as: "serviceArray"
-                }
-            },
+            $geoNear: {
+                near: {
+                    type: "Point",
+                    coordinates: [long, lat]
+                },
+                spherical: true,
+                distanceField: "dist.calculated",
+                distanceMultiplier: 0.000621371
+            }
+        },
+        {
+            $match: {
+                isservicesadded: "true"
+            }
+        },
+        {
+            $lookup: {
+                from: "salonservices",
+                localField: "_id",
+                foreignField: "salon_id",
+                as: "serviceArray"
+            }
+        },
 
-            {
-                $match: {
-                    "serviceArray.service_id": {
-                        $in: serviceQuery
-                    }
-                }
-            },
-
-            {
-                $lookup: {
-                    from: "services",
-                    localField: "serviceArray.service_id",
-                    foreignField: "_id",
-                    as: "servicesData"
-                }
-            },
-            {
-                $lookup: {
-                    from: "reviewratings",
-                    localField: "serviceArray.salon_id",
-                    foreignField: "salon_id",
-                    as: "reviewsRatings"
-                }
-            },
-
-            {
-                $project: {
-                    name: 1,
-                    salonaddress: 1,
-                    image: 1,
-                    avgRatings: { $avg: "$reviewsRatings.ratings" },
-                    distance: "$dist.calculated"
+        {
+            $match: {
+                "serviceArray.service_id": {
+                    $in: serviceQuery
                 }
             }
+        },
+
+        {
+            $lookup: {
+                from: "services",
+                localField: "serviceArray.service_id",
+                foreignField: "_id",
+                as: "servicesData"
+            }
+        },
+        {
+            $lookup: {
+                from: "reviewratings",
+                localField: "serviceArray.salon_id",
+                foreignField: "salon_id",
+                as: "reviewsRatings"
+            }
+        },
+
+        {
+            $project: {
+                name: 1,
+                salonaddress: 1,
+                image: 1,
+                avgRatings: { $avg: "$reviewsRatings.ratings" },
+                distance: "$dist.calculated"
+            }
+        }
         ]);
         console.log("postQuery", JSON.stringify(postQuery));
         if (pageSizes && currentPage) {
@@ -223,8 +223,8 @@ commonQuery.findoneData = async function findoneData(
     condition,
     fetchVal
 ) {
-    return new Promise(function(resolve, reject) {
-        model.findOne(condition, fetchVal, function(err, data) {
+    return new Promise(function (resolve, reject) {
+        model.findOne(condition, fetchVal, function (err, data) {
             if (err) {
                 console.log("Erroe @ 234", err);
                 reject(err);
@@ -239,13 +239,13 @@ commonQuery.findAll = async function findAll(model, condition, pageSize, page) {
     let user = "_id";
     let pageSizes = pageSize;
     let currentPage = page;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let postQuery = model.find(condition);
 
         if (pageSizes && currentPage) {
             postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
         }
-        postQuery.exec(function(err, data) {
+        postQuery.exec(function (err, data) {
             if (err) {
                 console.log("err---->>>>>", err);
                 reject(err);
@@ -262,7 +262,7 @@ commonQuery.findoneBySort = function findoneBySort(
     fetchVal,
     sortby
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (!sortby) {
             sortby = {
                 _id: -1
@@ -271,7 +271,7 @@ commonQuery.findoneBySort = function findoneBySort(
         model
             .findOne(condition, fetchVal)
             .sort(sortby)
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     console.log("err---->>>>>", err);
                     reject(err);
@@ -290,13 +290,13 @@ commonQuery.findoneBySort = function findoneBySort(
  * Created Date 22-Jan-2018
  */
 commonQuery.lastInsertedId = function lastInsertedId(model) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .findOne()
             .sort({
                 id: -1
             })
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     resolve(0);
                 } else {
@@ -311,11 +311,11 @@ commonQuery.lastInsertedId = function lastInsertedId(model) {
     });
 };
 commonQuery.sortAllData = function sortAllData(model, field_name) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .find()
             .sort(field_name)
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     reject(err);
                 } else {
@@ -325,13 +325,13 @@ commonQuery.sortAllData = function sortAllData(model, field_name) {
     });
 };
 commonQuery.sortAllDataDesc = function sortAllDataDesc(model, field_name) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let to_sort = {};
         to_sort[field_name] = -1;
         model
             .find()
             .sort(to_sort)
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     reject(err);
                 } else {
@@ -341,13 +341,13 @@ commonQuery.sortAllDataDesc = function sortAllDataDesc(model, field_name) {
     });
 };
 commonQuery.lastInsertedIdPermissonId = function lastInsertedId(model) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .findOne()
             .sort({
                 permission_id: -1
             })
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     resolve(0);
                 } else {
@@ -371,8 +371,8 @@ commonQuery.lastInsertedIdPermissonId = function lastInsertedId(model) {
  * Created Date 22-Jan-2018
  */
 commonQuery.InsertIntoCollection = function InsertIntoCollection(model, obj) {
-    return new Promise(function(resolve, reject) {
-        new model(obj).save(function(err, insertedData) {
+    return new Promise(function (resolve, reject) {
+        new model(obj).save(function (err, insertedData) {
             if (err) {
                 console.log("errrrrrrrr", err);
                 reject(err);
@@ -395,18 +395,18 @@ commonQuery.updateOneDocument = function updateOneDocument(
     updateCond,
     updateData
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         //console.log("Inside",updateCond,updateData);
         model
             .findOneAndUpdate(
                 updateCond, {
-                    $set: updateData
-                }, {
-                    new: true
-                }
+                $set: updateData
+            }, {
+                new: true
+            }
             )
             .lean()
-            .exec(function(err, result) {
+            .exec(function (err, result) {
                 //console.log("HHHHHH", err, result);
                 if (err) {
                     console.log("errerrerrerrerrerr", err);
@@ -419,13 +419,13 @@ commonQuery.updateOneDocument = function updateOneDocument(
     });
 };
 commonQuery.updateOne = function updateOne(model, updateCond, updateData) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         model
             .updateOne(updateCond, {
                 $set: updateData
             })
             .lean()
-            .exec(async function(err, result) {
+            .exec(async function (err, result) {
                 // console.log("HHHHHH", err, result);
                 if (err) {
                     console.log("errerrerrerrerrerr", err);
@@ -479,17 +479,17 @@ commonQuery.updateAllDocument = function updateAllDocument(
     updateCond,
     userUpdateData
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .update(
                 updateCond, {
-                    $set: userUpdateData
-                }, {
-                    multi: true
-                }
+                $set: userUpdateData
+            }, {
+                multi: true
+            }
             )
             .lean()
-            .exec(function(err, userInfoData) {
+            .exec(function (err, userInfoData) {
                 if (err) {
                     resolve(0);
                 } else {
@@ -503,13 +503,13 @@ commonQuery.updateMany = function updateMany(
     updateCond,
     userUpdateData
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .updateMany(updateCond, {
                 $set: userUpdateData
             })
             .lean()
-            .exec(function(err, userInfoData) {
+            .exec(function (err, userInfoData) {
                 if (err) {
                     resolve(0);
                 } else {
@@ -528,8 +528,8 @@ commonQuery.updateMany = function updateMany(
  * Created Date 23-Jan-2018
  */
 commonQuery.fetch_all = function fetch_all(model, cond = {}, fetchd = {}) {
-    return new Promise(function(resolve, reject) {
-        model.find(cond, fetchd).exec(function(err, userData) {
+    return new Promise(function (resolve, reject) {
+        model.find(cond, fetchd).exec(function (err, userData) {
             // console.log("userData", userData);
             if (err) {
                 console.log("errrrrrr", err);
@@ -545,11 +545,11 @@ commonQuery.fetch_all_by_sort = function fetch_all_by_sort(
     cond = {},
     fetchd = {}
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .find(cond, fetchd)
             .sort("createdAt")
-            .exec(function(err, userData) {
+            .exec(function (err, userData) {
                 if (err) {
                     console.log("errrrrrr", err);
                     reject(err);
@@ -560,8 +560,8 @@ commonQuery.fetch_all_by_sort = function fetch_all_by_sort(
     });
 };
 commonQuery.fetch_one = function fetch_one(model, cond = {}, fetchd = {}) {
-    return new Promise(function(resolve, reject) {
-        model.findOne(cond, fetchd).exec(function(err, userData) {
+    return new Promise(function (resolve, reject) {
+        model.findOne(cond, fetchd).exec(function (err, userData) {
             if (err) {
                 console.log("errrrrrr", err);
                 reject(err);
@@ -572,8 +572,8 @@ commonQuery.fetch_one = function fetch_one(model, cond = {}, fetchd = {}) {
     });
 };
 commonQuery.hard_delete = function hard_delete(model, cond = {}) {
-    return new Promise(function(resolve, reject) {
-        model.remove(cond).exec(function(err, Data) {
+    return new Promise(function (resolve, reject) {
+        model.remove(cond).exec(function (err, Data) {
             if (err) {
                 console.log("errrrrrr", err);
                 reject(err);
@@ -599,8 +599,8 @@ commonQuery.fetch_all_distinct = function fetch_all_distinct(
     ditinctVal,
     cond
 ) {
-    return new Promise(function(resolve, reject) {
-        model.distinct(ditinctVal, cond).exec(function(err, data) {
+    return new Promise(function (resolve, reject) {
+        model.distinct(ditinctVal, cond).exec(function (err, data) {
             if (err) {
                 reject(err);
             } else {
@@ -619,8 +619,8 @@ commonQuery.fetch_all_distinct = function fetch_all_distinct(
  * Created Date 23-Jan-2018
  */
 commonQuery.countData = function countData(model, cond) {
-    return new Promise(function(resolve, reject) {
-        model.countDocuments(cond).exec(function(err, userData) {
+    return new Promise(function (resolve, reject) {
+        model.countDocuments(cond).exec(function (err, userData) {
             if (err) {
                 reject(err);
             } else {
@@ -639,8 +639,8 @@ commonQuery.countData = function countData(model, cond) {
  * Created Date 23-Jan-2018
  */
 commonQuery.fetchAllLimit = function fetchAllLimit(query) {
-    return new Promise(function(resolve, reject) {
-        query.exec(function(err, userData) {
+    return new Promise(function (resolve, reject) {
+        query.exec(function (err, userData) {
             if (err) {
                 reject(err);
             } else {
@@ -663,18 +663,18 @@ commonQuery.uniqueInsertIntoCollection = function uniqueInsertIntoCollection(
     model,
     obj
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .update(
                 obj, {
-                    $setOnInsert: obj
-                }, {
-                    upsert: true,
-                    new: true,
-                    setDefaultsOnInsert: true
-                }
+                $setOnInsert: obj
+            }, {
+                upsert: true,
+                new: true,
+                setDefaultsOnInsert: true
+            }
             )
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     resolve(0);
                 } else {
@@ -693,8 +693,8 @@ commonQuery.uniqueInsertIntoCollection = function uniqueInsertIntoCollection(
  * Created Date 07-Feb-2018
  */
 commonQuery.deleteOneDocument = function deleteOneDocument(model, cond) {
-    return new Promise(function(resolve, reject) {
-        model.deleteOne(cond).exec(function(err, userData) {
+    return new Promise(function (resolve, reject) {
+        model.deleteOne(cond).exec(function (err, userData) {
             if (err) {
                 resolve(0);
             } else {
@@ -715,8 +715,8 @@ commonQuery.InsertManyIntoCollection = function InsertManyIntoCollection(
     model,
     obj
 ) {
-    return new Promise(function(resolve, reject) {
-        model.insertMany(obj, function(error, inserted) {
+    return new Promise(function (resolve, reject) {
+        model.insertMany(obj, function (error, inserted) {
             if (error) {
                 console.log("---------------------", error);
                 resolve(error);
@@ -739,8 +739,8 @@ commonQuery.deleteManyfromCollection = function deleteManyfromCollection(
     model,
     obj
 ) {
-    return new Promise(function(resolve, reject) {
-        model.deleteMany(obj, function(error, inserted) {
+    return new Promise(function (resolve, reject) {
+        model.deleteMany(obj, function (error, inserted) {
             if (error) {
                 console.log("Reject", error);
                 resolve(0);
@@ -752,7 +752,7 @@ commonQuery.deleteManyfromCollection = function deleteManyfromCollection(
     });
 };
 
-commonQuery.mongoObjectId = function(data) {
+commonQuery.mongoObjectId = function (data) {
     if (data && data !== null && data !== undefined) {
         return mongoose.Types.ObjectId(data);
     } else {
@@ -776,21 +776,21 @@ commonQuery.aggregateFunc = function aggregateFunc(
     foreignFieldVal,
     condition
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .aggregate([{
-                    $match: condition
-                },
-                {
-                    $lookup: {
-                        from: fromTable,
-                        localField: localFieldVal,
-                        foreignField: foreignFieldVal,
-                        as: "docs"
-                    }
+                $match: condition
+            },
+            {
+                $lookup: {
+                    from: fromTable,
+                    localField: localFieldVal,
+                    foreignField: foreignFieldVal,
+                    as: "docs"
                 }
+            }
             ])
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -812,81 +812,81 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
     fourth_fromTable
 ) {
     console.log(fromTable, localFieldVal, foreignFieldVal, condition);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .aggregate([{
-                    $match: condition
-                },
+                $match: condition
+            },
 
-                {
-                    $lookup: {
-                        from: "reviewratings",
-                        localField: "_id",
-                        foreignField: "salon_id",
-                        as: "ratings"
-                    }
-                },
+            {
+                $lookup: {
+                    from: "reviewratings",
+                    localField: "_id",
+                    foreignField: "salon_id",
+                    as: "ratings"
+                }
+            },
 
-                {
-                    $lookup: {
-                        from: "salonservices",
-                        localField: "_id",
-                        foreignField: "salon_id",
-                        as: "salonserv"
-                    }
-                },
+            {
+                $lookup: {
+                    from: "salonservices",
+                    localField: "_id",
+                    foreignField: "salon_id",
+                    as: "salonserv"
+                }
+            },
 
-                {
-                    $lookup: {
-                        from: "categories",
-                        localField: "salonserv.category_id",
-                        foreignField: "_id",
-                        as: "categoriess"
-                    }
-                },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "salonserv.category_id",
+                    foreignField: "_id",
+                    as: "categoriess"
+                }
+            },
 
-                {
-                    $unwind: "$categoriess"
-                },
+            {
+                $unwind: "$categoriess"
+            },
 
-                {
-                    $lookup: {
-                        from: "services",
-                        localField: "categoriess.services",
-                        foreignField: "_id",
-                        as: "servicess"
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "salonservices",
-                        localField: "servicess._id",
-                        foreignField: "service_id",
-                        as: "pricing"
-                    }
-                },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "categoriess.services",
+                    foreignField: "_id",
+                    as: "servicess"
+                }
+            },
+            {
+                $lookup: {
+                    from: "salonservices",
+                    localField: "servicess._id",
+                    foreignField: "service_id",
+                    as: "pricing"
+                }
+            },
 
-                {
-                    $group: {
-                        _id: "$name",
-                        categoryId: { $first: "$categoriess._id" },
-                        salonaddress: { $first: "$salonaddress" },
-                        contact: { $first: "$contact" },
-                        location: { $first: "$location" },
-                        avgRating: { $first: { $avg: "$ratings.ratings" } },
-                        opentime: { $first: "$opentime" },
-                        closetime: { $first: "$closetime" },
-                        image: { $first: "$image" },
-                        category: {
-                            $push: {
-                                category: "$categoriess",
-                                services: "$servicess",
-                                pricing: "$pricing"
-                            }
+            {
+                $group: {
+                    _id: "$name",
+                    categoryId: { $first: "$categoriess._id" },
+                    salonaddress: { $first: "$salonaddress" },
+                    contact: { $first: "$contact" },
+                    location: { $first: "$location" },
+                    avgRating: { $first: { $avg: "$ratings.ratings" } },
+                    opentime: { $first: "$opentime" },
+                    closetime: { $first: "$closetime" },
+                    image: { $first: "$image" },
+                    category: {
+                        $push: {
+                            category: "$categoriess",
+                            services: "$servicess",
+                            pricing: "$pricing"
                         }
                     }
                 }
-            ]).exec(function(err, data) {
+            }
+            ]).exec(function (err, data) {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -896,9 +896,9 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
                     let catergoriesTemp = [];
                     let finalArray = [];
 
-                    data.forEach(function(v) {
+                    data.forEach(function (v) {
                         console.log("V", v);
-                        v.category.forEach(function(c) {
+                        v.category.forEach(function (c) {
                             console.log("SSSSSSSSS", c);
                             catergoriesTemp.push({
                                 categories: c.category.catname,
@@ -937,29 +937,29 @@ commonQuery.doubleLookup = function doubleLookup(
     second_localFieldVal,
     second_foreignFieldVal
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .aggregate([{
-                    $match: condition
-                },
-                {
-                    $lookup: {
-                        from: fromTable,
-                        localField: localFieldVal,
-                        foreignField: foreignFieldVal,
-                        as: "docs"
-                    }
-                },
-                {
-                    $lookup: {
-                        from: second_fromTable,
-                        localField: second_localFieldVal,
-                        foreignField: second_foreignFieldVal,
-                        as: "dataa"
-                    }
+                $match: condition
+            },
+            {
+                $lookup: {
+                    from: fromTable,
+                    localField: localFieldVal,
+                    foreignField: foreignFieldVal,
+                    as: "docs"
                 }
+            },
+            {
+                $lookup: {
+                    from: second_fromTable,
+                    localField: second_localFieldVal,
+                    foreignField: second_foreignFieldVal,
+                    as: "dataa"
+                }
+            }
             ])
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     reject(err);
                 } else {
@@ -968,23 +968,23 @@ commonQuery.doubleLookup = function doubleLookup(
             });
     });
 };
-commonQuery.getNextSequenceValue = function(sequenceName) {
-    return new Promise(function(resolve, reject) {
+commonQuery.getNextSequenceValue = function (sequenceName) {
+    return new Promise(function (resolve, reject) {
         let query = {
             _id: sequenceName
         };
         counters
             .findOneAndUpdate(
                 query, {
-                    $inc: {
-                        sequence_value: 1
-                    }
-                }, {
-                    new: true
+                $inc: {
+                    sequence_value: 1
                 }
+            }, {
+                new: true
+            }
             )
             .lean()
-            .exec(function(err, updatedData) {
+            .exec(function (err, updatedData) {
                 if (err) {
                     console.log("errerrerrerrerrerr", err);
                     reject(0);
@@ -1004,11 +1004,11 @@ commonQuery.getNextSequenceValue = function(sequenceName) {
  * 20-jun-2019e 20-jun-2019
  */
 commonQuery.findData = function findData(model, cond, fetchVal) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let tempObj = {
             status: false
         };
-        model.find(cond, fetchVal, function(err, userData) {
+        model.find(cond, fetchVal, function (err, userData) {
             if (err) {
                 tempObj.error = err;
                 reject(tempObj);
@@ -1027,7 +1027,7 @@ commonQuery.fileUpload = function fileUpload(imagePath, buffer) {
             let tempObj = {
                 status: false
             };
-            fs.writeFile(imagePath, buffer, function(err) {
+            fs.writeFile(imagePath, buffer, function (err) {
                 if (err) {
                     tempObj.error = err;
                     reject(err);
@@ -1049,7 +1049,7 @@ commonQuery.fetch_all_paginated_price = function fetch_all_paginated_price(
     pageSize,
     page
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let pageSizes = pageSize;
         let currentPage = page;
 
@@ -1076,7 +1076,7 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
     pageSize,
     page
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let pageSizes = pageSize;
         let currentPage = page;
         console.log("pageSizes", cond);
@@ -1117,8 +1117,8 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
 };
 
 commonQuery.findCount = function findCount(model, condition) {
-    return new Promise(function(resolve, reject) {
-        model.countDocuments(condition).exec(function(err, res) {
+    return new Promise(function (resolve, reject) {
+        model.countDocuments(condition).exec(function (err, res) {
             if (err) {
                 reject(err);
             } else {
@@ -1140,7 +1140,7 @@ commonQuery.multiLookup = function multiLookup(
     third_fromTable,
     third_foreignFieldVal
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .aggregate([
                 { $match: condition },
@@ -1190,48 +1190,48 @@ commonQuery.multiLookup = function multiLookup(
             //   .aggregate([
             //     { $match:condition },
 
-        //     {
-        //       $lookup: {
-        //         from: fromTable,
-        //         localField: localFieldVal,
-        //         foreignField: foreignFieldVal,
-        //         as: "ratings"
-        //       }
-        //     },
-        //     {
-        //       $lookup: {
-        //         from: second_fromTable,
-        //         localField: second_localFieldVal,
-        //         foreignField: second_foreignFieldVal,
-        //         as: "categories"
-        //       }
-        //     },
-        //     {
-        //       $lookup: {
-        //         from: third_fromTable,
-        //         localField: "categories._id",
-        //         foreignField: third_foreignFieldVal,
-        //         as: "services"
-        //       }
-        //     },
-        //     {
-        //       $project: {
-        //         _id: 0,
-        //         name: "$name",
-        //         image: "$image",
-        //         address: "",
-        //         location: "$location",
-        //         categories: "$categories.catname"
-        //       }
-        //     }
-        //   ])
-        .exec(function(err, data) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        });
+            //     {
+            //       $lookup: {
+            //         from: fromTable,
+            //         localField: localFieldVal,
+            //         foreignField: foreignFieldVal,
+            //         as: "ratings"
+            //       }
+            //     },
+            //     {
+            //       $lookup: {
+            //         from: second_fromTable,
+            //         localField: second_localFieldVal,
+            //         foreignField: second_foreignFieldVal,
+            //         as: "categories"
+            //       }
+            //     },
+            //     {
+            //       $lookup: {
+            //         from: third_fromTable,
+            //         localField: "categories._id",
+            //         foreignField: third_foreignFieldVal,
+            //         as: "services"
+            //       }
+            //     },
+            //     {
+            //       $project: {
+            //         _id: 0,
+            //         name: "$name",
+            //         image: "$image",
+            //         address: "",
+            //         location: "$location",
+            //         categories: "$categories.catname"
+            //       }
+            //     }
+            //   ])
+            .exec(function (err, data) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
     });
 };
 
@@ -1242,27 +1242,27 @@ commonQuery.getSalonsBasedOnRatings = function getSalonsBasedOnRatings(
     foreignFieldVal,
     condition
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .aggregate([{
-                    $lookup: {
-                        from: fromTable,
-                        localField: localFieldVal,
-                        foreignField: foreignFieldVal,
-                        as: "data"
-                    }
-                },
-                {
-                    $unwind: "$data"
-                },
-                {
-                    $group: {
-                        _id: "$data.salon_id",
-                        avgRatings: { $avg: "$data.ratings" }
-                    }
+                $lookup: {
+                    from: fromTable,
+                    localField: localFieldVal,
+                    foreignField: foreignFieldVal,
+                    as: "data"
                 }
+            },
+            {
+                $unwind: "$data"
+            },
+            {
+                $group: {
+                    _id: "$data.salon_id",
+                    avgRatings: { $avg: "$data.ratings" }
+                }
+            }
             ])
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     reject(err);
                 } else {
@@ -1273,9 +1273,22 @@ commonQuery.getSalonsBasedOnRatings = function getSalonsBasedOnRatings(
 };
 
 commonQuery.getSalonOnPrice = function getSalonOnPrice() {
-    return new Promise(function(resolve, reject) {
-        model.find(cond, fetchd).exec(function(err, userData) {
+    return new Promise(function (resolve, reject) {
+        model.find(cond, fetchd).exec(function (err, userData) {
             // console.log("userData", userData);
+            if (err) {
+                console.log("errrrrrr", err);
+                reject(err);
+            } else {
+                resolve(userData);
+            }
+        });
+    });
+};
+commonQuery.ensureIndex = function ensureIndex(model) {
+    return new Promise(function (resolve, reject) {
+        model.createIndex({ location: "2dsphere" }).exec(function (err, userData) {
+            console.log("userData", userData);
             if (err) {
                 console.log("errrrrrr", err);
                 reject(err);
@@ -1293,7 +1306,7 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
     page
 ) {
     //console.log("inFETCHALLPAGINATED",model,cond,pageSize.page);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let pageSizes = pageSize;
         let currentPage = page;
         //  console.log("pageSizes",pageSizes);
@@ -1305,24 +1318,24 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
         }
 
         let postQuery = model.aggregate([{
-                $lookup: {
-                    from: "users",
-                    localField: "user_id",
-                    foreignField: "_id",
-                    as: "users"
-                }
-            },
-            { $unwind: "$users" },
-            {
-                $project: {
-                    ratings: "$ratings",
-                    comments: "$comments",
-                    firstName: "$users.firstName",
-                    lastName: "$users.lastName",
-                    profilepic: "$users.profilepic",
-                    createdAt: "$createdAt"
-                }
+            $lookup: {
+                from: "users",
+                localField: "user_id",
+                foreignField: "_id",
+                as: "users"
             }
+        },
+        { $unwind: "$users" },
+        {
+            $project: {
+                ratings: "$ratings",
+                comments: "$comments",
+                firstName: "$users.firstName",
+                lastName: "$users.lastName",
+                profilepic: "$users.profilepic",
+                createdAt: "$createdAt"
+            }
+        }
         ]);
         //console.log(pos)
 
@@ -1346,12 +1359,12 @@ commonQuery.addServicesInCategories = function addServicesInCategories(
     category_id,
     service_id
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .findByIdAndUpdate(
                 category_id, { $push: { services: service_id } }, { safe: true, upsert: true }
             )
-            .exec(function(err, userData) {
+            .exec(function (err, userData) {
                 // console.log("userData", userData);
                 if (err) {
                     console.log("errrrrrr", err);
@@ -1368,12 +1381,12 @@ commonQuery.addEmployeeToSalon = function addEmployeeToSalon(
     salon_id,
     employee_id
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .findByIdAndUpdate(
                 salon_id, { $push: { employees: employee_id } }, { safe: true, upsert: true }
             )
-            .exec(function(err, userData) {
+            .exec(function (err, userData) {
                 console.log("userData", userData);
                 if (err) {
                     console.log("errrrrrr", err);
@@ -1390,12 +1403,12 @@ commonQuery.removeServicesInCategories = function removeServicesInCategories(
     category_id,
     service_id
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .findByIdAndUpdate(
                 category_id, { $pull: { services: service_id } }, { safe: true, upsert: true }
             )
-            .exec(function(err, userData) {
+            .exec(function (err, userData) {
                 console.log("userData", userData);
                 if (err) {
                     console.log("errrrrrr", err);
@@ -1413,17 +1426,20 @@ commonQuery.fetch_categories = function fetch_categories(
     localFieldVal,
     foreignFieldVal
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
-            .aggregate([{
-                $lookup: {
-                    from: fromTable,
-                    localField: localFieldVal,
-                    foreignField: foreignFieldVal,
-                    as: "services"
+            .aggregate([
+                { $match: { isActive: true, isDeleted: false } },
+                {
+                    $lookup: {
+                        from: fromTable,
+                        localField: localFieldVal,
+                        foreignField: foreignFieldVal,
+                        as: "services"
+                    }
                 }
-            }])
-            .exec(function(err, data) {
+            ])
+            .exec(function (err, data) {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -1438,7 +1454,7 @@ commonQuery.fetch_salon_services = function fetch_salon_services(
     model,
     condition
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .aggregate([
                 { $match: condition },
@@ -1459,7 +1475,7 @@ commonQuery.fetch_salon_services = function fetch_salon_services(
                     }
                 }
             ])
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -1475,10 +1491,10 @@ commonQuery.addServiceToEmployee = function addServiceToEmployee(
     dataToAdd
 ) {
     console.log("dataToAdd", dataToAdd);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .update({ _id: empId }, { $addToSet: { salonservices_id: dataToAdd } })
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -1495,10 +1511,10 @@ commonQuery.removeServiceToEmp = function removeServiceToEmp(
     dataToRemove
 ) {
     console.log("dataToRemove", dataToRemove);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
             .update({ _id: empId }, { $pull: { salonservices_id: dataToRemove } })
-            .exec(function(err, data) {
+            .exec(function (err, data) {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -1510,9 +1526,10 @@ commonQuery.removeServiceToEmp = function removeServiceToEmp(
 };
 
 commonQuery.fetchCategories = function fetchCategories(model, condition) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
-            .aggregate([{
+            .aggregate([
+                {
                     $lookup: {
                         from: "salonservices",
                         localField: "_id",
@@ -1539,7 +1556,7 @@ commonQuery.fetchCategories = function fetchCategories(model, condition) {
                     }
                 }
             ])
-            .exec(function(err, res) {
+            .exec(function (err, res) {
                 if (err) {
                     reject(err);
                 } else {
@@ -1553,9 +1570,10 @@ commonQuery.getSalonDetailsQuery = function getSalonDetailsQuery(
     model,
     condition
 ) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         model
-            .aggregate([{
+            .aggregate([
+                {
                     $match: condition
                 },
                 {
@@ -1576,13 +1594,10 @@ commonQuery.getSalonDetailsQuery = function getSalonDetailsQuery(
                         image: 1,
                         contact: 1,
                         avgRatings: { $avg: "$ratings.ratings" }
-
-
-
                     }
                 }
             ])
-            .exec(function(err, res) {
+            .exec(function (err, res) {
                 if (err) {
                     reject(err);
                 } else {

@@ -14,7 +14,7 @@ export class AdminDashboardComponent implements OnInit {
   showSelection(data){
     this.isSelectorShown =  !this.isSelectorShown;
 
-    data.classList.toggle("change");
+    //data.classList.toggle("change");
 
   }
 

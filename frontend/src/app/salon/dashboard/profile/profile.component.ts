@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CommonService } from "../common.service";
 import { AuthService } from "../../auth.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-profile",
@@ -10,24 +11,30 @@ import { AuthService } from "../../auth.service";
 })
 export class ProfileComponent implements OnInit {
   submitSalonDetails: FormGroup;
-  showNow:boolean =  false;
-  numberPattern =/^(\+\d{1,3}[- ]?)?\d{10}$/;
+  showNow: boolean = false;
+  numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
   lng: any;
- private user_id: any;
+  user_id: any;
   selectedFile: File;
-  url: any;
+  checkIsApproved: boolean = false;
+  tempUrl: string | ArrayBuffer;
+  public url = <any>'';
+
+  showPendingApproval: boolean = false;
+  checkInitialApprovalStatus: boolean;
 
   constructor(
     private authServ: AuthService,
     private fb: FormBuilder,
-    private commServ: CommonService
+    private commServ: CommonService,
+    private toastrServ: ToastrService
   ) {
     if (navigator) {
       navigator.geolocation.getCurrentPosition(pos => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
-        console.log("DDD",this.lat,this.lng);
+        console.log("DDD", this.lat, this.lng);
       });
     }
   }
@@ -35,35 +42,65 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.submitSalonDetails = this.fb.group({
       name: ["", Validators.required],
-      contact: ["", [Validators.required, Validators.pattern(this.numberPattern)]],
-      salonaddress: ["", Validators.required]
+      contact: [
+        "",
+        [Validators.required, Validators.pattern(this.numberPattern)]
+      ],
+      salonaddress: ["", Validators.required],
+      image: null
     });
-
-  //   this.authServ.currentIds.subscribe(data => {
-  //  //  sessionStorage.setItem("userId", data);
-  //     this.user_id = data;
-  //   });
-  this.user_id = sessionStorage.getItem('userId');
-  console.log(this.user_id);
+    this.checkIsApprovedProfile();
+    this.user_id = sessionStorage.getItem("userId");
+    console.log(this.user_id);
+    this.checkInitialApprovalStatus = JSON.parse(
+      sessionStorage.getItem("isSubmitted")
+    );
+    if (this.checkInitialApprovalStatus == true) {
+      this.showPendingApproval = true;
+    } else {
+      this.showPendingApproval = false;
+    }
   }
 
-  get contact() { return this.submitSalonDetails.get('contact'); }
 
-
-
+  get contact() {
+    return this.submitSalonDetails.get("contact");
+  }
 
   uploadImage(event) {
-    this.selectedFile = event.target.files;
-    console.log("SelectedFile", this.selectedFile);
-    var reader = new FileReader();
+    console.log("++++event", event);
+    if (event.target.files && event.target.files[0]) {
+      console.log("files", event.target.files);
+      console.log("file", event.target.files);
+      var reader = new FileReader();
+      reader.onload = (event: ProgressEvent) => {// called once readAsDataURL is completed
+        this.url = false;
+        console.log("event", event.target);
+        console.log("event2", event);
+        this.tempUrl = (<FileReader>event.target).result;// read file as data url
+        console.log("temoURL", this.tempUrl);
+      }
+      reader.readAsDataURL(event.target.files[0]);
+      let file = <File>event.target.files[0];
+      console.log("======files======", file);
+      // this.Adminservice.addService(file)
+      //this.submitSalonDetails.get('image').setValue(file);
+      const Image = this.submitSalonDetails.get('image');
+      Image.setValue(file, event.target.files[0]);
+      this.submitSalonDetails.updateValueAndValidity();
 
-    reader.readAsDataURL(event.target.files[0]); // read file as data url
+      console.log("======this.addServiceForm======", this.submitSalonDetails);
+    }
 
-    reader.onload = event => {
-    };
   }
+
+  checkIsApprovedProfile() {
+    this.checkIsApproved = JSON.parse(sessionStorage.getItem("isApproved"));
+    console.log(this.checkIsApproved);
+  }
+
   submitSalon(data) {
-    console.log("datais",data);
+    console.log("datais", data);
     //this.user_id = sessionStorage.getItem("userId");
     console.log(this.user_id);
     let dataToPass = {
@@ -72,15 +109,37 @@ export class ProfileComponent implements OnInit {
       contact: data.contact,
       lat: this.lat,
       long: this.lng,
-      user_id: this.user_id
+      user_id: this.user_id,
+      image: data.image
     };
-    console.log("DATATOPASS",dataToPass);
-    this.commServ.saveSalonDetails(dataToPass).subscribe(data => {
-      console.log("USERSAVED", data);
-    });
+    console.log("DATATOPASS", dataToPass);
+    this.commServ.saveSalonDetails(dataToPass).subscribe(
+      data => {
+        if (data["code"] === 200) {
+          this.showPendingApproval = true;
+          this.toastrServ.success(
+            "Salon Details Submitted Successfully",
+            "Waiting For Admin Approval",
+            {
+              timeOut: 2000
+            }
+          );
+        } else {
+          this.showPendingApproval = false;
+          this.toastrServ.error("Failed To Submit Salon Details", "", {
+            timeOut: 2000
+          });
+        }
+      },
+      error => {
+        this.toastrServ.error("Server Error", error, {
+          timeOut: 2000
+        });
+      }
+    );
   }
 
-  
+
 
 
 

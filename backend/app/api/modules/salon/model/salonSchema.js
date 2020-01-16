@@ -57,6 +57,10 @@ var salonSchema = mongoose.Schema({
   isApproved:{
     type:Boolean,
     default:false
+  },
+  isDeclined:{
+    type:Boolean,
+    default:false
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));

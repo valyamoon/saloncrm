@@ -3,7 +3,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
-const stripe = require('stripe')("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
+const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 var path = require("path");
 var http = require("http");
 var https = require("https");
@@ -13,23 +13,21 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./app/swagger/swagger.json");
 var cors = require("cors");
 
-
-global.__rootRequire = function(relpath) {
+global.__rootRequire = function (relpath) {
     return require(path.join(__dirname, relpath));
 };
 
-global.__debug = function() {
+global.__debug = function () {
     if (!process.env.NODE_ENV ||
         process.env.NODE_ENV === "local" ||
         process.env.NODE_ENV === "development" ||
         process.env.NODE_ENV === "aws"
-    ) {}
+    ) { }
 };
 
 var app = express();
 app.use(cors());
 app.use(fileUpload());
-
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -45,16 +43,16 @@ app.set("view engine", "html");
 app.set("views", __dirname + "/views");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.json({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json({ extended: true, limit: "50mb" }));
 
 // routes
 //app.use("/uploads", express.static(path.join(__dirname, "./app/uploads")));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/modules/dashboard")));
-app.use(express.static(path.join(__dirname, "./frontend")));
+app.use(express.static(path.join(__dirname, "frontend")));
 // All api requests
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     // CORS headers
     res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -73,6 +71,9 @@ app.use(function(req, res, next) {
 
 app.use("/api", require("./app/api/routes")(express));
 
+app.use((req, res, next) => {
+    res.sendFile(path.join(__dirname, "frontend", "index.html"));
+});
 
 // start server
 var port = process.env.PORT || config.port;
@@ -80,6 +81,6 @@ app.listen(port).timeout = 1800000; //30 min
 console.log("Available on:", config.backendBaseUrl);
 module.exports.urlInUser = {
     url: config.backendBaseUrl
-}
+};
 
 //logger.info("Listening on " + config.backendBaseUrl);

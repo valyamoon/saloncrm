@@ -1,6 +1,7 @@
-'use strict';
+"use strict";
 
-var jwt = require('jsonwebtoken');
+var jwt = require("jsonwebtoken");
+const jwtKey = "saloncrm";
 
 var Constant = require('../config/constant.js');
 const commonQuery = require("../lib/commonQuery");
@@ -9,12 +10,12 @@ const services = require("../api/modules/admin/model/servicesSchema");
 const salons = require("../api/modules/salon/model/salonSchema");
 
 // const config = require('../config/config.js').get(process.env.NODE_ENV);
-console.log("three-----------")
+console.log("three-----------");
 module.exports = {
     ensureAuthorized: ensureAuthorized,
     getServcieName: getServcieName,
     getCategoryName: getCategoryName,
-    getSalonId : getSalonId
+    getSalonId: getSalonId
 
 }
 
@@ -23,18 +24,21 @@ module.exports = {
  * @return json
  * Created by Trisha Deepam
  * @smartData Enterprises (I) Ltd
- * Created Date 
+ * Created Date
  */
 
 function ensureAuthorized(req, res, next) {
-    console.log("baseUrl", req.path)
     var bearerToken;
-    var bearerHeader = req.headers["authorization"] || req.query["api_key"];
-    if (typeof bearerHeader !== 'undefined') {
-        var bearer = bearerHeader.split(" ");
-        bearerToken = bearer[1];
-        jwt.verify(bearerToken, "saloncrm", function(err, decoded) {
-            console.log("decoded ================= ", err, decoded)
+    var bearerHeader = req.headers["authorization"];
+    if (bearerHeader !== "undefined") {
+        //console.log("BEARER HEADER", this.bearerHeader);
+        var bearer = bearerHeader; //bearerHeader.split(" ");
+
+        //console.log("sss", token);
+        //bearerToken = bearer[1];
+        // console.log("SSSSS", bearerToken);
+        jwt.verify(bearer, jwtKey, function (err, decoded) {
+            console.log("decoded ================= ", err, decoded);
             req.user = decoded;
             if (err) {
                 return res.send({
@@ -52,8 +56,10 @@ function ensureAuthorized(req, res, next) {
     }
 }
 
+
+
 function getServcieName(model, masterId) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         try {
             let condition = {
                 _id: mongoose.Types.ObjectId(masterId)
@@ -74,7 +80,7 @@ function getServcieName(model, masterId) {
 
 function getCategoryName(model, masterId) {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         try {
             let condition = {
                 _id: mongoose.Types.ObjectId(masterId)
@@ -93,8 +99,8 @@ function getCategoryName(model, masterId) {
 
 }
 
-async function getSalonId(userId){
-    return new Promise(async function(resolve, reject) {
+async function getSalonId(userId) {
+    return new Promise(async function (resolve, reject) {
         try {
             let condition = {
                 user_id: mongoose.Types.ObjectId(userId)
