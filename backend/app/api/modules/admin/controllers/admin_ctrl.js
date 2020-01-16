@@ -1395,3 +1395,57 @@ function forgotPassword(req, res) {
     }
     forgot_password().then(data => { });
 }
+/**
+ * Function is use to get list service provided by admin
+ * @access private
+ * @return json
+ * Created by Rashmi Ranjan
+ * @smartData Enterprises (I) Ltd
+ * Created On 09/01/2020
+ */
+async function getServiceList(req, res) {
+    console.log("req.body",req.body);
+    if(req.body.user_id){
+        var salonId = await util.getSalonId(req.body.user_id);
+        let finalServiceArr = [];
+        
+        let salonCond = {
+            "isActive" : true,
+            "isDeleted": false
+        };
+        let pageSize = 100;
+        let page = 1;
+        let serviceList = await commonQuery.fetch_all(services, salonCond);
+      //  console.log("serviceList", serviceList); return;
+        async.each(serviceList, async function(serviceData, firstCB) {
+            let serviceCond = {
+                "salon_id": salonId,
+                "service_id" : serviceData._id,
+                "category_id" : serviceData.category_id
+            }
+            let salonService = await commonQuery.findAll(salonservice, serviceCond);
+            let salonServiceData = {
+                "service" : serviceData,
+                "salonserviceinfo" : salonService
+            }
+            finalServiceArr.push(salonServiceData);
+        }, async function(err, data) {
+            if (err) {
+                console.log("Error @427", err)
+            } else {
+                res.json(
+                    Response(
+                        constant.SUCCESS_CODE,
+                        constant.FETCHED_ALL_DATA,
+                        finalServiceArr
+                    )
+                );
+            }
+        });
+    }else{
+        return res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+        );
+    }
+    
+}

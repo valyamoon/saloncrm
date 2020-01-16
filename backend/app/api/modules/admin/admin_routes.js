@@ -1,4 +1,4 @@
-module.exports = function (router) {
+module.exports = function(router) {
   var admin = require("./controllers/admin_ctrl");
 
   var utils = require("../../../lib/util");
@@ -27,7 +27,7 @@ module.exports = function (router) {
   router.post("/active-admin", admin.getActiveAdminList);
   router.post("/all-users", admin.fetchActiveUsersAll);
   router.post("/forgot-password", admin.forgotPassword);
-  router.post('/servicelist', admin.getServiceList);
+  router.post("/servicelist", admin.getServiceList);
 
   return router;
 };
