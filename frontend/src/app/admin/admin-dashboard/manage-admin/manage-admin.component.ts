@@ -32,5 +32,7 @@ export class ManageAdminComponent implements OnInit {
   dismissModal() {
     this.isAddModal = false;
   }
-  registerUser(data) {}
+  registerUser(data) {
+    console.log(data);
+  }
 }
