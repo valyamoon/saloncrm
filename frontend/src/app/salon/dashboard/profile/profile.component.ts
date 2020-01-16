@@ -11,6 +11,7 @@ import { ToastrService } from "ngx-toastr";
 })
 export class ProfileComponent implements OnInit {
   submitSalonDetails: FormGroup;
+  showNow: boolean = false;
   numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
   lng: any;
@@ -46,7 +47,7 @@ export class ProfileComponent implements OnInit {
         [Validators.required, Validators.pattern(this.numberPattern)]
       ],
       salonaddress: ["", Validators.required],
-      image:null
+      image: null
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
@@ -67,30 +68,30 @@ export class ProfileComponent implements OnInit {
   }
 
   uploadImage(event) {
-    console.log("++++event",event);
+    console.log("++++event", event);
     if (event.target.files && event.target.files[0]) {
-      console.log("files",event.target.files);
-      console.log("file",event.target.files);
+      console.log("files", event.target.files);
+      console.log("file", event.target.files);
       var reader = new FileReader();
       reader.onload = (event: ProgressEvent) => {// called once readAsDataURL is completed
         this.url = false;
-        console.log("event",event.target);
-        console.log("event2",event);
+        console.log("event", event.target);
+        console.log("event2", event);
         this.tempUrl = (<FileReader>event.target).result;// read file as data url
-        console.log("temoURL",this.tempUrl);
+        console.log("temoURL", this.tempUrl);
       }
       reader.readAsDataURL(event.target.files[0]);
       let file = <File>event.target.files[0];
       console.log("======files======", file);
       // this.Adminservice.addService(file)
       //this.submitSalonDetails.get('image').setValue(file);
-      const Image =   this.submitSalonDetails.get('image');
-      Image.setValue(file,event.target.files[0]);
+      const Image = this.submitSalonDetails.get('image');
+      Image.setValue(file, event.target.files[0]);
       this.submitSalonDetails.updateValueAndValidity();
 
       console.log("======this.addServiceForm======", this.submitSalonDetails);
     }
-   
+
   }
 
   checkIsApprovedProfile() {
@@ -109,13 +110,13 @@ export class ProfileComponent implements OnInit {
       lat: this.lat,
       long: this.lng,
       user_id: this.user_id,
-      image:data.image
+      image: data.image
     };
     console.log("DATATOPASS", dataToPass);
     this.commServ.saveSalonDetails(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
-         this.showPendingApproval = true;
+          this.showPendingApproval = true;
           this.toastrServ.success(
             "Salon Details Submitted Successfully",
             "Waiting For Admin Approval",
@@ -141,5 +142,5 @@ export class ProfileComponent implements OnInit {
 
 
 
-  
+
 }

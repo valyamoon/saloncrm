@@ -15,7 +15,7 @@ import {
 } from "@angular/material";
 
 import { ToastrModule } from "ngx-toastr";
-import {} from "googlemaps";
+import { } from "googlemaps";
 import { AgmCoreModule } from "@agm/core";
 import LatLng = google.maps.LatLng;
 import { LocationPickerModule } from "ng-location-picker";
@@ -56,4 +56,4 @@ import { RouterModule } from "@angular/router";
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

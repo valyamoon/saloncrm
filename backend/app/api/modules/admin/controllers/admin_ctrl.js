@@ -15,6 +15,7 @@ const roles = require("../../user/model/rolesSchema");
 const salons = require("../../salon/model/salonSchema");
 const categories = require("../../admin/model/categoriesSchema");
 const reviewratings = require("../../salon/model/salonreviewsratingSchema");
+const salonservice = require("../../salon/model/salonservicesSchema");
 const services = require("../model/servicesSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
@@ -22,6 +23,7 @@ const Config = require("../../../../config/config").get(
     process.env.NODE_ENV || "local"
 );
 const commonQuery = require("../../../../lib/commonQuery.js");
+const util = require("../../../../lib/util");
 
 module.exports = {
     addCategories: addCategories,
@@ -34,6 +36,7 @@ module.exports = {
     addRoles: addRoles,
     getRoles: getRoles,
     getActiveSalonsList: getActiveSalonsList,
+    getServiceList: getServiceList,
     fetchActiveUsersCount: fetchActiveUsersCount,
     fetchActiveSalonsCount: fetchActiveSalonsCount,
     fetchActiveUsersList: fetchActiveUsersList,
@@ -90,7 +93,7 @@ function addCategories(req, res) {
             );
         }
     }
-    addCategories().then(function() {});
+    addCategories().then(function () { });
 }
 /**
  * Function is use to get salon list which need to be approved by Admin
@@ -126,7 +129,7 @@ function getSalonsRequestList(req, res) {
                         Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
                     );
                 } else {
-                    listOfSalons.forEach(function(c) {
+                    listOfSalons.forEach(function (c) {
                         c.isservicesadded = undefined;
                         c.isreviewadded = undefined;
                     });
@@ -152,7 +155,7 @@ function getSalonsRequestList(req, res) {
         }
     }
 
-    getSalonsRequestList().then(function() {});
+    getSalonsRequestList().then(function () { });
 }
 
 /**
@@ -217,7 +220,7 @@ function acceptSalonRequest(req, res) {
                             messagetTemplate
                         );
 
-                        if (!sendEmailConfirmation) {} else {}
+                        if (!sendEmailConfirmation) { } else { }
                         res.json(
                             Response(
                                 constant.SUCCESS_CODE,
@@ -235,7 +238,7 @@ function acceptSalonRequest(req, res) {
         }
     }
 
-    acceptSalonRequest().then(function() {});
+    acceptSalonRequest().then(function () { });
 }
 /**
  * Function is use to suspend Salon on subsription expiry
@@ -299,7 +302,7 @@ function suspendSalon(req, res) {
                             messagetTemplate
                         );
 
-                        if (!sendEmailConfirmation) {} else {}
+                        if (!sendEmailConfirmation) { } else { }
 
                         res.json(
                             Response(
@@ -318,7 +321,7 @@ function suspendSalon(req, res) {
         }
     }
 
-    suspendSalon().then(function() {});
+    suspendSalon().then(function () { });
 }
 
 /**
@@ -343,8 +346,8 @@ function getCategories(req, res) {
                         Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
                     );
                 } else {
-                    categoriesList.forEach(function(v) {
-                        v.services.forEach(function(v) {
+                    categoriesList.forEach(function (v) {
+                        v.services.forEach(function (v) {
                             delete v.isActive;
                             delete v.isDeleted;
                         });
@@ -365,7 +368,7 @@ function getCategories(req, res) {
             );
         }
     }
-    getCategories().then(function() {});
+    getCategories().then(function () { });
 }
 
 /**
@@ -391,7 +394,7 @@ function addServices(req, res) {
                     services,
                     newService
                 );
-                if (!saveService) {} else {
+                if (!saveService) { } else {
                     let categoryUpdate = await commonQuery.addServicesInCategories(
                         categories,
                         req.body.category_id,
@@ -400,7 +403,7 @@ function addServices(req, res) {
 
                     if (!categoryUpdate) {
                         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
-                    } else {}
+                    } else { }
 
                     res.json(
                         Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveService)
@@ -414,7 +417,7 @@ function addServices(req, res) {
         }
     }
 
-    addServices().then(function() {});
+    addServices().then(function () { });
 }
 
 /**
@@ -456,7 +459,7 @@ function removeServices(req, res) {
                         req.body.service_id
                     );
 
-                    if (!categoryUpdate) {} else {}
+                    if (!categoryUpdate) { } else { }
 
                     res.json(
                         Response(
@@ -474,7 +477,7 @@ function removeServices(req, res) {
         }
     }
 
-    removeServices().then(function() {});
+    removeServices().then(function () { });
 }
 
 /**
@@ -507,7 +510,7 @@ function addRoles(req, res) {
             );
         }
     }
-    addRoles().then(function() {});
+    addRoles().then(function () { });
 }
 /**
  * Function is use to get list of Roles
@@ -546,7 +549,7 @@ function getRoles(req, res) {
                 if (!rolesList) {
                     res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
                 } else {
-                    rolesList.forEach(function(v) {
+                    rolesList.forEach(function (v) {
                         v.isDeleted = undefined;
                         v.status = undefined;
                     });
@@ -566,7 +569,7 @@ function getRoles(req, res) {
             );
         }
     }
-    getRoles().then(function() {});
+    getRoles().then(function () { });
 }
 
 /**
@@ -591,7 +594,7 @@ function getActiveSalonsList(req, res) {
                 if (!activeSalonsList) {
                     res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
                 } else {
-                    activeSalonsList.forEach(function(v) {
+                    activeSalonsList.forEach(function (v) {
                         v.isDeleted = undefined;
                         v.isreviewadded = undefined;
                         v.isservicesadded = undefined;
@@ -614,7 +617,7 @@ function getActiveSalonsList(req, res) {
             );
         }
     }
-    getActiveSalonsList().then(function() {});
+    getActiveSalonsList().then(function () { });
 }
 
 /**
@@ -668,7 +671,7 @@ function fetchActiveUsersCount(req, res) {
         }
     }
 
-    fetchActiveUsersCount().then(function() {});
+    fetchActiveUsersCount().then(function () { });
 }
 /**
  * Function is use to Fetch Active Salon List
@@ -697,7 +700,7 @@ function fetchActiveSalonsCount(req, res) {
                         isDeleted: false,
                         isApproved: true,
                         isDeclined: false
-                            // role_id: roleId
+                        // role_id: roleId
                     };
                     let salonsCount = await commonQuery.findCount(salons, condition);
                     console.log("SalonCount", salonsCount);
@@ -723,7 +726,7 @@ function fetchActiveSalonsCount(req, res) {
         }
     }
 
-    fetchActiveSalonsCount().then(function() {});
+    fetchActiveSalonsCount().then(function () { });
 }
 
 function fetchActiveUsersList(req, res) {
@@ -773,7 +776,7 @@ function fetchActiveUsersList(req, res) {
             );
         }
     }
-    fetchActiveUsersList().then(function() {});
+    fetchActiveUsersList().then(function () { });
 }
 /**
  * Function is use to remove categories
@@ -819,7 +822,7 @@ function removeCategories(req, res) {
             );
         }
     }
-    removeCategories().then(function() {});
+    removeCategories().then(function () { });
 }
 /**
  * Function is use to get list of archived categories
@@ -862,7 +865,7 @@ function getArchivedCategories(req, res) {
             );
         }
     }
-    getArchivedCategories().then(function() {});
+    getArchivedCategories().then(function () { });
 }
 
 /**
@@ -908,7 +911,7 @@ function getAdminCategoriesList(req, res) {
                         Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
                     );
                 } else {
-                    adminCategories.forEach(function(c) {
+                    adminCategories.forEach(function (c) {
                         c.services = undefined;
                     });
                     let dataToPass = {
@@ -931,7 +934,7 @@ function getAdminCategoriesList(req, res) {
             );
         }
     }
-    getAdminCategoriesList().then(function() {});
+    getAdminCategoriesList().then(function () { });
 }
 
 /**
@@ -978,7 +981,7 @@ function removeRole(req, res) {
             );
         }
     }
-    removeRole().then(function() {});
+    removeRole().then(function () { });
 }
 
 /**
@@ -1020,7 +1023,7 @@ function updateRole(req, res) {
             );
         }
     }
-    updateRole().then(function() {});
+    updateRole().then(function () { });
 }
 
 /**
@@ -1067,7 +1070,7 @@ function awakeCategory(req, res) {
             );
         }
     }
-    awakeCategory().then(function() {});
+    awakeCategory().then(function () { });
 }
 
 /**
@@ -1129,7 +1132,7 @@ function getActiveServices(req, res) {
         }
     }
 
-    getActiveServices().then(function() {});
+    getActiveServices().then(function () { });
 }
 
 /**
@@ -1191,7 +1194,7 @@ function getActiveAdminList(req, res) {
         }
     }
 
-    getActiveAdminList().then(function() {});
+    getActiveAdminList().then(function () { });
 }
 
 /**
@@ -1285,7 +1288,7 @@ function fetchActiveUsersAll(req, res) {
             );
         }
     }
-    fetchActiveUsersAll().then(function() {});
+    fetchActiveUsersAll().then(function () { });
 }
 
 /**
@@ -1390,5 +1393,5 @@ function forgotPassword(req, res) {
             );
         }
     }
-    forgot_password().then(data => {});
+    forgot_password().then(data => { });
 }
