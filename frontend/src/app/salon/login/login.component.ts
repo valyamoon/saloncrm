@@ -66,38 +66,46 @@ export class LoginComponent implements OnInit {
    */
 
   salonLogin(data) {
-    let dataToPass= {
-      email:data.email,
-      password:data.password,
-      role:"salon"
-    }
-    this.logServ.loginSalon(dataToPass).subscribe((data: any) => {
-      if (data.code === 200) {
-        this.toastServ.success("Logged In Successfully", "", {
-          timeOut: 3000
-        });
-        this.userData = data.data;
-        console.log("sss",this.userData);
-        console.log("USER DATA",this.userData['userInfo'].isApproved);
-        sessionStorage.setItem("isApproved",this.userData['userInfo'].isApproved);
-        sessionStorage.setItem("userId",data.data['userInfo']['_id']);
-        sessionStorage.setItem("isSubmitted",this.userData['userInfo'].isSubmitted)
-        this.authServ.sendIdS(data.data["userInfo"]["_id"]);
-        //(data.data['userInfo']['_id']);
+    let dataToPass = {
+      email: data.email,
+      password: data.password,
+      role: "salon"
+    };
+    this.logServ.loginSalon(dataToPass).subscribe(
+      (data: any) => {
+        if (data.code === 200) {
+          this.toastServ.success("Logged In Successfully", "", {
+            timeOut: 3000
+          });
+          this.userData = data.data;
+          console.log("sss", this.userData);
+          console.log("USER DATA", this.userData["userInfo"].isApproved);
+          sessionStorage.setItem(
+            "isApproved",
+            this.userData["userInfo"].isApproved
+          );
+          sessionStorage.setItem("userId", data.data["userInfo"]["_id"]);
+          sessionStorage.setItem(
+            "isSubmitted",
+            this.userData["userInfo"].isSubmitted
+          );
+          this.authServ.sendIdS(data.data["userInfo"]["_id"]);
+          //(data.data['userInfo']['_id']);
 
-        this.authServ.sendToken(data.data.token);
-        this.router.navigate(["salon/home"]);
-      } else {
-        this.toastServ.error("Invalid Login details", "", {
+          this.authServ.sendToken(data.data.token);
+          this.router.navigate(["salon/home"]);
+        } else {
+          this.toastServ.error("Invalid Login details", "", {
+            timeOut: 3000
+          });
+        }
+      },
+      error => {
+        this.toastServ.error("Failed to login", error.error, {
           timeOut: 3000
         });
       }
-    },error=>{
-      this.toastServ.error("Failed to login", error, {
-        timeOut: 3000
-      });
-
-    });
+    );
   }
   /**
    * Function is use to register salon
@@ -113,22 +121,29 @@ export class LoginComponent implements OnInit {
       email: data.email,
       password: data.password
     };
-    this.logServ.signUpSalon(dataToPass).subscribe((res: any) => {
-      if (res.code === 200) {
-        this.toastServ.success("Registered Successfully", "Please Login", {
-          timeOut: 3000
-        });
+    this.logServ.signUpSalon(dataToPass).subscribe(
+      (res: any) => {
+        if (res.code === 200) {
+          this.toastServ.success("Registered Successfully", "Please Login", {
+            timeOut: 3000
+          });
 
-        this.authServ.sendToken(res.data.token);
-      } else if (res.code === 201) {
-        this.toastServ.warning("User Already Exist", "Please Login", {
-          timeOut: 3000
-        });
-      } else {
-        this.toastServ.error("Failed to register", "Please try again", {
+          this.authServ.sendToken(res.data.token);
+        } else if (res.code === 201) {
+          this.toastServ.warning("User Already Exist", "Please Login", {
+            timeOut: 3000
+          });
+        } else {
+          this.toastServ.error("Failed to register", "Please try again", {
+            timeOut: 3000
+          });
+        }
+      },
+      error => {
+        this.toastServ.error("Server - Error", error.error, {
           timeOut: 3000
         });
       }
-    });
+    );
   }
 }
