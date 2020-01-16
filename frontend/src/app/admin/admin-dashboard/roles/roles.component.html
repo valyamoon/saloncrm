@@ -13,27 +13,6 @@
     </div>
   </div>
 
-<!-- <> -->
-
-<!-- <div class="confirmDialog" *ngIf="isDeleteDialog">
-        <div class="modal-content-section">
-                          <div><h1>Are you sure you want to delete?</h1></div>
-                            <div><p>warning you are about to delete role!</p></div>
-                            <div class="yesNoBtn">
-                                <button click)="confirmDialog()">CHC</button>
-                                <button class="btn btn-primary btn-sign-in" (click)="confirm('yes')">Yes</button>
-                                <button class="btn btn-primary btn-sign-in" (click)="reject('no')">No</button>
-                            </div>
-        </div>
-  </div> -->
-<!-- <> -->
-
-
-
-
-
-
-
   <!-- <Modal Popup for add categories start here> -->
   <div class="modalSection" *ngIf="isAddModal">
     <div class="modal-content-area">
@@ -69,17 +48,7 @@
         Cancel
       </button>
     </div>
-
   </div>
-
-
- 
-
-
-
-
-
-
 
   <!-- <Modal Popup for add categories end here> -->
 
@@ -98,12 +67,12 @@
           <td mat-cell *matCellDef="let element">
             <div class="buttonArea">
               <button
+                [disabled]="disabled"
                 class="btn btn-primary btn-sign-in  btn-sec"
                 (click)="deleteRole(element)"
               >
                 Delete
               </button>
-          
 
               <button
                 class="btn btn-primary btn-sign-in  btn-sec"
@@ -111,7 +80,6 @@
               >
                 Edit
               </button>
-                  
             </div>
           </td>
         </ng-container>
@@ -132,16 +100,4 @@
       <div class="noRec">No Records Found</div>
     </div>
   </div>
-
-
-
-
-
-
-
 </div>
-
-
-
-
- 

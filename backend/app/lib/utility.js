@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /*
  * Utility - utility.js
  * Author: smartData Enterprises
@@ -7,25 +7,34 @@
 // var config = require('../../config/config').get(process.env.NODE_ENV || 'staging');
 
 var utility = {};
-var bcrypt = require('bcrypt');
+var bcrypt = require("bcrypt");
 var salt = bcrypt.genSaltSync(10);
 
-utility.hashPassword = function (password) {
-    if (password) {
-        return bcrypt.hashSync(password, salt);
-    }
-    return '';
-}
+utility.hashPassword = function(password) {
+  if (password) {
+    return bcrypt.hashSync(password, salt);
+  }
+  return "";
+};
 
-utility.generateRandomString = function () {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+utility.getUuid = function() {
+  return new Promise((resolve, reject) => {
+    try {
+      let newUuid = uuidv1();
+      resolve(newUuid);
+    } catch (error) {}
+  });
+};
 
-    for (var i = 0; i < 6; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+utility.generateRandomString = function() {
+  var text = "";
+  var possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    return text;
+  for (var i = 0; i < 6; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-}
+  return text;
+};
 
 module.exports = utility;

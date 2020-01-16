@@ -52,7 +52,7 @@ var userSchema = mongoose.Schema(
     role_id: {
       type: mongoose.Types.ObjectId,
       ref: "roles",
-      default:null
+      default: null
     },
     gender: {
       type: String,
@@ -78,17 +78,21 @@ var userSchema = mongoose.Schema(
       type: String,
       default: null
     },
-    isApproved:{
-      type:Boolean,
-      default:false
+    isApproved: {
+      type: Boolean,
+      default: false
     },
-    isSubmitted:{
-      type:Boolean,
-      default:false
+    isSubmitted: {
+      type: Boolean,
+      default: false
     },
-    socialLoginId:{
-      type:String,
-      default:null
+    socialLoginId: {
+      type: String,
+      default: null
+    },
+    resetkey: {
+      type: String,
+      default: null
     }
   },
   { timestamps: true }
@@ -109,9 +113,7 @@ userSchema.pre("save", function(next) {
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
-
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-  
     if (err) return cb(err);
     cb(null, isMatch);
   });

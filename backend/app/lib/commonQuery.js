@@ -1482,6 +1482,19 @@ commonQuery.getSalonOnPrice = function getSalonOnPrice() {
     });
   });
 };
+commonQuery.ensureIndex = function ensureIndex(model) {
+  return new Promise(function(resolve, reject) {
+    model.createIndex({ location: "2dsphere" }).exec(function(err, userData) {
+      console.log("userData", userData);
+      if (err) {
+        console.log("errrrrrr", err);
+        reject(err);
+      } else {
+        resolve(userData);
+      }
+    });
+  });
+};
 
 commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
   model,
@@ -1620,7 +1633,7 @@ commonQuery.fetch_categories = function fetch_categories(
   return new Promise(function(resolve, reject) {
     model
       .aggregate([
-        {$match:{isActive:true,isDeleted:false}},
+        { $match: { isActive: true, isDeleted: false } },
         {
           $lookup: {
             from: fromTable,
@@ -1735,7 +1748,7 @@ commonQuery.fetchCategories = function fetchCategories(model, condition) {
         {
           $group: {
             _id: "$catname",
-            id:{$first:"$_id"}   ,
+            id: { $first: "$_id" },
             services: { $first: "$servvv" }
           }
         },
@@ -1743,7 +1756,7 @@ commonQuery.fetchCategories = function fetchCategories(model, condition) {
           $project: {
             name: "$_id",
             services: "$services",
-            _id:"$id"
+            _id: "$id"
           }
         }
       ])
@@ -1777,17 +1790,14 @@ commonQuery.getSalonDetailsQuery = function getSalonDetailsQuery(
         },
         {
           $project: {
-           name:1,
-           salonaddress:1,
-           location:1,
-           opentime:1,
-           closetime:1,
-           image:1,
-           contact:1,
-           avgRatings:{$avg:"$ratings.ratings"}
-
-
-
+            name: 1,
+            salonaddress: 1,
+            location: 1,
+            opentime: 1,
+            closetime: 1,
+            image: 1,
+            contact: 1,
+            avgRatings: { $avg: "$ratings.ratings" }
           }
         }
       ])
