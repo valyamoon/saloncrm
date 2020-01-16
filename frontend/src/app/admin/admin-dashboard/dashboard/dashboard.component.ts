@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
    */
 
   getRequests() {
-    console.log("I AM CALLED");
+    // console.log("I AM CALLED");
     let dataToPass = {
       pageSize: this.pageSize,
       page: this.page
@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
     this.dataDefault = dataToPass;
     this.adminServ.getSalonsRequest(dataToPass).subscribe(
       data => {
-        console.log("HERE DATA iS", data);
+        // console.log("HERE DATA iS", data);
         if (data["code"] == 200) {
           this.SalonRequestList = data["data"]["data"];
           this.limit = data["data"]["countNumber"];
@@ -81,7 +81,7 @@ export class DashboardComponent implements OnInit {
           });
         }
 
-        console.log("COUNT", this.count, this.SalonRequestList);
+        // console.log("COUNT", this.count, this.SalonRequestList);
       },
       error => {
         this.toastServ.error("Failed To Fetch Salons Request", error.error, {
@@ -92,7 +92,7 @@ export class DashboardComponent implements OnInit {
   }
 
   paginate(event) {
-    console.log(event);
+    //   console.log(event);
     this.page = event.pageIndex + 1;
     this.count = event.pageSize;
     this.getRequests();
@@ -106,13 +106,13 @@ export class DashboardComponent implements OnInit {
    * @smartData Enterprises (I) Ltd
    */
   approveSalonRequest(data) {
-    console.log("ApproveFor", data);
+    // console.log("ApproveFor", data);
     let dataToPass = {
       salon_id: data._id
     };
     this.adminServ.approveSalonRequests(dataToPass).subscribe(
       data => {
-        console.log("FFFF", data);
+        //    console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastServ.success("Salon Approved Successfully", "", {
             timeOut: 3000
@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
       data => {
         if (data["code"] == 200) {
           this.ActiveUsersCount = data["data"];
-          console.log("ActiveUsersCount SALONS", this.ActiveUsersCount);
+          //   console.log("ActiveUsersCount SALONS", this.ActiveUsersCount);
         }
       },
       error => {
@@ -175,10 +175,10 @@ export class DashboardComponent implements OnInit {
     };
     this.adminServ.getActiveSalonsCount(dataToPass).subscribe(
       data => {
-        console.log("DATA", data);
+        //  console.log("DATA", data);
         if (data["code"] == 200) {
           this.ActiveSalonsCount = data["data"];
-          console.log("ACTIVE SALONS", this.ActiveSalonsCount);
+          //   console.log("ACTIVE SALONS", this.ActiveSalonsCount);
         }
       },
       error => {
@@ -197,13 +197,13 @@ export class DashboardComponent implements OnInit {
    * @smartData Enterprises (I) Ltd
    */
   declineSalonRequest(data) {
-    console.log("ApproveFor", data);
+    //  console.log("ApproveFor", data);
     let dataToPass = {
       salon_id: data._id
     };
     this.adminServ.declineSalonRequest(dataToPass).subscribe(
       data => {
-        console.log("FFFF", data);
+        //   console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastServ.success("Salon Declined Successfully", "", {
             timeOut: 3000

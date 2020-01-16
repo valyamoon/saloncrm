@@ -25,7 +25,6 @@ export class SalonlistComponent implements OnInit {
   pageSize: any = 5;
   ActiveSalonsCount: any;
   disabled: boolean = true;
-  
 
   constructor(
     private adminServ: AdminServService,
@@ -35,7 +34,7 @@ export class SalonlistComponent implements OnInit {
   ngOnInit() {
     this.getActiveSalonsList();
     this.getActiveSalonsCount();
-    this.adminServ.setHeaderText("Manage Salons")
+    this.adminServ.setHeaderText("Manage Salons");
   }
 
   /**
@@ -48,8 +47,8 @@ export class SalonlistComponent implements OnInit {
   getActiveSalonsList() {
     this.adminServ.getSalonsList().subscribe(
       data => {
-        console.log(data);
-        console.log("SalonsList", data["data"]);
+        // console.log(data);
+        // console.log("SalonsList", data["data"]);
         if (data["code"] === 200) {
           this.activeSalons = data["data"];
           if (this.activeSalons.length == 0) {
@@ -78,10 +77,10 @@ export class SalonlistComponent implements OnInit {
     };
     this.adminServ.getActiveSalonsCount(dataToPass).subscribe(
       data => {
-        console.log("DATA", data);
+        //  console.log("DATA", data);
         if (data["code"] == 200) {
           this.ActiveSalonsCount = data["data"];
-          console.log("ACTIVE SALONS COUNT", this.ActiveSalonsCount);
+          //   console.log("ACTIVE SALONS COUNT", this.ActiveSalonsCount);
         }
       },
       error => {
@@ -93,20 +92,20 @@ export class SalonlistComponent implements OnInit {
   }
 
   paginate(event) {
-    console.log(event);
+    //  console.log(event);
     this.page = event.pageIndex + 1;
     this.count = event.pageSize;
     this.getActiveSalonsList();
   }
 
   declineSalonRequest(data) {
-    console.log("ApproveFor", data);
+    // console.log("ApproveFor", data);
     let dataToPass = {
       salon_id: data._id
     };
     this.adminServ.declineSalonRequest(dataToPass).subscribe(
       data => {
-        console.log("FFFF", data);
+        // console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastrServ.success("Salon Declined Successfully", "", {
             timeOut: 3000

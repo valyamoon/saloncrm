@@ -136,15 +136,6 @@ function verifyUser(req, res) {
                 let condition = {
                   phone: req.body.phone
                 };
-
-                // if (req.body.phone) {
-                //   condition = { phone: req.body.phone };
-                // } else if (req.body.email) {
-                //   condition = { email: req.body.email };
-                // } else {
-                //   condition = {phone: req.body.phone,email:req.body.email};
-                // }
-
                 let findUser = await commonQuery.findoneData(users, condition);
                 if (!findUser) {
                   res.json(
@@ -277,6 +268,7 @@ function verifyUser(req, res) {
 //  */
 
 function registerUser(req, res) {
+  console.log("REQBOD", req.body);
   async function registerUser() {
     let roleid;
     let isActiveStatus;
@@ -303,7 +295,9 @@ function registerUser(req, res) {
         }
         try {
           let condition = {};
-          if (req.body.email) {
+          if (req.body.email && req.body.phone) {
+            condition = [{ email: req.body.email }, { phone: req.body.phone }];
+          } else if (req.body.email) {
             condition = {
               email: req.body.email
             };
@@ -313,14 +307,18 @@ function registerUser(req, res) {
             };
           } else {
             condition = {
-              email: req.body.phone,
-              phone: req.body.phone
+              email: req.body.email,
+              phone: req.body.phone,
+              via: "sms"
             };
           }
 
-          let checkUser = await commonQuery.findoneData(users, condition);
+          console.log("CONDITION:", condition);
 
-          if (!checkUser) {
+          let checkUser = await commonQuery.findoneUser(users, condition);
+          +console.log("CGEC", checkUser);
+
+          if (!checkUser.length) {
             var newUser = new users({
               phone: req.body.phone,
               code: req.body.code,

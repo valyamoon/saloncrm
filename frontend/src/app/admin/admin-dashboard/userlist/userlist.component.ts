@@ -41,13 +41,12 @@ export class UserlistComponent implements OnInit {
     };
     this.adminServ.getActiveUsersList(dataToPass).subscribe(
       data => {
-        
         if (data["code"] === 200) {
           this.activeUsersList = data["data"];
           // if (this.activeUsersList.length == 0) {
           //   this.noRecordsFound = true;
           // }
-          console.log(this.activeUsersList);
+          //  console.log(this.activeUsersList);
           this.toastrServ.success("Users Fetched Successfully", "Success", {
             timeOut: 2000
           });
@@ -66,7 +65,7 @@ export class UserlistComponent implements OnInit {
   }
 
   suspendUser(data) {
-    console.log(data);
+    // console.log(data);
   }
 
   getActiveUsersCount() {
@@ -75,10 +74,10 @@ export class UserlistComponent implements OnInit {
     };
     this.adminServ.getActiveUsersCount(dataToPass).subscribe(
       data => {
-        console.log("DATA", data);
+        //   console.log("DATA", data);
         if (data["code"] == 200) {
           this.ActiveUsersCount = data["data"];
-          console.log("ACTIVE USERS COUNT", this.ActiveUsersCount);
+          //   console.log("ACTIVE USERS COUNT", this.ActiveUsersCount);
         }
       },
       error => {
@@ -90,7 +89,7 @@ export class UserlistComponent implements OnInit {
   }
 
   paginate(event) {
-    console.log(event);
+    // console.log(event);
     this.page = event.pageIndex + 1;
     this.count = event.pageSize;
     this.getActiveUsersList();

@@ -21,10 +21,11 @@
     align-items: center;
     justify-content: center;
     .modalContent {
-      width: 35%;
       background-color: white;
-      padding: 10px;
       border-radius: 10px;
+      opacity: 1;
+      padding: 10px;
+      width: 35%;
       .headerText {
         border-bottom: 1px solid lightgray;
       }
@@ -33,7 +34,7 @@
           .fields {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            // justify-content: space-between;
             margin-top: 5px;
             .label {
               width: 30%;
@@ -43,9 +44,14 @@
             .selectOption {
               width: 65%;
               padding: 10px !important;
+              background: transparent;
+              box-shadow: none;
+              border: 1px solid #ced4da;
+              margin-right: 0;
             }
             .pls {
               width: 65% !important;
+              margin-left: 4px;
             }
           }
         }
@@ -56,4 +62,21 @@
 
 table {
   width: 100%;
+}
+
+.status-check {
+  width: 120px;
+}
+.headerText h3 {
+  font-size: 20px;
+  padding-bottom: 0;
+}
+
+.btn-sign-in {
+  min-width: 80px;
+  margin-right: 5px;
+  margin-left: 0;
+}
+.serviceForm {
+  margin-top: 15px;
 }

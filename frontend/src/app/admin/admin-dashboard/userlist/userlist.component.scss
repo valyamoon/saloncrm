@@ -1,33 +1,34 @@
-table{
-    width: 100%;
+table {
+  width: 100%;
 }
-.btn-sus{
-    margin-bottom: 5px;
+.btn-sus {
+  margin-bottom: 5px;
 }
-.UserListWrapper{
-    margin-top: 5px;
+.UserListWrapper {
+  margin-top: 5px;
 }
-.headerSection{
-
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    .header{
-        
-        color:purple;
-    }
+.headerSection {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  .header {
+    color: purple;
+  }
 }
-.noRecords{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .noRec{
+.noRecords {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .noRec {
     text-align: center;
     color: #721c24;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     padding: 2em;
     width: 50%;
-    }
-
+  }
+}
+.suspend-sec {
+  width: 20%;
+  margin-left: 10px;
 }
