@@ -67,25 +67,25 @@ export class ManageAdminComponent implements OnInit {
       (res: any) => {
         if (res.code === 200) {
           this.toastrServ.success("Registered Successfully", "Please Login", {
-            timeOut: 3000
+            timeOut: 1000
           });
           this.fetchAllAdmins();
           this.isAddModal = false;
           this.authServ.sendToken(res.data.token);
         } else if (res.code === 201) {
           this.toastrServ.warning("User Already Exist", "Please Login", {
-            timeOut: 3000
+            timeOut: 1000
           });
           this.isAddModal = false;
         } else {
           this.toastrServ.error("Failed to register", "Please try again", {
-            timeOut: 3000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrServ.error("Server - Error", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );
@@ -111,7 +111,7 @@ export class ManageAdminComponent implements OnInit {
       },
       error => {
         this.toastrServ.error("Server - Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );

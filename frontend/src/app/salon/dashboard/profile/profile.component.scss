@@ -17,9 +17,17 @@
     padding: 10px;
     background-color: white;
     opacity: 1;
+    width: 45%;
     z-index: 11;
     border-radius: 10px;
     .salonDetailSave {
+      .field {
+        display: flex;
+        align-items: center;
+        label {
+          width: 20%;
+        }
+      }
       .fields {
         margin-top: 5px;
         margin-bottom: 5px;
@@ -42,7 +50,8 @@
       .pendingText {
         text-align: center;
         color: white;
-        background: transparent linear-gradient(90deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+        background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%)
+          0% 0% no-repeat padding-box;
         border-color: transparent;
       }
       .pendingGIF {

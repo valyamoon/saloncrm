@@ -5,7 +5,7 @@ const utility = require("../../../../lib/utility.js");
 const authy = require("authy")("Y23QOjmAiKdXpEU1MEVAp1g99X77QqFp");
 const jwt = require("jsonwebtoken");
 
-//const webUrl = "http://172.10.230.180:3001/uploads/profileImages/";
+//const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 const jwtKey = "saloncrm";
@@ -296,7 +296,10 @@ function registerUser(req, res) {
         try {
           let condition = {};
           if (req.body.email && req.body.phone) {
-            condition = [{ email: req.body.email }, { phone: req.body.phone }];
+            // condition = [{ email: req.body.email }, { phone: req.body.phone }];
+            condition = {
+              $or: [{ email: req.body.email }, { phone: req.body.phone }]
+            };
           } else if (req.body.email) {
             condition = {
               email: req.body.email
@@ -316,7 +319,7 @@ function registerUser(req, res) {
           console.log("CONDITION:", condition);
 
           let checkUser = await commonQuery.findoneUser(users, condition);
-          +console.log("CGEC", checkUser);
+          console.log("CGEC", checkUser);
 
           if (!checkUser.length) {
             var newUser = new users({
@@ -512,6 +515,7 @@ function login(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function updateUser(req, res) {
+  console.log(req.body);
   async function updateUser() {
     var image_path;
     let updatedUserData = {};
@@ -538,9 +542,17 @@ function updateUser(req, res) {
               if (req.files) {
                 extension = req.files.profilepic.name.split(".");
                 let imgOriginalName = req.files.profilepic.name;
+                // path =
+                //   constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
+                // db_path = webUrl + timeStamp + "_" + imgOriginalName;
+
                 path =
                   constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
+                // constant.directoryPath.SERVICEIMAGE
+                // return false;
                 db_path = webUrl + timeStamp + "_" + imgOriginalName;
+                console.log("DB PATH", db_path);
+                console.log("PATH IS", path);
               }
               if (db_path) {
                 //image_path= db_path;
@@ -892,11 +904,12 @@ function softDeleteUser(req, res) {
  */
 
 function getDetailsOfUser(req, res) {
+  console.log("USEREEE", req.body);
   async function getDetailsOfUser() {
     try {
-      if (req.body.userid) {
+      if (req.body.user_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.userid),
+          _id: mongoose.Types.ObjectId(req.body.user_id),
           isActive: true,
           isDeleted: false
         };

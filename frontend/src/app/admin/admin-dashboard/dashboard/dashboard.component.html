@@ -35,12 +35,12 @@
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="contact">
-        <th mat-header-cell *matHeaderCellDef>Contact</th>
+        <th mat-header-cell *matHeaderCellDef class="status-check">Contact</th>
         <td mat-cell *matCellDef="let element">{{ element.contact }}</td>
       </ng-container>
 
       <ng-container matColumnDef="isactive">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <th mat-header-cell *matHeaderCellDef class="status-check">Status</th>
         <td mat-cell *matCellDef="let element">
           <mat-slide-toggle
             [checked]="element.isActive"
@@ -50,8 +50,10 @@
       </ng-container>
 
       <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>Action</th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell *matHeaderCellDef class="status-check-action">
+          Action
+        </th>
+        <td mat-cell *matCellDef="let element" class="btnArea">
           <button
             class="btn btn-primary btn-sign-in"
             (click)="approveSalonRequest(element)"

@@ -1554,3 +1554,12 @@ function deactiveUsers() {
   }
   deactiveUsers().then(function() {});
 }
+
+function viewDetails(req, res) {
+  async function viewDetails() {
+    try {
+    } catch (error) {}
+  }
+
+  viewDetails().then(function() {});
+}
