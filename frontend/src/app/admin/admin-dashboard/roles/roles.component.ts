@@ -90,18 +90,18 @@ export class RolesComponent implements OnInit {
           }
 
           this.toastrServ.success("Fetched Roles", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
         } else {
           this.noRecordsFound = false;
           this.toastrServ.error("Failed To Fetch Roles", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -130,19 +130,19 @@ export class RolesComponent implements OnInit {
         //    console.log("INS ERE", data);
         if (data["code"] === 200) {
           this.toastrServ.success("Role Deleted", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
 
           this.fetchRoles();
         } else {
           this.toastrServ.error("Failed To Delete", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -161,20 +161,20 @@ export class RolesComponent implements OnInit {
         if (data["code"] === 200) {
           this.isAddModal = false;
           this.toastrServ.success("Role Added", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
           this.roleForm.reset();
           this.fetchRoles();
         } else {
           this.isAddModal = true;
           this.toastrServ.error("Failed To Add", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -192,21 +192,21 @@ export class RolesComponent implements OnInit {
         if (data["code"] === 200) {
           this.isAddModal = false;
           this.toastrServ.success("Role Updated", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
           this.roleForm.reset();
           this.fetchRoles();
         } else {
           this.isAddModal = true;
           this.toastrServ.error("Failed To Update", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         //   console.log(error.error);
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );

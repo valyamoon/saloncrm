@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ToastrService } from "ngx-toastr";
+
 @Component({
   selector: "app-userlist",
   templateUrl: "./userlist.component.html",
@@ -9,7 +10,11 @@ import { ToastrService } from "ngx-toastr";
 export class UserlistComponent implements OnInit {
   activeUsersList: any;
   activeSalons: any;
-  noRecordsFound: boolean;
+  noRecordsFound: boolean = false;
+  userDetails: any;
+  userDetailHeaderText: any = "User Details";
+  showUserDetails: boolean;
+
   displayedColumns = [
     "firstName",
     "lastName",
@@ -43,10 +48,10 @@ export class UserlistComponent implements OnInit {
       data => {
         if (data["code"] === 200) {
           this.activeUsersList = data["data"];
-          // if (this.activeUsersList.length == 0) {
-          //   this.noRecordsFound = true;
-          // }
-          //  console.log(this.activeUsersList);
+          if (this.activeUsersList.length == 0) {
+            this.noRecordsFound = true;
+          }
+          console.log(this.activeUsersList);
           this.toastrServ.success("Users Fetched Successfully", "Success", {
             timeOut: 2000
           });
@@ -63,9 +68,29 @@ export class UserlistComponent implements OnInit {
       }
     );
   }
+  closeUserDetail() {
+    this.showUserDetails = false;
+    this.userDetails = null;
+  }
 
-  suspendUser(data) {
-    // console.log(data);
+  viewUserDetails(data) {
+    let dataToPass = {
+      user_id: data._id
+    };
+
+    this.adminServ.getUserDetails(dataToPass).subscribe((data: any) => {
+      if (data["code"] === 200) {
+        this.showUserDetails = true;
+        this.userDetails = data["data"];
+        if (this.userDetails["profilepic"] === null) {
+          this.userDetails.profilepic = "../../../assets/images/profilepic.png";
+        }
+      } else {
+        this.toastrServ.error("Failed To Fetch User Details", "Error", {
+          timeOut: 2000
+        });
+      }
+    });
   }
 
   getActiveUsersCount() {

@@ -19,9 +19,13 @@ var promocodeSchema = mongoose.Schema(
       default: null,
       ref: "users"
     },
-    description:{
-        type:String,
-        default:null
+    description: {
+      type: String,
+      default: null
+    },
+    termsAndCondition: {
+      type: String,
+      default: null
     }
   },
   { timestamps: true }

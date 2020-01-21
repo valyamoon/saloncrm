@@ -66,20 +66,20 @@ export class CategoriesComponent implements OnInit {
         if (data["code"] === 200) {
           this.isAddModal = false;
           this.toastrSev.success("Catgory Added", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
           this.fetchCategoriesList();
         } else {
           this.isAddModal = true;
           this.toastrSev.error("Failed To Added", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.isAddModal = false;
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -103,18 +103,18 @@ export class CategoriesComponent implements OnInit {
           }
 
           this.toastrSev.success("Catgories Fetched", "Success", {
-            timeOut: 2000,
+            timeOut: 1000,
             progressAnimation: "decreasing"
           });
         } else {
           this.toastrSev.error("Failed To Fetch", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -128,18 +128,18 @@ export class CategoriesComponent implements OnInit {
         if (data["code"] === 200) {
           this.fetchCategoriesList();
           this.toastrSev.success("Catgories Deleted", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
           this.fetchArchivedCategoryList();
         } else {
           this.toastrSev.error("Failed To Delete", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -164,17 +164,17 @@ export class CategoriesComponent implements OnInit {
           }
 
           this.toastrSev.success("Archive Catgories Fetched", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
         } else {
           this.toastrSev.error("Failed To Fetch", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -191,17 +191,17 @@ export class CategoriesComponent implements OnInit {
           this.fetchCategoriesList();
           this.showArchived = false;
           this.toastrSev.success("Awake Catgory", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
         } else {
           this.toastrSev.error("Failed To Awake", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );

@@ -116,10 +116,10 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
   pageSize,
   page,
   dynamicQuery,
-  distance,
   lat,
   long
 ) {
+  console.log("CHHHH", dynamicQuery, pageSize, page, lat, long);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
@@ -198,7 +198,7 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
         }
       }
     ]);
-    console.log("postQuery", JSON.stringify(postQuery));
+    // console.log("postQuery", JSON.stringify(postQuery));
     if (pageSizes && currentPage) {
       postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
     }
@@ -238,18 +238,13 @@ commonQuery.findoneUser = async function findoneUser(
   fetchVal
 ) {
   return new Promise(function(resolve, reject) {
-    model.find(
-      {
-        $or: condition
-      },
-      function(err, docs) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(docs);
-        }
+    model.find(condition, function(err, docs) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(docs);
       }
-    );
+    });
   });
 };
 

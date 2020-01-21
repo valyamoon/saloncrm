@@ -54,7 +54,9 @@
         <!-- Name Column -->
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef>Email</th>
-          <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+          <td mat-cell *matCellDef="let element" class="valueField">
+            {{ element.email }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="isactive">
@@ -80,7 +82,10 @@
                 Delete
               </button> -->
               <div class="" (click)="deleteAdmin(element)">
-                <img src="../../../../assets/images/delete.svg" />
+                <img
+                  src="../../../../assets/images/delete.svg"
+                  title="Delete Admin"
+                />
               </div>
             </div>
           </td>

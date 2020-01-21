@@ -130,6 +130,13 @@ export class AdminServService {
   fetchAllUsersCommon(data) {
     return this.http.post(this.baseUrl + "/all-users", data, httpOptions);
   }
+  getUserDetails(data) {
+    return this.http.post(this.baseUrl + "/user-detail", data, httpOptions);
+  }
+
+  getSalonDetails(data) {
+    return this.http.post(this.baseUrl + "/view-salon", data, httpOptions);
+  }
 
   activeUser(data) {
     return this.http.post(

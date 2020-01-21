@@ -57,13 +57,13 @@ export class ServicesComponent implements OnInit {
           }
         } else {
           this.toastrServ.error("Failed To Fetch", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -83,21 +83,21 @@ export class ServicesComponent implements OnInit {
       (data: any) => {
         if (data["code"] == 200) {
           this.toastrServ.success("Service Deleted", "Success", {
-            timeOut: 2000,
+            timeOut: 1000,
             progressAnimation: "decreasing"
           });
 
           this.fetchAllServices();
         } else {
           this.toastrServ.error("Failed To Delete", "Error", {
-            timeOut: 2000,
+            timeOut: 1000,
             progressAnimation: "decreasing"
           });
         }
       },
       error => {
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000,
+          timeOut: 1000,
           progressAnimation: "decreasing"
         });
       }
@@ -114,7 +114,7 @@ export class ServicesComponent implements OnInit {
       (data: any) => {
         if (data["code"] == 200) {
           this.toastrServ.success("Service Added", "Success", {
-            timeOut: 2000,
+            timeOut: 1000,
             progressAnimation: "decreasing"
           });
           this.addServiceModal = false;
@@ -122,14 +122,14 @@ export class ServicesComponent implements OnInit {
           this.fetchAllServices();
         } else {
           this.toastrServ.error("Failed To Add", "Error", {
-            timeOut: 2000,
+            timeOut: 1000,
             progressAnimation: "decreasing"
           });
         }
       },
       error => {
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000,
+          timeOut: 1000,
           progressAnimation: "decreasing"
         });
       }
@@ -165,17 +165,17 @@ export class ServicesComponent implements OnInit {
             this.noRecordsFound = true;
           }
           this.toastrServ.success("Fetched Services", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
         } else {
           this.toastrServ.error("Failed to fetch", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );

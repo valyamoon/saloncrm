@@ -115,20 +115,20 @@ export class DashboardComponent implements OnInit {
         //    console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastServ.success("Salon Approved Successfully", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
           this.getRequests();
           this.getActiveSalonsCount();
           this.getActiveUsersCount();
         } else {
           this.toastServ.error("Failed To Process", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastServ.error("Failed To Approve Salon", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );
@@ -155,7 +155,7 @@ export class DashboardComponent implements OnInit {
       },
       error => {
         this.toastServ.error("Server Error", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );
@@ -183,7 +183,7 @@ export class DashboardComponent implements OnInit {
       },
       error => {
         this.toastServ.error("Server Error", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );
@@ -206,20 +206,20 @@ export class DashboardComponent implements OnInit {
         //   console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastServ.success("Salon Declined Successfully", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
           this.getRequests();
           this.getActiveSalonsCount();
           this.getActiveUsersCount();
         } else {
           this.toastServ.error("Failed To Decline", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastServ.error("Server Error", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );

@@ -72,3 +72,7 @@ table {
   display: flex;
   margin-bottom: 5px;
 }
+.valueField:first-child {
+  opacity: 0.5;
+  pointer-events: none;
+}
