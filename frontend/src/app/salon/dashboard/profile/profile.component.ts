@@ -15,11 +15,14 @@ export class ProfileComponent implements OnInit {
   numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
   lng: any;
+  chosenTime: any;
+  formVal: any;
   user_id: any;
   selectedFile: File;
   checkIsApproved: boolean = false;
   tempUrl: string | ArrayBuffer;
-  public url = <any>'';
+  imageTemp: any;
+  public url = <any>"";
 
   showPendingApproval: boolean = false;
   checkInitialApprovalStatus: boolean;
@@ -47,7 +50,9 @@ export class ProfileComponent implements OnInit {
         [Validators.required, Validators.pattern(this.numberPattern)]
       ],
       salonaddress: ["", Validators.required],
-      image: null
+      image: null,
+      opentime: ["", Validators.required],
+      closetime: ["", Validators.required]
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
@@ -62,36 +67,14 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-
   get contact() {
     return this.submitSalonDetails.get("contact");
   }
 
   uploadImage(event) {
-    console.log("++++event", event);
-    if (event.target.files && event.target.files[0]) {
-      console.log("files", event.target.files);
-      console.log("file", event.target.files);
-      var reader = new FileReader();
-      reader.onload = (event: ProgressEvent) => {// called once readAsDataURL is completed
-        this.url = false;
-        console.log("event", event.target);
-        console.log("event2", event);
-        this.tempUrl = (<FileReader>event.target).result;// read file as data url
-        console.log("temoURL", this.tempUrl);
-      }
-      reader.readAsDataURL(event.target.files[0]);
-      let file = <File>event.target.files[0];
-      console.log("======files======", file);
-      // this.Adminservice.addService(file)
-      //this.submitSalonDetails.get('image').setValue(file);
-      const Image = this.submitSalonDetails.get('image');
-      Image.setValue(file, event.target.files[0]);
-      this.submitSalonDetails.updateValueAndValidity();
-
-      console.log("======this.addServiceForm======", this.submitSalonDetails);
-    }
-
+    const file = (event.target as HTMLInputElement).files[0];
+    this.submitSalonDetails.patchValue({ image: file });
+    this.submitSalonDetails.get("image").updateValueAndValidity();
   }
 
   checkIsApprovedProfile() {
@@ -100,8 +83,7 @@ export class ProfileComponent implements OnInit {
   }
 
   submitSalon(data) {
-    console.log("datais", data);
-    //this.user_id = sessionStorage.getItem("userId");
+    console.log("INSIDE DATA", JSON.stringify(data));
     console.log(this.user_id);
     let dataToPass = {
       name: data.name,
@@ -109,11 +91,30 @@ export class ProfileComponent implements OnInit {
       contact: data.contact,
       lat: this.lat,
       long: this.lng,
+      image: data.image,
       user_id: this.user_id,
-      image: data.image
+      opentime: data.opentime,
+      closetime: data.closetime
     };
+
+    const postData = new FormData();
+    postData.append("name", dataToPass.name);
+    postData.append("image", dataToPass.image);
+    postData.append("lat", dataToPass.lat);
+    postData.append("long", dataToPass.long);
+    postData.append("salonaddress", dataToPass.salonaddress);
+    postData.append("opentime", dataToPass.opentime);
+    postData.append("closetime", dataToPass.closetime);
+    postData.append("contact", dataToPass.contact);
+    postData.append("user_id", dataToPass.user_id);
+
+    console.log("POSTDATA", postData);
+
+    var options = { content: postData };
+    console.log(options);
+
     console.log("DATATOPASS", dataToPass);
-    this.commServ.saveSalonDetails(dataToPass).subscribe(
+    this.commServ.saveSalonDetails(postData).subscribe(
       data => {
         if (data["code"] === 200) {
           this.showPendingApproval = true;
@@ -139,8 +140,13 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-
-
-
-
+  openTime(data) {
+    console.log(data);
+  }
+  closeTime(data) {
+    console.log(data);
+  }
+  timeChanged(data) {
+    console.log(data);
+  }
 }

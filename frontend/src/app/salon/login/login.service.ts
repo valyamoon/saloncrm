@@ -18,9 +18,9 @@ export class LoginService {
   constructor(private http: HttpClient) {}
 
   loginSalon(data) {
-  return  this.http.post(this.baseUrl + "/login", data, httpOptions);
+    return this.http.post(this.baseUrl + "/login", data);
   }
   signUpSalon(data) {
-   return this.http.post(this.baseUrl + "/register", data, httpOptions);
+    return this.http.post(this.baseUrl + "/register", data);
   }
 }
