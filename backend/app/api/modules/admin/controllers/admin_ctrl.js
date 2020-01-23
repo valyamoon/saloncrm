@@ -281,7 +281,8 @@ function suspendSalon(req, res) {
           let user_id = suspendedSalon.user_id;
 
           let activeCondition = {
-            isActive: false
+            isActive: false,
+            isSubmitted: false
           };
           let condition = {
             _id: mongoose.Types.ObjectId(user_id)
@@ -594,6 +595,9 @@ function getRoles(req, res) {
  */
 
 function getActiveSalonsList(req, res) {
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   async function getActiveSalonsList() {
     try {
       if (req.body && req.body.type === "activesalons") {
@@ -603,7 +607,12 @@ function getActiveSalonsList(req, res) {
           isApproved: true,
           isDeclined: false
         };
-        let activeSalonsList = await commonQuery.fetch_all(salons, condition);
+        let activeSalonsList = await commonQuery.fetch_all_paginated(
+          salons,
+          condition,
+          pageSize,
+          currentPage
+        );
         if (!activeSalonsList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {

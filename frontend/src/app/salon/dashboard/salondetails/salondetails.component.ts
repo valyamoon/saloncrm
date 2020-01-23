@@ -5,21 +5,21 @@ import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 
 @Component({
-  selector: "app-profile",
-  templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.scss"]
+  selector: "app-salondetails",
+  templateUrl: "./salondetails.component.html",
+  styleUrls: ["./salondetails.component.scss"]
 })
-export class ProfileComponent implements OnInit {
+export class SalondetailsComponent implements OnInit {
   submitSalonDetails: FormGroup;
   closetime: any;
   opentime: any;
   showNow: boolean = false;
   numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
-  min: any;
   lng: any;
   chosenTime: any;
   formVal: any;
+  min: any;
   user_id: any;
   selectedFile: File;
   checkIsApproved: boolean = false;

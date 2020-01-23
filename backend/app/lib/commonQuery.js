@@ -1331,7 +1331,7 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
   pageSize,
   page
 ) {
-  //console.log("inFETCHALLPAGINATED",model,cond,pageSize.page);
+  console.log("inFETCHALLPAGINATED", cond, pageSize, page);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
@@ -1353,6 +1353,7 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
         }
       },
       { $unwind: "$users" },
+      { $match: cond },
       {
         $project: {
           ratings: "$ratings",
@@ -1636,6 +1637,97 @@ commonQuery.getSalonDetailsQuery = function getSalonDetailsQuery(
         } else {
           resolve(res);
         }
+      });
+  });
+};
+
+commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
+  model,
+  long,
+  lat,
+  service_id,
+  pageSize,
+  page,
+  name,
+  sortParam
+) {
+  return new Promise(function(resolve, reject) {
+    let pageSizes = pageSize;
+    let currentPage = page;
+    let postQuery = model.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [long, lat]
+          },
+          spherical: true,
+          distanceField: "dist.calculated",
+          distanceMultiplier: 0.00062137
+        }
+      },
+      {
+        $match: {
+          name: new RegExp(name ? name : " ", "gi")
+        }
+      },
+      {
+        $match: {
+          isservicesadded: "true"
+        }
+      },
+      {
+        $lookup: {
+          from: "reviewratings",
+          localField: "_id",
+          foreignField: "salon_id",
+          as: "ratings"
+        }
+      },
+      {
+        $lookup: {
+          from: "salonservices",
+          localField: "_id",
+          foreignField: "salon_id",
+          as: "servicesSelected"
+        }
+      },
+      { $sort: { "servicesSelected.price": -1 } },
+      { $unwind: "$servicesSelected" },
+      { $sort: sortParam },
+      {
+        $match: {
+          "servicesSelected.service_id": service_id
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          address: "$salonaddress",
+          contact: 1,
+          closetime: 1,
+          opentime: 1,
+          location: 1,
+          image: 1,
+          avgRatings: { $avg: "$ratings.ratings" },
+          distance: "$dist.calculated",
+          service: "$servicesSelected"
+        }
+      }
+    ]);
+    if (pageSizes && currentPage) {
+      postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
+    }
+    postQuery
+      .then(result => {
+        // console.log("999999999999999999999", result);
+
+        resolve(result);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
       });
   });
 };

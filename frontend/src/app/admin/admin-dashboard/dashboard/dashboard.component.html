@@ -60,12 +60,32 @@
           >
             Approve
           </button>
-          <button
+          <!-- <button
             class="btn btn-primary btn-sign-in"
             (click)="declineSalonRequest(element)"
           >
             Decline
-          </button>
+          </button> -->
+          <div class="suspend-sec" (click)="declineSalonRequest(element)">
+            <img
+              src="../../../../assets/images/suspend.svg"
+              title="Suspend Salon"
+              alt="Suspend Salon"
+            />
+          </div>
+          <div class="suspend-sec" (click)="showSalonDetails(element)">
+            <img
+              src="../../../../assets/images/view.svg"
+              title="Salon Detail"
+              alt=" Salon Detail"
+            />
+          </div>
+          <!-- <button
+            class="btn btn-primary btn-sign-in"
+            (click)="showSalonDetails(element)"
+          >
+            Details
+          </button> -->
         </td>
       </ng-container>
 
@@ -83,6 +103,55 @@
   </div>
   <div *ngIf="noRecordFound" class="noRecords">
     <div class="noRec">No Records Found</div>
+  </div>
+</div>
+
+<div class="userDetailsOverlay" *ngIf="showSalonDetail">
+  <div class="main-section-area">
+    <div class="header">
+      <h1>Salon Details</h1>
+    </div>
+    <div class="main-section">
+      <div class="field-row img">
+        <img src="{{ salonRequestDetails.image }}" class="profilePic" />
+      </div>
+      <div class="field-row">
+        <label>Name:</label>
+        <div class="details">{{ salonRequestDetails.name }}</div>
+      </div>
+      <div class="field-row">
+        <label>Email:</label>
+        <div class="details">{{ salonEmail }}</div>
+      </div>
+      <div class="field-row">
+        <label>Address:</label>
+        <div class="details">{{ salonRequestDetails.salonaddress }}</div>
+      </div>
+      <div class="field-row">
+        <label>Contact:</label>
+        <div class="details">{{ salonRequestDetails.contact }}</div>
+      </div>
+      <div class="field-row">
+        <label>Close Time:</label>
+        <div class="details">
+          {{ salonRequestDetails.closetime | date: "shortTime" }}
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Open Time:</label>
+        <div class="details">
+          {{ salonRequestDetails.opentime | date: "shortTime" }}
+        </div>
+      </div>
+    </div>
+    <div class="btn-Area">
+      <button
+        class=" btn btn-sign-in btn-primary"
+        (click)="closeSalonDetails()"
+      >
+        Close
+      </button>
+    </div>
   </div>
 </div>
 

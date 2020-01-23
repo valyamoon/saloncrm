@@ -27,11 +27,11 @@ var salonSchema = mongoose.Schema({
     type: String
   },
   opentime: {
-    type: String,
+    type: Date,
     default: null
   },
   closetime: {
-    type: String,
+    type: Date,
     default: null
   },
   user_id: {
