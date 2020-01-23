@@ -14,6 +14,7 @@ import {
   MatOptionModule
 } from "@angular/material";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 import { ToastrModule } from "ngx-toastr";
 import {} from "googlemaps";
 import { AgmCoreModule } from "@agm/core";
@@ -46,7 +47,9 @@ import { RouterModule } from "@angular/router";
     MatDialogModule,
     MatSelectModule,
     MatOptionModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   providers: [
     {

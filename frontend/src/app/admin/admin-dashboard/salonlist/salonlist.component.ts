@@ -19,10 +19,12 @@ export class SalonlistComponent implements OnInit {
     "isactive",
     "action"
   ];
-  page: any;
+
   limit: any = 0;
   count: any = 5;
   pageSize: any = 5;
+
+  page: any = 1;
   ActiveSalonsCount: any;
   disabled: boolean = true;
   salonDetails: any;
@@ -48,7 +50,12 @@ export class SalonlistComponent implements OnInit {
    * @smartData Enterprises (I) Ltd
    */
   getActiveSalonsList() {
-    this.adminServ.getSalonsList().subscribe(
+    let dataToPass = {
+      type: "activesalons",
+      pageSize: this.count,
+      page: this.page
+    };
+    this.adminServ.getSalonsList(dataToPass).subscribe(
       data => {
         // console.log(data);
         // console.log("SalonsList", data["data"]);

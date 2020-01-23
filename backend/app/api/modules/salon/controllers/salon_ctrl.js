@@ -2,7 +2,8 @@
 
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
-
+var ts = require("time-slots-generator");
+const moment = require("moment");
 const jwt = require("jsonwebtoken");
 const mkdirp = require("mkdirp");
 //const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
@@ -53,9 +54,6 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
-  console.log("IMAGE", req.files);
-
-  console.log("ASSSSSSSSSS", req.body);
   async function saveSalonDetails() {
     try {
       var image_path;
@@ -192,32 +190,174 @@ function getSalons(req, res) {
 
   async function getSalons() {
     try {
-      if (req.body && req.body.services) {
+      var intervals;
+      var endtime;
+      var timeslots;
+      var starttime;
+      var startTiming;
+      var endTiming;
+      var salonListingNew = [];
+
+      if (req.body && req.body.service_id) {
         let lat = +req.body.lat;
         let long = +req.body.long;
         let name = req.body.name;
+        let service_id = mongoose.Types.ObjectId(req.body.service_id);
         let pageSize =
           +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
         let page = +req.body.page || +req.body.page ? req.body.page : +1;
 
-        let dynamicQuery = req.body.services;
-        console.log(dynamicQuery, lat, long, name, pageSize, page);
+        let sortParam;
+        if (req.body.sort === "price" && req.body.sortOrder === "asc") {
+          sortParam = { "servicesSelected.price": 1 };
+        } else if (req.body.sort === "price" && req.body.sortOrder === "dsc") {
+          sortParam = { "servicesSelected.price": -1 };
+        } else if (
+          req.body.sort === "distance" &&
+          req.body.sortOrder === "asc"
+        ) {
+          sortParam = { distanceField: 1 };
+        } else if (req.body.sort === "price" && req.body.sortOrder === "dsc") {
+          sortParam = { distanceField: -1 };
+        } else {
+          sortParam = { "servicesSelected.price": 1 };
+        }
 
-        let salonList = await commonQuery.fetch_near_salons(
+        let salonList = await commonQuery.fetch_Salon_list_Near(
           salons,
+          long,
+          lat,
+          service_id,
           pageSize,
           page,
-          dynamicQuery,
-          lat,
-          long
+          name,
+          sortParam
         );
         if (!salonList) {
         } else {
+          //console.log("SALONLIST", salonList);
+
+          let slots = [];
+          salonList.forEach(async function(c) {
+            slots.push({
+              salon: c.name,
+              _id: c._id,
+              optime: c.opentime,
+              cltime: c.closetime,
+              image: c.image,
+              contact: c.contact,
+              avgRatings: c.avgRatings,
+              distance: c.distance,
+              location: c.location,
+              address: c.address,
+              servicename: c.service["servicename"],
+              services: c.service,
+              duration: c.service["duration"]
+            });
+          });
+          //console.log("SLOTS", slots);
+          slots.forEach(function(v) {
+            let todaysDate = new Date();
+            console.log(todaysDate);
+            let comingDate = req.body.date;
+            todaysDate = moment(todaysDate).format("DD:MM:YYYY");
+            comingDate = moment(comingDate).format("DD:MM:YYYY");
+
+            if (todaysDate === comingDate) {
+              let currentTime = new Date();
+              //  console.log("CT", moment(currentTime).format("HH:mm"));
+              starttime = currentTime;
+            } else {
+              starttime = v.optime;
+            }
+
+            var difference = v.cltime - v.optime;
+            var minutes = difference * 60;
+            var slots = minutes / v.duration;
+
+            intervals = v.duration;
+            endtime = v.cltime;
+            timeslots = [starttime];
+
+            startTiming = moment(starttime).format("HH:mm");
+            endTiming = moment(endtime).format("HH:mm");
+
+            // console.log("ddd", difference);
+            // console.log("MIN", minutes);
+            // console.log("Slots", slots);
+            // console.log("interval", intervals);
+            // console.log("endtime", endtime);
+            // console.log("starttime", starttime);
+            // console.log("starttime", startTiming);
+            // console.log("endTiming", endTiming);
+
+            function parseTime(s) {
+              var c = s.split(":");
+              return parseInt(c[0]) * 60 + parseInt(c[1]);
+            }
+
+            function convertHours(mins) {
+              var hour = Math.floor(mins / 60);
+              var mins = mins % 60;
+              var converted = pad(hour, 2) + ":" + pad(mins, 2);
+              return converted;
+            }
+
+            function pad(str, max) {
+              str = str.toString();
+              return str.length < max ? pad("0" + str, max) : str;
+            }
+
+            function calculate_time_slot(start_time, end_time, interval) {
+              var i, formatted_time;
+              var time_slots = new Array();
+              for (var i = start_time; i <= end_time; i = i + interval) {
+                formatted_time = convertHours(i);
+                time_slots.push(formatted_time);
+              }
+              return time_slots;
+            }
+
+            let stime = startTiming.toString();
+            let etime = endTiming.toString();
+            // console.log(stime);
+
+            var startTime = stime;
+
+            var endTime = etime;
+
+            var start_time = parseTime(startTime);
+            var end_time = parseTime(endTime);
+            var interval = parseInt(intervals);
+
+            var times_ara = calculate_time_slot(start_time, end_time, interval);
+
+            //console.log(times_ara);
+            salonListingNew.push({
+              starttime: v.optime,
+              _id: v._id,
+              closetime: v.cltime,
+              name: v.salon,
+              slots: times_ara,
+              image: v.image,
+              contact: v.contact,
+              avgRatings: v.avgRatings,
+              distance: v.distance,
+              location: v.location,
+              address: v.address,
+              servicename: v.servicename,
+              service: v.services
+            });
+
+            // console.log("SALONLISTFINAL NEW", salonListingNew);
+          });
+
           return res.json(
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
-              salonList
+              //salonList
+              salonListingNew
             )
           );
         }
@@ -294,15 +434,16 @@ function getSalonDetails(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getReviewsAndRatingsList(req, res) {
+  console.log("SSSS", req.body);
   async function getReviewsAndRatingsList() {
     try {
-      if (req.body.salon_id) {
+      if (req.body.salon_id && req.body) {
         let pageSize =
           +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
         let page = +req.body.page || +req.body.page ? req.body.page : 1;
 
         let conditon = {
-          salon_id: req.body.salon_id
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id)
         };
 
         let reviewratingsList = await commonQuery.fetch_ReviewRatings(
@@ -342,193 +483,196 @@ function getReviewsAndRatingsList(req, res) {
  * Created by SmartData
  * @smartData Enterprises (I) Ltd
  */
-// function addSalonServices(req, res) {
-//     console.log(req.body);
-//     return;;
-//     async function addSalonServices() {
-//         try {
-//             let serviceName;
-//             let categoryName;
-//             if (req.body.salon_id && req.body) {
-//                 let servCondition = {
-//                     _id: mongoose.Types.ObjectId(req.body.service_id)
-//                 };
-//                 let isserviceName = await commonQuery.findoneData(
-//                     services,
-//                     servCondition
-//                 );
-//                 console.log("serviceName", serviceName);
-//                 if (!isserviceName) {
-//                     res.json(
-//                         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-//                     );
-//                 } else {
-//                     serviceName = isserviceName.name;
-//                 }
+function addSalonServices(req, res) {
+  console.log(req.body);
 
-//                 let catCondition = {
-//                     _id: mongoose.Types.ObjectId(req.body.category_id)
-//                 };
-//                 let iscategorynname = await commonQuery.findoneData(
-//                     categories,
-//                     catCondition
-//                 );
-//                 console.log("serviceName", iscategorynname);
-//                 if (!iscategorynname) {
-//                     res.json(
-//                         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-//                     );
-//                 } else {
-//                     categoryName = iscategorynname.catname;
-//                 }
-
-//                 let newsalonService = new salonservices({
-//                     price: req.body.price,
-//                     duration: req.body.duration,
-//                     salon_id: req.body.salon_id,
-//                     service_id: req.body.service_id,
-//                     category_id: req.body.category_id,
-//                     servicename: serviceName,
-//                     categoryname: categoryName
-//                 });
-
-//                 let saveServiceToSalon = await commonQuery.InsertIntoCollection(
-//                     salonservices,
-//                     newsalonService
-//                 );
-
-//                 if (!saveServiceToSalon) {
-//                     res.json(
-//                         Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
-//                     );
-//                 } else {
-//                     let condition = { _id: req.body.salon_id };
-
-//                     let updateCondition = { isservicesadded: true };
-
-//                     let updateSalonData = await commonQuery.updateOneDocument(
-//                         salons,
-//                         condition,
-//                         updateCondition
-//                     );
-//                     if (!updateSalonData) {} else {}
-
-//                     res.json(
-//                         Response(
-//                             constant.SUCCESS_CODE,
-//                             constant.ADDED_SUCCESS,
-//                             saveServiceToSalon
-//                         )
-//                     );
-//                 }
-//             }
-//         } catch (error) {}
-//     }
-
-//     addSalonServices().then(function() {});
-// }
-
-async function addSalonServices(req, res) {
-  if (req.body.user_id && req.body.salonService) {
-    var salonService = [];
-
-    var salonId = await util.getSalonId(req.body.user_id);
-    // console.log("salonId", salonId);
-    async.each(
-      req.body.salonService,
-      async function(serviceData, firstCB) {
-        let serviceName = await util.getServcieName(
-          services,
-          serviceData.service_id
-        );
-        var categoryName = await util.getCategoryName(
-          categories,
-          serviceData.category_id
-        );
-
-        var countCond = {
-          salon_id: salonId,
-          service_id: serviceData.service_id,
-          category_id: serviceData.category_id
+  async function addSalonServices() {
+    try {
+      let serviceName;
+      let categoryName;
+      if (req.body.salon_id && req.body) {
+        console.log("HERE");
+        let servCondition = {
+          _id: mongoose.Types.ObjectId(req.body.service_id)
         };
-        // console.log("countCond", countCond);
-        let countRecord = await commonQuery.countData(salonservices, countCond);
-        // console.log("countRecord", countRecord);
-        // return;
-        if (countRecord == 0) {
-          let newsalonService = new salonservices({
-            price: serviceData.price,
-            duration: serviceData.duration,
-            salon_id: salonId,
-            service_id: serviceData.service_id,
-            category_id: serviceData.category_id,
-            servicename: serviceName,
-            categoryname: categoryName
-          });
-          let saveServiceToSalon = await commonQuery.InsertIntoCollection(
-            salonservices,
-            newsalonService
+        let isserviceName = await commonQuery.findoneData(
+          services,
+          servCondition
+        );
+        console.log("serviceName", serviceName);
+        if (!isserviceName) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
-          if (!saveServiceToSalon) {
-            res.json(
-              Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
-            );
-          } else {
-            salonService.push(saveServiceToSalon);
-            let condition = { _id: salonId };
-
-            let updateCondition = { isservicesadded: true };
-
-            let updateSalonData = await commonQuery.updateOneDocument(
-              salons,
-              condition,
-              updateCondition
-            );
-            if (!updateSalonData) {
-            } else {
-              console.log("saveServiceToSalon===========>", saveServiceToSalon);
-            }
-          }
         } else {
-          let updateData = {
-            price: serviceData.price,
-            duration: serviceData.duration,
-            salon_id: salonId,
-            service_id: serviceData.service_id,
-            category_id: serviceData.category_id,
-            servicename: serviceName,
-            categoryname: categoryName
-          };
-          let updateServiceToSalon = await commonQuery.updateOne(
-            salonservices,
-            countCond,
-            updateData
-          );
-          salonService.push(updateData);
+          serviceName = isserviceName.name;
         }
 
-        // firstCB();
-      },
-      function(err, data) {
-        if (err) {
-          console.log("Error @427", err);
+        let catCondition = {
+          _id: mongoose.Types.ObjectId(req.body.category_id)
+        };
+        let iscategorynname = await commonQuery.findoneData(
+          categories,
+          catCondition
+        );
+        console.log("serviceName", iscategorynname);
+        if (!iscategorynname) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+          );
         } else {
+          categoryName = iscategorynname.catname;
+        }
+
+        let newsalonService = new salonservices({
+          price: req.body.price,
+          duration: req.body.duration,
+          salon_id: req.body.salon_id,
+          service_id: req.body.service_id,
+          category_id: req.body.category_id,
+          servicename: serviceName,
+          categoryname: categoryName
+        });
+
+        let saveServiceToSalon = await commonQuery.InsertIntoCollection(
+          salonservices,
+          newsalonService
+        );
+
+        if (!saveServiceToSalon) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
+          );
+        } else {
+          let condition = { _id: req.body.salon_id };
+
+          let updateCondition = { isservicesadded: true };
+
+          let updateSalonData = await commonQuery.updateOneDocument(
+            salons,
+            condition,
+            updateCondition
+          );
+          if (!updateSalonData) {
+          } else {
+          }
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
               constant.ADDED_SUCCESS,
-              salonService
+              saveServiceToSalon
             )
           );
         }
       }
-    );
-  } else {
-    return res.json(
-      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-    );
+    } catch (error) {}
   }
+
+  addSalonServices().then(function() {});
 }
+
+// async function addSalonServices(req, res) {
+//   if (req.body.user_id && req.body.salonService) {
+//     var salonService = [];
+
+//     var salonId = await util.getSalonId(req.body.user_id);
+//     // console.log("salonId", salonId);
+//     async.each(
+//       req.body.salonService,
+//       async function(serviceData, firstCB) {
+//         let serviceName = await util.getServcieName(
+//           services,
+//           serviceData.service_id
+//         );
+//         var categoryName = await util.getCategoryName(
+//           categories,
+//           serviceData.category_id
+//         );
+
+//         var countCond = {
+//           salon_id: salonId,
+//           service_id: serviceData.service_id,
+//           category_id: serviceData.category_id
+//         };
+//         // console.log("countCond", countCond);
+//         let countRecord = await commonQuery.countData(salonservices, countCond);
+//         // console.log("countRecord", countRecord);
+//         // return;
+//         if (countRecord == 0) {
+//           let newsalonService = new salonservices({
+//             price: serviceData.price,
+//             duration: serviceData.duration,
+//             salon_id: salonId,
+//             service_id: serviceData.service_id,
+//             category_id: serviceData.category_id,
+//             servicename: serviceName,
+//             categoryname: categoryName
+//           });
+//           let saveServiceToSalon = await commonQuery.InsertIntoCollection(
+//             salonservices,
+//             newsalonService
+//           );
+//           if (!saveServiceToSalon) {
+//             res.json(
+//               Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
+//             );
+//           } else {
+//             salonService.push(saveServiceToSalon);
+//             let condition = { _id: salonId };
+
+//             let updateCondition = { isservicesadded: true };
+
+//             let updateSalonData = await commonQuery.updateOneDocument(
+//               salons,
+//               condition,
+//               updateCondition
+//             );
+//             if (!updateSalonData) {
+//             } else {
+//               console.log("saveServiceToSalon===========>", saveServiceToSalon);
+//             }
+//           }
+//         } else {
+//           let updateData = {
+//             price: serviceData.price,
+//             duration: serviceData.duration,
+//             salon_id: salonId,
+//             service_id: serviceData.service_id,
+//             category_id: serviceData.category_id,
+//             servicename: serviceName,
+//             categoryname: categoryName
+//           };
+//           let updateServiceToSalon = await commonQuery.updateOne(
+//             salonservices,
+//             countCond,
+//             updateData
+//           );
+//           salonService.push(updateData);
+//         }
+
+//         // firstCB();
+//       },
+//       function(err, data) {
+//         if (err) {
+//           console.log("Error @427", err);
+//         } else {
+//           res.json(
+//             Response(
+//               constant.SUCCESS_CODE,
+//               constant.ADDED_SUCCESS,
+//               salonService
+//             )
+//           );
+//         }
+//       }
+//     );
+//   } else {
+//     return res.json(
+//       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+//     );
+//   }
+// }
 
 async function getRemovesalonservice(req, res) {
   if (req.body.user_id && req.body.salonService) {
