@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 
 import { SalonRoutingModule } from "./salon-routing.module";
 import { LoginComponent } from "./login/login.component";
@@ -11,6 +12,7 @@ import { AgmCoreModule } from "@agm/core";
 import { ProfileComponent } from "./dashboard/profile/profile.component";
 import { ManageServiceComponent } from "./dashboard/manage-service/manage-service.component";
 import { ManageEmployeeComponent } from "./dashboard/manage-employee/manage-employee.component";
+import { SalondetailsComponent } from './dashboard/salondetails/salondetails.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { ManageEmployeeComponent } from "./dashboard/manage-employee/manage-empl
     DashboardComponent,
     ProfileComponent,
     ManageServiceComponent,
-    ManageEmployeeComponent
+    ManageEmployeeComponent,
+    SalondetailsComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +32,9 @@ import { ManageEmployeeComponent } from "./dashboard/manage-employee/manage-empl
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg"
     }),
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ]
 })
 export class SalonModule {}

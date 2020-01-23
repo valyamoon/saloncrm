@@ -28,6 +28,7 @@
     "bootstrap": "^4.4.1",
     "geolocation": "^0.2.0",
     "ng-location-picker": "^0.1.9",
+    "ng-pick-datetime": "^7.0.0",
     "ng2-fileupload": "0.0.7",
     "ngx-material-timepicker": "^5.3.0",
     "ngx-toastr": "^11.2.1",

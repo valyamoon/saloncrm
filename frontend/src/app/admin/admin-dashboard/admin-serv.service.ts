@@ -49,8 +49,7 @@ export class AdminServService {
     return this.headerText.asObservable();
   }
 
-  getSalonsList() {
-    let data = { type: "activesalons" };
+  getSalonsList(data) {
     return this.http.post(this.baseUrl + "/activesalons", data, httpOptions);
   }
 

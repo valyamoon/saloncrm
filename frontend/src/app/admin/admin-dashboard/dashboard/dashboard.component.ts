@@ -18,14 +18,17 @@ export class DashboardComponent implements OnInit {
   page: any;
   limit: any = 0;
   count: any = 5;
+  showSalonDetail: boolean;
   subscription: Subscription;
   pageSize: any = 5;
   disabled: boolean = true;
+  salonRequestDetails: any;
   pageNumber: any;
   noRecordFound: boolean;
   ActiveSalonsCount: any = 0;
   ActiveUsersCount: any = 0;
   dataDefault: any;
+  salonEmail: any;
 
   constructor(
     private adminServ: AdminServService,
@@ -187,6 +190,34 @@ export class DashboardComponent implements OnInit {
         });
       }
     );
+  }
+
+  showSalonDetails(data) {
+    // console.log(data);
+    let dataToPass = {
+      salon_id: data._id
+    };
+
+    this.adminServ.getSalonDetails(dataToPass).subscribe((data: any) => {
+      //  console.log("DSS", data);
+
+      if (data["code"] === 200) {
+        this.showSalonDetail = true;
+        this.salonRequestDetails = data["data"]["salondetail"];
+        this.salonEmail = data["data"]["email"];
+        if (this.salonRequestDetails["image"] === null) {
+          this.salonRequestDetails["image"] =
+            "../../../assets/images/profilepic.png";
+        }
+      } else {
+        this.toastServ.error("Failed To Fetch User Details", "Error", {
+          timeOut: 1000
+        });
+      }
+    });
+  }
+  closeSalonDetails() {
+    this.showSalonDetail = false;
   }
 
   /**
