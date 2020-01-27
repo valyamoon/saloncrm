@@ -103,6 +103,11 @@ export class SalondetailsComponent implements OnInit {
     console.log("event", event);
   }
 
+  logout() {
+    this.authServ.logout();
+    sessionStorage.clear();
+  }
+
   uploadImage(event) {
     const file = (event.target as HTMLInputElement).files[0];
     this.submitSalonDetails.patchValue({ image: file });
