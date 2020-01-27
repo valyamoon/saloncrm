@@ -50,7 +50,7 @@ export class AdminServService {
   }
 
   getSalonsList(data) {
-    return this.http.post(this.baseUrl + "/activesalons", data, httpOptions);
+    return this.http.post(this.baseUrl + "/activesalons", data);
   }
 
   getSalonsRequest(data) {
