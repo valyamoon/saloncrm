@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { CommonService } from "../dashboard/common.service";
+import { ToastrService } from "ngx-toastr";
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,18 +8,46 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
   dropdownVisible = false;
-  constructor() { }
+  salonData: any;
+  user_id: any;
+  constructor(
+    private commServ: CommonService,
+    private toastrServ: ToastrService
+  ) { }
 
-  ngOnInit() {
+  ngOnInit(
+
+  ) {
+    this.user_id = sessionStorage.getItem("userId");
+    this.getSalonData(this.user_id);
   }
 
   toggleSidebar() {
-    document.getElementsByTagName( 'body' )[0].classList.toggle('sidenav-toggled');
+    document.getElementsByTagName('body')[0].classList.toggle('sidenav-toggled');
   }
-  toggleDropdown(){
+  toggleDropdown() {
     this.dropdownVisible = !this.dropdownVisible;
   }
+  getSalonData(userId) {
+    let data = {
+      'user_id': userId
+    }
+    this.commServ.getSalonData(data).subscribe((responce: any) => {
+      if (responce.code === 200) {
+        this.salonData = responce.data;
 
+      } else {
+        this.toastrServ.error("Invalid salon details", "", {
+          timeOut: 3000
+        });
+      }
+    }, error => {
+      this.toastrServ.error("Failed to get salon data", error, {
+        timeOut: 3000
+      });
+
+    });
+  }
 }
 
 

@@ -1,0 +1,94 @@
+<div class="check-spa-outer">
+    <div class="employee-tabs">
+    </div>
+    <div class="create-availabillity">
+        <div class="create-availabillity-inner">
+            <div class="employee-sec">
+                <!-- <h2>Employees</h2> -->
+            </div>
+            <div class="add-employee">
+                <a routerLink="/salon/home/add-employee">
+                    <div class="add-employee-inner">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </div>
+                    <h2>Add Employee</h2>
+                </a>
+            </div>
+        </div>
+        <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+
+
+            <!-- <Modal Popup for add categories end here> -->
+            <table mat-table [dataSource]="employeeList">
+                <!-- Position Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                </ng-container>
+                <!-- Name Column -->
+
+                <ng-container matColumnDef="servicename">
+                    <th mat-header-cell *matHeaderCellDef>Services</th>
+                    <td mat-cell *matCellDef="let element">{{ (element.servicename) ? element.servicename : "" }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element" class="action-btns ">
+                        <a (click)="openAssignServieModal(element)" class="asign-primary">
+                            <img src="../../../../assets/images/assign.svg">
+                        </a>
+                        <a (click)="openEditServiceModal(element)">
+                            <img src="../../../../assets/images/edit-ico.svg">
+                        </a>
+                        <a (click)="deleteEmployee(element)" class="delete-info">
+                            <img src="../../../../assets/images/delete-icon.svg">
+                        </a>
+
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+            <mat-paginator [length]="rolesCount" [pageSize]="count" (page)="paginate($event)"
+                [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <div *ngIf="noRecordsFound" class="noRecords">
+            <div class="noRec">No Records Found</div>
+        </div>
+    </div>
+</div>
+
+<div class="userDetailsOverlay" *ngIf="isAddModal">
+
+    <div class="main-section-area modal-md">
+        <div class="header">
+            <h4>Assign Service</h4>
+        </div>
+        <div class="main-section">
+            <div class="row add-employee">
+                <div class="col-md-12">
+                    <label>Select Service:</label>
+                    <mat-select-autocomplete formControlName="service_id" class="custom-ddl"
+                        [placeholder]="'Options Selection'" [errorMsg]="errorMessage" [showErrorMsg]="showError"
+                        [options]="serviceList" [display]="'name'" [value]="'id'" [multiple]='true' [labelCount]="2"
+                        [selectedOptions]="selectedOptions" (selectionChange)="getSelectedOptions($event)">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+        </div>
+        <div class="btn-Area">
+            <button class="btn btn-primary btn-sign-in" (click)="updateEmpService()">
+                Assign
+            </button>
+            <button class=" btn btn-sign-in btn-primary" (click)="dismissModal()">
+                Close
+            </button>
+
+        </div>
+    </div>
+</div>

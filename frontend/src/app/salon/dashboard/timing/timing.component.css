@@ -1,0 +1,67 @@
+
+ 
+  body .chk-custom .custom-control-label::before {
+    background-color: transparent;
+    border: 2px solid;
+    border-radius: 2px;
+    border-style: solid;
+    -o-border-image: url("../../../../assets/images/check-mark.svg");
+       border-image: url("../../../../assets/images/check-box-empty.svg");
+    border-image-slice: 3;
+  }
+  
+  body .chk-custom .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: url("../../../../assets/images/check-mark.svg");
+  }
+  
+  body .chk-custom .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #fff;
+  }
+  
+  body .chk-custom .text-darkblue {
+    color: #454F60;
+  }
+  
+  body .create-availabillity .table.table-custom tbody tr td {
+    border-top: none;
+    border-bottom: 1px solid transparent;
+    text-align: left;
+    letter-spacing: 0;
+    color: #454F60;
+    opacity: 1;
+    font-size: 14px;
+    padding-top: 15px;
+    padding-left: 40px;
+    padding-bottom: 15px;
+    padding-right: 40px;
+    vertical-align: middle;
+  }
+ .check-spa-outer{
+    background: #FFFFFF;
+}
+.create-availabillity-inner{
+  min-height: 85px;
+  border-bottom: 1px solid #e1e1e1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-left: 40px;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 40px;
+}
+.create-availabillity-inner h4{
+  font-size: 16px;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454F60;
+  opacity: 1;
+  font-weight: bold;
+  margin: 0;
+}
+  /*# sourceMappingURL=style.css.map */
