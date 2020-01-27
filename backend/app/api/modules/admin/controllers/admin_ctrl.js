@@ -51,6 +51,7 @@ module.exports = {
   // checkAuthorisation: checkAuthorisation,
   fetchActiveUsersAll: fetchActiveUsersAll,
   forgotPassword: forgotPassword,
+  getServices: getServices,
   activeUsers: activeUsers,
   deactiveUsers: deactiveUsers
 };
@@ -95,7 +96,7 @@ function addCategories(req, res) {
       );
     }
   }
-  addCategories().then(function() {});
+  addCategories().then(function () { });
 }
 /**
  * Function is use to get salon list which need to be approved by Admin
@@ -131,7 +132,7 @@ function getSalonsRequestList(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
           );
         } else {
-          listOfSalons.forEach(function(c) {
+          listOfSalons.forEach(function (c) {
             c.isservicesadded = undefined;
             c.isreviewadded = undefined;
           });
@@ -156,7 +157,7 @@ function getSalonsRequestList(req, res) {
     }
   }
 
-  getSalonsRequestList().then(function() {});
+  getSalonsRequestList().then(function () { });
 }
 
 /**
@@ -239,7 +240,7 @@ function acceptSalonRequest(req, res) {
     }
   }
 
-  acceptSalonRequest().then(function() {});
+  acceptSalonRequest().then(function () { });
 }
 /**
  * Function is use to suspend Salon on subsription expiry
@@ -324,7 +325,7 @@ function suspendSalon(req, res) {
     }
   }
 
-  suspendSalon().then(function() {});
+  suspendSalon().then(function () { });
 }
 
 /**
@@ -349,8 +350,8 @@ function getCategories(req, res) {
             Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
           );
         } else {
-          categoriesList.forEach(function(v) {
-            v.services.forEach(function(v) {
+          categoriesList.forEach(function (v) {
+            v.services.forEach(function (v) {
               delete v.isActive;
               delete v.isDeleted;
             });
@@ -371,7 +372,7 @@ function getCategories(req, res) {
       );
     }
   }
-  getCategories().then(function() {});
+  getCategories().then(function () { });
 }
 
 /**
@@ -422,7 +423,7 @@ function addServices(req, res) {
     }
   }
 
-  addServices().then(function() {});
+  addServices().then(function () { });
 }
 
 /**
@@ -481,7 +482,7 @@ function removeServices(req, res) {
     }
   }
 
-  removeServices().then(function() {});
+  removeServices().then(function () { });
 }
 
 /**
@@ -514,7 +515,7 @@ function addRoles(req, res) {
       );
     }
   }
-  addRoles().then(function() {});
+  addRoles().then(function () { });
 }
 /**
  * Function is use to get list of Roles
@@ -554,7 +555,7 @@ function getRoles(req, res) {
         if (!rolesList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
-          rolesList.forEach(function(v) {
+          rolesList.forEach(function (v) {
             v.isDeleted = undefined;
             v.status = undefined;
           });
@@ -574,7 +575,7 @@ function getRoles(req, res) {
       );
     }
   }
-  getRoles().then(function() {});
+  getRoles().then(function () { });
 }
 
 /**
@@ -607,7 +608,7 @@ function getActiveSalonsList(req, res) {
         if (!activeSalonsList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
-          activeSalonsList.forEach(function(v) {
+          activeSalonsList.forEach(function (v) {
             v.isDeleted = undefined;
             v.isreviewadded = undefined;
             v.isservicesadded = undefined;
@@ -630,7 +631,7 @@ function getActiveSalonsList(req, res) {
       );
     }
   }
-  getActiveSalonsList().then(function() {});
+  getActiveSalonsList().then(function () { });
 }
 
 /**
@@ -681,7 +682,7 @@ function fetchActiveUsersCount(req, res) {
     }
   }
 
-  fetchActiveUsersCount().then(function() {});
+  fetchActiveUsersCount().then(function () { });
 }
 /**
  * Function is use to Fetch Active Salon List
@@ -726,7 +727,7 @@ function fetchActiveSalonsCount(req, res) {
     }
   }
 
-  fetchActiveSalonsCount().then(function() {});
+  fetchActiveSalonsCount().then(function () { });
 }
 
 function fetchActiveUsersList(req, res) {
@@ -776,7 +777,7 @@ function fetchActiveUsersList(req, res) {
       );
     }
   }
-  fetchActiveUsersList().then(function() {});
+  fetchActiveUsersList().then(function () { });
 }
 /**
  * Function is use to remove categories
@@ -822,7 +823,7 @@ function removeCategories(req, res) {
       );
     }
   }
-  removeCategories().then(function() {});
+  removeCategories().then(function () { });
 }
 /**
  * Function is use to get list of archived categories
@@ -864,7 +865,7 @@ function getArchivedCategories(req, res) {
       );
     }
   }
-  getArchivedCategories().then(function() {});
+  getArchivedCategories().then(function () { });
 }
 
 /**
@@ -909,7 +910,7 @@ function getAdminCategoriesList(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
-          adminCategories.forEach(function(c) {
+          adminCategories.forEach(function (c) {
             c.services = undefined;
           });
           let dataToPass = {
@@ -932,7 +933,7 @@ function getAdminCategoriesList(req, res) {
       );
     }
   }
-  getAdminCategoriesList().then(function() {});
+  getAdminCategoriesList().then(function () { });
 }
 
 /**
@@ -979,7 +980,7 @@ function removeRole(req, res) {
       );
     }
   }
-  removeRole().then(function() {});
+  removeRole().then(function () { });
 }
 
 /**
@@ -1021,7 +1022,7 @@ function updateRole(req, res) {
       );
     }
   }
-  updateRole().then(function() {});
+  updateRole().then(function () { });
 }
 
 /**
@@ -1068,7 +1069,7 @@ function awakeCategory(req, res) {
       );
     }
   }
-  awakeCategory().then(function() {});
+  awakeCategory().then(function () { });
 }
 
 /**
@@ -1130,7 +1131,7 @@ function getActiveServices(req, res) {
     }
   }
 
-  getActiveServices().then(function() {});
+  getActiveServices().then(function () { });
 }
 
 /**
@@ -1192,7 +1193,7 @@ function getActiveAdminList(req, res) {
     }
   }
 
-  getActiveAdminList().then(function() {});
+  getActiveAdminList().then(function () { });
 }
 
 /**
@@ -1264,7 +1265,7 @@ function fetchActiveUsersAll(req, res) {
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
             );
           } else {
-            usersList.forEach(function(c) {
+            usersList.forEach(function (c) {
               c.password = undefined;
               c.lat = undefined;
               c.long = undefined;
@@ -1290,7 +1291,7 @@ function fetchActiveUsersAll(req, res) {
       );
     }
   }
-  fetchActiveUsersAll().then(function() {});
+  fetchActiveUsersAll().then(function () { });
 }
 
 /**
@@ -1390,7 +1391,7 @@ function forgotPassword(req, res) {
       );
     }
   }
-  forgot_password().then(data => {});
+  forgot_password().then(data => { });
 }
 /**
  * Function is use to get list service provided by admin
@@ -1401,54 +1402,78 @@ function forgotPassword(req, res) {
  * Created On 09/01/2020
  */
 async function getServiceList(req, res) {
+  console.log("req.body", req.body);
   if (req.body.user_id) {
     var salonId = await util.getSalonId(req.body.user_id);
     let finalServiceArr = [];
 
     let salonCond = {
-      isActive: true,
-      isDeleted: false
+      "isActive": true,
+      "isDeleted": false
     };
     let pageSize = 100;
     let page = 1;
     let serviceList = await commonQuery.fetch_all(services, salonCond);
-
-    async.each(
-      serviceList,
-      async function(serviceData, firstCB) {
-        let serviceCond = {
-          salon_id: salonId,
-          service_id: serviceData._id,
-          category_id: serviceData.category_id
-        };
-        let salonService = await commonQuery.findAll(salonservice, serviceCond);
-        let salonServiceData = {
-          service: serviceData,
-          salonserviceinfo: salonService
-        };
-        finalServiceArr.push(salonServiceData);
-      },
-      async function(err, data) {
-        if (err) {
-          console.log("Error @427", err);
-        } else {
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.FETCHED_ALL_DATA,
-              finalServiceArr
-            )
-          );
-        }
+    //  console.log("serviceList", serviceList); return;
+    async.each(serviceList, async function (serviceData, firstCB) {
+      let serviceCond = {
+        "salon_id": salonId,
+        "service_id": serviceData._id,
+        "category_id": serviceData.category_id
       }
+      let salonService = await commonQuery.findAll(salonservice, serviceCond);
+      let salonServiceData = {
+        "service": serviceData,
+        "salonserviceinfo": salonService
+      }
+      finalServiceArr.push(salonServiceData);
+    }, async function (err, data) {
+      if (err) {
+        console.log("Error @427", err)
+      } else {
+        res.json(
+          Response(
+            constant.SUCCESS_CODE,
+            finalServiceArr
+          )
+        );
+      }
+    });
+  } else {
+    return res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
+  }
+
+}
+async function getServices(req, res) {
+  console.log("res.body", res.body)
+  if (req.body.category_id) {
+    let cond = {
+      "category_id": req.body.category_id
+    }
+
+    let servicesList = await commonQuery.fetch_all(services, cond);
+    // console.log("servicesList", servicesList); return;
+    if (!servicesList) {
+      res.json(
+        Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
+      );
+    } else {
+      res.json(
+        Response(
+          constant.SUCCESS_CODE,
+          constant.FETCHED_ALL_DATA,
+          servicesList
+        )
+      );
+    }
   } else {
     return res.json(
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
 }
-
 function activeUsers(req, res) {
   async function activeUsers() {
     try {
@@ -1487,7 +1512,7 @@ function activeUsers(req, res) {
       );
     }
   }
-  activeUsers().then(function() {});
+  activeUsers().then(function () { });
 }
 function deactiveUsers() {
   async function deactiveUsers() {
@@ -1527,14 +1552,14 @@ function deactiveUsers() {
       );
     }
   }
-  deactiveUsers().then(function() {});
+  deactiveUsers().then(function () { });
 }
 
 function viewDetails(req, res) {
   async function viewDetails() {
     try {
-    } catch (error) {}
+    } catch (error) { }
   }
 
-  viewDetails().then(function() {});
+  viewDetails().then(function () { });
 }

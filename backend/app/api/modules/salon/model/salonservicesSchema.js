@@ -18,14 +18,19 @@ var salonServicesSchema = mongoose.Schema({
   },
   duration: {
     type: String
-  },
-  servicename: {
+  }
+  , servicename: {
     type: String
   },
   categoryname: {
     type: String
-  }
-});
+  },
+  is_active: {
+    type: Boolean,
+    default: true
+  },
+
+}, { timestamps: true });
 var salonservices = (module.exports = mongoose.model(
   "salonservices",
   salonServicesSchema

@@ -1,0 +1,189 @@
+
+
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+html, body {
+    height: 100%;
+}
+
+.header-sec .navbar{
+    background: transparent linear-gradient(267deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 2px 6px #0000000A;
+    opacity: 1;
+    position: relative !important;
+    padding-left: 8px;
+    padding-right: 8px;
+    min-height: 60px;
+}
+.header-sec .navbar-brand{
+    margin-left: 12px;
+}
+.header-sec .navbar-nav{
+    margin-right: 12px;
+}
+
+.header-sec  .navbar-collapse{
+    justify-content: flex-end;
+    height: 0;
+}
+
+.header-sec ul li:nth-child(2){
+    margin-left: 25px;
+    margin-right: 25px;
+}
+.header-sec .navbar ul li.active{
+    text-align: left;
+    letter-spacing: 1.4px;
+    color: #FFFFFF;
+    opacity: 1;
+    font-weight: bold;
+    font-size: 14px;
+}
+.header-sec .navbar ul li a{
+    text-align: left;
+    letter-spacing: 1.4px;
+    color: #FFFFFF;
+    opacity: 1;
+    font-size: 14px;
+
+}
+.header-sec .navbar ul li.notification-img{
+    border-right: 1px solid #fff;
+    margin-left: 60px;
+    height: 25px;
+    margin-top: 5px;
+}
+.header-sec .navbar ul li.notification-img img{
+
+    margin-right: 15px;
+    margin-top: -15px;
+}
+
+
+.header-sec .navbar .dropdown-toggle::after{
+    display: none;
+}
+.header-sec .navbar .nav-link.dropdown-toggle{
+    margin-right: 50px;
+    margin-left: 15px;
+    letter-spacing: 0;
+}
+
+.header-sec .navbar .dropdown-item{
+    text-align: left;
+    letter-spacing: 1.4px;
+    color: #333;
+    opacity: 1;
+    font-size: 12px;
+    line-height: 1;
+    color: #454F60;
+}
+
+
+.header-sec .navbar ul li a .salon-icon{
+    height: 45px;
+    width: 45px;
+    border: 1px solid #FF7D7D;
+    border-radius: 28px;
+    opacity: 1;
+    line-height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -4px;
+    right: 0;
+    background: #fff;
+}
+
+@media(max-width: 1200px){
+    .create-availabillity .table tbody tr td{
+        padding-left: 20px;
+        padding-right: 20px;
+      
+        
+    }
+    .create-availabillity .table thead tr th{
+        padding-left: 20px;
+        padding-right: 45px;
+    }
+    .create-availabillity .table tbody tr td .delete-info {
+        margin-left: 25px;
+    }
+    .check-spa-outer .check-spa .salon-info .salon-info-inner h5{
+        word-break: break-word;
+    }
+    .check-spa-outer .check-spa .check-spa-image-outer{
+        padding: 25px 15px;
+    }
+    .check-spa-outer .check-spa .salon-info{
+        padding: 25px 15px;
+    }
+}
+
+
+@media(max-width:991px){
+    .check-spa-outer .check-spa .salon-info .salon-info-inner h5{
+        word-break: unset;
+    }
+    .check-spa-outer .check-spa .check-spa-image-outer{
+        padding: 25px 40px;
+    }
+    .check-spa-outer .check-spa .salon-info{
+        padding: 25px 40px;
+    }
+
+}
+@media(max-width:767px){
+    .employee-tabs ul li:nth-child(2) {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .create-availabillity .table tbody tr td{
+        padding-top: 30px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+        padding-right: 15px;
+        
+    }
+    .create-availabillity .btn-sec{
+        margin-right: 10px;
+    }
+    .create-availabillity .btn-sec .btn-save{
+        height: 40px;
+        min-width: 120px;
+    }
+    .create-availabillity .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link{
+        padding: 5px;
+    }
+    .create-availabillity-inner{
+        padding-left: 20px;
+     
+        padding-right: 20px;
+    }   
+}
+.mat-tab-group {
+    width: 95% !important;
+}
+
+    
+    
+
+
+/*          
+.logoutItem{
+    position: absolute;
+    height: 20px;
+    cursor: pointer;
+    right: 2px;
+    text-align: center;
+    align-items: center;
+    padding: 15px;
+    box-shadow: 1px 2px 2px 1px lightgrey;
+    background: white;
+    border-radius: 5px;
+    display: flex;
+
+} */

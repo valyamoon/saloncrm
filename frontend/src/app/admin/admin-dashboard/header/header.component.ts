@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authServ: AuthService,
     private admnServ: AdminServService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getAdminName();
