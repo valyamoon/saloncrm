@@ -52,4 +52,4 @@ import { ManageAdminComponent } from "./admin-dashboard/manage-admin/manage-admi
   ],
   entryComponents: [ConfirmationComponent]
 })
-export class AdminModule {}
+export class AdminModule { }

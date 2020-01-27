@@ -9,7 +9,7 @@ var salonServicesSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "services"
   },
-  category_id:{
+  category_id: {
     type: mongoose.Types.ObjectId,
     ref: "categories"
   },
@@ -19,13 +19,18 @@ var salonServicesSchema = mongoose.Schema({
   duration: {
     type: String
   }
-  ,servicename:{
-    type:String
+  , servicename: {
+    type: String
   },
-  categoryname:{
-    type:String
-  }
-});
+  categoryname: {
+    type: String
+  },
+  is_active: {
+    type: Boolean,
+    default: true
+  },
+
+}, { timestamps: true });
 var salonservices = (module.exports = mongoose.model(
   "salonservices",
   salonServicesSchema

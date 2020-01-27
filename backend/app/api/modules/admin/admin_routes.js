@@ -27,7 +27,8 @@ module.exports = function (router) {
   router.post("/active-admin", admin.getActiveAdminList);
   router.post("/all-users", admin.fetchActiveUsersAll);
   router.post("/forgot-password", admin.forgotPassword);
-  router.post('/servicelist', admin.getServiceList);
+  // router.post('/servicelist', admin.getServiceList);
+  router.post("/services", admin.getServices);
 
   return router;
 };

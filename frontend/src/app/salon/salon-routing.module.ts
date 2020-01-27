@@ -1,36 +1,31 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './dashboard/profile/profile.component';
 import { AuthGuard } from '../salon/auth.guard';
 import { AuthService } from '../salon/auth.service';
-import { ManageServiceComponent } from './dashboard/manage-service/manage-service.component';
-import { ManageEmployeeComponent } from './dashboard/manage-employee/manage-employee.component';
+
+import { BookingComponent } from './dashboard/booking/booking.component';
+import { AddEmployeeComponent } from './dashboard/employee/add-employee/add-employee.component';
+import { AddServiceComponent } from './dashboard/services/add-service/add-service.component';
+import { TimingComponent } from './dashboard/timing/timing.component';
 
 
 
 
 const routes: Routes = [
-{path:'',component:LoginComponent},
-{path:'home',component:DashboardComponent, canActivate: [AuthGuard],
-children:[
- 
-  {path:'profile',component:ProfileComponent},
-  {path:'',redirectTo:'profile',pathMatch:'full'},
-   {path:'manage-service',component:ManageServiceComponent},
-  {path:'manage-employee',component:ManageEmployeeComponent},
-  // {path:'payment',component:PaymentComponent},
-  // {path:'account',component:AccountComponent},
-  // {path:'cancelled',component:CancelledBookingsComponent},
-  // {path:'ratings',component:RatingsComponent},
-  // {path:'notification',component:NotificationsComponent},
-  // {path:'gateway',component:GatewayComponent},
-  // {path:'services',component:ServicesComponent},
-
-
-
-]},
+  { path: '', component: LoginComponent },
+  {
+    path: 'home', component: DashboardComponent, canActivate: [AuthGuard],
+    children: [
+      { path: 'profile', component: ProfileComponent },
+      { path: 'booking', component: BookingComponent },
+      { path: 'add-employee', component: AddEmployeeComponent },
+      { path: 'add-service', component: AddServiceComponent },
+      { path: 'timing', component: TimingComponent }
+    ]
+  },
 
 
 ];
@@ -38,6 +33,6 @@ children:[
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers:[AuthGuard,AuthService]
+  providers: [AuthGuard, AuthService]
 })
 export class SalonRoutingModule { }

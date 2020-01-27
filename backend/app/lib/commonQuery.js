@@ -38,7 +38,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
     distance,
     name
 ) {
-    console.log(second_fromTable, second_localFieldVal, second_foreignFieldVal);
+    // console.log(second_fromTable, second_localFieldVal, second_foreignFieldVal);
     return new Promise(function (resolve, reject) {
         let pageSizes = pageSize;
         let currentPage = page;
@@ -129,17 +129,16 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
         let currentPage = page;
 
         let serviceQuery = [];
-        console.log("lenght", dynamicQuery.length);
+
         // q["$and"].push({ services_id: { $in: dynamicQuery.split(",") } });
         //  if(dynamicQuery.length > 0){
         //   q["$and"].push({ services_id: {$in: dynamicQuery.split(",") }});
         // }
         dynamicQuery.forEach(async function (v) {
             serviceQuery.push(mongoose.Types.ObjectId(v));
-            console.log(serviceQuery);
+
         });
 
-        console.log("qqq", serviceQuery);
 
         let postQuery = model.aggregate([{
             $geoNear: {
@@ -201,14 +200,14 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
             }
         }
         ]);
-        console.log("postQuery", JSON.stringify(postQuery));
+        // console.log("postQuery", JSON.stringify(postQuery));
         if (pageSizes && currentPage) {
             postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
         }
         postQuery
             .then(result => {
                 // console.log("999999999999999999999", result);
-                console.log("RESULT", result);
+                // console.log("RESULT", result);
                 resolve(result);
             })
             .catch(error => {
@@ -811,7 +810,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
     third_fromTable,
     fourth_fromTable
 ) {
-    console.log(fromTable, localFieldVal, foreignFieldVal, condition);
+    // console.log(fromTable, localFieldVal, foreignFieldVal, condition);
     return new Promise(function (resolve, reject) {
         model
             .aggregate([{
@@ -897,16 +896,16 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
                     let finalArray = [];
 
                     data.forEach(function (v) {
-                        console.log("V", v);
+                        // console.log("V", v);
                         v.category.forEach(function (c) {
-                            console.log("SSSSSSSSS", c);
+                            // console.log("SSSSSSSSS", c);
                             catergoriesTemp.push({
                                 categories: c.category.catname,
                                 services: c.services,
                                 prices: c.pricing
                             });
                         });
-                        console.log("catergoriesTemp", catergoriesTemp);
+                        // console.log("catergoriesTemp", catergoriesTemp);
                         dataToPass.name = v._id;
                         dataToPass.salonaddress = v.salonaddress;
                         dataToPass.location = v.location;
@@ -916,10 +915,10 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
                     });
 
                     //dataToPass.push.apply(catergoriesTemp);
-                    console.log("DAAA", dataToPass);
+                    // console.log("DAAA", dataToPass);
                     finalArray = [].concat(dataToPass, catergoriesTemp);
                     //;tempArray.concat(catergoriesTemp);
-                    console.log("FInAL ARRYA", finalArray);
+                    // console.log("FInAL ARRYA", finalArray);
                     //console.log("DATATOPASS", data[0]);
                     resolve(finalArray);
                 }
@@ -989,7 +988,7 @@ commonQuery.getNextSequenceValue = function (sequenceName) {
                     console.log("errerrerrerrerrerr", err);
                     reject(0);
                 } else {
-                    console.log("updatedData", updatedData);
+                    // console.log("updatedData", updatedData);
                     resolve(updatedData);
                 }
             });
@@ -1060,7 +1059,7 @@ commonQuery.fetch_all_paginated_price = function fetch_all_paginated_price(
         }
         postQuery
             .then(result => {
-                console.log(result);
+                // console.log(result);
                 resolve(result);
             })
             .catch(error => {
@@ -1079,7 +1078,7 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
     return new Promise(function (resolve, reject) {
         let pageSizes = pageSize;
         let currentPage = page;
-        console.log("pageSizes", cond);
+        // console.log("pageSizes", cond);
 
         if (cond) {
             cond = cond;
@@ -1104,9 +1103,9 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
         }
         postQuery
             .then(result => {
-                console.log(result);
+                // console.log(result);
 
-                console.log("DATATOPASS", result);
+                // console.log("DATATOPASS", result);
                 resolve(result);
             })
             .catch(error => {
@@ -1115,6 +1114,67 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
             });
     });
 };
+
+commonQuery.find_all_employee_paginate = function find_all_employee_paginate(model, cond, pageSize, page) {
+    return new Promise(function (resolve, reject) {
+        let pageSizes = pageSize;
+        let currentPage = page;
+        // console.log("pageSizes", cond);
+
+        if (cond) {
+            cond = cond;
+        } else {
+            cond = {};
+        }
+        let postQuery = model.aggregate([
+            {
+                $match: cond
+            },
+            {
+                $lookup:
+                {
+                    from: "salonservices",
+                    localField: "salonservices_id",
+                    foreignField: "_id",
+                    as: "servicesSet"
+                }
+            }
+            , {
+                $lookup:
+                {
+                    from: "services",
+                    localField: "servicesSet.service_id",
+                    foreignField: "_id",
+                    as: "serviceData"
+                }
+            }
+            , {
+                $project: {
+                    name: 1,
+                    salon_service_id: "$servicesSet._id",
+                    price: "$servicesSet.price",
+                    duration: "$servicesSet.duration",
+                    servicename: "$serviceData.name"
+                }
+            }
+        ])
+
+        if (pageSizes && currentPage) {
+            postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
+        }
+        postQuery.then(result => {
+            // console.log(result);
+
+            // console.log("DATATOPASS", result);
+            resolve(result);
+        })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+    });
+
+}
 
 commonQuery.findCount = function findCount(model, condition) {
     return new Promise(function (resolve, reject) {
@@ -1288,7 +1348,7 @@ commonQuery.getSalonOnPrice = function getSalonOnPrice() {
 commonQuery.ensureIndex = function ensureIndex(model) {
     return new Promise(function (resolve, reject) {
         model.createIndex({ location: "2dsphere" }).exec(function (err, userData) {
-            console.log("userData", userData);
+            // console.log("userData", userData);
             if (err) {
                 console.log("errrrrrr", err);
                 reject(err);
@@ -1344,7 +1404,7 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
         }
         postQuery
             .then(result => {
-                console.log(result);
+                // console.log(result);
                 resolve(result);
             })
             .catch(error => {
@@ -1387,7 +1447,7 @@ commonQuery.addEmployeeToSalon = function addEmployeeToSalon(
                 salon_id, { $push: { employees: employee_id } }, { safe: true, upsert: true }
             )
             .exec(function (err, userData) {
-                console.log("userData", userData);
+                // console.log("userData", userData);
                 if (err) {
                     console.log("errrrrrr", err);
                     reject(err);
@@ -1409,7 +1469,7 @@ commonQuery.removeServicesInCategories = function removeServicesInCategories(
                 category_id, { $pull: { services: service_id } }, { safe: true, upsert: true }
             )
             .exec(function (err, userData) {
-                console.log("userData", userData);
+                // console.log("userData", userData);
                 if (err) {
                     console.log("errrrrrr", err);
                     reject(err);
@@ -1449,6 +1509,8 @@ commonQuery.fetch_categories = function fetch_categories(
             });
     });
 };
+
+
 
 commonQuery.fetch_salon_services = function fetch_salon_services(
     model,
@@ -1490,7 +1552,7 @@ commonQuery.addServiceToEmployee = function addServiceToEmployee(
     empId,
     dataToAdd
 ) {
-    console.log("dataToAdd", dataToAdd);
+    console.log("dataToAdd++model", dataToAdd + "***");
     return new Promise(function (resolve, reject) {
         model
             .update({ _id: empId }, { $addToSet: { salonservices_id: dataToAdd } })
@@ -1510,7 +1572,7 @@ commonQuery.removeServiceToEmp = function removeServiceToEmp(
     empId,
     dataToRemove
 ) {
-    console.log("dataToRemove", dataToRemove);
+    // console.log("dataToRemove", dataToRemove);
     return new Promise(function (resolve, reject) {
         model
             .update({ _id: empId }, { $pull: { salonservices_id: dataToRemove } })
@@ -1606,5 +1668,6 @@ commonQuery.getSalonDetailsQuery = function getSalonDetailsQuery(
             });
     });
 };
+
 
 module.exports = commonQuery;

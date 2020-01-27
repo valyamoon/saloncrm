@@ -17,20 +17,55 @@ export class CommonService {
 
 
   constructor(private http: HttpClient) { }
-  saveSalonDetails(data){
-    return this.http.post(this.baseUrl + "/addsalon", data,httpOptions);
+  saveSalonDetails(data) {
+    return this.http.post(this.baseUrl + "/addsalon", data, httpOptions);
   }
-  
+
   serviceList(data) {
-    return this.http.post(this.baseUrl + "/servicelist",data, httpOptions);
-  } 
-
-  addSalonService(data){
-    return this.http.post(this.baseUrl + "/addsalonservices", data,httpOptions);
+    return this.http.post(this.baseUrl + "/servicelist", data, httpOptions);
   }
 
-  removeSalonService(data){
-    return this.http.post(this.baseUrl + "/removesalonservice", data,httpOptions);
+  addSalonService(data) {
+    return this.http.post(this.baseUrl + "/addsalonservices", data, httpOptions);
+  }
+
+  removeSalonService(data) {
+    return this.http.post(this.baseUrl + "/removesalonservice", data, httpOptions);
+  }
+
+  getSalonData(data) {
+    return this.http.post(this.baseUrl + "/salondatabyuser", data, httpOptions);
+  }
+
+  getSalonServicesList(data) {
+    return this.http.post(this.baseUrl + "/salonservicelist", data, httpOptions);
+  }
+  getEmployeeServList(data) {
+    return this.http.post(this.baseUrl + "/employeeservicelist", data, httpOptions);
+  }
+  getCategories(data) {
+    return this.http.post(this.baseUrl + "/categories", data, httpOptions);
+  }
+  getServices(data) {
+    return this.http.post(this.baseUrl + "/services", data, httpOptions);
+  }
+
+  addEmployee(data) {
+    return this.http.post(this.baseUrl + "/addemployee", data, httpOptions);
+  }
+  assignEmpService(data) {
+    return this.http.post(this.baseUrl + "/assignservice", data, httpOptions);
+  }
+  addEmpService(data) {
+    return this.http.post(this.baseUrl + "/addsalonservices", data, httpOptions);
+  }
+  updateSalonService(data) {
+
+    return this.http.post(this.baseUrl + "/updatesalonservices", data, httpOptions);
+  }
+
+  removeEmpService(data) {
+    return this.http.post(this.baseUrl + "/removeemployee", data, httpOptions);
   }
 
 

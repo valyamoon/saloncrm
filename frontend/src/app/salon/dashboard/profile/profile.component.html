@@ -1,38 +1,15 @@
-<div class="profileOverlay" *ngIf="!checkIsApproved">
-  <div id="profileArea">
-    <div *ngIf="showPendingApproval" class="pendingApprovalArea">
-      <span class="pendingText">Pending Approval</span>
-      <img src="../../../../assets/images/Infinity-1s-200px.gif" class="pendingGIF" />
-      <p class="pendingText">You will recieve an Email confirmation of successful approval</p>
-      <p class="pendingText">Please login once you are approved</p>
-
-    </div>
-    <div *ngIf="!showPendingApproval">
-      <h2>Add Salon Details</h2>
-      <form [formGroup]="submitSalonDetails" class="salonDetailSave">
-        <input type="text" class="form-control fields" placeholder="Name" formControlName="name" />
-
-        <input style="display: none" type="file" accept="image/*" (change)="uploadImage($event)" #fileInput />
-        <button class="btn btn-primary btn-sign-in" (click)="fileInput.click()">
-          Select Image
-        </button>
-
-        <input type="text" class="form-control fields" placeholder="Contact" formControlName="contact" />
-        <div *ngIf="contact.invalid && (contact.dirty || contact.touched)" class="erroralert">
-          <div *ngIf="contact.invalid">
-            Invalid Contact Number
-          </div>
-        </div>
-        <input type="text" class="form-control fields" placeholder="Address" formControlName="salonaddress" />
-        <button class="btn btn-primary btn-sign-in" [disabled]="submitSalonDetails.invalid"
-          (click)="submitSalon(submitSalonDetails.value)">
-          Submit
-        </button>
-
-        <agm-map [latitude]="lat" [longitude]="lng">
-          <agm-marker [latitude]="lat" [longitude]="lng"> </agm-marker>
-        </agm-map>
-      </form>
-    </div>
+<div class="check-spa-outer">
+  <div class="employee-tabs ">
+    <mat-tab-group class="tabsArea">
+      <mat-tab label="Service">
+        <app-services></app-services>
+      </mat-tab>
+      <mat-tab label="Employee">
+        <app-employee></app-employee>
+      </mat-tab>
+      <mat-tab label="Timing">
+        <app-timing></app-timing>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

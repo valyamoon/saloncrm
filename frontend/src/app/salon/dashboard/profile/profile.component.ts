@@ -13,14 +13,15 @@ export class ProfileComponent implements OnInit {
   submitSalonDetails: FormGroup;
   showNow: boolean = false;
   numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+  isSubmitted: boolean = false;
   lat: any;
   lng: any;
   user_id: any;
   selectedFile: File;
-  checkIsApproved: boolean = false;
+  checkIsApproved: boolean = true;
   tempUrl: string | ArrayBuffer;
   public url = <any>'';
-
+  salonData: any;
   showPendingApproval: boolean = false;
   checkInitialApprovalStatus: boolean;
 
@@ -28,13 +29,14 @@ export class ProfileComponent implements OnInit {
     private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
-    private toastrServ: ToastrService
+    private toastrServ: ToastrService,
+
   ) {
     if (navigator) {
       navigator.geolocation.getCurrentPosition(pos => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
-        console.log("DDD", this.lat, this.lng);
+
       });
     }
   }
@@ -51,15 +53,17 @@ export class ProfileComponent implements OnInit {
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
-    console.log(this.user_id);
+
     this.checkInitialApprovalStatus = JSON.parse(
       sessionStorage.getItem("isSubmitted")
     );
+
     if (this.checkInitialApprovalStatus == true) {
       this.showPendingApproval = true;
     } else {
       this.showPendingApproval = false;
     }
+
   }
 
 
@@ -96,7 +100,7 @@ export class ProfileComponent implements OnInit {
 
   checkIsApprovedProfile() {
     this.checkIsApproved = JSON.parse(sessionStorage.getItem("isApproved"));
-    console.log(this.checkIsApproved);
+
   }
 
   submitSalon(data) {
@@ -117,6 +121,9 @@ export class ProfileComponent implements OnInit {
       data => {
         if (data["code"] === 200) {
           this.showPendingApproval = true;
+          this.isSubmitted = true;
+          sessionStorage.setItem("isSubmitted", JSON.stringify(this.isSubmitted));
+
           this.toastrServ.success(
             "Salon Details Submitted Successfully",
             "Waiting For Admin Approval",
@@ -138,6 +145,7 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
+
 
 
 
