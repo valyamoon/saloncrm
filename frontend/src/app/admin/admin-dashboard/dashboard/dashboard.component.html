@@ -1,18 +1,21 @@
 <div id="cards">
   <div class="card">
     <span class="cardText">Salon Request</span>
-    <h2 >{{limit}}</h2>
+    <h2>{{ limit }}</h2>
   </div>
   <div class="card">
-      <span class="cardText">Active Salons</span>
-      <h2 >{{ActiveSalonsCount}}</h2>
+    <span class="cardText">Active Salons</span>
+    <h2>{{ ActiveSalonsCount }}</h2>
   </div>
   <div class="card">
-      <span class="cardText">Users</span>
-      <h2 >{{ActiveUsersCount}}</h2>
+    <span class="cardText">Users</span>
+    <h2>{{ ActiveUsersCount }}</h2>
   </div>
 </div>
-<div class="headerSection"> <span class="breadCrumb"></span><app-header-text class="header"></app-header-text></div>
+<div class="headerSection">
+  <span class="breadCrumb"></span
+  ><app-header-text class="header"></app-header-text>
+</div>
 <div class="table-responsive tablecustom">
   <div class="mat-elevation-z8" *ngIf="!noRecordFound">
     <table mat-table [dataSource]="SalonRequestList">
@@ -32,26 +35,62 @@
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="contact">
-        <th mat-header-cell *matHeaderCellDef>Contact</th>
+        <th mat-header-cell *matHeaderCellDef class="status-check">Contact</th>
         <td mat-cell *matCellDef="let element">{{ element.contact }}</td>
       </ng-container>
 
       <ng-container matColumnDef="isactive">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <th mat-header-cell *matHeaderCellDef class="status-check">Status</th>
         <td mat-cell *matCellDef="let element">
-          <mat-slide-toggle [checked]="element.isActive" [disabled]="disabled"></mat-slide-toggle>
+          <mat-slide-toggle
+            [checked]="element.isActive"
+            [disabled]="disabled"
+          ></mat-slide-toggle>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>Action</th>
-        <td mat-cell *matCellDef="let element"><button class="btn btn-primary btn-sign-in" (click)="approveSalonRequest(element)">Approve</button>
-          <button class="btn btn-primary btn-sign-in" (click)="declineSalonRequest(element)">Decline</button></td>
+        <th mat-header-cell *matHeaderCellDef class="status-check-action">
+          Action
+        </th>
+        <td mat-cell *matCellDef="let element" class="btnArea">
+          <button
+            class="btn btn-primary btn-sign-in"
+            (click)="approveSalonRequest(element)"
+          >
+            Approve
+          </button>
+          <!-- <button
+            class="btn btn-primary btn-sign-in"
+            (click)="declineSalonRequest(element)"
+          >
+            Decline
+          </button> -->
+          <div class="suspend-sec" (click)="declineSalonRequest(element)">
+            <img
+              src="../../../../assets/images/suspend.svg"
+              title="Suspend Salon"
+              alt="Suspend Salon"
+            />
+          </div>
+          <div class="suspend-sec" (click)="showSalonDetails(element)">
+            <img
+              src="../../../../assets/images/view.svg"
+              title="Salon Detail"
+              alt=" Salon Detail"
+            />
+          </div>
+          <!-- <button
+            class="btn btn-primary btn-sign-in"
+            (click)="showSalonDetails(element)"
+          >
+            Details
+          </button> -->
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-     
     </table>
 
     <mat-paginator
@@ -61,15 +100,60 @@
       [pageSizeOptions]="[5, 10, 15, 20]"
       showFirstLastButtons
     ></mat-paginator>
-
   </div>
   <div *ngIf="noRecordFound" class="noRecords">
-    <div class="noRec">  No Records Found</div>
+    <div class="noRec">No Records Found</div>
   </div>
-
-
 </div>
 
+<div class="userDetailsOverlay" *ngIf="showSalonDetail">
+  <div class="main-section-area">
+    <div class="header">
+      <h1>Salon Details</h1>
+    </div>
+    <div class="main-section">
+      <div class="field-row img">
+        <img src="{{ salonRequestDetails.image }}" class="profilePic" />
+      </div>
+      <div class="field-row">
+        <label>Name:</label>
+        <div class="details">{{ salonRequestDetails.name }}</div>
+      </div>
+      <div class="field-row">
+        <label>Email:</label>
+        <div class="details">{{ salonEmail }}</div>
+      </div>
+      <div class="field-row">
+        <label>Address:</label>
+        <div class="details">{{ salonRequestDetails.salonaddress }}</div>
+      </div>
+      <div class="field-row">
+        <label>Contact:</label>
+        <div class="details">{{ salonRequestDetails.contact }}</div>
+      </div>
+      <div class="field-row">
+        <label>Close Time:</label>
+        <div class="details">
+          {{ salonRequestDetails.closetime | date: "shortTime" }}
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Open Time:</label>
+        <div class="details">
+          {{ salonRequestDetails.opentime | date: "shortTime" }}
+        </div>
+      </div>
+    </div>
+    <div class="btn-Area">
+      <button
+        class=" btn btn-sign-in btn-primary"
+        (click)="closeSalonDetails()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- <div class="modalSection"  *ngIf="isDeleteDialog">
         <div class="modal-content-area">

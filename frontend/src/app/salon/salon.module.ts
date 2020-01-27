@@ -15,6 +15,7 @@ import { ServicesComponent } from './dashboard/services/services.component';
 import { EmployeeComponent } from './dashboard/employee/employee.component';
 import { MatTabsModule } from '@angular/material/tabs'
 import { SelectAutocompleteModule } from "mat-select-autocomplete";
+
 import { FooterComponent } from './dashboard/footer/footer.component';
 import { SalonHeaderComponent } from './dashboard/salon-header/salon-header.component';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,6 +29,8 @@ import {
   MatSlideToggleModule,
 } from "@angular/material";
 import { TimingComponent } from './dashboard/timing/timing.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 @NgModule({
   declarations: [LoginComponent, DashboardComponent, ProfileComponent, ServicesComponent, EmployeeComponent, FooterComponent, SalonHeaderComponent, BookingComponent, AddEmployeeComponent, AddServiceComponent, TimingComponent],
@@ -44,9 +47,11 @@ import { TimingComponent } from './dashboard/timing/timing.component';
     SelectAutocompleteModule,
     MatSelectModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg'
+      apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg"
     }),
-    MatTabsModule
+    NgxMaterialTimepickerModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ]
 })
 export class SalonModule { }

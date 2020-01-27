@@ -1,69 +1,109 @@
 <div id="UserListWrapper">
-   <div class="headerSection"> <span class="breadCrumb"></span><app-header-text class="header"></app-header-text></div>
-    <div class="table-responsive tablecustom">
-      <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
-        <table mat-table [dataSource]="activeUsersList">
-          <!-- Position Column -->
-  
-          <!-- Name Column -->
-          <ng-container matColumnDef="firstName">
-            <th mat-header-cell *matHeaderCellDef>First Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
-          </ng-container>
-  
-          <!-- Weight Column -->
-          <ng-container matColumnDef="lastName">
-            <th mat-header-cell *matHeaderCellDef>Last Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
-          </ng-container>
-  
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-          </ng-container>
-          <ng-container matColumnDef="phone">
-            <th mat-header-cell *matHeaderCellDef>Contact</th>
-            <td mat-cell *matCellDef="let element">{{ element.phone }}</td>
-          </ng-container>
-  
-          <ng-container matColumnDef="isactive">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let element">
-              <mat-slide-toggle
-                [checked]="element.isActive"
-                [disabled]="disabled"
-              ></mat-slide-toggle>
-            </td>
-          </ng-container>
-  
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>Action</th>
-            <td mat-cell *matCellDef="let element">
-              <button
-              class="btn btn-primary btn-sign-in btn-sus"
-              (click)="suspendUser(element)"
-            >
-              Suspend
-            </button>
-            </td>
-          </ng-container>
-  
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-  
-        <mat-paginator
-          [length]="ActiveUsersCount"
-          [pageSize]="count"
-          (page)="paginate($event)"
-          [pageSizeOptions]="[5, 10, 15, 20]"
-          showFirstLastButtons
-        ></mat-paginator>
+  <div class="headerSection">
+    <span class="breadCrumb"></span
+    ><app-header-text class="header"></app-header-text>
+  </div>
+  <div class="table-responsive tablecustom">
+    <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+      <table mat-table [dataSource]="activeUsersList">
+        <!-- Position Column -->
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef>First Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef>Last Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+        </ng-container>
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Contact</th>
+          <td mat-cell *matCellDef="let element">{{ element.phone }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isactive">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-slide-toggle
+              [checked]="element.isActive"
+              [disabled]="disabled"
+            ></mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="suspend-sec" (click)="viewUserDetails(element)">
+              <img
+                src="../../../../assets/images/view.svg"
+                title="User Details"
+                alt="User Details"
+              />
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="ActiveUsersCount"
+        [pageSize]="count"
+        (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 15, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+    <div *ngIf="noRecordsFound" class="noRecords">
+      <div class="noRec">No Records Found</div>
+    </div>
+  </div>
+
+  <div class="userDetailsOverlay" *ngIf="showUserDetails">
+    <div class="main-section-area">
+      <div class="header">
+        <h1>User Details</h1>
       </div>
-      <div *ngIf="noRecordsFound" class="noRecords">
-        <div class="noRec">No Records Found</div>
+      <div class="main-section">
+        <div class="field-row img">
+          <img src="{{ userDetails.profilepic }}" class="profilePic" />
+        </div>
+        <div class="field-row">
+          <label>First Name:</label>
+          <div class="details">{{ userDetails.firstName }}</div>
+        </div>
+        <div class="field-row">
+          <label>Last Name:</label>
+          <div class="details">{{ userDetails.lastName }}</div>
+        </div>
+        <div class="field-row">
+          <label>Email:</label>
+          <div class="details">{{ userDetails.email }}</div>
+        </div>
+        <div class="field-row">
+          <label>Contact:</label>
+          <div class="details">{{ userDetails.phone }}</div>
+        </div>
+      </div>
+      <div class="btn-Area">
+        <button
+          class=" btn btn-sign-in btn-primary"
+          (click)="closeUserDetail()"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
-  
+</div>

@@ -27,11 +27,11 @@ var salonSchema = mongoose.Schema({
     type: String
   },
   opentime: {
-    type: Number,
+    type: Date,
     default: null
   },
   closetime: {
-    type: Number,
+    type: Date,
     default: null
   },
   user_id: {
@@ -50,17 +50,17 @@ var salonSchema = mongoose.Schema({
     type: String,
     default: false
   },
-  employees:{
-    type:[mongoose.Types.ObjectId],
-    ref:"employees"
+  employees: {
+    type: [mongoose.Types.ObjectId],
+    ref: "employees"
   },
-  isApproved:{
-    type:Boolean,
-    default:false
+  isApproved: {
+    type: Boolean,
+    default: false
   },
-  isDeclined:{
-    type:Boolean,
-    default:false
+  isDeclined: {
+    type: Boolean,
+    default: false
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));

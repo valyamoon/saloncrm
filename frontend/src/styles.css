@@ -1,4 +1,5 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "~ng-pick-datetime/assets/style/picker.min.css";
 */ body {
   font-family: 'Roboto', sans-serif;
 }
@@ -102,11 +103,10 @@ img {
 }
 .noRec {
   text-align: center;
-  color: #721c24;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  padding: 2em;
-  width: 50%;
+  color: #783a87;
+  font-weight: 600;
+  font-size: 20px;
+  padding-top: 15px;
 }
 
 @media only screen and (max-width: 768px) {
@@ -2010,6 +2010,7 @@ input[type='search']::-webkit-search-cancel-button {
   margin-top: 10px;
   background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%) 0% 0%
     no-repeat padding-box;
+  margin-left: 15px;
 }
 .btn-sign-in:hover {
   /* background-position: right center; */

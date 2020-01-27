@@ -14,6 +14,8 @@ import {
   MatOptionModule
 } from "@angular/material";
 import { MatTabsModule } from '@angular/material/tabs'
+import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 import { ToastrModule } from "ngx-toastr";
 import { } from "googlemaps";
 import { AgmCoreModule } from "@agm/core";
@@ -25,10 +27,11 @@ import { UserComponent } from "./user/user.component";
 import { AdminComponent } from "./admin/admin.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 
 @NgModule({
-  declarations: [AppComponent, SalonComponent, UserComponent, AdminComponent],
+  declarations: [AppComponent, SalonComponent, UserComponent, AdminComponent, PagenotfoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -48,7 +51,10 @@ import { RouterModule } from "@angular/router";
     MatSelectModule,
     MatOptionModule,
     MatTabsModule,
-    SelectAutocompleteModule
+    SelectAutocompleteModule,
+    NgxMaterialTimepickerModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   providers: [
     {

@@ -14,7 +14,7 @@ var salonServicesSchema = mongoose.Schema({
     ref: "categories"
   },
   price: {
-    type: String
+    type: Number
   },
   duration: {
     type: String

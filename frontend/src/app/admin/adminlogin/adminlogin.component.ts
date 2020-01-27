@@ -31,37 +31,42 @@ export class AdminloginComponent implements OnInit {
   }
 
   /**
- * Function is use to login Admin
- * @access private
- * @return json
- * Created by SmartData
- * @smartData Enterprises (I) Ltd
- */
+   * Function is use to login Admin
+   * @access private
+   * @return json
+   * Created by SmartData
+   * @smartData Enterprises (I) Ltd
+   */
 
   loginAdmin(data) {
     let dataToPass = {
-      email:data.email,
-      password:data.password,
-      role:"admin"
-    }
-    this.adminServ.login(dataToPass).subscribe((data: any) => {
-      if (data.code === 200) {
-        this.toastServ.success("Logged In Successfully", "", {
-          timeOut: 3000
-        });
+      email: data.email,
+      password: data.password,
+      role: "admin"
+    };
+    this.adminServ.login(dataToPass).subscribe(
+      (data: any) => {
+        if (data.code === 200) {
+          this.toastServ.success("Logged In Successfully", "", {
+            timeOut: 3000
+          });
+          console.log("DATA", data);
+          sessionStorage.setItem("userDetails", data["data"]["userInfo"].email);
 
-        this.authServ.sendToken(data.data.token);
+          this.authServ.sendToken(data.data.token);
 
-        this.router.navigate(["admin/home"]);
-      } else {
-        this.toastServ.error("Invalid Login details", "", {
+          this.router.navigate(["admin/home"]);
+        } else {
+          this.toastServ.error("Invalid Login details", "", {
+            timeOut: 3000
+          });
+        }
+      },
+      error => {
+        this.toastServ.error("Failed to Login", error, {
           timeOut: 3000
         });
       }
-    },error=>{
-      this.toastServ.error("Failed to Login", error, {
-        timeOut: 3000
-      });
-    });
+    );
   }
 }

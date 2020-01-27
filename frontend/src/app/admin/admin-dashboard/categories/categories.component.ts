@@ -18,11 +18,11 @@ export class CategoriesComponent implements OnInit {
   page: any = 1;
   displayedColumns = ["catname", "isactive", "action"];
   noRecordsFound: boolean;
-  noArchivedRecordsFound:boolean = false;
-    disabled: boolean = true;
+  noArchivedRecordsFound: boolean = false;
+  disabled: boolean = true;
   archivedCategoriesList: any;
   archivedCategoriesCount: any;
-  showArchived:boolean = false;
+  showArchived: boolean = false;
   constructor(
     private adminServ: AdminServService,
     private fb: FormBuilder,
@@ -39,7 +39,7 @@ export class CategoriesComponent implements OnInit {
 
   openAddCategoryModal() {
     this.isAddModal = true;
-    console.log(this.isAddModal);
+    //console.log(this.isAddModal);
   }
   dismissModal() {
     this.isAddModal = false;
@@ -48,16 +48,16 @@ export class CategoriesComponent implements OnInit {
   }
 
   paginate(event) {
-    console.log(event);
+    //console.log(event);
     this.page = event.pageIndex + 1;
-    console.log("c", this.count);
-    console.log("p", this.page);
+    //  console.log("c", this.count);
+    // console.log("p", this.page);
     this.count = event.pageSize;
     this.fetchCategoriesList();
   }
 
   addCategory(data) {
-    console.log("ADD", data);
+    // console.log("ADD", data);
     let dataToPass = {
       catname: data.name
     };
@@ -66,36 +66,35 @@ export class CategoriesComponent implements OnInit {
         if (data["code"] === 200) {
           this.isAddModal = false;
           this.toastrSev.success("Catgory Added", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
           this.fetchCategoriesList();
         } else {
           this.isAddModal = true;
           this.toastrSev.error("Failed To Added", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.isAddModal = false;
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
   }
 
   fetchCategoriesList() {
-  
     let dataToPass = {
       type: "admin-categories",
       pageSize: this.count,
       page: this.page
     };
-    console.log(dataToPass);
+    //console.log(dataToPass);
     this.adminServ.getAdmincategoriesList(dataToPass).subscribe(
       data => {
-        console.log(data);
+        //   console.log(data);
         if (data["code"] === 200) {
           this.adminCategoriesCount = data["data"]["count"];
           this.categoriesList = data["data"]["data"];
@@ -104,18 +103,18 @@ export class CategoriesComponent implements OnInit {
           }
 
           this.toastrSev.success("Catgories Fetched", "Success", {
-            timeOut: 2000,
-            progressAnimation:"decreasing"
+            timeOut: 1000,
+            progressAnimation: "decreasing"
           });
         } else {
           this.toastrSev.error("Failed To Fetch", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
@@ -129,94 +128,82 @@ export class CategoriesComponent implements OnInit {
         if (data["code"] === 200) {
           this.fetchCategoriesList();
           this.toastrSev.success("Catgories Deleted", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
           this.fetchArchivedCategoryList();
         } else {
           this.toastrSev.error("Failed To Delete", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
   }
 
   fetchArchivedCategoryList() {
-      this.showArchived = true;
+    this.showArchived = true;
     let dataToPass = {
       type: "archive-categories"
     };
-    console.log(dataToPass);
+    //  console.log(dataToPass);
     this.adminServ.getArchivedCategories(dataToPass).subscribe(
       data => {
-        console.log(data);
+        //    console.log(data);
         if (data["code"] === 200) {
-        
-          console.log("archivedCategoriesCount",this.archivedCategoriesCount)
-         
+          //   console.log("archivedCategoriesCount", this.archivedCategoriesCount);
+
           this.archivedCategoriesList = data["data"];
-             this.archivedCategoriesCount =this.archivedCategoriesList.length;
+          this.archivedCategoriesCount = this.archivedCategoriesList.length;
           if (this.archivedCategoriesList.length == 0) {
             this.noArchivedRecordsFound = true;
           }
 
           this.toastrSev.success("Archive Catgories Fetched", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
         } else {
           this.toastrSev.error("Failed To Fetch", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastrSev.error("Server Error", error.error, {
-          timeOut: 2000
+          timeOut: 1000
         });
       }
     );
   }
-awakeCategory(data){
-  console.log(data)
+  awakeCategory(data) {
+    // console.log(data);
     let dataToPass = {
       _id: data._id
     };
-    this.adminServ.awakeCategories(dataToPass).subscribe((data:any)=>{
-      if (data["code"] === 200) {
-        
-       
-        this.fetchArchivedCategoryList();
-        this.fetchCategoriesList();
-         this.showArchived = false;
+    this.adminServ.awakeCategories(dataToPass).subscribe(
+      (data: any) => {
+        if (data["code"] === 200) {
+          this.fetchArchivedCategoryList();
+          this.fetchCategoriesList();
+          this.showArchived = false;
           this.toastrSev.success("Awake Catgory", "Success", {
-            timeOut: 2000
+            timeOut: 1000
           });
         } else {
           this.toastrSev.error("Failed To Awake", "Error", {
-            timeOut: 2000
+            timeOut: 1000
           });
         }
-
-
-
-
-
-    },error=>{
-
- this.toastrSev.error("Server Error", error.error, {
-            timeOut: 2000
-          });
-
-
-    })
-}
-
-
-
-
+      },
+      error => {
+        this.toastrSev.error("Server Error", error.error, {
+          timeOut: 1000
+        });
+      }
+    );
+  }
 }

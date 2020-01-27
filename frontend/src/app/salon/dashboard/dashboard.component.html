@@ -1,54 +1,54 @@
 <app-salon-header></app-salon-header>
 <div class="check-spa-outer">
-    <div class="container check-timing-sec">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="check-spa">
-                    <div class="edit-info">
-                        <img src="../../../assets/images/edit.svg">
-                    </div>
+  <div class="container check-timing-sec">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="check-spa">
+          <div class="edit-info">
+            <img src="../../../assets/images/edit.svg">
+          </div>
 
-                    <div class="check-spa-image-outer">
-                        <div class="check-spa-image">
-                            <img src="../../../assets/images/surface1.svg">
-                        </div>
-                        <h4>
-                            {{salonData?.name}}
-                        </h4>
+          <div class="check-spa-image-outer">
+            <div class="check-spa-image">
+              <img src="../../../assets/images/surface1.svg">
+            </div>
+            <h4>
+              {{salonData?.name}}
+            </h4>
 
-                    </div>
-                    <div class="salon-info">
-                        <!-- <div class="salon-info-inner">
+          </div>
+          <div class="salon-info">
+            <!-- <div class="salon-info-inner">
                             <img src="../../../assets/images/mail.svg">
                             <h5>checkers_spa_salon@gmail.com</h5>
                         </div> -->
-                        <div class="salon-info-inner">
-                            <img src="../../../assets/images/telephone.svg">
-                            <h5>{{ salonData?.contact }}</h5>
-                        </div>
-                        <div class="salon-info-inner">
-                            <img src="../../../assets/images/address.svg">
-                            <h5>{{ salonData?.salonaddress }}</h5>
-                        </div>
-                    </div>
-                    <div class="about-salon">
-                        <h2>
-                            About
-                        </h2>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                            ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat.
-                        </p>
-                    </div>
-                </div>
+            <div class="salon-info-inner">
+              <img src="../../../assets/images/telephone.svg">
+              <h5>{{ salonData?.contact }}</h5>
             </div>
-            <div class="col-lg-9">
-                <router-outlet></router-outlet>
-                <app-footer></app-footer>
+            <div class="salon-info-inner">
+              <img src="../../../assets/images/address.svg">
+              <h5>{{ salonData?.salonaddress }}</h5>
             </div>
+          </div>
+          <div class="about-salon">
+            <h2>
+              About
+            </h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut
+              labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco
+              laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-9">
+        <router-outlet></router-outlet>
+        <app-footer></app-footer>
+      </div>
     </div>
+  </div>
 </div>

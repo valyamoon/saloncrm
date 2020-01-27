@@ -18,14 +18,17 @@ export class DashboardComponent implements OnInit {
   page: any;
   limit: any = 0;
   count: any = 5;
+  showSalonDetail: boolean;
   subscription: Subscription;
   pageSize: any = 5;
   disabled: boolean = true;
+  salonRequestDetails: any;
   pageNumber: any;
   noRecordFound: boolean;
   ActiveSalonsCount: any = 0;
   ActiveUsersCount: any = 0;
   dataDefault: any;
+  salonEmail: any;
 
   constructor(
     private adminServ: AdminServService,
@@ -57,7 +60,7 @@ export class DashboardComponent implements OnInit {
    */
 
   getRequests() {
-    console.log("I AM CALLED");
+    // console.log("I AM CALLED");
     let dataToPass = {
       pageSize: this.pageSize,
       page: this.page
@@ -65,7 +68,7 @@ export class DashboardComponent implements OnInit {
     this.dataDefault = dataToPass;
     this.adminServ.getSalonsRequest(dataToPass).subscribe(
       data => {
-        console.log("HERE DATA iS", data);
+        // console.log("HERE DATA iS", data);
         if (data["code"] == 200) {
           this.SalonRequestList = data["data"]["data"];
           this.limit = data["data"]["countNumber"];
@@ -81,7 +84,7 @@ export class DashboardComponent implements OnInit {
           });
         }
 
-        console.log("COUNT", this.count, this.SalonRequestList);
+        // console.log("COUNT", this.count, this.SalonRequestList);
       },
       error => {
         this.toastServ.error("Failed To Fetch Salons Request", error.error, {
@@ -92,7 +95,7 @@ export class DashboardComponent implements OnInit {
   }
 
   paginate(event) {
-    console.log(event);
+    //   console.log(event);
     this.page = event.pageIndex + 1;
     this.count = event.pageSize;
     this.getRequests();
@@ -106,29 +109,29 @@ export class DashboardComponent implements OnInit {
    * @smartData Enterprises (I) Ltd
    */
   approveSalonRequest(data) {
-    console.log("ApproveFor", data);
+    // console.log("ApproveFor", data);
     let dataToPass = {
       salon_id: data._id
     };
     this.adminServ.approveSalonRequests(dataToPass).subscribe(
       data => {
-        console.log("FFFF", data);
+        //    console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastServ.success("Salon Approved Successfully", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
           this.getRequests();
           this.getActiveSalonsCount();
           this.getActiveUsersCount();
         } else {
           this.toastServ.error("Failed To Process", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastServ.error("Failed To Approve Salon", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );
@@ -150,12 +153,12 @@ export class DashboardComponent implements OnInit {
       data => {
         if (data["code"] == 200) {
           this.ActiveUsersCount = data["data"];
-          console.log("ActiveUsersCount SALONS", this.ActiveUsersCount);
+          //   console.log("ActiveUsersCount SALONS", this.ActiveUsersCount);
         }
       },
       error => {
         this.toastServ.error("Server Error", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );
@@ -175,18 +178,46 @@ export class DashboardComponent implements OnInit {
     };
     this.adminServ.getActiveSalonsCount(dataToPass).subscribe(
       data => {
-        console.log("DATA", data);
+        //  console.log("DATA", data);
         if (data["code"] == 200) {
           this.ActiveSalonsCount = data["data"];
-          console.log("ACTIVE SALONS", this.ActiveSalonsCount);
+          //   console.log("ACTIVE SALONS", this.ActiveSalonsCount);
         }
       },
       error => {
         this.toastServ.error("Server Error", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );
+  }
+
+  showSalonDetails(data) {
+    // console.log(data);
+    let dataToPass = {
+      salon_id: data._id
+    };
+
+    this.adminServ.getSalonDetails(dataToPass).subscribe((data: any) => {
+      //  console.log("DSS", data);
+
+      if (data["code"] === 200) {
+        this.showSalonDetail = true;
+        this.salonRequestDetails = data["data"]["salondetail"];
+        this.salonEmail = data["data"]["email"];
+        if (this.salonRequestDetails["image"] === null) {
+          this.salonRequestDetails["image"] =
+            "../../../assets/images/profilepic.png";
+        }
+      } else {
+        this.toastServ.error("Failed To Fetch User Details", "Error", {
+          timeOut: 1000
+        });
+      }
+    });
+  }
+  closeSalonDetails() {
+    this.showSalonDetail = false;
   }
 
   /**
@@ -197,29 +228,29 @@ export class DashboardComponent implements OnInit {
    * @smartData Enterprises (I) Ltd
    */
   declineSalonRequest(data) {
-    console.log("ApproveFor", data);
+    //  console.log("ApproveFor", data);
     let dataToPass = {
       salon_id: data._id
     };
     this.adminServ.declineSalonRequest(dataToPass).subscribe(
       data => {
-        console.log("FFFF", data);
+        //   console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastServ.success("Salon Declined Successfully", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
           this.getRequests();
           this.getActiveSalonsCount();
           this.getActiveUsersCount();
         } else {
           this.toastServ.error("Failed To Decline", "", {
-            timeOut: 3000
+            timeOut: 1000
           });
         }
       },
       error => {
         this.toastServ.error("Server Error", error.error, {
-          timeOut: 3000
+          timeOut: 1000
         });
       }
     );

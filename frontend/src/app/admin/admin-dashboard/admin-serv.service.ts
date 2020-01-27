@@ -26,7 +26,19 @@ export class AdminServService {
 
   constructor(private http: HttpClient) {}
 
-  private headerText = new BehaviorSubject<string>(""); // Initialize with emtpy string
+  private headerText = new BehaviorSubject<string>("");
+
+  // Initialize with emtpy string
+  private headerResponse = new BehaviorSubject<boolean>(true);
+
+  setHeaderResponse(data: boolean) {
+    // Fire the update event with the new data
+    this.headerResponse.next(data);
+  }
+
+  getHeaderResponse(): Observable<boolean> {
+    return this.headerResponse.asObservable();
+  }
 
   setHeaderText(data: string) {
     // Fire the update event with the new data
@@ -37,8 +49,7 @@ export class AdminServService {
     return this.headerText.asObservable();
   }
 
-  getSalonsList() {
-    let data = { type: "activesalons" };
+  getSalonsList(data) {
     return this.http.post(this.baseUrl + "/activesalons", data, httpOptions);
   }
 
@@ -114,6 +125,31 @@ export class AdminServService {
 
   getServices(data) {
     return this.http.post(this.baseUrl + "/active-services", data, httpOptions);
+  }
+  fetchAllUsersCommon(data) {
+    return this.http.post(this.baseUrl + "/all-users", data, httpOptions);
+  }
+  getUserDetails(data) {
+    return this.http.post(this.baseUrl + "/user-detail", data, httpOptions);
+  }
+
+  getSalonDetails(data) {
+    return this.http.post(this.baseUrl + "/view-salon", data, httpOptions);
+  }
+
+  activeUser(data) {
+    return this.http.post(
+      this.baseUrl + "/active-user-check",
+      data,
+      httpOptions
+    );
+  }
+  deactiveUser(data) {
+    return this.http.post(
+      this.baseUrl + "/deactive-user-check",
+      data,
+      httpOptions
+    );
   }
 
   // errorHandler(error:HttpErrorResponse){

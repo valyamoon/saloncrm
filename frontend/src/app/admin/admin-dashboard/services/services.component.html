@@ -1,106 +1,112 @@
-
 <div class="servicesWrapper">
-
-<div class="headerSection">
+  <div class="headerSection">
     <app-header-text></app-header-text>
-<div class="actionBtn">
-    <button class="btn btn-primary btn-sign-in" (click)="openAddServiceModal()">Add Service</button>
-</div>    
-
-
-</div>
-<div class="addServiceModal" *ngIf="addServiceModal">
-
+    <div class="actionBtn">
+      <button
+        class="btn btn-primary btn-sign-in"
+        (click)="openAddServiceModal()"
+      >
+        Add Service
+      </button>
+    </div>
+  </div>
+  <div class="addServiceModal" *ngIf="addServiceModal">
     <div class="modalContent">
-    <div class="headerText"><h3>Add Service</h3></div>
-    <div class="mainSection">
+      <div class="headerText"><h3>Add Service</h3></div>
+      <div class="mainSection">
         <form class="serviceForm" [formGroup]="saveServiceForm">
-            <div class="fields">
-                <label class="label">Select Category:</label>
-                <select class="selectOption select-css" formControlName="category">
-                    <option *ngFor="let item of categoriesList" [value]="item._id" >{{item.catname}}</option>
-                </select>
-               
-            </div>
-             <div class="fields">
-                <label class="label">Service Name:</label>
-                <input type="text" class="form-control pls" placeholder="Enter service name" formControlName="name">
-               
-            </div>
-              <div class="fields">
-              <button class="btn btn-primary btn-sign-in" [disabled]="saveServiceForm.invalid" (click)="addService(saveServiceForm.value)">Add</button>
-                <button class="btn btn-primary btn-sign-in" (click)="dismissModal()">Cancel</button>
-               
-            </div>
+          <div class="fields">
+            <label class="label">Select Category:</label>
+            <select class="selectOption select-css" formControlName="category">
+              <option *ngFor="let item of categoriesList" [value]="item._id">{{
+                item.catname
+              }}</option>
+            </select>
+          </div>
+          <div class="fields">
+            <label class="label">Service Name:</label>
+            <input
+              type="text"
+              class="form-control pls"
+              placeholder="Enter service name"
+              formControlName="name"
+            />
+          </div>
+          <div class="fields">
+            <button
+              class="btn btn-primary btn-sign-in"
+              [disabled]="saveServiceForm.invalid"
+              (click)="addService(saveServiceForm.value)"
+            >
+              Add
+            </button>
+            <button
+              class="btn btn-primary btn-sign-in"
+              (click)="dismissModal()"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
+  <div class="table-responsive tablecustom">
+    <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+      <table mat-table [dataSource]="servicesList">
+        <!-- Position Column -->
 
-        </form>    
-    </div>   
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
 
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="status-check">Status</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-slide-toggle
+              [checked]="element.isActive"
+              [disabled]="disabled"
+            ></mat-slide-toggle>
+          </td>
+        </ng-container>
 
-</div>   
-
-
-
-</div>
-
-
-
- <div class="table-responsive tablecustom">
-        <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
-          <table mat-table [dataSource]="servicesList">
-            <!-- Position Column -->
-    
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Name</th>
-              <td mat-cell *matCellDef="let element">{{ element.name}}</td>
-            </ng-container>
-    
-            
-    
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Status</th>
-              <td mat-cell *matCellDef="let element">
-                <mat-slide-toggle
-                  [checked]="element.isActive"
-                  [disabled]="disabled"
-                ></mat-slide-toggle>
-              </td>
-            </ng-container>
-    
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef>Action</th>
-              <td mat-cell *matCellDef="let element">
-                <div class="buttonArea">
-                  <button
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="status-check">Action</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="buttonArea">
+              <!-- <button
                     class="btn btn-primary btn-sign-in  btn-sec"
                     (click)="deleteService(element)"
                   >
                     Delete
-                  </button>
-                 
-                </div>
-              </td>
-            </ng-container>
-    
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-    
-          <mat-paginator
-            [length]="servicesCount"
-            [pageSize]="count"
-            (page)="paginate($event)"
-            [pageSizeOptions]="[5, 10, 15, 20]"
-            showFirstLastButtons
-          ></mat-paginator>
-        </div>
-        <div *ngIf="noRecordsFound" class="noRecords">
-          <div class="noRec">No Records Found</div>
-        </div>
-      </div>
+                  </button> -->
+              <div class="" (click)="deleteService(element)">
+                <img
+                  src="../../../../assets/images/delete.svg"
+                  title="Delete Service"
+                />
+              </div>
+            </div>
+          </td>
+        </ng-container>
 
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
 
-
-</div>    
+      <mat-paginator
+        [length]="servicesCount"
+        [pageSize]="count"
+        (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 15, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+    <div *ngIf="noRecordsFound" class="noRecords">
+      <div class="noRec">No Records Found</div>
+    </div>
+  </div>
+</div>

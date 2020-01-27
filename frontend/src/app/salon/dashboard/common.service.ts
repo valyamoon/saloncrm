@@ -1,16 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 
 const httpOptions = {
   headers: new HttpHeaders({
-    "Content-Type": "application/json",
-    Authorization: ""
+    "Content-Type": "application/json"
   })
 };
+// const httpOpt = {
+//   headers: new HttpHeaders({
+//     "Content-Type": "multipart/form-data\n"
+//   })
+// };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class CommonService {
   baseUrl = environment.backendBaseUrl + "/api";
@@ -69,5 +73,18 @@ export class CommonService {
   }
 
 
+
+
+
+
+
+  updateSalonDetails(data) {
+    return this.http.post(this.baseUrl + "/update-salon", data);
+  }
+
+  getSalonDetailsData(data) {
+    return this.http.post(this.baseUrl + "/get-salon", data);
+
+  }
 
 }

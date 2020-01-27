@@ -29,6 +29,9 @@ module.exports = function (router) {
   router.post("/forgot-password", admin.forgotPassword);
   // router.post('/servicelist', admin.getServiceList);
   router.post("/services", admin.getServices);
+  router.post("/servicelist", admin.getServiceList);
+  router.post("/active-user-check", admin.activeUsers);
+  router.post("/deactive-user-check", admin.deactiveUsers);
 
   return router;
 };
