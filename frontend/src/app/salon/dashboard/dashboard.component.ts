@@ -18,14 +18,14 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.user_id = sessionStorage.getItem("userId");
     this.getSalonData(this.user_id);
-    this.checkChanges(this.user_id);
+    // this.checkChanges(this.user_id);
   }
 
-  checkChanges(data) {
-    setInterval(() => {
-      this.getSalonData(data);
-    }, 3000);
-  }
+  // checkChanges(data) {
+  //   setInterval(() => {
+  //     this.getSalonData(data);
+  //   }, 3000);
+  // }
 
   toggleSidebar() {
     document
