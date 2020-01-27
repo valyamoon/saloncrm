@@ -21,9 +21,14 @@ export class CommonService {
 
   constructor(private http: HttpClient) {}
   saveSalonDetails(data) {
-    console.log("QQQQQQQQQQQQQQQQQ", data);
-
     return this.http.post(this.baseUrl + "/addsalon", data);
+  }
+  updateSalonDetails(data) {
+    return this.http.post(this.baseUrl + "/update-salon", data);
+  }
+
+  getSalonDetailsData(data) {
+    return this.http.post(this.baseUrl + "/get-salon", data);
   }
 
   serviceList(data) {

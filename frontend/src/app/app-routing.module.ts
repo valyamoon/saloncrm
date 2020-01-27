@@ -24,8 +24,16 @@ const routes: Routes = [
     loadChildren: () =>
       import("../app/user/user.module").then(m => m.UserModule)
   },
+  {
+    path: "pagenotfound",
+    loadChildren: () =>
+      import("../app/pagenotfound/pagenotfound.module").then(
+        m => m.PagenotfoundModule
+      )
+  },
   { path: "", redirectTo: "", pathMatch: "full" },
-  { path: "**", redirectTo: "", pathMatch: "full" }
+
+  { path: "**", redirectTo: "pagenotfound", pathMatch: "full" }
 ];
 
 //{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
