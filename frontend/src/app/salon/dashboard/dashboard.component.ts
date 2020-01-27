@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 import { CommonService } from "../dashboard/common.service";
 import { ToastrService } from "ngx-toastr";
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrls: ["./dashboard.component.css"]
 })
 export class DashboardComponent implements OnInit {
   dropdownVisible = false;
@@ -13,44 +13,50 @@ export class DashboardComponent implements OnInit {
   constructor(
     private commServ: CommonService,
     private toastrServ: ToastrService
-  ) { }
+  ) {}
 
-  ngOnInit(
-
-  ) {
+  ngOnInit() {
     this.user_id = sessionStorage.getItem("userId");
     this.getSalonData(this.user_id);
+    this.checkChanges(this.user_id);
+  }
+
+  checkChanges(data) {
+    setInterval(() => {
+      this.getSalonData(data);
+    }, 3000);
   }
 
   toggleSidebar() {
-    document.getElementsByTagName('body')[0].classList.toggle('sidenav-toggled');
+    document
+      .getElementsByTagName("body")[0]
+      .classList.toggle("sidenav-toggled");
   }
   toggleDropdown() {
     this.dropdownVisible = !this.dropdownVisible;
   }
   getSalonData(userId) {
     let data = {
-      'user_id': userId
-    }
-    this.commServ.getSalonData(data).subscribe((responce: any) => {
-      if (responce.code === 200) {
-        this.salonData = responce.data;
-
-      } else {
-        this.toastrServ.error("Invalid salon details", "", {
+      user_id: userId
+    };
+    this.commServ.getSalonData(data).subscribe(
+      (responce: any) => {
+        if (responce.code === 200) {
+          this.salonData = responce.data;
+        } else {
+          this.toastrServ.error("Invalid salon details", "", {
+            timeOut: 3000
+          });
+        }
+      },
+      error => {
+        this.toastrServ.error("Failed to get salon data", error, {
           timeOut: 3000
         });
       }
-    }, error => {
-      this.toastrServ.error("Failed to get salon data", error, {
-        timeOut: 3000
-      });
-
-    });
+    );
   }
 }
-
-
 
 // import { Injectable } from "@angular/core";
 // import { HttpClient, HttpHeaders } from "@angular/common/http";

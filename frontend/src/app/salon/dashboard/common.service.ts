@@ -19,10 +19,10 @@ const httpOptions = {
 export class CommonService {
   baseUrl = environment.backendBaseUrl + "/api";
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   saveSalonDetails(data) {
-    return this.http.post(this.baseUrl + "/addsalon", data, httpOptions);
+    console.log("AAA", data);
+    return this.http.post(this.baseUrl + "/addsalon", data);
   }
 
   serviceList(data) {
@@ -30,11 +30,19 @@ export class CommonService {
   }
 
   addSalonService(data) {
-    return this.http.post(this.baseUrl + "/addsalonservices", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/addsalonservices",
+      data,
+      httpOptions
+    );
   }
 
   removeSalonService(data) {
-    return this.http.post(this.baseUrl + "/removesalonservice", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/removesalonservice",
+      data,
+      httpOptions
+    );
   }
 
   getSalonData(data) {
@@ -42,10 +50,18 @@ export class CommonService {
   }
 
   getSalonServicesList(data) {
-    return this.http.post(this.baseUrl + "/salonservicelist", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/salonservicelist",
+      data,
+      httpOptions
+    );
   }
   getEmployeeServList(data) {
-    return this.http.post(this.baseUrl + "/employeeservicelist", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/employeeservicelist",
+      data,
+      httpOptions
+    );
   }
   getCategories(data) {
     return this.http.post(this.baseUrl + "/categories", data, httpOptions);
@@ -61,22 +77,23 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/assignservice", data, httpOptions);
   }
   addEmpService(data) {
-    return this.http.post(this.baseUrl + "/addsalonservices", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/addsalonservices",
+      data,
+      httpOptions
+    );
   }
   updateSalonService(data) {
-
-    return this.http.post(this.baseUrl + "/updatesalonservices", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/updatesalonservices",
+      data,
+      httpOptions
+    );
   }
 
   removeEmpService(data) {
     return this.http.post(this.baseUrl + "/removeemployee", data, httpOptions);
   }
-
-
-
-
-
-
 
   updateSalonDetails(data) {
     return this.http.post(this.baseUrl + "/update-salon", data);
@@ -84,7 +101,5 @@ export class CommonService {
 
   getSalonDetailsData(data) {
     return this.http.post(this.baseUrl + "/get-salon", data);
-
   }
-
 }
