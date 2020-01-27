@@ -62,6 +62,7 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
+  console.log("SAVE SALON", req.body);
   async function saveSalonDetails() {
     try {
       var image_path;
@@ -84,7 +85,7 @@ function saveSalonDetails(req, res) {
             coordinates: coordinates
           };
           if (req.files) {
-            mkdirp(constant.PROFILEIMAGE, async function (err) {
+            mkdirp(constant.PROFILEIMAGE, async function(err) {
               let timeStamp = Date.now();
 
               let extension;
@@ -182,7 +183,7 @@ function saveSalonDetails(req, res) {
       );
     }
   }
-  saveSalonDetails().then(function () { });
+  saveSalonDetails().then(function() {});
 }
 /**
  * Function is use to Fetch salon List(This is going to change as per new requirement)
@@ -251,7 +252,7 @@ function getSalons(req, res) {
         if (!salonList) {
         } else {
           let slots = [];
-          salonList.forEach(async function (c) {
+          salonList.forEach(async function(c) {
             slots.push({
               salon: c.name,
               _id: c._id,
@@ -269,7 +270,7 @@ function getSalons(req, res) {
             });
           });
 
-          slots.forEach(function (v) {
+          slots.forEach(function(v) {
             let todaysDate = new Date();
 
             let comingDate = req.body.date;
@@ -372,7 +373,7 @@ function getSalons(req, res) {
     }
   }
 
-  getSalons().then(function () { });
+  getSalons().then(function() {});
 }
 
 /**
@@ -410,16 +411,13 @@ function getSalonDetails(req, res) {
           );
         }
       }
-
-    }
-    catch (error) {
+    } catch (error) {
       res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
       );
     }
-
   }
-  getSalonDetails().then(function () { });
+  getSalonDetails().then(function() {});
 }
 /**
  * Function is use to Fetch Reviews and ratings of salon
@@ -468,7 +466,7 @@ function getReviewsAndRatingsList(req, res) {
     }
   }
 
-  getReviewsAndRatingsList().then(function () { });
+  getReviewsAndRatingsList().then(function() {});
 }
 /**
  * Function is use to Add services with respect to salon
@@ -561,10 +559,10 @@ function addSalonServices(req, res) {
           );
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
-  addSalonServices().then(function () { });
+  addSalonServices().then(function() {});
 }
 
 async function getRemovesalonservice(req, res) {
@@ -634,7 +632,7 @@ function addPromocodes(req, res) {
       );
     }
   }
-  addPromocodes().then(function () { });
+  addPromocodes().then(function() {});
 }
 /**
  * Function is use to Fetch promocode with respect to salon
@@ -658,7 +656,7 @@ function getPromoCodes(req, res) {
         } else {
           // fetchPromoCodes.forEach(function(v){ delete v.salon_id; delete v.usedbyusers; ret });
 
-          fetchPromoCodes.forEach(function (v) {
+          fetchPromoCodes.forEach(function(v) {
             v.salon_id = undefined;
             v.usedbyusers = undefined;
           });
@@ -678,7 +676,7 @@ function getPromoCodes(req, res) {
       );
     }
   }
-  getPromoCodes().then(function () { });
+  getPromoCodes().then(function() {});
 }
 /**
  * Function is use to Fetch salon services chosen by salon
@@ -720,7 +718,7 @@ function getSalonServices(req, res) {
     }
   }
 
-  getSalonServices().then(function () { });
+  getSalonServices().then(function() {});
 }
 
 /**
@@ -775,7 +773,7 @@ function addEmployeeToSalon(req, res) {
       );
     }
   }
-  addEmployeeToSalon().then(function () { });
+  addEmployeeToSalon().then(function() {});
 }
 /**
  * Function is use to assign services to employee
@@ -789,14 +787,14 @@ function addServicesToEmployee(req, res) {
     try {
       if (req.body.employee_id && req.body) {
         let tempSev = [];
-        req.body.salonservices_id.forEach(function (v) {
+        req.body.salonservices_id.forEach(function(v) {
           tempSev.push(mongoose.Types.ObjectId(v));
         });
 
         let empId = req.body.employee_id;
         var empCond = {
           _id: empId
-        }
+        };
         let isEmployeExist = await commonQuery.countData(employees, empCond);
         //console.log("isEmployeExist", isEmployeExist); return;
         if (isEmployeExist == 0) {
@@ -821,8 +819,12 @@ function addServicesToEmployee(req, res) {
         } else {
           let updateData = {
             salonservices_id: req.body.salonservices_id
-          }
-          let updateService = await commonQuery.updateOne(employees, empCond, updateData);
+          };
+          let updateService = await commonQuery.updateOne(
+            employees,
+            empCond,
+            updateData
+          );
           if (!updateService) {
             res.json(
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -843,12 +845,9 @@ function addServicesToEmployee(req, res) {
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
       );
     }
-
   }
-  addServicesToEmployee().then(function () { })
+  addServicesToEmployee().then(function() {});
 }
-
-
 
 /**
  * Function is use to remove service to employee
@@ -891,7 +890,7 @@ function removeServiceToEmployee(req, res) {
     }
   }
 
-  removeServiceToEmployee().then(function () { });
+  removeServiceToEmployee().then(function() {});
 }
 
 function getCategoriesAndServicesOfSalon(req, res) {
@@ -916,9 +915,9 @@ function getCategoriesAndServicesOfSalon(req, res) {
           );
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   }
-  getCategoriesAndServicesOfSalon().then(function () { });
+  getCategoriesAndServicesOfSalon().then(function() {});
 }
 
 /**
@@ -936,7 +935,7 @@ function addSalonWeeklySlots(req, res) {
     try {
       async.each(
         req.body.daysData,
-        async function (record) {
+        async function(record) {
           let slotData = {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
@@ -999,7 +998,7 @@ function addSalonWeeklySlots(req, res) {
             }
           }
         },
-        function (err) {
+        function(err) {
           if (err) {
             console.log("Error @ 179", err);
           } else {
@@ -1081,17 +1080,17 @@ function viewSalonDetails(req, res) {
       );
     }
   }
-  viewSalonDetails().then(function () { });
+  viewSalonDetails().then(function() {});
 }
 
 function updateSalonDetails(req, res) {
   var image_path;
-
+  console.log(req.body);
   async function updateSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
         if (req.files) {
-          mkdirp(constant.PROFILEIMAGE, async function (err) {
+          mkdirp(constant.PROFILEIMAGE, async function(err) {
             let timeStamp = Date.now();
 
             let extension;
@@ -1128,7 +1127,7 @@ function updateSalonDetails(req, res) {
                         };
                         let updateCondition = {
                           name: req.body.name,
-                          address: req.body.address,
+                          salonaddress: req.body.salonaddress,
                           contact: req.body.contact,
                           opentime: req.body.opentime,
                           closetime: req.body.closetime,
@@ -1168,7 +1167,7 @@ function updateSalonDetails(req, res) {
           };
           let updateCondition = {
             name: req.body.name,
-            address: req.body.address,
+            salonaddress: req.body.salonaddress,
             contact: req.body.contact,
             opentime: req.body.opentime,
             closetime: req.body.closetime
@@ -1202,10 +1201,11 @@ function updateSalonDetails(req, res) {
       );
     }
   }
-  updateSalonDetails().then(function () { });
+  updateSalonDetails().then(function() {});
 }
 
 function fetchSalonData(req, res) {
+  console.log("HERE", req.body);
   async function fetchSalonData() {
     try {
       if (req.body && req.body.user_id) {
@@ -1214,6 +1214,7 @@ function fetchSalonData(req, res) {
         };
 
         let getSalonData = await commonQuery.findoneData(salons, condition);
+        console.log(getSalonData);
 
         if (!getSalonData) {
           return res.json(
@@ -1236,7 +1237,7 @@ function fetchSalonData(req, res) {
     }
   }
 
-  fetchSalonData().then(function () { });
+  fetchSalonData().then(function() {});
 }
 
 function bookSlot(req, res) {
@@ -1251,7 +1252,7 @@ function bookSlot(req, res) {
       );
     }
   }
-  bookSlot().then(function () { });
+  bookSlot().then(function() {});
 }
 /**
  * Function is use to get Salon Details from user ID
@@ -1266,25 +1267,18 @@ async function getSalonByUser(req, res) {
   if (req.body.user_id) {
     let userId = req.body.user_id;
     let cond = {
-      "user_id": userId
-    }
+      user_id: userId
+    };
     let salonDetails = await commonQuery.fetch_one(salons, cond);
     if (salonDetails) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.FETCHED_ALL_DATA,
-          salonDetails
-        )
+        Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonDetails)
       );
     }
   } else {
-    res.json(
-      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-    );
+    res.json(Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null));
   }
   //console.log("req.body", req.body); return;
-
 }
 
 /**
@@ -1297,35 +1291,32 @@ async function getSalonByUser(req, res) {
  */
 async function getSalonServiceList(req, res) {
   //console.log("req.body", req.body); return;
-  let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   if (req.body.user_id) {
     var salonId = await util.getSalonId(req.body.user_id);
     let serviceCond = {
-      "salon_id": salonId
-    }
+      salon_id: salonId
+    };
     let pageSize = 100;
     let page = 1;
     // let serviceList = await commonQuery.fetch_all(services, salonCond);
     let serviceList = await commonQuery.fetch_all_paginated(
-      salonservices, serviceCond,
+      salonservices,
+      serviceCond,
       pageSize,
       currentPage
     );
     //console.log("serviceList", serviceList); return;
     res.json(
-      Response(
-        constant.SUCCESS_CODE,
-        constant.FETCHED_ALL_DATA,
-        serviceList
-      )
+      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, serviceList)
     );
   } else {
     return res.json(
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
-
 }
 /**
  * Function is use to get list service assign to all employee
@@ -1337,30 +1328,28 @@ async function getSalonServiceList(req, res) {
  */
 async function getEmployeeServiceList(req, res) {
   // console.log("req.body", req.body);
-  let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   if (req.body.user_id) {
     var employeeList = [];
     var salonId = await util.getSalonId(req.body.user_id);
     let empCond = {
-      "salon_id": salonId
-    }
+      salon_id: salonId
+    };
     let pageSize = 100;
     let page = 1;
 
     let employeeData = await commonQuery.find_all_employee_paginate(
-      employees, empCond,
+      employees,
+      empCond,
       pageSize,
       currentPage
     );
 
     // console.log("employeeList", employeeList); return;
     res.json(
-      Response(
-        constant.SUCCESS_CODE,
-        constant.FETCHED_ALL_DATA,
-        employeeData
-      )
+      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, employeeData)
     );
   } else {
     return res.json(
@@ -1373,21 +1362,21 @@ async function updateSalonServices(req, res) {
   // console.log("req.body", req.body); //return;
   if (req.body) {
     let updateCond = {
-      "_id": req.body.id
-    }
+      _id: req.body.id
+    };
     let updateData = {
       price: req.body.price,
       duration: req.body.duration
-    }
-    let updateService = await commonQuery.updateOne(salonservices, updateCond, updateData);
+    };
+    let updateService = await commonQuery.updateOne(
+      salonservices,
+      updateCond,
+      updateData
+    );
     // console.log("updateService", updateService);
     if (updateService) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.SERVICE_UPDATED,
-          updateService
-        )
+        Response(constant.SUCCESS_CODE, constant.SERVICE_UPDATED, updateService)
       );
     }
   } else {
@@ -1395,25 +1384,20 @@ async function updateSalonServices(req, res) {
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
-
 }
 
 async function removeEmployee(req, res) {
   console.log("req.body", req.body);
   if (req.body._id) {
     let updateCond = {
-      "_id": req.body._id
-    }
+      _id: req.body._id
+    };
 
     let removeEmp = await commonQuery.hard_delete(employees, updateCond);
     // console.log("updateService", updateService);
     if (removeEmp) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.DELETED_SUCCESS,
-          removeEmp
-        )
+        Response(constant.SUCCESS_CODE, constant.DELETED_SUCCESS, removeEmp)
       );
     }
   } else {
@@ -1422,5 +1406,3 @@ async function removeEmployee(req, res) {
     );
   }
 }
-
-

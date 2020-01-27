@@ -1,107 +1,124 @@
 <div class="check-spa-outer">
-    <div class="employee-tabs">
+  <div class="employee-tabs"></div>
+  <div class="create-availabillity">
+    <div class="create-availabillity-inner">
+      <div class="employee-sec"></div>
+      <div class="add-btn">
+        <a routerLink="/salon/home/add-service">
+          <div class="add-employee-inner">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </div>
+          <span>Add Service</span>
+        </a>
+      </div>
     </div>
-    <div class="create-availabillity">
-        <div class="create-availabillity-inner">
-            <div class="employee-sec">
-            </div>
-            <div class="add-btn">
-                <a routerLink="/salon/home/add-service">
-                    <div class="add-employee-inner">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </div>
-                    <span>Add Service</span>
-                </a>
-            </div>
-        </div>
 
-        <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+    <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+      <table mat-table [dataSource]="salonServicesList">
+        <!-- Position Column -->
 
-            <table mat-table [dataSource]="salonServicesList">
-                <!-- Position Column -->
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="categoryname">
-                    <th mat-header-cell *matHeaderCellDef>Category</th>
-                    <td mat-cell *matCellDef="let element">{{ element.categoryname }}</td>
-                </ng-container>
-                <ng-container matColumnDef="servicename">
-                    <th mat-header-cell *matHeaderCellDef>Services</th>
-                    <td mat-cell *matCellDef="let element">{{ element.servicename }}</td>
-                </ng-container>
-                <ng-container matColumnDef="price">
-                    <th mat-header-cell *matHeaderCellDef>Price</th>
-                    <td mat-cell *matCellDef="let element">{{ element.price }}</td>
-                </ng-container>
-                <ng-container matColumnDef="duration">
-                    <th mat-header-cell *matHeaderCellDef>Duration</th>
-                    <td mat-cell *matCellDef="let element">{{ element.duration }}</td>
-                </ng-container>
-                <ng-container matColumnDef="is_active">
-                    <th mat-header-cell *matHeaderCellDef>Status</th>
-                    <td mat-cell *matCellDef="let element">
-                        <span *ngIf="element.is_active === true" class="badge badge-success">Active</span>
-                        <span *ngIf="element.is_active === false" class="badge badge-danger">Deleted</span>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef>Action</th>
-                    <td mat-cell *matCellDef="let element" class="action-btns">
-                        <a (click)="openEditServiceModal(element)">
-                            <img src="../../../../assets/images/edit-ico.svg">
-                        </a>
-                        <a (click)="deleteService(element, 'delete')" class="delete-info">
-                            <img src="../../../../assets/images/delete-icon.svg">
-                        </a>
-                        <!-- <a (click)="deleteService(element, 'restore')" class="resotre-info">
+        <!-- Name Column -->
+        <ng-container matColumnDef="categoryname">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let element">{{ element.categoryname }}</td>
+        </ng-container>
+        <ng-container matColumnDef="servicename">
+          <th mat-header-cell *matHeaderCellDef>Services</th>
+          <td mat-cell *matCellDef="let element">{{ element.servicename }}</td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef>Duration</th>
+          <td mat-cell *matCellDef="let element">{{ element.duration }}</td>
+        </ng-container>
+        <ng-container matColumnDef="is_active">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.is_active === true" class="badge badge-success"
+              >Active</span
+            >
+            <span *ngIf="element.is_active === false" class="badge badge-danger"
+              >Deleted</span
+            >
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element" class="action-btns">
+            <a (click)="openEditServiceModal(element)">
+              <img src="../../../../assets/images/edit-ico.svg" />
+            </a>
+            <a (click)="deleteService(element, 'delete')" class="delete-info">
+              <img src="../../../../assets/images/delete-icon.svg" />
+            </a>
+            <!-- <a (click)="deleteService(element, 'restore')" class="resotre-info">
                             <img src="../../../../assets/images/delete-icon.svg">
                         </a> -->
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
 
-                    </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-            <mat-paginator [length]="rolesCount" [pageSize]="count" (page)="paginate($event)"
-                [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
-        </div>
-
-        <div *ngIf="noRecordsFound" class="noRecords">
-            <div class="noRec">No Records Found</div>
-        </div>
+      <mat-paginator
+        [length]="salonServicesCount"
+        [pageSize]="count"
+        (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 15, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
     </div>
+
+    <div *ngIf="noRecordsFound" class="noRecords">
+      <div class="noRec">No Records Found</div>
+    </div>
+  </div>
 </div>
 
 <div class="userDetailsOverlay" *ngIf="isAddModal">
-    <div class="main-section-area modal-md">
-        <div class="header">
-            <h4>Edit Service</h4>
-        </div>
-        <div class="main-section">
-            <form [formGroup]="editServiceForm">
-                <div class="row add-employee">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="custom-label">Price</label>
-                            <input type="text" formControlName="price" class="form-control"
-                                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;" />
-                        </div>
-                        <div class="form-group">
-                            <label class="custom-label">Duration</label>
-                            <input type="text" formControlName="duration" class="form-control"
-                                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;" />
-                        </div>
-                    </div>
-                </div>
-                <div class="btn-Area">
-                    <button class="btn btn-primary btn-sign-in" (click)="updateEmpService(editServiceForm.value)">
-                        Update
-                    </button>
-                    <button class=" btn btn-sign-in btn-primary" (click)="dismissModal()">
-                        Close
-                    </button>
-                </div>
-            </form>
-        </div>
+  <div class="main-section-area modal-md">
+    <div class="header">
+      <h4>Edit Service</h4>
     </div>
+    <div class="main-section">
+      <form [formGroup]="editServiceForm">
+        <div class="row add-employee">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="custom-label">Price</label>
+              <input
+                type="text"
+                formControlName="price"
+                class="form-control"
+                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;"
+              />
+            </div>
+            <div class="form-group">
+              <label class="custom-label">Duration</label>
+              <input
+                type="text"
+                formControlName="duration"
+                class="form-control"
+                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="btn-Area">
+          <button
+            class="btn btn-primary btn-sign-in"
+            (click)="updateEmpService(editServiceForm.value)"
+          >
+            Update
+          </button>
+          <button class=" btn btn-sign-in btn-primary" (click)="dismissModal()">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
