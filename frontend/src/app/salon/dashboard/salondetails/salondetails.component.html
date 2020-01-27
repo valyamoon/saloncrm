@@ -138,3 +138,130 @@
     </div>
   </div>
 </div>
+<div class="profileOverlay" *ngIf="editSalonDetails">
+  <div *ngIf="editSalonDetails" id="profileArea">
+    <h2>Update Salon Details</h2>
+    <form [formGroup]="submitSalonDetails" class="salonDetailSave">
+      <div class="field">
+        <label class="label">Name:</label>
+        <input
+          type="text"
+          class="form-control fields"
+          placeholder="Name"
+          formControlName="name"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label">Image:</label>
+        <input
+          style="display: none"
+          type="file"
+          accept="image/*"
+          (change)="uploadImage($event)"
+          #fileInput
+        />
+        <button
+          class="btn btn-primary btn-sign-in btn-select-img"
+          (click)="fileInput.click()"
+        >
+          Select Image
+        </button>
+      </div>
+      <div class="field">
+        <label class="label">Open Time:</label>
+        <input
+          [min]="min"
+          class="setTime form-control fields"
+          (ngModelChange)="onOpenTimeSelect($event)"
+          formControlName="opentime"
+          [owlDateTime]="dtPicker2"
+          [owlDateTimeTrigger]="dtPicker2"
+          placeholder="Open time"
+        />
+        <owl-date-time [pickerType]="'timer'" #dtPicker2></owl-date-time>
+
+        <!-- <input type="time" formControlName="opentime" /> -->
+        <!-- <div class="ngx-timepicker-field-example">
+            <ngx-timepicker-field
+              (timeSet)="openTime($event)"
+              formControlName="opentime"
+            ></ngx-timepicker-field>
+          </div> -->
+      </div>
+      <div class="field">
+        <label class="label">Close Time:</label>
+        <input
+          [min]="min"
+          class="setTime form-control fields"
+          (ngModelChange)="onCloseTimeSelect($event)"
+          formControlName="closetime"
+          [owlDateTime]="dtPicker1"
+          [owlDateTimeTrigger]="dtPicker1"
+          placeholder="Close time"
+        />
+        <owl-date-time [pickerType]="'timer'" #dtPicker1></owl-date-time>
+        <!-- <input type="time" formControlName="closetime" /> -->
+        <!-- <owl-date-time
+            [(ngModel)]="closetime"
+            #dt1
+            pickerType="timer"
+          ></owl-date-time> -->
+        <!-- <div class="ngx-timepicker-field-example">
+            <ngx-timepicker-field
+              (timeSet)="closeTime($event)"
+              formControlName="closetime"
+            ></ngx-timepicker-field>
+          </div> -->
+      </div>
+      <!-- <div class="field">
+          <label>Close Time:</label>
+          <input
+            type="time"
+            placeholder="closetime"
+            formControlName="closetime"
+          />
+        </div> -->
+      <div class="field">
+        <label class="label">Contact:</label>
+        <div class="phoneArea">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Contact"
+            formControlName="contact"
+          />
+          <div
+            *ngIf="contact.invalid && (contact.dirty || contact.touched)"
+            class="erroralert"
+          >
+            <div *ngIf="contact.invalid">
+              Invalid Contact Number
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Address:</label>
+        <input
+          type="text"
+          class="form-control fields"
+          placeholder="Address"
+          formControlName="salonaddress"
+        />
+      </div>
+
+      <button
+        class="btn btn-primary btn-sign-in"
+        [disabled]="submitSalonDetails.invalid"
+        (click)="updatetSalon(submitSalonDetails.value)"
+      >
+        Update
+      </button>
+      <button class="btn btn-primary btn-sign-in" (click)="cancelSalonUpdate()">
+        Cancel
+      </button>
+    </form>
+  </div>
+</div>
+<button (click)="editSalonDetailsShow()" class="editBtn">EDIT</button>

@@ -1651,6 +1651,7 @@ commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
   name,
   sortParam
 ) {
+  console.log("AAAA", sortParam);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;

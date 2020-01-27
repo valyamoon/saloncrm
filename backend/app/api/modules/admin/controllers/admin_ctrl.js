@@ -118,7 +118,6 @@ function getSalonsRequestList(req, res) {
         };
 
         let count = await commonQuery.findCount(salons, condition);
-        console.log("count", count);
 
         let listOfSalons = await commonQuery.fetch_all_paginated(
           salons,
@@ -141,7 +140,6 @@ function getSalonsRequestList(req, res) {
             countNumber: count
           };
 
-          console.log("DATATOPASS", dataToPass);
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -170,7 +168,6 @@ function getSalonsRequestList(req, res) {
  */
 
 function acceptSalonRequest(req, res) {
-  console.log("Acctp", req.body.salon_id);
   async function acceptSalonRequest() {
     try {
       if (req.body.salon_id) {
@@ -187,14 +184,13 @@ function acceptSalonRequest(req, res) {
           condition,
           activeCondition
         );
-        console.log("Axcc", acceptSalonRequest);
+
         if (!acceptSalonRequest || acceptSalonRequest === null) {
           res.json(
             Response(constant.ERROR_CODE, constant.USER_NOT_FOUND, null)
           );
         } else {
           let user_id = acceptSalonRequest.user_id;
-          console.log("USER?I", user_id);
 
           let activeCondition = {
             isActive: true,
@@ -254,7 +250,6 @@ function acceptSalonRequest(req, res) {
  */
 
 function suspendSalon(req, res) {
-  console.log(req.body);
   async function suspendSalon() {
     try {
       if (req.body.salon_id) {
@@ -439,7 +434,6 @@ function addServices(req, res) {
  */
 
 function removeServices(req, res) {
-  console.log(req.body);
   async function removeServices() {
     try {
       if (req.body && req.body.service_id) {
@@ -457,8 +451,6 @@ function removeServices(req, res) {
           condition,
           removeCondition
         );
-
-        console.log("ASSS", removeService);
 
         if (!removeService) {
           Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error);
@@ -532,7 +524,6 @@ function addRoles(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function getRoles(req, res) {
-  console.log("GET ROLES", req.body);
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
@@ -546,7 +537,7 @@ function getRoles(req, res) {
         };
 
         let rolesCount = await commonQuery.findCount(roles, condition);
-        console.log("COUNRT", rolesCount);
+
         if (rolesCount) {
           countNumber = rolesCount;
         } else {
@@ -651,8 +642,6 @@ function getActiveSalonsList(req, res) {
  */
 
 function fetchActiveUsersCount(req, res) {
-  console.log("INSEID", req.body);
-
   async function fetchActiveUsersCount() {
     try {
       if (req.body && req.body.type) {
@@ -661,9 +650,8 @@ function fetchActiveUsersCount(req, res) {
             name: "user"
           };
           let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-          console.log("roleUID", fetchRoleId);
+
           let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
-          console.log(roleId);
 
           let condition = {
             isActive: true,
@@ -704,28 +692,18 @@ function fetchActiveUsersCount(req, res) {
  */
 
 function fetchActiveSalonsCount(req, res) {
-  console.log("SalonsCount", req.body);
-
   async function fetchActiveSalonsCount() {
     try {
       if (req.body && req.body.type) {
         if (req.body.type === "salon") {
-          // let roleCondition = {
-          //     name: "salon"
-          // };
-          // let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-          // console.log("roleUID", fetchRoleId);
-          // let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
-
           let condition = {
             isActive: true,
             isDeleted: false,
             isApproved: true,
             isDeclined: false
-            // role_id: roleId
           };
           let salonsCount = await commonQuery.findCount(salons, condition);
-          console.log("SalonCount", salonsCount);
+
           if (!salonsCount) {
             res.json(
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -763,9 +741,8 @@ function fetchActiveUsersList(req, res) {
             name: "user"
           };
           let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-          console.log("roleUID", fetchRoleId);
+
           let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
-          console.log(roleId);
 
           let condition = {
             isActive: true,
@@ -856,7 +833,6 @@ function removeCategories(req, res) {
  */
 
 function getArchivedCategories(req, res) {
-  console.log(req.body);
   async function getArchivedCategories() {
     try {
       if (req.body && req.body.type === "archive-categories") {
@@ -900,7 +876,6 @@ function getArchivedCategories(req, res) {
  */
 
 function getAdminCategoriesList(req, res) {
-  console.log(req.body);
   let adminCount;
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
@@ -922,7 +897,6 @@ function getAdminCategoriesList(req, res) {
         } else {
           adminCount = adminCategoriesCount;
         }
-        console.log("ccc", adminCount);
 
         let adminCategories = await commonQuery.fetch_all_paginated(
           categories,
@@ -1106,7 +1080,6 @@ function awakeCategory(req, res) {
  */
 
 function getActiveServices(req, res) {
-  console.log("INSID", req.body);
   let servicesCount;
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
@@ -1131,7 +1104,7 @@ function getActiveServices(req, res) {
           pageSize,
           currentPage
         );
-        console.log("ServiceList", servicesList);
+
         if (!servicesList) {
           res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -1169,7 +1142,6 @@ function getActiveServices(req, res) {
  */
 
 function getActiveAdminList(req, res) {
-  console.log("INSID", req.body);
   let AdminCount;
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
@@ -1194,7 +1166,7 @@ function getActiveAdminList(req, res) {
           pageSize,
           currentPage
         );
-        console.log("ServiceList", servicesList);
+
         if (!servicesList) {
           res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -1232,7 +1204,6 @@ function getActiveAdminList(req, res) {
  */
 
 function fetchActiveUsersAll(req, res) {
-  console.log("www", req.body);
   let model;
   let count;
   let countCondition;
@@ -1242,7 +1213,6 @@ function fetchActiveUsersAll(req, res) {
   async function fetchActiveUsersAll() {
     try {
       if (req.body && req.body.type) {
-        console.log(req.body.type);
         if (req.body.type) {
           let roleCondition = {
             name: req.body.type
@@ -1270,9 +1240,8 @@ function fetchActiveUsersAll(req, res) {
           }
 
           let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-          console.log("roleUID", fetchRoleId);
+
           let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
-          console.log(roleId);
 
           let condition = {
             isActive: true,
@@ -1359,7 +1328,7 @@ function forgotPassword(req, res) {
           isActive: true
         };
         var userObj = await query.findoneData(model, condition, fields);
-        console.log("userObjuserObj++++++++", userObj);
+
         if (userObj.data) {
           var condition = {
             _id: userObj.data._id
@@ -1368,7 +1337,6 @@ function forgotPassword(req, res) {
             resetkey: ""
           };
           updateData.resetkey = utility.uuid.v1();
-          console.log("data for resetkey updateData", updateData);
 
           let updateKey = await query.updateOneDocument(
             model,
@@ -1389,10 +1357,9 @@ function forgotPassword(req, res) {
               data: userMailData,
               mailType: constant.varibleType.FORGET_PASSWORD //"Forget Password"
             };
-            console.log("data for forget password==========", obj);
+
             let sendMail = await sendEmailFunction(obj);
             if (sendMail) {
-              console.log("sendMailsendMail==========");
               res.json(
                 Response(
                   constant.statusCode.ok,
@@ -1434,7 +1401,6 @@ function forgotPassword(req, res) {
  * Created On 09/01/2020
  */
 async function getServiceList(req, res) {
-  console.log("req.body", req.body);
   if (req.body.user_id) {
     var salonId = await util.getSalonId(req.body.user_id);
     let finalServiceArr = [];
@@ -1446,7 +1412,7 @@ async function getServiceList(req, res) {
     let pageSize = 100;
     let page = 1;
     let serviceList = await commonQuery.fetch_all(services, salonCond);
-    //  console.log("serviceList", serviceList); return;
+
     async.each(
       serviceList,
       async function(serviceData, firstCB) {

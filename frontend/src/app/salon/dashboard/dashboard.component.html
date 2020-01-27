@@ -1,120 +1,168 @@
 <div class="app sidebar-mini rtl">
-    <nav class="navbar navbar-expand-lg navbar-dark  logo-left">
-        <div class="mobile-logo">
-            <ul class="navbar-nav">
-                <li class="nav-item d-lg-block">
-                    <button class="header-post-btn">
-                      <div class="masthead-search-indicator"></div>
-                    </button>
-                </li>
-                <li class="nav-item dropdown d-lg-block">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                        <span class="badge badge-light">
-                          <img src="../../../assets/images/prof-img.jpg" />
-                        </span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#">Edit Profile</a>
-                        <a class="dropdown-item" href="#">Change Password</a>
-                        <a class="dropdown-item" href="#">Logout</a>
-                    </div>
-                </li>
-            </ul>
+  <nav class="navbar navbar-expand-lg navbar-dark  logo-left">
+    <div class="mobile-logo">
+      <ul class="navbar-nav">
+        <li class="nav-item d-lg-block">
+          <button class="header-post-btn">
+            <div class="masthead-search-indicator"></div>
+          </button>
+        </li>
+        <li class="nav-item dropdown d-lg-block">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbardrop"
+            data-toggle="dropdown"
+          >
+            <span class="badge badge-light">
+              <img src="../../../assets/images/prof-img.jpg" />
+            </span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="#">Edit Profile</a>
+            <a class="dropdown-item" href="#">Change Password</a>
+            <a class="dropdown-item" href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
 
-            <button class="navbar-toggler" type="button">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <button type="button" class="hamburger-menu app-sidebar__toggle" data-toggle="sidebar" aria-label="Hide Sidebar" (click)="toggleSidebar()" href="javascript:void(0)">
-          <img src="../../../assets/images/menu-arrow.png" />
-        </button>
+      <button class="navbar-toggler" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <button
+      type="button"
+      class="hamburger-menu app-sidebar__toggle"
+      data-toggle="sidebar"
+      aria-label="Hide Sidebar"
+      (click)="toggleSidebar()"
+      href="javascript:void(0)"
+    >
+      <img src="../../../assets/images/menu-arrow.png" />
+    </button>
 
-        <a class="navbar-brand abs-center-x d-xl-block" href="#"><img src="../../../assets/images/logo.svg" alt="" /></a>
+    <a class="navbar-brand abs-center-x d-xl-block" href="#"
+      ><img src="../../../assets/images/logo.svg" alt=""
+    /></a>
 
-        <div class="header-menu transition right-sidebar navbar-collapse" id="rightSidebar">
-            <ul class="navbar-nav left-nav d-none-menu">
+    <div
+      class="header-menu transition right-sidebar navbar-collapse"
+      id="rightSidebar"
+    >
+      <ul class="navbar-nav left-nav d-none-menu"></ul>
 
-            </ul>
+      <ul class="navbar-nav d-none-menu">
+        <li class="nav-item dropdown d-lg-block">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbardrop"
+            data-toggle="dropdown"
+          >
+            <span class="badge badge-light">
+              <img src="../../../assets/images/prof-img.jpg" />
+            </span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="#">Edit Profile</a>
+            <a class="dropdown-item" href="#">Change Password</a>
+            <a class="dropdown-item" href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
+      <ul class="search-notif-mob">
+        <li>
+          <input
+            type="search"
+            placeholder="type here to search.."
+            id="masthead-search-search"
+          />
+          <button type="submit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+            >
+              <image
+                id="magnifying-glass"
+                width="20"
+                height="20"
+                xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABgUlEQVQ4ja2UPUscYRhFj2YxrIigW+U/mDpJaSsSAxFJJaTRbCAhjSCKCFpErNKElCFVKhvxL0SsLE0hglhYKZtA0LAQT3jx2WV33BndxQuXGWbe58z7cZ/pU8loEJgFpoDHQAWoAQfANvAN+J0taigLnAE+AQ+BLWAXOAdGgCfANPAAWAC+diQmYHjRa22qQy3PW11WV9V/Me7GmMbNTMBmc0BZvwjofCfgoHqa98UCL6m/1EoW+EY9K1hmngfUE3W59X1/nGY6gD95J5ejOvA96pvqj2j86BLWUKobywIrEY1elOrKkd0msBY560UjsfSLVmDqgKc9AlPYf2aXnNrpZUy9G5WAV8BOW406HLFZ6TI279RL9VGnTnkdyX9+R9i4Wlc/5LVe8kZAFyO0nUClmFk9WvVtETB5LtrpWP2oTqrP1Al1TT2MZb4P2JVaLQImj0af7qkXMZO/6r66ntmzBGuD3mW/0i+r6H0bNB39bbq8ZcCXuH5uxOa+XFWP/gOTjt3QTnqGnQAAAABJRU5ErkJggg=="
+              />
+            </svg>
+          </button>
+        </li>
+        <li>
+          <a class="nav-link" href="#">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="17"
+              height="21"
+              viewBox="0 0 17 21"
+            >
+              <image
+                id="notification"
+                width="17"
+                height="21"
+                xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAVCAYAAACg/AXsAAAA50lEQVQ4jaWUPwrCMBTGP/9MgiKI6OKoSweVTg5CLyA4eAG9krdw9QZeQHsPhQ7FoYOfFBKN7Us09Qcl5L2PHyEvFCRd357kVa3WnEsQ8JPAlq3DTr/QKe5f2CQjALtCbavqZYTjbUimlElV33knS5KZRaDJVM4qib8INLFNEv4o0ITSdGaOSUlMpem0PSUdSVIZU9L0lDSkkww8JUNJsvCUvPNqTBOSD88R5/mx+U4OngLNQUuiigJNVCN5rvDQTC65ZA2g+4ckySVSowXgCKBn1G4AVgDupbTj9zgneSKZqDXfl3MknlUYZ6hvlXpUAAAAAElFTkSuQmCC"
+              />
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-            <ul class="navbar-nav d-none-menu">
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 
+  <aside class="app-sidebar">
+    <ul class="app-menu">
+      <li>
+        <a
+          class="app-menu__item"
+          [routerLink]="'profile'"
+          routerLinkActive="active"
+        >
+          <span class="app-menu__label">Dashboard</span>
+        </a>
+      </li>
 
-                <li class="nav-item dropdown d-lg-block">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                        <span class="badge badge-light">
-                          <img src="../../../assets/images/prof-img.jpg" />
-                        </span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#">Edit Profile</a>
-                        <a class="dropdown-item" href="#">Change Password</a>
-                        <a class="dropdown-item" href="#">Logout</a>
-                    </div>
-                </li>
-            </ul>
-            <ul class="search-notif-mob">
-                <li>
-                    <input type="search" placeholder="type here to search.." id="masthead-search-search" />
-                    <button type="submit">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                      >
-                        <image
-                          id="magnifying-glass"
-                          width="20"
-                          height="20"
-                          xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABgUlEQVQ4ja2UPUscYRhFj2YxrIigW+U/mDpJaSsSAxFJJaTRbCAhjSCKCFpErNKElCFVKhvxL0SsLE0hglhYKZtA0LAQT3jx2WV33BndxQuXGWbe58z7cZ/pU8loEJgFpoDHQAWoAQfANvAN+J0taigLnAE+AQ+BLWAXOAdGgCfANPAAWAC+diQmYHjRa22qQy3PW11WV9V/Me7GmMbNTMBmc0BZvwjofCfgoHqa98UCL6m/1EoW+EY9K1hmngfUE3W59X1/nGY6gD95J5ejOvA96pvqj2j86BLWUKobywIrEY1elOrKkd0msBY560UjsfSLVmDqgKc9AlPYf2aXnNrpZUy9G5WAV8BOW406HLFZ6TI279RL9VGnTnkdyX9+R9i4Wlc/5LVe8kZAFyO0nUClmFk9WvVtETB5LtrpWP2oTqrP1Al1TT2MZb4P2JVaLQImj0af7qkXMZO/6r66ntmzBGuD3mW/0i+r6H0bNB39bbq8ZcCXuH5uxOa+XFWP/gOTjt3QTnqGnQAAAABJRU5ErkJggg=="
-                        />
-                      </svg>
-                    </button>
-                </li>
-                <li>
-                    <a class="nav-link" href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="21" viewBox="0 0 17 21">
-                          <image
-                            id="notification"
-                            width="17"
-                            height="21"
-                            xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAVCAYAAACg/AXsAAAA50lEQVQ4jaWUPwrCMBTGP/9MgiKI6OKoSweVTg5CLyA4eAG9krdw9QZeQHsPhQ7FoYOfFBKN7Us09Qcl5L2PHyEvFCRd357kVa3WnEsQ8JPAlq3DTr/QKe5f2CQjALtCbavqZYTjbUimlElV33knS5KZRaDJVM4qib8INLFNEv4o0ITSdGaOSUlMpem0PSUdSVIZU9L0lDSkkww8JUNJsvCUvPNqTBOSD88R5/mx+U4OngLNQUuiigJNVCN5rvDQTC65ZA2g+4ckySVSowXgCKBn1G4AVgDupbTj9zgneSKZqDXfl3MknlUYZ6hvlXpUAAAAAElFTkSuQmCC"
-                          />
-                        </svg>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-
-    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-
-    <aside class="app-sidebar">
-        <ul class="app-menu">
-            <li>
-                <a class="app-menu__item" [routerLink]="'profile'" routerLinkActive="active">
-                    <span class="app-menu__label">Dashboard</span>
-                </a>
-            </li>
-
-            <!-- <li>
+      <!-- <li>
                 <a class="app-menu__item" href="#">
                     <span class="app-menu__label">Business profile</span>
                 </a>
             </li> -->
-            <li>
-                <a class="app-menu__item" [routerLink]="'manage-service'" routerLinkActive="active">
-                    <span class="app-menu__label">Manage Services</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item" [routerLink]="'manage-employee'" routerLinkActive="active">
-                    <span class="app-menu__label">Manage Employee</span>
-                </a>
-            </li>
-            <!-- <li>
+      <li>
+        <a
+          class="app-menu__item"
+          [routerLink]="'manage-service'"
+          routerLinkActive="active"
+        >
+          <span class="app-menu__label">Manage Services</span>
+        </a>
+      </li>
+      <li>
+        <a
+          class="app-menu__item"
+          [routerLink]="'manage-employee'"
+          routerLinkActive="active"
+        >
+          <span class="app-menu__label">Manage Employee</span>
+        </a>
+      </li>
+      <li>
+        <a
+          class="app-menu__item"
+          [routerLink]="'location'"
+          routerLinkActive="active"
+        >
+          <span class="app-menu__label">location</span>
+        </a>
+      </li>
+      <!-- <li>
                 <a class="app-menu__item" href="#">
                     <span class="app-menu__label">New Bookings</span>
                 </a>
@@ -134,10 +182,8 @@
                     <span class="app-menu__label">Cancelled Bookings</span>
                 </a>
             </li> -->
-        </ul>
-    </aside>
+    </ul>
+  </aside>
 
-    <router-outlet></router-outlet>
-
-
+  <router-outlet></router-outlet>
 </div>

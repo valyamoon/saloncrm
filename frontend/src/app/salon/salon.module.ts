@@ -13,6 +13,7 @@ import { ProfileComponent } from "./dashboard/profile/profile.component";
 import { ManageServiceComponent } from "./dashboard/manage-service/manage-service.component";
 import { ManageEmployeeComponent } from "./dashboard/manage-employee/manage-employee.component";
 import { SalondetailsComponent } from './dashboard/salondetails/salondetails.component';
+import { LocationComponent } from './dashboard/location/location.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SalondetailsComponent } from './dashboard/salondetails/salondetails.com
     ProfileComponent,
     ManageServiceComponent,
     ManageEmployeeComponent,
-    SalondetailsComponent
+    SalondetailsComponent,
+    LocationComponent
   ],
   imports: [
     CommonModule,
