@@ -26,9 +26,12 @@ export class SalondetailsComponent implements OnInit {
   tempUrl: string | ArrayBuffer;
   imageTemp: any;
   public url = <any>"";
-
+  editSalonDetails: boolean = false;
   showPendingApproval: boolean = false;
   checkInitialApprovalStatus: boolean;
+  salonDetailsData: any;
+  userid: any;
+  salonid: any;
 
   constructor(
     private authServ: AuthService,
@@ -46,6 +49,10 @@ export class SalondetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.user_id = sessionStorage.getItem("userId");
+    this.userid = this.user_id;
+
+    this.getsalonsData(this.userid);
     this.submitSalonDetails = this.fb.group({
       name: ["", Validators.required],
       contact: [
@@ -59,6 +66,7 @@ export class SalondetailsComponent implements OnInit {
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
+
     console.log(this.user_id);
     this.checkInitialApprovalStatus = JSON.parse(
       sessionStorage.getItem("isSubmitted")
@@ -159,5 +167,99 @@ export class SalondetailsComponent implements OnInit {
   }
   timeChanged(data) {
     console.log(data);
+  }
+  cancelSalonUpdate() {
+    this.editSalonDetails = false;
+  }
+
+  getsalonsData(data) {
+    let dataToPass = {
+      user_id: data
+    };
+    this.commServ.getSalonDetailsData(dataToPass).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data["code"] === 200) {
+          this.salonDetailsData = data["data"];
+          this.salonid = data["data"]._id;
+          console.log(this.salonid);
+        } else {
+          this.toastrServ.error("Failed to fetch salon details", "error", {
+            timeOut: 1000
+          });
+        }
+      },
+      error => {
+        this.toastrServ.error("Server Error", error, {
+          timeOut: 1000
+        });
+      }
+    );
+  }
+
+  editSalonDetailsShow() {
+    this.editSalonDetails = true;
+    this.submitSalonDetails.get("name").setValue(this.salonDetailsData.name);
+    this.submitSalonDetails
+      .get("contact")
+      .setValue(this.salonDetailsData.contact);
+    this.submitSalonDetails
+      .get("salonaddress")
+      .setValue(this.salonDetailsData.salonaddress);
+    this.submitSalonDetails
+      .get("opentime")
+      .setValue(this.salonDetailsData.opentime);
+    this.submitSalonDetails
+      .get("closetime")
+      .setValue(this.salonDetailsData.closetime);
+  }
+
+  updatetSalon(data) {
+    console.log("ASSSSSAAAA", data);
+    let dataToPass = {
+      salon_id: this.salonid,
+      name: data.name,
+      salonaddress: data.salonaddress,
+      contact: data.contact,
+      image: data.image,
+      opentime: data.opentime,
+      closetime: data.closetime
+    };
+
+    const postData = new FormData();
+    postData.append("name", dataToPass.name);
+    postData.append("image", dataToPass.image);
+    postData.append("salonaddress", dataToPass.salonaddress);
+    postData.append("opentime", dataToPass.opentime);
+    postData.append("closetime", dataToPass.closetime);
+    postData.append("contact", dataToPass.contact);
+    postData.append("salon_id", dataToPass.salon_id);
+
+    var options = { content: postData };
+
+    this.commServ.updateSalonDetails(postData).subscribe(
+      data => {
+        if (data["code"] === 200) {
+          this.editSalonDetails = false;
+          this.toastrServ.success(
+            "Salon Details Updated Successfully",
+            "Success",
+            {
+              timeOut: 2000
+            }
+          );
+        } else {
+          this.showPendingApproval = false;
+          this.toastrServ.error("Failed To Update Salon Details", "", {
+            timeOut: 2000
+          });
+        }
+      },
+      error => {
+        this.toastrServ.error("Server Error", error, {
+          timeOut: 2000
+        });
+      }
+    );
   }
 }

@@ -8,6 +8,7 @@ import { AuthService } from "../salon/auth.service";
 import { ManageServiceComponent } from "./dashboard/manage-service/manage-service.component";
 import { ManageEmployeeComponent } from "./dashboard/manage-employee/manage-employee.component";
 import { SalondetailsComponent } from "./dashboard/salondetails/salondetails.component";
+import { LocationComponent } from "./dashboard/location/location.component";
 
 const routes: Routes = [
   { path: "", component: LoginComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
       { path: "details", component: SalondetailsComponent },
       { path: "", redirectTo: "details", pathMatch: "full" },
       { path: "manage-service", component: ManageServiceComponent },
-      { path: "manage-employee", component: ManageEmployeeComponent }
+      { path: "manage-employee", component: ManageEmployeeComponent },
+      { path: "location", component: LocationComponent }
       // {path:'payment',component:PaymentComponent},
       // {path:'account',component:AccountComponent},
       // {path:'cancelled',component:CancelledBookingsComponent},
