@@ -9,9 +9,9 @@ var serviceSchema = mongoose.Schema({
     type: Boolean,
     default: true
   },
-  isDeleted:{
-    type:Boolean,
-    default:false
+  isDeleted: {
+    type: Boolean,
+    default: false
   },
   price: {
     type: Number,
@@ -24,7 +24,7 @@ var serviceSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "salons"
   },
-  category_id:{
+  category_id: {
     type: mongoose.Types.ObjectId,
     ref: "categories"
   },
@@ -32,8 +32,8 @@ var serviceSchema = mongoose.Schema({
     type: String,
     default: null
   },
-  description:{
-    type:String
+  description: {
+    type: String
   }
 });
 var service = (module.exports = mongoose.model("service", serviceSchema));

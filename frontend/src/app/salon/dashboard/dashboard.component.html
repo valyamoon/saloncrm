@@ -15,7 +15,7 @@
 
           <div class="check-spa-image-outer">
             <div class="check-spa-image">
-              <img src="../../../assets/images/surface1.svg" />
+              <img src="{{ salonData?.image }}" />
             </div>
             <h4>
               {{ salonData?.name }}
@@ -45,6 +45,16 @@
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi ut aliquip ex ea commodo consequat.
             </p>
+          </div>
+          <div class="about-salon">
+            <h2>
+              <a
+                [routerLink]="'subscription'"
+                routerLinkActive="router-link-active"
+              >
+                Subscription Details
+              </a>
+            </h2>
           </div>
         </div>
       </div>

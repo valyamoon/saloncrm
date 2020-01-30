@@ -22,6 +22,8 @@ import { RolesComponent } from "./admin-dashboard/roles/roles.component";
 import { HeaderTextComponent } from "./admin-dashboard/header-text/header-text.component";
 import { ConfirmationComponent } from "./admin-dashboard/confirmation/confirmation.component";
 import { ManageAdminComponent } from "./admin-dashboard/manage-admin/manage-admin.component";
+import { ManageplanComponent } from './admin-dashboard/manageplan/manageplan.component';
+import { SubcriptionsListComponent } from './admin-dashboard/subcriptions-list/subcriptions-list.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { ManageAdminComponent } from "./admin-dashboard/manage-admin/manage-admi
     RolesComponent,
     HeaderTextComponent,
     ConfirmationComponent,
-    ManageAdminComponent
+    ManageAdminComponent,
+    ManageplanComponent,
+    SubcriptionsListComponent
   ],
   imports: [
     CommonModule,

@@ -3,15 +3,18 @@
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
 const messageTemplates = require("../../../../lib/messagetemplates");
-
+const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
 const mailer = require("../../../../lib/mailer");
 
+const subscriptionplans = require("../model/subscriptionPlan");
+
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
 const roles = require("../../user/model/rolesSchema");
+const salonSubscriptions = require("../../salon/model/salonSubscriptions");
 const salons = require("../../salon/model/salonSchema");
 const categories = require("../../admin/model/categoriesSchema");
 const reviewratings = require("../../salon/model/salonreviewsratingSchema");
@@ -53,7 +56,11 @@ module.exports = {
   forgotPassword: forgotPassword,
   getServices: getServices,
   activeUsers: activeUsers,
-  deactiveUsers: deactiveUsers
+  deactiveUsers: deactiveUsers,
+  createSubscription: createSubscription,
+  getSubscription: getSubscription,
+  deletePlan: deletePlan,
+  getSubscirbedSalonsList: getSubscirbedSalonsList
 };
 
 /**
@@ -96,7 +103,7 @@ function addCategories(req, res) {
       );
     }
   }
-  addCategories().then(function () { });
+  addCategories().then(function() {});
 }
 /**
  * Function is use to get salon list which need to be approved by Admin
@@ -132,7 +139,7 @@ function getSalonsRequestList(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
           );
         } else {
-          listOfSalons.forEach(function (c) {
+          listOfSalons.forEach(function(c) {
             c.isservicesadded = undefined;
             c.isreviewadded = undefined;
           });
@@ -157,7 +164,7 @@ function getSalonsRequestList(req, res) {
     }
   }
 
-  getSalonsRequestList().then(function () { });
+  getSalonsRequestList().then(function() {});
 }
 
 /**
@@ -240,7 +247,7 @@ function acceptSalonRequest(req, res) {
     }
   }
 
-  acceptSalonRequest().then(function () { });
+  acceptSalonRequest().then(function() {});
 }
 /**
  * Function is use to suspend Salon on subsription expiry
@@ -325,7 +332,7 @@ function suspendSalon(req, res) {
     }
   }
 
-  suspendSalon().then(function () { });
+  suspendSalon().then(function() {});
 }
 
 /**
@@ -350,8 +357,8 @@ function getCategories(req, res) {
             Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
           );
         } else {
-          categoriesList.forEach(function (v) {
-            v.services.forEach(function (v) {
+          categoriesList.forEach(function(v) {
+            v.services.forEach(function(v) {
               delete v.isActive;
               delete v.isDeleted;
             });
@@ -372,7 +379,7 @@ function getCategories(req, res) {
       );
     }
   }
-  getCategories().then(function () { });
+  getCategories().then(function() {});
 }
 
 /**
@@ -423,7 +430,7 @@ function addServices(req, res) {
     }
   }
 
-  addServices().then(function () { });
+  addServices().then(function() {});
 }
 
 /**
@@ -482,7 +489,7 @@ function removeServices(req, res) {
     }
   }
 
-  removeServices().then(function () { });
+  removeServices().then(function() {});
 }
 
 /**
@@ -515,7 +522,7 @@ function addRoles(req, res) {
       );
     }
   }
-  addRoles().then(function () { });
+  addRoles().then(function() {});
 }
 /**
  * Function is use to get list of Roles
@@ -555,7 +562,7 @@ function getRoles(req, res) {
         if (!rolesList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
-          rolesList.forEach(function (v) {
+          rolesList.forEach(function(v) {
             v.isDeleted = undefined;
             v.status = undefined;
           });
@@ -575,7 +582,7 @@ function getRoles(req, res) {
       );
     }
   }
-  getRoles().then(function () { });
+  getRoles().then(function() {});
 }
 
 /**
@@ -608,7 +615,7 @@ function getActiveSalonsList(req, res) {
         if (!activeSalonsList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
-          activeSalonsList.forEach(function (v) {
+          activeSalonsList.forEach(function(v) {
             v.isDeleted = undefined;
             v.isreviewadded = undefined;
             v.isservicesadded = undefined;
@@ -631,7 +638,7 @@ function getActiveSalonsList(req, res) {
       );
     }
   }
-  getActiveSalonsList().then(function () { });
+  getActiveSalonsList().then(function() {});
 }
 
 /**
@@ -682,7 +689,7 @@ function fetchActiveUsersCount(req, res) {
     }
   }
 
-  fetchActiveUsersCount().then(function () { });
+  fetchActiveUsersCount().then(function() {});
 }
 /**
  * Function is use to Fetch Active Salon List
@@ -727,7 +734,7 @@ function fetchActiveSalonsCount(req, res) {
     }
   }
 
-  fetchActiveSalonsCount().then(function () { });
+  fetchActiveSalonsCount().then(function() {});
 }
 
 function fetchActiveUsersList(req, res) {
@@ -777,7 +784,7 @@ function fetchActiveUsersList(req, res) {
       );
     }
   }
-  fetchActiveUsersList().then(function () { });
+  fetchActiveUsersList().then(function() {});
 }
 /**
  * Function is use to remove categories
@@ -823,7 +830,7 @@ function removeCategories(req, res) {
       );
     }
   }
-  removeCategories().then(function () { });
+  removeCategories().then(function() {});
 }
 /**
  * Function is use to get list of archived categories
@@ -865,7 +872,7 @@ function getArchivedCategories(req, res) {
       );
     }
   }
-  getArchivedCategories().then(function () { });
+  getArchivedCategories().then(function() {});
 }
 
 /**
@@ -910,7 +917,7 @@ function getAdminCategoriesList(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
-          adminCategories.forEach(function (c) {
+          adminCategories.forEach(function(c) {
             c.services = undefined;
           });
           let dataToPass = {
@@ -933,7 +940,7 @@ function getAdminCategoriesList(req, res) {
       );
     }
   }
-  getAdminCategoriesList().then(function () { });
+  getAdminCategoriesList().then(function() {});
 }
 
 /**
@@ -980,7 +987,7 @@ function removeRole(req, res) {
       );
     }
   }
-  removeRole().then(function () { });
+  removeRole().then(function() {});
 }
 
 /**
@@ -1022,7 +1029,7 @@ function updateRole(req, res) {
       );
     }
   }
-  updateRole().then(function () { });
+  updateRole().then(function() {});
 }
 
 /**
@@ -1069,7 +1076,7 @@ function awakeCategory(req, res) {
       );
     }
   }
-  awakeCategory().then(function () { });
+  awakeCategory().then(function() {});
 }
 
 /**
@@ -1131,7 +1138,7 @@ function getActiveServices(req, res) {
     }
   }
 
-  getActiveServices().then(function () { });
+  getActiveServices().then(function() {});
 }
 
 /**
@@ -1193,7 +1200,7 @@ function getActiveAdminList(req, res) {
     }
   }
 
-  getActiveAdminList().then(function () { });
+  getActiveAdminList().then(function() {});
 }
 
 /**
@@ -1265,7 +1272,7 @@ function fetchActiveUsersAll(req, res) {
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
             );
           } else {
-            usersList.forEach(function (c) {
+            usersList.forEach(function(c) {
               c.password = undefined;
               c.lat = undefined;
               c.long = undefined;
@@ -1291,7 +1298,7 @@ function fetchActiveUsersAll(req, res) {
       );
     }
   }
-  fetchActiveUsersAll().then(function () { });
+  fetchActiveUsersAll().then(function() {});
 }
 
 /**
@@ -1391,7 +1398,7 @@ function forgotPassword(req, res) {
       );
     }
   }
-  forgot_password().then(data => { });
+  forgot_password().then(data => {});
 }
 /**
  * Function is use to get list service provided by admin
@@ -1408,64 +1415,56 @@ async function getServiceList(req, res) {
     let finalServiceArr = [];
 
     let salonCond = {
-      "isActive": true,
-      "isDeleted": false
+      isActive: true,
+      isDeleted: false
     };
     let pageSize = 100;
     let page = 1;
     let serviceList = await commonQuery.fetch_all(services, salonCond);
     //  console.log("serviceList", serviceList); return;
-    async.each(serviceList, async function (serviceData, firstCB) {
-      let serviceCond = {
-        "salon_id": salonId,
-        "service_id": serviceData._id,
-        "category_id": serviceData.category_id
+    async.each(
+      serviceList,
+      async function(serviceData, firstCB) {
+        let serviceCond = {
+          salon_id: salonId,
+          service_id: serviceData._id,
+          category_id: serviceData.category_id
+        };
+        let salonService = await commonQuery.findAll(salonservice, serviceCond);
+        let salonServiceData = {
+          service: serviceData,
+          salonserviceinfo: salonService
+        };
+        finalServiceArr.push(salonServiceData);
+      },
+      async function(err, data) {
+        if (err) {
+          console.log("Error @427", err);
+        } else {
+          res.json(Response(constant.SUCCESS_CODE, finalServiceArr));
+        }
       }
-      let salonService = await commonQuery.findAll(salonservice, serviceCond);
-      let salonServiceData = {
-        "service": serviceData,
-        "salonserviceinfo": salonService
-      }
-      finalServiceArr.push(salonServiceData);
-    }, async function (err, data) {
-      if (err) {
-        console.log("Error @427", err)
-      } else {
-        res.json(
-          Response(
-            constant.SUCCESS_CODE,
-            finalServiceArr
-          )
-        );
-      }
-    });
+    );
   } else {
     return res.json(
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
-
 }
 async function getServices(req, res) {
-  console.log("res.body", res.body)
+  console.log("res.body", res.body);
   if (req.body.category_id) {
     let cond = {
-      "category_id": req.body.category_id
-    }
+      category_id: req.body.category_id
+    };
 
     let servicesList = await commonQuery.fetch_all(services, cond);
     // console.log("servicesList", servicesList); return;
     if (!servicesList) {
-      res.json(
-        Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
-      );
+      res.json(Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null));
     } else {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.FETCHED_ALL_DATA,
-          servicesList
-        )
+        Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, servicesList)
       );
     }
   } else {
@@ -1512,7 +1511,7 @@ function activeUsers(req, res) {
       );
     }
   }
-  activeUsers().then(function () { });
+  activeUsers().then(function() {});
 }
 function deactiveUsers() {
   async function deactiveUsers() {
@@ -1552,14 +1551,203 @@ function deactiveUsers() {
       );
     }
   }
-  deactiveUsers().then(function () { });
+  deactiveUsers().then(function() {});
 }
 
 function viewDetails(req, res) {
   async function viewDetails() {
     try {
-    } catch (error) { }
+    } catch (error) {}
   }
 
-  viewDetails().then(function () { });
+  viewDetails().then(function() {});
+}
+
+function createSubscription(req, res) {
+  console.log(req.body);
+  async function createSubscription() {
+    try {
+      if (req.body && req.body.amount) {
+        stripe.plans.create(
+          {
+            amount: req.body.amount * 100,
+            currency: "usd",
+            interval: req.body.interval,
+            product: { name: req.body.planname },
+            trial_period_days: req.body.trialperiod
+          },
+          async function(err, plan) {
+            if (err) {
+              res.json(
+                Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+              );
+            } else {
+              console.log("PLAN", plan);
+
+              let subscriptionSave = new subscriptionplans({
+                id: req.body.planname,
+                plan_id: plan.id,
+                amount: req.body.amount,
+                interval: req.body.interval,
+                currency: "usd",
+                trial_period_days: req.body.trialperiod
+              });
+
+              let saveSubscription = await commonQuery.InsertIntoCollection(
+                subscriptionplans,
+                subscriptionSave
+              );
+              if (saveSubscription) {
+                console.log(saveSubscription);
+              }
+
+              res.json(
+                Response(
+                  constant.SUCCESS_CODE,
+                  constant.SUBSCRIPTION_CREATED,
+                  plan
+                )
+              );
+            }
+          }
+        );
+      } else {
+        return res.json(
+          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+        );
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  createSubscription().then(function() {});
+}
+
+function deletePlan(req, res) {
+  console.log(req.body);
+  async function deletePlan() {
+    try {
+      if (req.body && req.body.planid) {
+        stripe.plans.del(req.body.planid, async function(err, confirmation) {
+          // asynchronously called
+          if (err) {
+            console.log(err);
+            res.json(
+              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+            );
+          } else {
+            console.log("PLAN", confirmation);
+
+            let condition = { _id: req.body._id };
+            let updateCondition = { isActive: false };
+
+            let updateSubscription = await commonQuery.updateOneDocument(
+              subscriptionplans,
+              condition,
+              updateCondition
+            );
+            if (updateSubscription) {
+              console.log("HEEELO", updateSubscription);
+            }
+
+            res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.SUBSCRIPTION_CREATED,
+                confirmation
+              )
+            );
+          }
+        });
+      } else {
+        return res.json(
+          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+        );
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  deletePlan().then(function() {});
+}
+
+function getSubscription(req, res) {
+  console.log(req.body);
+  async function getSubscription() {
+    try {
+      if (req.body && req.body.type === "plans") {
+        console.log("sssssssss");
+        let condition = { isActive: true };
+        let plansList = await commonQuery.findAll(subscriptionplans, condition);
+        console.log(plansList);
+        if (!plansList) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              plansList
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getSubscription().then(function() {});
+}
+
+function getSubscirbedSalonsList(req, res) {
+  let count;
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+  async function getSubscirbedSalonsList() {
+    try {
+      if (req.body && req.body.type === "subscriptions") {
+        count = await commonQuery.findCount(salonSubscriptions);
+
+        let subscriptionList = await commonQuery.getSalonSubscriptionList(
+          salonSubscriptions,
+          pageSize,
+          currentPage
+        );
+        if (!subscriptionList) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          let dataToPass = {
+            salons: subscriptionList,
+            count: count
+          };
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              dataToPass
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getSubscirbedSalonsList().then(function() {});
 }

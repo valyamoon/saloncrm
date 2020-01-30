@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
+import { BehaviorSubject, Observable } from "rxjs";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -20,8 +21,29 @@ export class CommonService {
   baseUrl = environment.backendBaseUrl + "/api";
 
   constructor(private http: HttpClient) {}
+
+  private customer_id = new BehaviorSubject<string>("");
+  private salon_id = new BehaviorSubject<string>("");
+
+  setCustomer_id(data: string) {
+    // Fire the update event with the new data
+    this.customer_id.next(data);
+  }
+
+  getCustomer_id(): Observable<string> {
+    return this.customer_id.asObservable();
+  }
+
+  setSalon_id(data: string) {
+    // Fire the update event with the new data
+    this.salon_id.next(data);
+  }
+
+  getSalon_id(): Observable<string> {
+    return this.salon_id.asObservable();
+  }
+
   saveSalonDetails(data) {
-    console.log("AAA", data);
     return this.http.post(this.baseUrl + "/addsalon", data);
   }
 
@@ -47,6 +69,9 @@ export class CommonService {
 
   getSalonData(data) {
     return this.http.post(this.baseUrl + "/salondatabyuser", data, httpOptions);
+  }
+  createToken(data) {
+    return this.http.post(this.baseUrl + "/create-token", data);
   }
 
   getSalonServicesList(data) {
@@ -101,5 +126,9 @@ export class CommonService {
 
   getSalonDetailsData(data) {
     return this.http.post(this.baseUrl + "/get-salon", data);
+  }
+
+  getSalonSubscriptionDetail(data) {
+    return this.http.post(this.baseUrl + "/salon-subscribe-detail", data);
   }
 }

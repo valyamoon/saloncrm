@@ -1,0 +1,17 @@
+.subscriptionWrapper {
+  margin-top: 2.5em;
+  .mainSection {
+    .field {
+      display: flex;
+      align-items: center;
+      border: 1px solid lightgray;
+      padding: 10px;
+      border-radius: 10px;
+      background: white;
+
+      .value {
+        margin-left: 2em;
+      }
+    }
+  }
+}

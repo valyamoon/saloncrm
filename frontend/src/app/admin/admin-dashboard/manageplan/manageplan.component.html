@@ -1,0 +1,124 @@
+<div class="managePlanWrapper">
+  <div class="header">
+    <app-header-text></app-header-text>
+    <div class="actionButtons">
+      <button
+        class="btn btn-primary btn-sign-in"
+        (click)="openAddPlanPanel('add')"
+      >
+        Add Plan
+      </button>
+    </div>
+  </div>
+  <div class="mainSection">
+    <div class="col-md-4" *ngFor="let item of planListArray">
+      <div class="card">
+        <h4>
+          {{ item.id }}
+        </h4>
+        <h3 class="rate">
+          {{ item.amount | currency: "USD" }}
+        </h3>
+        <p>Enjoy the benefits of this package for a {{ item.interval }}</p>
+        <a (click)="deletePlan(item)" class="delete-btn">
+          <img
+            src="../../../../assets/images/delete.svg"
+            alt="Delete"
+            title="Delete Category"
+          />
+        </a>
+
+        <!-- <button
+          class="btn-primary btn btn-sign-in edit"
+          (click)="deletePlan(item)"
+        >
+          Delete
+        </button> -->
+      </div>
+    </div>
+
+    <!-- <div class="plan-card col-md-4" *ngFor="let item of planListArray">
+      <div class="form-group">
+        <h4>
+          {{ item.id }}
+        </h4>
+        <h3 class="rate">
+          {{ item.amount | currency: "USD" }}
+        </h3>
+      </div>
+      <div class="clearfix">
+        <div>Enjoy the benefits of this package for a {{ item.interval }}</div>
+      </div>
+      <div class="plan-edit text-right">
+        <button
+          class="btn-primary btn btn-sign-in edit"
+          (click)="deletePlan(item)"
+        >
+          Delete
+        </button>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="addPlanModel" *ngIf="isAddPlan">
+    <div class="modal-content">
+      <div class="headerText">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <form [formGroup]="savePlan">
+        <div class="inpFeilds">
+          <label>Plan Name:</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="planname"
+            placeholder="Name"
+          />
+        </div>
+        <div class="inpFeilds">
+          <label>Amount:</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="amount"
+            placeholder="Amount"
+          />
+        </div>
+        <div class="inpFeilds">
+          <label>Trial Period:</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="trialperiod"
+            placeholder="Trial Days"
+          />
+        </div>
+        <div class="inpFeilds">
+          <label>Cycle:</label>
+          <select class="select-css " formControlName="interval">
+            <option *ngFor="let item of intervals" [value]="item.value">{{
+              item.key
+            }}</option>
+          </select>
+        </div>
+        <div class="inpFeilds">
+          <button
+            *ngIf="!isEditPlan"
+            class="btn btn-primary btn-sign-in"
+            [disabled]="savePlan.invalid"
+            (click)="add(savePlan.value)"
+          >
+            Add
+          </button>
+
+          <button class="btn btn-primary btn-sign-in" (click)="close('add')">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="noRec" *ngIf="noRecordsFound">
+    No Records Found
+  </div>
+</div>
