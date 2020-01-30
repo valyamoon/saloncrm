@@ -4,12 +4,12 @@ import { CommonService } from "../common.service";
 import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { MatDialog } from "@angular/material";
-import { AgmBicyclingLayer } from '@agm/core';
+import { AgmBicyclingLayer } from "@agm/core";
 
 @Component({
-  selector: 'app-services',
-  templateUrl: './services.component.html',
-  styleUrls: ['./services.component.scss']
+  selector: "app-services",
+  templateUrl: "./services.component.html",
+  styleUrls: ["./services.component.scss"]
 })
 export class ServicesComponent implements OnInit {
   /**Used for salon service list */
@@ -18,7 +18,14 @@ export class ServicesComponent implements OnInit {
   pageSize: any = 5;
   count: any = 5;
   page: any = 1;
-  displayedColumns = ['categoryname', 'servicename', 'price', 'duration', 'is_active', 'action'];
+  displayedColumns = [
+    "categoryname",
+    "servicename",
+    "price",
+    "duration",
+    "is_active",
+    "action"
+  ];
   salonServicesCount: number;
   noRecordsFound: boolean;
   user_id: any;
@@ -32,16 +39,17 @@ export class ServicesComponent implements OnInit {
   isAddModal: boolean = false;
   servcieData: any;
   edit_servie_id: any;
-  constructor(private authServ: AuthService,
+  constructor(
+    private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
     private toastrServ: ToastrService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog
+  ) {
     this.editServiceForm = this.fb.group({
-      price: ['', [Validators.required]],
-      duration: ['', [Validators.required]]
-    })
-
+      price: ["", [Validators.required]],
+      duration: ["", [Validators.required]]
+    });
   }
 
   ngOnInit() {
@@ -49,10 +57,8 @@ export class ServicesComponent implements OnInit {
     this.getSalonService();
   }
   paginate(event) {
-    console.log(event);
     this.page = event.pageIndex + 1;
-    console.log("c", this.count);
-    console.log("p", this.page);
+
     this.count = event.pageSize;
     this.getSalonService();
   }
@@ -61,7 +67,6 @@ export class ServicesComponent implements OnInit {
     this.isConfirm = data;
   }
   reject(data) {
-
     this.isConfirm = data;
 
     this.isDeleteDialog = false;
@@ -75,7 +80,6 @@ export class ServicesComponent implements OnInit {
 
     this.commServ.getSalonServicesList(dataToPass).subscribe(
       (data: any) => {
-
         if (data["code"] == 200) {
           this.salonServicesList = data["data"];
           this.salonServicesCount = data.responseStatus;
@@ -99,24 +103,31 @@ export class ServicesComponent implements OnInit {
 
   deleteService(element, type) {
     let deletedData = {
-      "type": type,
-      "salonService": element
-    }
+      type: type,
+      salonService: element
+    };
     // console.log("Delete element", deletedData); return;
     this.commServ.removeSalonService(deletedData).subscribe(
       (data: any) => {
         if (data["code"] == 200) {
           this.getSalonService();
-          if (type == 'restore') {
-            this.toastrServ.success("One Service restore successfully", "Success", {
-              timeOut: 2000
-            });
+          if (type == "restore") {
+            this.toastrServ.success(
+              "One Service restore successfully",
+              "Success",
+              {
+                timeOut: 2000
+              }
+            );
           } else {
-            this.toastrServ.success("One Service remove successfully", "Success", {
-              timeOut: 2000
-            });
+            this.toastrServ.success(
+              "One Service remove successfully",
+              "Success",
+              {
+                timeOut: 2000
+              }
+            );
           }
-
         } else {
           this.noRecordsFound = false;
           this.toastrServ.error("Failed To remove service", "Error", {
@@ -134,10 +145,9 @@ export class ServicesComponent implements OnInit {
   }
 
   openEditServiceModal(element) {
-
-    this.edit_servie_id = element._id
-    this.editServiceForm.get('price').setValue(element.price);
-    this.editServiceForm.get('duration').setValue(element.duration);
+    this.edit_servie_id = element._id;
+    this.editServiceForm.get("price").setValue(element.price);
+    this.editServiceForm.get("duration").setValue(element.duration);
     this.isAddModal = true;
     this.servcieData = element;
   }
@@ -151,13 +161,16 @@ export class ServicesComponent implements OnInit {
     //console.log("Update Data", data);
     this.commServ.updateSalonService(data).subscribe(
       (result: any) => {
-        console.log("data", result);
         if (result["code"] == 200) {
           this.getSalonService();
           this.isAddModal = false;
-          this.toastrServ.success("One Service updated successfully", "Success", {
-            timeOut: 2000
-          });
+          this.toastrServ.success(
+            "One Service updated successfully",
+            "Success",
+            {
+              timeOut: 2000
+            }
+          );
         } else {
           this.noRecordsFound = false;
           this.toastrServ.error("Failed To update service", "Error", {
@@ -166,12 +179,10 @@ export class ServicesComponent implements OnInit {
         }
       },
       error => {
-
         this.toastrServ.error("Server Error", error, {
           timeOut: 2000
         });
       }
     );
-
   }
 }

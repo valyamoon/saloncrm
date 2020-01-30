@@ -13,6 +13,7 @@ import { Router } from "@angular/router";
 export class SalondetailsComponent implements OnInit {
   submitSalonDetails: FormGroup;
   closetime: any;
+  salonEmail: any;
   opentime: any;
   showNow: boolean = false;
   numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
@@ -52,6 +53,7 @@ export class SalondetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.salonEmail = sessionStorage.getItem("email");
     this.user_id = sessionStorage.getItem("userId");
     this.userid = this.user_id;
     this.isApprovedStatus = JSON.parse(sessionStorage.getItem("isApproved"));
@@ -144,6 +146,7 @@ export class SalondetailsComponent implements OnInit {
     postData.append("closetime", dataToPass.closetime);
     postData.append("contact", dataToPass.contact);
     postData.append("user_id", dataToPass.user_id);
+    postData.append("email", this.salonEmail);
 
     console.log("POSTDATA", postData);
 

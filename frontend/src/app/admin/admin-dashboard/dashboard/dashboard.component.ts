@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
     this.getActiveUsersCount();
     //this.checkRequest();
     this.adminServ.setHeaderText("Salons Request");
-    this.subscription = timer(0, 10000)
+    this.subscription = timer(0, 200000)
       .pipe(switchMap(() => this.adminServ.getSalonsRequest(this.dataDefault)))
       .subscribe(
         result => (
@@ -68,7 +68,7 @@ export class DashboardComponent implements OnInit {
     this.dataDefault = dataToPass;
     this.adminServ.getSalonsRequest(dataToPass).subscribe(
       data => {
-        // console.log("HERE DATA iS", data);
+        console.log("HERE DATA iS", data);
         if (data["code"] == 200) {
           this.SalonRequestList = data["data"]["data"];
           this.limit = data["data"]["countNumber"];

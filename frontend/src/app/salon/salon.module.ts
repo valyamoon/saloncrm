@@ -6,12 +6,14 @@ import { SalonRoutingModule } from "./salon-routing.module";
 import { LoginComponent } from "./login/login.component";
 import { HttpClientModule } from "@angular/common/http";
 import { DashboardComponent } from "./dashboard/dashboard.component";
+import { NgxMaskModule } from "ngx-mask";
 import { AgmCoreModule } from "@agm/core";
 import { ProfileComponent } from "./dashboard/profile/profile.component";
 // import { ManageServiceComponent } from './dashboard/manage-service/manage-service.component';
 // import { ManageEmployeeComponent } from './dashboard/manage-employee/manage-employee.component';
 import { ServicesComponent } from "./dashboard/services/services.component";
 import { EmployeeComponent } from "./dashboard/employee/employee.component";
+
 import { MatTabsModule } from "@angular/material/tabs";
 import { SelectAutocompleteModule } from "mat-select-autocomplete";
 
@@ -31,7 +33,9 @@ import { TimingComponent } from "./dashboard/timing/timing.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 import { SalondetailsComponent } from "./dashboard/salondetails/salondetails.component";
-import { EditsalonComponent } from './dashboard/editsalon/editsalon.component';
+import { EditsalonComponent } from "./dashboard/editsalon/editsalon.component";
+import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
+import { SubscriptionComponent } from './dashboard/subscription/subscription.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +51,9 @@ import { EditsalonComponent } from './dashboard/editsalon/editsalon.component';
     AddServiceComponent,
     TimingComponent,
     SalondetailsComponent,
-    EditsalonComponent
+    EditsalonComponent,
+    SubscribeComponent,
+    SubscriptionComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +73,8 @@ import { EditsalonComponent } from './dashboard/editsalon/editsalon.component';
     }),
     NgxMaterialTimepickerModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    NgxMaskModule.forRoot()
   ]
 })
 export class SalonModule {}

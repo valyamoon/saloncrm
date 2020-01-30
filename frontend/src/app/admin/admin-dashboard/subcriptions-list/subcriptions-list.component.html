@@ -1,0 +1,46 @@
+<div class="subscriptionListWrapper">
+  <div class="header">
+    <app-header-text></app-header-text>
+  </div>
+  <div class="table-responsive tablecustom">
+    <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+      <table mat-table [dataSource]="convertedSalonSubscriptionList">
+        <!-- Position Column -->
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.salon.name }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="startdate">
+          <th mat-header-cell *matHeaderCellDef>Subscribed On</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.created_on }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="enddate">
+          <th mat-header-cell *matHeaderCellDef>Renewal Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.expiry_date }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="salonSubscriptionCount"
+        [pageSize]="count"
+        (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 15, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+    <div *ngIf="noRecordsFound" class="noRecords">
+      <div class="noRec">No Records Found</div>
+    </div>
+  </div>
+</div>

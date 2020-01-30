@@ -51,7 +51,7 @@ export class UserlistComponent implements OnInit {
           if (this.activeUsersList.length == 0) {
             this.noRecordsFound = true;
           }
-          console.log(this.activeUsersList);
+     
           this.toastrServ.success("Users Fetched Successfully", "Success", {
             timeOut: 2000
           });
