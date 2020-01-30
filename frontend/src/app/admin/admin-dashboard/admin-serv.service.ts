@@ -137,6 +137,18 @@ export class AdminServService {
     return this.http.post(this.baseUrl + "/view-salon", data, httpOptions);
   }
 
+  addPlans(data) {
+    return this.http.post(this.baseUrl + "/create-plan", data);
+  }
+  getPlans(data) {
+    return this.http.post(this.baseUrl + "/get-plan", data);
+  }
+
+  deletePlans(data) {
+ 
+    return this.http.post(this.baseUrl + "/delete-plan", data);
+  }
+
   activeUser(data) {
     return this.http.post(
       this.baseUrl + "/active-user-check",
@@ -150,6 +162,10 @@ export class AdminServService {
       data,
       httpOptions
     );
+  }
+
+  getSalonSubscriptionList(data) {
+    return this.http.post(this.baseUrl + "/get-subscriptions", data);
   }
 
   // errorHandler(error:HttpErrorResponse){

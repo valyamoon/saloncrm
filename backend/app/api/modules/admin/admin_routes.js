@@ -32,6 +32,10 @@ module.exports = function(router) {
   router.post("/servicelist", admin.getServiceList);
   router.post("/active-user-check", admin.activeUsers);
   router.post("/deactive-user-check", admin.deactiveUsers);
+  router.post("/create-plan", admin.createSubscription);
+  router.post("/delete-plan", admin.deletePlan);
+  router.post("/get-plan", admin.getSubscription);
+  router.post("/get-subscriptions", admin.getSubscirbedSalonsList);
 
   return router;
 };

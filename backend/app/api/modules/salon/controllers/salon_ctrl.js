@@ -5,6 +5,8 @@ const utility = require("../../../../lib/utility.js");
 var ts = require("time-slots-generator");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
+const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
+//const stripe = require("stripe")("pk_test_qTMNt7hjKJiVtbBOr2xjDUsr00yAO2oDBq");
 const mkdirp = require("mkdirp");
 //const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
@@ -12,6 +14,7 @@ const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 const constant = require("../../../../config/constant.js");
 
 const users = mongoose.model("users");
+const salonSubscriptions = require("../model/salonSubscriptions");
 const roles = require("../../user/model/rolesSchema");
 const salons = require("../model/salonSchema");
 const promocodes = require("../model/promocodeSchema");
@@ -51,7 +54,9 @@ module.exports = {
   viewSalonDetails: viewSalonDetails,
   updateSalonDetails: updateSalonDetails,
   fetchSalonData: fetchSalonData,
-  bookSlot: bookSlot
+  bookSlot: bookSlot,
+  subscribedSalonDetails: subscribedSalonDetails,
+  createCardToken: createCardToken
 };
 
 /**
@@ -66,6 +71,8 @@ function saveSalonDetails(req, res) {
   async function saveSalonDetails() {
     try {
       var image_path;
+      var customer_id_value;
+
       if (req.body && req.body.user_id) {
         let conditon = {
           _id: req.body.user_id,
@@ -117,52 +124,79 @@ function saveSalonDetails(req, res) {
                       .fileUpload(path, req.files.image["data"])
                       .then(async data => {
                         if (data.status) {
-                          let salonData = new salons({
-                            name: req.body.name,
-                            location: locations,
-                            contact: req.body.contact,
-                            salonaddress: req.body.salonaddress,
-                            user_id: req.body.user_id,
-                            image: image_path,
-                            opentime: req.body.opentime,
-                            closetime: req.body.closetime,
-                            isActive: false,
-                            isDeleted: false,
-                            isreviewadded: false,
-                            isservicesadded: false
-                          });
+                          stripe.customers.create(
+                            {
+                              email: req.body.email,
+                              description: req.body.name,
+                              name: req.body.name,
+                              phone: req.body.phone,
+                              address: {
+                                line1: req.body.salonaddress,
+                                postal_code: "98140",
+                                city: "San Francisco",
+                                state: "CA",
+                                country: "US"
+                              }
+                            },
+                            async function(err, customer) {
+                              if (err) {
+                                console.log(err);
+                              } else {
+                                customer_id_value = customer["id"];
 
-                          let saveSalon = await commonQuery.InsertIntoCollection(
-                            salons,
-                            salonData
-                          );
+                                let salonData = new salons({
+                                  name: req.body.name,
+                                  location: locations,
+                                  contact: req.body.contact,
+                                  salonaddress: req.body.salonaddress,
+                                  user_id: req.body.user_id,
+                                  image: image_path,
+                                  opentime: req.body.opentime,
+                                  closetime: req.body.closetime,
+                                  isActive: false,
+                                  isDeleted: false,
+                                  isreviewadded: false,
+                                  isservicesadded: false,
+                                  customer_id: customer_id_value
+                                });
 
-                          if (!saveSalon) {
-                          } else {
-                            let updateCondition = {
-                              isSubmitted: true
-                            };
-                            let condition = {
-                              _id: mongoose.Types.ObjectId(req.body.user_id)
-                            };
-                            let updateUser = await commonQuery.updateOneDocument(
-                              users,
-                              condition,
-                              updateCondition
-                            );
-                            if (!updateUser) {
-                            } else {
-                              console.log(updateUser);
+                                let saveSalon = await commonQuery.InsertIntoCollection(
+                                  salons,
+                                  salonData
+                                );
+
+                                if (!saveSalon) {
+                                } else {
+                                  let updateCondition = {
+                                    isSubmitted: true
+                                  };
+                                  let condition = {
+                                    _id: mongoose.Types.ObjectId(
+                                      req.body.user_id
+                                    )
+                                  };
+                                  let updateUser = await commonQuery.updateOneDocument(
+                                    users,
+                                    condition,
+                                    updateCondition
+                                  );
+                                  if (!updateUser) {
+                                  } else {
+                                    console.log(updateUser);
+                                  }
+
+                                  res.json(
+                                    Response(
+                                      constant.SUCCESS_CODE,
+                                      constant.NEW_DATA_ADDED,
+                                      saveSalon
+                                    )
+                                  );
+                                }
+                              }
                             }
-
-                            res.json(
-                              Response(
-                                constant.SUCCESS_CODE,
-                                constant.NEW_DATA_ADDED,
-                                saveSalon
-                              )
-                            );
-                          }
+                          );
+                          console.log("customer_id_value", customer_id_value);
                         } else {
                         }
                       });
@@ -1240,11 +1274,27 @@ function fetchSalonData(req, res) {
   fetchSalonData().then(function() {});
 }
 
-function bookSlot(req, res) {
-  console.log(req.body);
+function bookSlot(data) {
+  console.log("INSIDE BOOKSLOT", data);
   async function bookSlot() {
     try {
       if (req.body && req.body.starttime) {
+        var starttime = req.body.starttime;
+        var duration = req.body.duration;
+        var hour = starttime.split(":");
+        var hourInt = hour[0] * 60;
+        var minInt = hour[1];
+        var totaltime = parseInt(hourInt) + parseInt(minInt);
+        var endtime = totaltime + parseInt(duration);
+        var endTimeCalculated;
+        time_convert(endtime);
+        function time_convert(num) {
+          const hours = Math.floor(num / 60);
+          const minutes = num % 60;
+          endTimeCalculated = `${hours}:${minutes}`;
+        }
+
+        console.log("endTimeCalculated", endTimeCalculated);
       }
     } catch (error) {
       return res.json(
@@ -1405,4 +1455,176 @@ async function removeEmployee(req, res) {
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
+}
+
+function createCardToken(req, res) {
+  console.log(req.body);
+  var card_id;
+  var token_id;
+  async function createCardToken() {
+    try {
+      if (req.body && req.body.number) {
+        stripe.tokens.create(
+          {
+            card: {
+              number: req.body.number,
+              exp_month: req.body.exp_month,
+              exp_year: req.body.exp_year,
+              cvc: req.body.cvc
+            }
+          },
+          async function(err, token) {
+            if (err) {
+              console.log("ERROR", err);
+              return res.json(
+                Response(
+                  constant.ERROR_CODE,
+                  constant.CARD_DATA_INVALID,
+                  err.Error
+                )
+              );
+            } else {
+              console.log(token);
+              token_id = token["id"];
+              card_id = token["card"]["id"];
+              stripe.customers.createSource(
+                req.body.customer_id,
+                { source: token_id },
+                async function(err, card) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    console.log(card);
+                    stripe.subscriptions.create(
+                      {
+                        customer: req.body.customer_id,
+                        items: [{ plan: req.body.plan_id }]
+                      },
+                      async function(err, subscription) {
+                        if (err) {
+                          return res.json(
+                            Response(
+                              constant.ERROR_CODE,
+                              constant.FAILED_TO_SUBSCRIBE,
+                              err.Error
+                            )
+                          );
+                        } else {
+                          console.log("subbb", subscription);
+                          let condition = {
+                            _id: mongoose.Types.ObjectId(req.body.salon_id)
+                          };
+                          let updateCondition = { isSubscribed: true };
+                          let updateSalonDetails = await commonQuery.updateOneDocument(
+                            salons,
+                            condition,
+                            updateCondition
+                          );
+                          console.log("SSS", updateSalonDetails);
+                          if (updateSalonDetails) {
+                            let updateUserCondition = {
+                              _id: mongoose.Types.ObjectId(
+                                updateSalonDetails["user_id"]
+                              )
+                            };
+                            let updateCondition = { isSubscribed: true };
+                            let updateUserTableDetails = await commonQuery.updateOneDocument(
+                              users,
+                              updateUserCondition,
+                              updateCondition
+                            );
+                            console.log(updateUserTableDetails);
+                            if (updateUserTableDetails) {
+                              let saveSalonSubscription = new salonSubscriptions(
+                                {
+                                  salon_id: req.body.salon_id,
+                                  user_id: updateSalonDetails["user_id"],
+                                  expiry_date:
+                                    subscription["current_period_end"],
+                                  created_on:
+                                    subscription["current_period_start"],
+                                  customer_id: subscription["customer"],
+                                  plan_id: subscription["plan"]["id"],
+                                  subscription_id: subscription["id"],
+                                  product_id: subscription["plan"]["product"],
+                                  isActive: subscription["status"]
+                                }
+                              );
+
+                              let addSalonSubscription = await commonQuery.InsertIntoCollection(
+                                salonSubscriptions,
+                                saveSalonSubscription
+                              );
+                              if (addSalonSubscription) {
+                                res.json(
+                                  Response(
+                                    constant.SUCCESS_CODE,
+                                    constant.SUBSCRIPTION_CREATED,
+                                    addSalonSubscription
+                                  )
+                                );
+                              } else {
+                                return res.json(
+                                  Response(
+                                    constant.ERROR_CODE,
+                                    constant.FAILED_TO_SUBSCRIBE,
+                                    null
+                                  )
+                                );
+                              }
+                            }
+                          }
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  createCardToken().then(function() {});
+}
+
+function subscribedSalonDetails(req, res) {
+  console.log("hello", req.body);
+  async function subscribedSalonDetails() {
+    try {
+      if (req.body && req.body.salon_id) {
+        let condition = {
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id)
+        };
+        let salonSubscriptionDetails = await commonQuery.getSalonSubscriptionDetails(
+          salonSubscriptions,
+          condition
+        );
+        console.log(salonSubscriptionDetails);
+        if (!salonSubscriptionDetails) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              salonSubscriptionDetails
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  subscribedSalonDetails().then(function() {});
 }

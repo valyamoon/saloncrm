@@ -46,10 +46,9 @@ export class ManageAdminComponent implements OnInit {
     this.isAddModal = true;
   }
   paginate(event) {
-    // console.log(event);
+  
     this.page = event.pageIndex + 1;
-    // console.log("c", this.count);
-    //console.log("p", this.page);
+  
     this.count = event.pageSize;
     this.fetchAllAdmins();
   }

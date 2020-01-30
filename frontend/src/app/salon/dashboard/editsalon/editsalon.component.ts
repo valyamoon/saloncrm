@@ -44,7 +44,6 @@ export class EditsalonComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(pos => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
-        console.log("DDD", this.lat, this.lng);
       });
     }
   }
@@ -69,23 +68,13 @@ export class EditsalonComponent implements OnInit {
   get contact() {
     return this.submitSalonDetails.get("contact");
   }
-  openTime(data) {
-    console.log(data);
-  }
-  closeTime(data) {
-    console.log(data);
-  }
-  timeChanged(data) {
-    console.log(data);
-  }
+  openTime(data) {}
+  closeTime(data) {}
+  timeChanged(data) {}
 
-  onOpenTimeSelect(event) {
-    console.log("event", event);
-  }
+  onOpenTimeSelect(event) {}
 
-  onCloseTimeSelect(event) {
-    console.log("event", event);
-  }
+  onCloseTimeSelect(event) {}
 
   cancelSalonUpdate() {
     this.submitSalonDetails.reset();
@@ -103,11 +92,10 @@ export class EditsalonComponent implements OnInit {
     };
     this.commServ.getSalonDetailsData(dataToPass).subscribe(
       (data: any) => {
-        console.log(data);
         if (data["code"] === 200) {
           this.salonDetailsData = data["data"];
           this.salonid = data["data"]._id;
-          console.log(this.salonid, this.salonDetailsData);
+
           this.submitSalonDetails
             .get("name")
             .setValue(this.salonDetailsData.name);
@@ -154,7 +142,6 @@ export class EditsalonComponent implements OnInit {
   // }
 
   updatetSalon(data) {
-    console.log("ASSSSSAAAA", data);
     let dataToPass = {
       salon_id: this.salonid,
       name: data.name,
@@ -164,7 +151,6 @@ export class EditsalonComponent implements OnInit {
       opentime: data.opentime,
       closetime: data.closetime
     };
-    console.log(dataToPass);
 
     const postData = new FormData();
     postData.append("name", dataToPass.name);

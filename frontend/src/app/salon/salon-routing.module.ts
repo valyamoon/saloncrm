@@ -12,6 +12,8 @@ import { AddServiceComponent } from "./dashboard/services/add-service/add-servic
 import { TimingComponent } from "./dashboard/timing/timing.component";
 import { SalondetailsComponent } from "./dashboard/salondetails/salondetails.component";
 import { EditsalonComponent } from "./dashboard/editsalon/editsalon.component";
+import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
+import { SubscriptionComponent } from "./dashboard/subscription/subscription.component";
 
 const routes: Routes = [
   { path: "", component: LoginComponent },
@@ -26,8 +28,10 @@ const routes: Routes = [
       { path: "edit-salon", component: EditsalonComponent },
       { path: "", redirectTo: "details", pathMatch: "full" },
       { path: "add-employee", component: AddEmployeeComponent },
+      { path: "subscription", component: SubscriptionComponent },
       { path: "add-service", component: AddServiceComponent },
-      { path: "timing", component: TimingComponent }
+      { path: "timing", component: TimingComponent },
+      { path: "subscribe", component: SubscribeComponent }
     ]
   }
 ];
