@@ -20,7 +20,7 @@ const httpOptions = {
 export class CommonService {
   baseUrl = environment.backendBaseUrl + "/api";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private customer_id = new BehaviorSubject<string>("");
   private salon_id = new BehaviorSubject<string>("");
@@ -120,12 +120,29 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/removeemployee", data, httpOptions);
   }
 
+  updateEployee(data) {
+    return this.http.post(this.baseUrl + "/updateemployee", data, httpOptions);
+  }
+
+
+
+
+
+
+
   updateSalonDetails(data) {
     return this.http.post(this.baseUrl + "/update-salon", data);
   }
 
   getSalonDetailsData(data) {
     return this.http.post(this.baseUrl + "/get-salon", data);
+  }
+
+  addSalonTIming(data) {
+    return this.http.post(this.baseUrl + "/addsalonweeklyslot", data, httpOptions);
+  }
+  getSalonTiming(data) {
+    return this.http.post(this.baseUrl + "/salonweeklyslot", data, httpOptions);
   }
 
   getSalonSubscriptionDetail(data) {
