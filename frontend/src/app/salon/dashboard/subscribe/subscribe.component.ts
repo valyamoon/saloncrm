@@ -21,6 +21,7 @@ export class SubscribeComponent implements OnInit {
   month: any;
   plan_id: any;
   salon_id: any;
+  loader: boolean = false;
   year: any;
   cardSave: FormGroup;
   error: string;
@@ -72,6 +73,7 @@ export class SubscribeComponent implements OnInit {
     this.showEnterCardForm = true;
   }
   pay(data) {
+    this.loader = true;
     this.month = data.expiry.slice(0, 2);
     this.year = data["expiry"].slice(2);
     let dataToPass = {
@@ -87,6 +89,7 @@ export class SubscribeComponent implements OnInit {
     this.commonServ.createToken(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] === 200) {
+          this.loader = false;
           this.toastServ.success("Subscribed Successfully", "Success", {
             timeOut: 1000
           });
