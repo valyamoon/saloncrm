@@ -20,6 +20,7 @@ const categories = require("../../admin/model/categoriesSchema");
 const salonservices = require("../model/salonservicesSchema");
 const reviewratings = require("../model/salonreviewsratingSchema");
 const services = require("../../admin/model/servicesSchema");
+const salonweeklyslot = require("../model/salonweeklyslotSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
@@ -51,7 +52,10 @@ module.exports = {
   viewSalonDetails: viewSalonDetails,
   updateSalonDetails: updateSalonDetails,
   fetchSalonData: fetchSalonData,
-  bookSlot: bookSlot
+  bookSlot: bookSlot,
+  getSalonWeeklySlots: getSalonWeeklySlots,
+  updateEmployee: updateEmployee
+
 };
 
 /**
@@ -62,6 +66,7 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
+  // console.log("req.body", req.body); return;
   async function saveSalonDetails() {
     try {
       var image_path;
@@ -778,6 +783,37 @@ function addEmployeeToSalon(req, res) {
   addEmployeeToSalon().then(function () { });
 }
 /**
+ * Function is use to Update employee
+ * @access private
+ * @return json
+ * Created by Rashmi Ranjan
+ * @smartData Enterprises (I) Ltd
+ * Created on 30th Jan, 2020
+ */
+async function updateEmployee(req, res) {
+  console.log("req.body", req.body);
+  if (req.body.id) {
+    let updateCond = {
+      _id: req.body.id
+    }
+
+    let updateEmp = await commonQuery.updateOneDocument(employees, updateCond, { name: req.body.name });
+    if (updateEmp) {
+      res.json(
+        Response(
+          constant.SUCCESS_CODE,
+          constant.SERVICE_UPDATED,
+          updateEmp
+        )
+      );
+    }
+  } else {
+    res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+    );
+  }
+}
+/**
  * Function is use to assign services to employee
  * @access private
  * @return json
@@ -930,6 +966,7 @@ function getCategoriesAndServicesOfSalon(req, res) {
  * On dated 03-01-2020
  */
 function addSalonWeeklySlots(req, res) {
+  // console.log("req.body", req.body); return;
   if (req.body.salon_id && req.body.user_id) {
     var finalDataArr = [];
     var finalUpdateDataArr = [];
@@ -941,19 +978,23 @@ function addSalonWeeklySlots(req, res) {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
             days: record.days,
-            starttime: record.fromTime,
-            endtime: record.toTime,
-            status: record.status
+            starttime: record.opentime,
+            endtime: record.closetime,
+            status: record.status,
+            order_sort: record.order_sort
           };
+          //console.log("req.body", req.body); return;
           let countCond = {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
             days: record.days
           };
+          //  console.log("countCond", countCond); return;
           let salonWeeklySlotCount = await commonQuery.countData(
             salonweeklyslot,
             countCond
           );
+
           if (salonWeeklySlotCount == 0) {
             let saveSalonWeeklySlot = await commonQuery.InsertIntoCollection(
               salonweeklyslot,
@@ -985,9 +1026,10 @@ function addSalonWeeklySlots(req, res) {
               days: fetchOne.days
             };
             let updateSlotData = {
-              starttime: record.fromTime,
-              endtime: record.toTime,
-              status: record.status
+              starttime: record.opentime,
+              endtime: record.closetime,
+              status: record.status,
+              order_sort: record.order_sort
             };
             let updateSalonWeeklySlot = commonQuery.updateOne(
               salonweeklyslot,
@@ -1421,6 +1463,32 @@ async function removeEmployee(req, res) {
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
+}
+
+async function getSalonWeeklySlots(req, res) {
+  //console.log("req.body", req.body);
+  if (req.body.user_id && req.body.salon_id) {
+    let cond = {
+      user_id: req.body.user_id,
+      salon_id: req.body.salon_id
+    }
+    let salonSotList = await commonQuery.fetch_all_sort_by_order(salonweeklyslot, cond);
+    //console.log("salonSotList", salonSotList);
+    if (salonSotList) {
+      res.json(
+        Response(
+          constant.SUCCESS_CODE,
+          constant.FETCHED_ALL_DATA,
+          salonSotList
+        )
+      );
+    }
+  } else {
+    return res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+    );
+  }
+
 }
 
 

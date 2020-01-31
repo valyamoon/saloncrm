@@ -22,7 +22,7 @@ export class CommonService {
 
   constructor(private http: HttpClient) { }
   saveSalonDetails(data) {
-    return this.http.post(this.baseUrl + "/addsalon", data, httpOptions);
+    return this.http.post(this.baseUrl + "/addsalon", data);
   }
 
   serviceList(data) {
@@ -72,6 +72,10 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/removeemployee", data, httpOptions);
   }
 
+  updateEployee(data) {
+    return this.http.post(this.baseUrl + "/updateemployee", data, httpOptions);
+  }
+
 
 
 
@@ -85,6 +89,13 @@ export class CommonService {
   getSalonDetailsData(data) {
     return this.http.post(this.baseUrl + "/get-salon", data);
 
+  }
+
+  addSalonTIming(data) {
+    return this.http.post(this.baseUrl + "/addsalonweeklyslot", data, httpOptions);
+  }
+  getSalonTiming(data) {
+    return this.http.post(this.baseUrl + "/salonweeklyslot", data, httpOptions);
   }
 
 }

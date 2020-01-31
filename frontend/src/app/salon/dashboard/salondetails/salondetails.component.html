@@ -2,10 +2,7 @@
   <div id="profileArea">
     <div *ngIf="showPendingApproval" class="pendingApprovalArea">
       <span class="pendingText">Pending Approval</span>
-      <img
-        src="../../../../assets/images/Infinity-1s-200px.gif"
-        class="pendingGIF"
-      />
+      <img src="../../../../assets/images/Infinity-1s-200px.gif" class="pendingGIF" />
       <p class="pendingText">
         You will recieve an Email confirmation of successful approval
       </p>
@@ -16,41 +13,21 @@
       <form [formGroup]="submitSalonDetails" class="salonDetailSave">
         <div class="field">
           <label class="label">Name:</label>
-          <input
-            type="text"
-            class="form-control fields"
-            placeholder="Name"
-            formControlName="name"
-          />
+          <input type="text" class="form-control fields" placeholder="Name" formControlName="name" />
         </div>
 
         <div class="field">
           <label class="label">Image:</label>
-          <input
-            style="display: none"
-            type="file"
-            accept="image/*"
-            (change)="uploadImage($event)"
-            #fileInput
-          />
-          <button
-            class="btn btn-primary btn-sign-in btn-select-img"
-            (click)="fileInput.click()"
-          >
+          <input style="display: none" type="file" accept="image/*" (change)="uploadImage($event)" #fileInput />
+          <button class="btn btn-primary btn-sign-in btn-select-img" (click)="fileInput.click()">
             Select Image
           </button>
         </div>
         <div class="field">
           <label class="label">Open Time:</label>
-          <input
-            [min]="min"
-            class="setTime form-control fields"
-            (ngModelChange)="onOpenTimeSelect($event)"
-            formControlName="opentime"
-            [owlDateTime]="dtPicker2"
-            [owlDateTimeTrigger]="dtPicker2"
-            placeholder="Open time"
-          />
+          <input [min]="min" class="setTime form-control fields" (ngModelChange)="onOpenTimeSelect($event)"
+            formControlName="opentime" [owlDateTime]="dtPicker2" [owlDateTimeTrigger]="dtPicker2"
+            placeholder="Open time" />
           <owl-date-time [pickerType]="'timer'" #dtPicker2></owl-date-time>
 
           <!-- <input type="time" formControlName="opentime" /> -->
@@ -63,15 +40,9 @@
         </div>
         <div class="field">
           <label class="label">Close Time:</label>
-          <input
-            [min]="min"
-            class="setTime form-control fields"
-            (ngModelChange)="onCloseTimeSelect($event)"
-            formControlName="closetime"
-            [owlDateTime]="dtPicker1"
-            [owlDateTimeTrigger]="dtPicker1"
-            placeholder="Close time"
-          />
+          <input [min]="min" class="setTime form-control fields" (ngModelChange)="onCloseTimeSelect($event)"
+            formControlName="closetime" [owlDateTime]="dtPicker1" [owlDateTimeTrigger]="dtPicker1"
+            placeholder="Close time" />
           <owl-date-time [pickerType]="'timer'" #dtPicker1></owl-date-time>
           <!-- <input type="time" formControlName="closetime" /> -->
           <!-- <owl-date-time
@@ -97,16 +68,8 @@
         <div class="field">
           <label class="label">Contact:</label>
           <div class="phoneArea">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Contact"
-              formControlName="contact"
-            />
-            <div
-              *ngIf="contact.invalid && (contact.dirty || contact.touched)"
-              class="erroralert"
-            >
+            <input type="text" class="form-control" placeholder="Contact" formControlName="contact" />
+            <div *ngIf="contact.invalid && (contact.dirty || contact.touched)" class="erroralert">
               <div *ngIf="contact.invalid">
                 Invalid Contact Number
               </div>
@@ -115,19 +78,11 @@
         </div>
         <div class="field">
           <label class="label">Address:</label>
-          <input
-            type="text"
-            class="form-control fields"
-            placeholder="Address"
-            formControlName="salonaddress"
-          />
+          <input type="text" class="form-control fields" placeholder="Address" formControlName="salonaddress" />
         </div>
 
-        <button
-          class="btn btn-primary btn-sign-in"
-          [disabled]="submitSalonDetails.invalid"
-          (click)="submitSalon(submitSalonDetails.value)"
-        >
+        <button class="btn btn-primary btn-sign-in" [disabled]="submitSalonDetails.invalid"
+          (click)="submitSalon(submitSalonDetails.value)">
           Submit
         </button>
 
@@ -144,41 +99,21 @@
     <form [formGroup]="submitSalonDetails" class="salonDetailSave">
       <div class="field">
         <label class="label">Name:</label>
-        <input
-          type="text"
-          class="form-control fields"
-          placeholder="Name"
-          formControlName="name"
-        />
+        <input type="text" class="form-control fields" placeholder="Name" formControlName="name" />
       </div>
 
       <div class="field">
         <label class="label">Image:</label>
-        <input
-          style="display: none"
-          type="file"
-          accept="image/*"
-          (change)="uploadImage($event)"
-          #fileInput
-        />
-        <button
-          class="btn btn-primary btn-sign-in btn-select-img"
-          (click)="fileInput.click()"
-        >
+        <input style="display: none" type="file" accept="image/*" (change)="uploadImage($event)" #fileInput />
+        <button class="btn btn-primary btn-sign-in btn-select-img" (click)="fileInput.click()">
           Select Image
         </button>
       </div>
       <div class="field">
         <label class="label">Open Time:</label>
-        <input
-          [min]="min"
-          class="setTime form-control fields"
-          (ngModelChange)="onOpenTimeSelect($event)"
-          formControlName="opentime"
-          [owlDateTime]="dtPicker2"
-          [owlDateTimeTrigger]="dtPicker2"
-          placeholder="Open time"
-        />
+        <input [min]="min" class="setTime form-control fields" (ngModelChange)="onOpenTimeSelect($event)"
+          formControlName="opentime" [owlDateTime]="dtPicker2" [owlDateTimeTrigger]="dtPicker2"
+          placeholder="Open time" />
         <owl-date-time [pickerType]="'timer'" #dtPicker2></owl-date-time>
 
         <!-- <input type="time" formControlName="opentime" /> -->
@@ -191,15 +126,9 @@
       </div>
       <div class="field">
         <label class="label">Close Time:</label>
-        <input
-          [min]="min"
-          class="setTime form-control fields"
-          (ngModelChange)="onCloseTimeSelect($event)"
-          formControlName="closetime"
-          [owlDateTime]="dtPicker1"
-          [owlDateTimeTrigger]="dtPicker1"
-          placeholder="Close time"
-        />
+        <input [min]="min" class="setTime form-control fields" (ngModelChange)="onCloseTimeSelect($event)"
+          formControlName="closetime" [owlDateTime]="dtPicker1" [owlDateTimeTrigger]="dtPicker1"
+          placeholder="Close time" />
         <owl-date-time [pickerType]="'timer'" #dtPicker1></owl-date-time>
         <!-- <input type="time" formControlName="closetime" /> -->
         <!-- <owl-date-time
@@ -225,16 +154,8 @@
       <div class="field">
         <label class="label">Contact:</label>
         <div class="phoneArea">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Contact"
-            formControlName="contact"
-          />
-          <div
-            *ngIf="contact.invalid && (contact.dirty || contact.touched)"
-            class="erroralert"
-          >
+          <input type="text" class="form-control" placeholder="Contact" formControlName="contact" />
+          <div *ngIf="contact.invalid && (contact.dirty || contact.touched)" class="erroralert">
             <div *ngIf="contact.invalid">
               Invalid Contact Number
             </div>
@@ -243,19 +164,11 @@
       </div>
       <div class="field">
         <label class="label">Address:</label>
-        <input
-          type="text"
-          class="form-control fields"
-          placeholder="Address"
-          formControlName="salonaddress"
-        />
+        <input type="text" class="form-control fields" placeholder="Address" formControlName="salonaddress" />
       </div>
 
-      <button
-        class="btn btn-primary btn-sign-in"
-        [disabled]="submitSalonDetails.invalid"
-        (click)="updatetSalon(submitSalonDetails.value)"
-      >
+      <button class="btn btn-primary btn-sign-in" [disabled]="submitSalonDetails.invalid"
+        (click)="updatetSalon(submitSalonDetails.value)">
         Update
       </button>
       <button class="btn btn-primary btn-sign-in" (click)="cancelSalonUpdate()">

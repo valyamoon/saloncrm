@@ -13,7 +13,7 @@ import { ProfileComponent } from './dashboard/profile/profile.component';
 // import { ManageEmployeeComponent } from './dashboard/manage-employee/manage-employee.component';
 import { ServicesComponent } from './dashboard/services/services.component';
 import { EmployeeComponent } from './dashboard/employee/employee.component';
-import { MatTabsModule } from '@angular/material/tabs'
+import { MatTabsModule } from '@angular/material/tabs';
 import { SelectAutocompleteModule } from "mat-select-autocomplete";
 
 import { FooterComponent } from './dashboard/footer/footer.component';
@@ -23,6 +23,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { BookingComponent } from './dashboard/booking/booking.component';
 import { AddEmployeeComponent } from './dashboard/employee/add-employee/add-employee.component';
 import { AddServiceComponent } from './dashboard/services/add-service/add-service.component';
+import { SalondetailsComponent } from './dashboard/salondetails/salondetails.component';
 import {
   MatPaginatorModule,
   MatTableModule,
@@ -33,7 +34,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 @NgModule({
-  declarations: [LoginComponent, DashboardComponent, ProfileComponent, ServicesComponent, EmployeeComponent, FooterComponent, SalonHeaderComponent, BookingComponent, AddEmployeeComponent, AddServiceComponent, TimingComponent],
+  declarations: [LoginComponent, DashboardComponent, ProfileComponent, ServicesComponent, EmployeeComponent, FooterComponent, SalonHeaderComponent, BookingComponent, AddEmployeeComponent, AddServiceComponent, TimingComponent, SalondetailsComponent],
   imports: [
     CommonModule,
     SalonRoutingModule,
@@ -46,6 +47,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
     MatSlideToggleModule,
     SelectAutocompleteModule,
     MatSelectModule,
+    MatTabsModule,
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg"
     }),

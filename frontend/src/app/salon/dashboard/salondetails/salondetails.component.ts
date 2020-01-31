@@ -198,6 +198,7 @@ export class SalondetailsComponent implements OnInit {
   }
 
   editSalonDetailsShow() {
+    console.log("this.salonDetailsData", this.salonDetailsData);
     this.editSalonDetails = true;
     this.submitSalonDetails.get("name").setValue(this.salonDetailsData.name);
     this.submitSalonDetails

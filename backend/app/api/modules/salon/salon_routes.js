@@ -18,6 +18,7 @@ module.exports = function (router) {
   router.post("/saloncategories", salon.getCategoriesAndServicesOfSalon);
   router.post("/removesalonservice", salon.getRemovesalonservice);
   router.post("/addsalonweeklyslot", salon.addSalonWeeklySlots);
+  router.post("/salonweeklyslot", salon.getSalonWeeklySlots);
   router.post("/view-salon", salon.viewSalonDetails);
   router.post("/update-salon", salon.updateSalonDetails);
   router.post("/get-salon", salon.fetchSalonData);
@@ -26,6 +27,7 @@ module.exports = function (router) {
   router.post('/salonservicelist', salon.getSalonServiceList);
   router.post('/employeeservicelist', salon.getEmployeeServiceList);
   router.post('/removeemployee', salon.removeEmployee);
+  router.post("/updateemployee", salon.updateEmployee);
 
   // router.get('/listUser', middlewares, user.getUserList);
   return router;

@@ -60,7 +60,9 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
-
+  resetForm() {
+    this.router.navigate(["salon/home/profile"]);
+  }
   saveEmployee(data) {
     let dataToPass = {
       'name': data.name,

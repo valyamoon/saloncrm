@@ -2241,7 +2241,7 @@ input[type='search']::-webkit-search-cancel-button {
     
 }
 .add-employees2 .custom-label{
-      margin-top: 15px;
+      margin-top: 7px;
   
 }
 .service-block .custom-label{
@@ -2276,13 +2276,15 @@ input[type='search']::-webkit-search-cancel-button {
   margin-left: 0px;
 }
 .service-block{
-  position: relative;
+  position: relative;    
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
 }
 .add-service .close-icons{
   position: absolute;
   right: 18px;
   top: 15px;
-  right: -11px;
+  right: 0px;
   top: 0;
   color: #454F60;
   font-size: 17px;
@@ -2293,10 +2295,138 @@ body .form-control{
     border-radius: 25px;
     opacity: 1;
     font-size: 14px;
-    height: 50px;
+    /*height: 50px;*/
     letter-spacing: 0;
     color: #9595A1;
     opacity: 0.9;
     padding-left: 20px;
     max-width: 100%;
+}
+.btn-save{
+  background: transparent linear-gradient(101deg, #CC2B5E 0%, #753A88 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 12px #00000029;
+  border-radius: 25px;
+  opacity: 1;
+  height: 50px;
+  text-align: center;
+  letter-spacing: 1.4px;
+  color: #FFFFFF;
+  opacity: 1;
+  font-size: 14px;
+  text-transform: uppercase;
+  min-width: 152px;
+
+}
+.btn-cancel{
+  background: #454F60 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 12px #00000029;
+  border-radius: 25px;
+  opacity: 1;
+  height: 50px;
+  text-align: center;
+  letter-spacing: 1.4px;
+  color: #FFFFFF;
+  opacity: 1;
+  font-size: 14px;
+  text-transform: uppercase;
+  min-width: 152px;
+  
+  margin-right: 5px;
+
+}
+/*customize input type*/
+.create-availabillity  input[type="text"]{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #DFDFDF;
+  border-radius: 25px;
+  opacity: 1;
+  font-size: 14px;
+  height: 35px;
+  letter-spacing: 0;
+  color: #9595A1;
+  opacity: 0.9;
+  padding-left: 20px;
+  
+}
+
+
+/*customize ddl*/
+.mat-ddl .mat-form-field-label {
+    position: relative;
+  font-size: 18px;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454F60;
+  opacity: 1;
+  
+}
+.mat-ddl .mat-form-field-label.ng-tns-c6-1.mat-empty.mat-form-field-empty{
+  position: relative;
+  top :-15px;
+  font-size: 14px;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454F60;
+  opacity: 1;
+}
+.mat-ddl.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label ,
+.mat-ddl.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+.mat-ddl.mat-select.ng-pristine.ng-invalid.mat-select-empty.ng-star-inserted.ng-touched.mat-select-invalid .mat-form-field-label,
+.mat-ddl.mat-form-field-appearance-legacy .mat-form-field-label
+{
+  -ms-transform:translateY(0px)scale(1) translateZ(0px);
+  transform:translateY(0px)scale(1) translateZ(0px);
+  font-size: 14px;
+  position: relative;
+  top: -15px;
+}
+.mat-ddl.mat-form-field.mat-focused.mat-primary .mat-select-arrow,
+.mat-ddl.mat-form-field.mat-focused .mat-form-field-label
+{
+  color: #454F60;
+}
+.select-employee.mat-ddl.mat-form-field.mat-primary.mat-form-field-type-mat-select.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-has-label.ng-pristine.ng-invalid.mat-form-field-invalid.ng-touched.mat-focused.mat-form-field-should-float .mat-form-field-label{
+  -ms-transform:translateY(-5px)scale(1) translateZ(0px);
+  transform: translateY(-5  px)scale(1) translateZ(0px);
+}
+.mat-ddl.mat-form-field{
+  min-width: 100%;
+}
+
+
+
+.mat-ddl .mat-form-field-empty.mat-form-field-label{
+  top: -14px;
+}
+.mat-ddl.mat-form-field-appearance-legacy .mat-form-field-wrapper{
+  padding-top: 1.26em;
+  padding-bottom: 1.26em;
+}
+.mat-ddl.mat-form-field-appearance-legacy .mat-form-field-underline{
+      height: 0px;
+}
+.mat-ddl.mat-form-field-appearance-legacy.mat-form-field-invalid:not(.mat-focused) .mat-form-field-ripple{
+  height: 0px;
+}
+.mat-ddl.mat-form-field-appearance-legacy .mat-form-field-ripple{
+  height: 0px;
+}
+.mat-ddl.mat-form-field-appearance-legacy .mat-form-field-infix{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #DFDFDF;
+  border-radius: 25px;
+  font-size: 14px;
+  letter-spacing: 0;
+  color: #9595A1;
+  opacity: 0.9;
+  padding: 8px 20px;
+  max-width: 100%;
+  height: 35px;
+}
+.mat-ddl .mat-form-field-label-wrapper{
+  top: -25px;
+  padding-top: 19px;
+}
+.mat-ddl .mat-form-field.mat-focused .mat-form-field-label{
+    color: #454F60;
 }

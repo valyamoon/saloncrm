@@ -557,6 +557,26 @@ commonQuery.fetch_all = function fetch_all(model, cond = {}, fetchd = {}) {
     });
   });
 };
+
+commonQuery.fetch_all_sort_by_order = function fetch_all_sort_by_order(
+  model,
+  cond = {},
+  fetchd = {}
+) {
+  return new Promise(function (resolve, reject) {
+    model
+      .find(cond, fetchd)
+      .sort("order_sort")
+      .exec(function (err, userData) {
+        if (err) {
+          console.log("errrrrrr", err);
+          reject(err);
+        } else {
+          resolve(userData);
+        }
+      });
+  });
+};
 commonQuery.fetch_all_by_sort = function fetch_all_by_sort(
   model,
   cond = {},

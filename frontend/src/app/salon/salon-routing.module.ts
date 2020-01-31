@@ -26,7 +26,8 @@ const routes: Routes = [
       { path: "", redirectTo: "details", pathMatch: "full" },
       { path: 'add-employee', component: AddEmployeeComponent },
       { path: 'add-service', component: AddServiceComponent },
-      { path: 'timing', component: TimingComponent }
+      { path: 'timing', component: TimingComponent },
+
     ]
   },
 
