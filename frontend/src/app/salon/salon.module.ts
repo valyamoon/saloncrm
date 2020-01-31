@@ -27,7 +27,8 @@ import { AddServiceComponent } from "./dashboard/services/add-service/add-servic
 import {
   MatPaginatorModule,
   MatTableModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatExpansionModule
 } from "@angular/material";
 import { TimingComponent } from "./dashboard/timing/timing.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
@@ -35,7 +36,8 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 import { SalondetailsComponent } from "./dashboard/salondetails/salondetails.component";
 import { EditsalonComponent } from "./dashboard/editsalon/editsalon.component";
 import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
-import { SubscriptionComponent } from './dashboard/subscription/subscription.component';
+import { SubscriptionComponent } from "./dashboard/subscription/subscription.component";
+import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { SubscriptionComponent } from './dashboard/subscription/subscription.com
     SalondetailsComponent,
     EditsalonComponent,
     SubscribeComponent,
-    SubscriptionComponent
+    SubscriptionComponent,
+    PromcodeComponent
   ],
   imports: [
     CommonModule,
@@ -75,7 +78,8 @@ import { SubscriptionComponent } from './dashboard/subscription/subscription.com
     NgxMaterialTimepickerModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    MatExpansionModule
   ]
 })
-export class SalonModule { }
+export class SalonModule {}

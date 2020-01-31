@@ -13,7 +13,15 @@
       class="selectorSection"
       [ngClass]="isSelectorShown ? 'selectorSection' : 'danger'"
     >
-      <div class="menus-app">
+      <div class="menus-app" (click)="hideMenu()">
+        <div class="clearfix profile-sm">
+          <div class="float-left font-weight-bold">Nadim Shah</div>
+          <div class="float-right">
+            <i class="material-icons">
+              exit_to_app
+            </i>
+          </div>
+        </div>
         <a class="selectors" routerLink="dashboard" routerLinkActive="active"
           >Dashboard</a
         >

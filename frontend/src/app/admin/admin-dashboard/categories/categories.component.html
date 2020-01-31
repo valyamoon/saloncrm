@@ -1,21 +1,27 @@
 <div class="categoriesWrapper">
   <div class="actionButtons">
-    <div class="headerArea">
-      <app-header-text></app-header-text>
-    </div>
-    <div class="btnActionArea">
-      <button
-        class="btn btn-primary btn-sign-in"
-        (click)="openAddCategoryModal()"
-      >
-        Add Category
-      </button>
-      <button
-        class="btn btn-primary btn-sign-in"
-        (click)="fetchArchivedCategoryList()"
-      >
-        Archived Categories
-      </button>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="headerArea">
+          <app-header-text></app-header-text>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="btnActionArea">
+          <button
+            class="btn btn-primary btn-sign-in"
+            (click)="openAddCategoryModal()"
+          >
+            Add Category
+          </button>
+          <button
+            class="btn btn-primary btn-sign-in"
+            (click)="fetchArchivedCategoryList()"
+          >
+            Archived Categories
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

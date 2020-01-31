@@ -1,0 +1,65 @@
+.promcodeWrapper {
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 5px;
+    .addPromoCode {
+      margin: 0;
+    }
+  }
+  .mainSection {
+    .promocodesArea {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      border: 1px solid lightgray;
+      padding: 10px;
+      border-radius: 20px;
+      margin-bottom: 5px;
+    }
+  }
+  .modelOverlay {
+    background: white;
+    padding: 1em;
+    border-radius: 20px;
+    margin-top: 10px;
+    .headerText {
+      border-bottom: 1px solid lightgray;
+      margin-bottom: 5px;
+    }
+    .main-content {
+      padding: 15px;
+      form {
+        .fields {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          margin-bottom: 5px;
+          .labels {
+            width: 20%;
+            margin: 0;
+            min-width: 150px;
+          }
+          .inp {
+            width: 75%;
+          }
+        }
+        .add {
+          margin: 0;
+          width: 100px;
+        }
+      }
+    }
+  }
+}
+.delete {
+  cursor: pointer;
+}
+.noRecords {
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  text-align: center;
+  width: 50%;
+}
