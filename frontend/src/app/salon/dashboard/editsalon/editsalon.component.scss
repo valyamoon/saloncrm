@@ -1,0 +1,60 @@
+.profileOverlay {
+  margin-top: 4.5%;
+  #profileArea {
+    padding: 10px;
+    background-color: white;
+    opacity: 1;
+
+    z-index: 11;
+    border-radius: 10px;
+    .salonDetailSave {
+      .field {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        .label {
+          width: 25%;
+          margin: 0;
+        }
+      }
+      .fields {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 60%;
+      }
+      .image {
+        display: none;
+      }
+    }
+
+    .pendingApprovalArea {
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      .pendingText {
+        text-align: center;
+        // color: white;
+        // background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%)
+        //   0% 0% no-repeat padding-box;
+        border-color: transparent;
+        margin: 0;
+      }
+      .pendingGIF {
+        height: 85px;
+        width: 85px;
+      }
+    }
+    h2 {
+      font-size: 25px;
+    }
+    .btn-select-img {
+      margin: 0;
+    }
+  }
+}

@@ -84,6 +84,7 @@ export class LoginComponent implements OnInit {
             "isApproved",
             this.userData["userInfo"].isApproved
           );
+          sessionStorage.setItem("email", this.userData["userInfo"]["email"]);
           sessionStorage.setItem("userId", data.data["userInfo"]["_id"]);
           sessionStorage.setItem(
             "isSubmitted",

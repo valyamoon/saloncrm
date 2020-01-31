@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CommonService } from "../common.service";
 import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-salondetails",
@@ -12,6 +13,7 @@ import { ToastrService } from "ngx-toastr";
 export class SalondetailsComponent implements OnInit {
   submitSalonDetails: FormGroup;
   closetime: any;
+  salonEmail: any;
   opentime: any;
   showNow: boolean = false;
   numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
@@ -32,12 +34,14 @@ export class SalondetailsComponent implements OnInit {
   salonDetailsData: any;
   userid: any;
   salonid: any;
+  isApprovedStatus: boolean;
 
   constructor(
     private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
-    private toastrServ: ToastrService
+    private toastrServ: ToastrService,
+    private router: Router
   ) {
     if (navigator) {
       navigator.geolocation.getCurrentPosition(pos => {
@@ -49,10 +53,14 @@ export class SalondetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.salonEmail = sessionStorage.getItem("email");
     this.user_id = sessionStorage.getItem("userId");
     this.userid = this.user_id;
+    this.isApprovedStatus = JSON.parse(sessionStorage.getItem("isApproved"));
 
-    this.getsalonsData(this.userid);
+    console.log("ISAPPROVEDSTATUS", this.isApprovedStatus);
+    this.chechIsApprovedStatus(this.isApprovedStatus);
+
     this.submitSalonDetails = this.fb.group({
       name: ["", Validators.required],
       contact: [
@@ -78,6 +86,13 @@ export class SalondetailsComponent implements OnInit {
     }
   }
 
+  chechIsApprovedStatus(data) {
+    if (data === true) {
+      this.router.navigate(["/salon/home/profile"]);
+    } else {
+    }
+  }
+
   get contact() {
     return this.submitSalonDetails.get("contact");
   }
@@ -88,6 +103,11 @@ export class SalondetailsComponent implements OnInit {
 
   onCloseTimeSelect(event) {
     console.log("event", event);
+  }
+
+  logout() {
+    this.authServ.logout();
+    sessionStorage.clear();
   }
 
   uploadImage(event) {
@@ -126,6 +146,7 @@ export class SalondetailsComponent implements OnInit {
     postData.append("closetime", dataToPass.closetime);
     postData.append("contact", dataToPass.contact);
     postData.append("user_id", dataToPass.user_id);
+    postData.append("email", this.salonEmail);
 
     console.log("POSTDATA", postData);
 

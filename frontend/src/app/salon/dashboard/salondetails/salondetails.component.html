@@ -6,7 +6,11 @@
       <p class="pendingText">
         You will recieve an Email confirmation of successful approval
       </p>
+
       <p class="pendingText">Please login once you are approved</p>
+      <button class="btn btn-primary btn-sign-in" (click)="logout()">
+        Logout
+      </button>
     </div>
     <div *ngIf="!showPendingApproval">
       <h2>Add Salon Details</h2>

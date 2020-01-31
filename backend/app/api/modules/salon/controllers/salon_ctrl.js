@@ -5,6 +5,8 @@ const utility = require("../../../../lib/utility.js");
 var ts = require("time-slots-generator");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
+const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
+//const stripe = require("stripe")("pk_test_qTMNt7hjKJiVtbBOr2xjDUsr00yAO2oDBq");
 const mkdirp = require("mkdirp");
 //const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
@@ -12,6 +14,7 @@ const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 const constant = require("../../../../config/constant.js");
 
 const users = mongoose.model("users");
+const salonSubscriptions = require("../model/salonSubscriptions");
 const roles = require("../../user/model/rolesSchema");
 const salons = require("../model/salonSchema");
 const promocodes = require("../model/promocodeSchema");
@@ -54,8 +57,10 @@ module.exports = {
   fetchSalonData: fetchSalonData,
   bookSlot: bookSlot,
   getSalonWeeklySlots: getSalonWeeklySlots,
-  updateEmployee: updateEmployee
+  updateEmployee: updateEmployee,
 
+  subscribedSalonDetails: subscribedSalonDetails,
+  createCardToken: createCardToken
 };
 
 /**
@@ -66,10 +71,12 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
-  // console.log("req.body", req.body); return;
+
   async function saveSalonDetails() {
     try {
       var image_path;
+      var customer_id_value;
+
       if (req.body && req.body.user_id) {
         let conditon = {
           _id: req.body.user_id,
@@ -121,52 +128,79 @@ function saveSalonDetails(req, res) {
                       .fileUpload(path, req.files.image["data"])
                       .then(async data => {
                         if (data.status) {
-                          let salonData = new salons({
-                            name: req.body.name,
-                            location: locations,
-                            contact: req.body.contact,
-                            salonaddress: req.body.salonaddress,
-                            user_id: req.body.user_id,
-                            image: image_path,
-                            opentime: req.body.opentime,
-                            closetime: req.body.closetime,
-                            isActive: false,
-                            isDeleted: false,
-                            isreviewadded: false,
-                            isservicesadded: false
-                          });
+                          stripe.customers.create(
+                            {
+                              email: req.body.email,
+                              description: req.body.name,
+                              name: req.body.name,
+                              phone: req.body.phone,
+                              address: {
+                                line1: req.body.salonaddress,
+                                postal_code: "98140",
+                                city: "San Francisco",
+                                state: "CA",
+                                country: "US"
+                              }
+                            },
+                            async function (err, customer) {
+                              if (err) {
+                                console.log(err);
+                              } else {
+                                customer_id_value = customer["id"];
 
-                          let saveSalon = await commonQuery.InsertIntoCollection(
-                            salons,
-                            salonData
-                          );
+                                let salonData = new salons({
+                                  name: req.body.name,
+                                  location: locations,
+                                  contact: req.body.contact,
+                                  salonaddress: req.body.salonaddress,
+                                  user_id: req.body.user_id,
+                                  image: image_path,
+                                  opentime: req.body.opentime,
+                                  closetime: req.body.closetime,
+                                  isActive: false,
+                                  isDeleted: false,
+                                  isreviewadded: false,
+                                  isservicesadded: false,
+                                  customer_id: customer_id_value
+                                });
 
-                          if (!saveSalon) {
-                          } else {
-                            let updateCondition = {
-                              isSubmitted: true
-                            };
-                            let condition = {
-                              _id: mongoose.Types.ObjectId(req.body.user_id)
-                            };
-                            let updateUser = await commonQuery.updateOneDocument(
-                              users,
-                              condition,
-                              updateCondition
-                            );
-                            if (!updateUser) {
-                            } else {
-                              console.log(updateUser);
+                                let saveSalon = await commonQuery.InsertIntoCollection(
+                                  salons,
+                                  salonData
+                                );
+
+                                if (!saveSalon) {
+                                } else {
+                                  let updateCondition = {
+                                    isSubmitted: true
+                                  };
+                                  let condition = {
+                                    _id: mongoose.Types.ObjectId(
+                                      req.body.user_id
+                                    )
+                                  };
+                                  let updateUser = await commonQuery.updateOneDocument(
+                                    users,
+                                    condition,
+                                    updateCondition
+                                  );
+                                  if (!updateUser) {
+                                  } else {
+                                    console.log(updateUser);
+                                  }
+
+                                  res.json(
+                                    Response(
+                                      constant.SUCCESS_CODE,
+                                      constant.NEW_DATA_ADDED,
+                                      saveSalon
+                                    )
+                                  );
+                                }
+                              }
                             }
-
-                            res.json(
-                              Response(
-                                constant.SUCCESS_CODE,
-                                constant.NEW_DATA_ADDED,
-                                saveSalon
-                              )
-                            );
-                          }
+                          );
+                          console.log("customer_id_value", customer_id_value);
                         } else {
                         }
                       });
@@ -415,14 +449,11 @@ function getSalonDetails(req, res) {
           );
         }
       }
-
-    }
-    catch (error) {
+    } catch (error) {
       res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
       );
     }
-
   }
   getSalonDetails().then(function () { });
 }
@@ -832,7 +863,7 @@ function addServicesToEmployee(req, res) {
         let empId = req.body.employee_id;
         var empCond = {
           _id: empId
-        }
+        };
         let isEmployeExist = await commonQuery.countData(employees, empCond);
         //console.log("isEmployeExist", isEmployeExist); return;
         if (isEmployeExist == 0) {
@@ -857,8 +888,12 @@ function addServicesToEmployee(req, res) {
         } else {
           let updateData = {
             salonservices_id: req.body.salonservices_id
-          }
-          let updateService = await commonQuery.updateOne(employees, empCond, updateData);
+          };
+          let updateService = await commonQuery.updateOne(
+            employees,
+            empCond,
+            updateData
+          );
           if (!updateService) {
             res.json(
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -879,12 +914,9 @@ function addServicesToEmployee(req, res) {
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
       );
     }
-
   }
-  addServicesToEmployee().then(function () { })
+  addServicesToEmployee().then(function () { });
 }
-
-
 
 /**
  * Function is use to remove service to employee
@@ -1128,7 +1160,7 @@ function viewSalonDetails(req, res) {
 
 function updateSalonDetails(req, res) {
   var image_path;
-
+  console.log(req.body);
   async function updateSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -1170,7 +1202,7 @@ function updateSalonDetails(req, res) {
                         };
                         let updateCondition = {
                           name: req.body.name,
-                          address: req.body.address,
+                          salonaddress: req.body.salonaddress,
                           contact: req.body.contact,
                           opentime: req.body.opentime,
                           closetime: req.body.closetime,
@@ -1210,7 +1242,7 @@ function updateSalonDetails(req, res) {
           };
           let updateCondition = {
             name: req.body.name,
-            address: req.body.address,
+            salonaddress: req.body.salonaddress,
             contact: req.body.contact,
             opentime: req.body.opentime,
             closetime: req.body.closetime
@@ -1248,6 +1280,7 @@ function updateSalonDetails(req, res) {
 }
 
 function fetchSalonData(req, res) {
+  console.log("HERE", req.body);
   async function fetchSalonData() {
     try {
       if (req.body && req.body.user_id) {
@@ -1256,6 +1289,7 @@ function fetchSalonData(req, res) {
         };
 
         let getSalonData = await commonQuery.findoneData(salons, condition);
+        console.log(getSalonData);
 
         if (!getSalonData) {
           return res.json(
@@ -1281,11 +1315,27 @@ function fetchSalonData(req, res) {
   fetchSalonData().then(function () { });
 }
 
-function bookSlot(req, res) {
-  console.log(req.body);
+function bookSlot(data) {
+  console.log("INSIDE BOOKSLOT", data);
   async function bookSlot() {
     try {
       if (req.body && req.body.starttime) {
+        var starttime = req.body.starttime;
+        var duration = req.body.duration;
+        var hour = starttime.split(":");
+        var hourInt = hour[0] * 60;
+        var minInt = hour[1];
+        var totaltime = parseInt(hourInt) + parseInt(minInt);
+        var endtime = totaltime + parseInt(duration);
+        var endTimeCalculated;
+        time_convert(endtime);
+        function time_convert(num) {
+          const hours = Math.floor(num / 60);
+          const minutes = num % 60;
+          endTimeCalculated = `${hours}:${minutes}`;
+        }
+
+        console.log("endTimeCalculated", endTimeCalculated);
       }
     } catch (error) {
       return res.json(
@@ -1308,25 +1358,18 @@ async function getSalonByUser(req, res) {
   if (req.body.user_id) {
     let userId = req.body.user_id;
     let cond = {
-      "user_id": userId
-    }
+      user_id: userId
+    };
     let salonDetails = await commonQuery.fetch_one(salons, cond);
     if (salonDetails) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.FETCHED_ALL_DATA,
-          salonDetails
-        )
+        Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonDetails)
       );
     }
   } else {
-    res.json(
-      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-    );
+    res.json(Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null));
   }
   //console.log("req.body", req.body); return;
-
 }
 
 /**
@@ -1339,35 +1382,32 @@ async function getSalonByUser(req, res) {
  */
 async function getSalonServiceList(req, res) {
   //console.log("req.body", req.body); return;
-  let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   if (req.body.user_id) {
     var salonId = await util.getSalonId(req.body.user_id);
     let serviceCond = {
-      "salon_id": salonId
-    }
+      salon_id: salonId
+    };
     let pageSize = 100;
     let page = 1;
     // let serviceList = await commonQuery.fetch_all(services, salonCond);
     let serviceList = await commonQuery.fetch_all_paginated(
-      salonservices, serviceCond,
+      salonservices,
+      serviceCond,
       pageSize,
       currentPage
     );
     //console.log("serviceList", serviceList); return;
     res.json(
-      Response(
-        constant.SUCCESS_CODE,
-        constant.FETCHED_ALL_DATA,
-        serviceList
-      )
+      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, serviceList)
     );
   } else {
     return res.json(
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
-
 }
 /**
  * Function is use to get list service assign to all employee
@@ -1379,30 +1419,28 @@ async function getSalonServiceList(req, res) {
  */
 async function getEmployeeServiceList(req, res) {
   // console.log("req.body", req.body);
-  let pageSize = +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   if (req.body.user_id) {
     var employeeList = [];
     var salonId = await util.getSalonId(req.body.user_id);
     let empCond = {
-      "salon_id": salonId
-    }
+      salon_id: salonId
+    };
     let pageSize = 100;
     let page = 1;
 
     let employeeData = await commonQuery.find_all_employee_paginate(
-      employees, empCond,
+      employees,
+      empCond,
       pageSize,
       currentPage
     );
 
     // console.log("employeeList", employeeList); return;
     res.json(
-      Response(
-        constant.SUCCESS_CODE,
-        constant.FETCHED_ALL_DATA,
-        employeeData
-      )
+      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, employeeData)
     );
   } else {
     return res.json(
@@ -1415,21 +1453,21 @@ async function updateSalonServices(req, res) {
   // console.log("req.body", req.body); //return;
   if (req.body) {
     let updateCond = {
-      "_id": req.body.id
-    }
+      _id: req.body.id
+    };
     let updateData = {
       price: req.body.price,
       duration: req.body.duration
-    }
-    let updateService = await commonQuery.updateOne(salonservices, updateCond, updateData);
+    };
+    let updateService = await commonQuery.updateOne(
+      salonservices,
+      updateCond,
+      updateData
+    );
     // console.log("updateService", updateService);
     if (updateService) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.SERVICE_UPDATED,
-          updateService
-        )
+        Response(constant.SUCCESS_CODE, constant.SERVICE_UPDATED, updateService)
       );
     }
   } else {
@@ -1437,25 +1475,20 @@ async function updateSalonServices(req, res) {
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
-
 }
 
 async function removeEmployee(req, res) {
   console.log("req.body", req.body);
   if (req.body._id) {
     let updateCond = {
-      "_id": req.body._id
-    }
+      _id: req.body._id
+    };
 
     let removeEmp = await commonQuery.hard_delete(employees, updateCond);
     // console.log("updateService", updateService);
     if (removeEmp) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.DELETED_SUCCESS,
-          removeEmp
-        )
+        Response(constant.SUCCESS_CODE, constant.DELETED_SUCCESS, removeEmp)
       );
     }
   } else {
@@ -1491,4 +1524,174 @@ async function getSalonWeeklySlots(req, res) {
 
 }
 
+function createCardToken(req, res) {
+  console.log(req.body);
+  var card_id;
+  var token_id;
+  async function createCardToken() {
+    try {
+      if (req.body && req.body.number) {
+        stripe.tokens.create(
+          {
+            card: {
+              number: req.body.number,
+              exp_month: req.body.exp_month,
+              exp_year: req.body.exp_year,
+              cvc: req.body.cvc
+            }
+          },
+          async function (err, token) {
+            if (err) {
+              console.log("ERROR", err);
+              return res.json(
+                Response(
+                  constant.ERROR_CODE,
+                  constant.CARD_DATA_INVALID,
+                  err.Error
+                )
+              );
+            } else {
+              console.log(token);
+              token_id = token["id"];
+              card_id = token["card"]["id"];
+              stripe.customers.createSource(
+                req.body.customer_id,
+                { source: token_id },
+                async function (err, card) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    console.log(card);
+                    stripe.subscriptions.create(
+                      {
+                        customer: req.body.customer_id,
+                        items: [{ plan: req.body.plan_id }]
+                      },
+                      async function (err, subscription) {
+                        if (err) {
+                          return res.json(
+                            Response(
+                              constant.ERROR_CODE,
+                              constant.FAILED_TO_SUBSCRIBE,
+                              err.Error
+                            )
+                          );
+                        } else {
+                          console.log("subbb", subscription);
+                          let condition = {
+                            _id: mongoose.Types.ObjectId(req.body.salon_id)
+                          };
+                          let updateCondition = { isSubscribed: true };
+                          let updateSalonDetails = await commonQuery.updateOneDocument(
+                            salons,
+                            condition,
+                            updateCondition
+                          );
+                          console.log("SSS", updateSalonDetails);
+                          if (updateSalonDetails) {
+                            let updateUserCondition = {
+                              _id: mongoose.Types.ObjectId(
+                                updateSalonDetails["user_id"]
+                              )
+                            };
+                            let updateCondition = { isSubscribed: true };
+                            let updateUserTableDetails = await commonQuery.updateOneDocument(
+                              users,
+                              updateUserCondition,
+                              updateCondition
+                            );
+                            console.log(updateUserTableDetails);
+                            if (updateUserTableDetails) {
+                              let saveSalonSubscription = new salonSubscriptions(
+                                {
+                                  salon_id: req.body.salon_id,
+                                  user_id: updateSalonDetails["user_id"],
+                                  expiry_date:
+                                    subscription["current_period_end"],
+                                  created_on:
+                                    subscription["current_period_start"],
+                                  customer_id: subscription["customer"],
+                                  plan_id: subscription["plan"]["id"],
+                                  subscription_id: subscription["id"],
+                                  product_id: subscription["plan"]["product"],
+                                  isActive: subscription["status"]
+                                }
+                              );
 
+                              let addSalonSubscription = await commonQuery.InsertIntoCollection(
+                                salonSubscriptions,
+                                saveSalonSubscription
+                              );
+                              if (addSalonSubscription) {
+                                res.json(
+                                  Response(
+                                    constant.SUCCESS_CODE,
+                                    constant.SUBSCRIPTION_CREATED,
+                                    addSalonSubscription
+                                  )
+                                );
+                              } else {
+                                return res.json(
+                                  Response(
+                                    constant.ERROR_CODE,
+                                    constant.FAILED_TO_SUBSCRIBE,
+                                    null
+                                  )
+                                );
+                              }
+                            }
+                          }
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  createCardToken().then(function () { });
+}
+
+function subscribedSalonDetails(req, res) {
+  console.log("hello", req.body);
+  async function subscribedSalonDetails() {
+    try {
+      if (req.body && req.body.salon_id) {
+        let condition = {
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id)
+        };
+        let salonSubscriptionDetails = await commonQuery.getSalonSubscriptionDetails(
+          salonSubscriptions,
+          condition
+        );
+        console.log(salonSubscriptionDetails);
+        if (!salonSubscriptionDetails) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              salonSubscriptionDetails
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  subscribedSalonDetails().then(function () { });
+}

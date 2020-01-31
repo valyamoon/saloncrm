@@ -1,0 +1,76 @@
+<div class="subscribeWrapper">
+  <div *ngIf="!showEnterCardForm" class="col-lg-4">
+    <div class="col-lg-12" *ngFor="let item of planListArray">
+      <div class="card">
+        <h4>
+          {{ item.id }}
+        </h4>
+        <h3 class="rate">
+          {{ item.amount | currency: "USD" }}
+        </h3>
+        <p>Enjoy the benefits of this package for a {{ item.interval }}</p>
+
+        <button
+          class="btn-primary btn btn-sign-in edit delete-btn"
+          (click)="buy(item)"
+        >
+          BUY SUBSCRIPTION
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-details card" *ngIf="showEnterCardForm">
+    <form class="card-form" [formGroup]="cardSave">
+      <div class="large">
+        <label>Card Number</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="cardnumber"
+          placeholder="xxxx xxxx xxxx xxxx"
+          mask="0000 0000 0000 0000"
+        />
+      </div>
+      <div class="small">
+        <div>
+          <label>Expiry</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="MM/YYYY"
+            formControlName="expiry"
+            mask="00/0000"
+          />
+        </div>
+        <div>
+          <label>CVC</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="cvv"
+            placeholder="***"
+            mask="000"
+          />
+        </div>
+      </div>
+      <div class="large">
+        <label>Card Holder Name</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="name"
+          placeholder="Name On Card"
+        />
+      </div>
+      <button (click)="pay(cardSave.value)" class="btn btn-primary btn-sign-in">
+        Pay
+      </button>
+    </form>
+  </div>
+  <div class="loader" *ngIf="loader">
+    <img
+      src="../../../../assets/images/Infinity-1s-200px.gif"
+      class="loaderImage"
+    />
+  </div>
+</div>

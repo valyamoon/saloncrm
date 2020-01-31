@@ -6,16 +6,16 @@ import { ToastrService } from "ngx-toastr";
 import { MatDialog } from "@angular/material";
 
 @Component({
-  selector: 'app-employee',
-  templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.scss']
+  selector: "app-employee",
+  templateUrl: "./employee.component.html",
+  styleUrls: ["./employee.component.scss"]
 })
 export class EmployeeComponent implements OnInit {
   employeeList: any = [];
   pageSize: any = 5;
   count: any = 5;
   page: any = 1;
-  displayedColumns = ['name', 'servicename', 'action'];
+  displayedColumns = ["name", "servicename", "action"];
   employeeCount: number;
   noRecordsFound: boolean;
   user_id: any;
@@ -36,46 +36,45 @@ export class EmployeeComponent implements OnInit {
   isEMployeeModal: boolean = false;
   editEmployeeData: any;
 
-  constructor(private authServ: AuthService,
+  constructor(
+    private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
     private toastrServ: ToastrService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog
+  ) {
     this.assignServiceForm = this.fb.group({
-      service_id: ['', [Validators.required]]
-    })
+      service_id: ["", [Validators.required]]
+    });
   }
   ngOnInit() {
     this.user_id = sessionStorage.getItem("userId");
     this.getSalonData(this.user_id);
     this.getEmployeeService();
-
-
   }
   getSalonData(userId) {
-
     let data = {
-      'user_id': userId
-
-    }
-    this.commServ.getSalonData(data).subscribe((responce: any) => {
-      if (responce.code === 200) {
-        this.salonData = responce.data;
-        this.getServiceList();
-      } else {
-        this.toastrServ.error("Invalid salon details", "", {
+      user_id: userId
+    };
+    this.commServ.getSalonData(data).subscribe(
+      (responce: any) => {
+        if (responce.code === 200) {
+          this.salonData = responce.data;
+          this.getServiceList();
+        } else {
+          this.toastrServ.error("Invalid salon details", "", {
+            timeOut: 3000
+          });
+        }
+      },
+      error => {
+        this.toastrServ.error("Failed to get salon data", error, {
           timeOut: 3000
         });
       }
-    }, error => {
-      this.toastrServ.error("Failed to get salon data", error, {
-        timeOut: 3000
-      });
-
-    });
+    );
   }
   paginate(event) {
-
     this.page = event.pageIndex + 1;
     this.count = event.pageSize;
     this.getEmployeeService();
@@ -85,9 +84,8 @@ export class EmployeeComponent implements OnInit {
     this.isConfirm = data;
   }
   reject(data) {
-    console.log(data);
     this.isConfirm = data;
-    console.log(this.isConfirm);
+
     this.isDeleteDialog = false;
   }
   getEmployeeService() {
@@ -99,7 +97,6 @@ export class EmployeeComponent implements OnInit {
 
     this.commServ.getEmployeeServList(dataToPass).subscribe(
       (data: any) => {
-
         if (data["code"] == 200) {
           this.employeeList = data["data"];
           this.employeeCount = data.responseStatus;
@@ -127,11 +124,10 @@ export class EmployeeComponent implements OnInit {
     this.editEmployeeData = element;
   }
   getServiceList() {
-
     let postData = {
-      'user_id': this.user_id,
-      'salon_id': this.salonData._id
-    }
+      user_id: this.user_id,
+      salon_id: this.salonData._id
+    };
     this.commServ.getSalonServicesList(postData).subscribe(
       (data: any) => {
         if (data["code"] == 200) {
@@ -139,9 +135,9 @@ export class EmployeeComponent implements OnInit {
           data["data"].forEach(element => {
             //console.log("serviceList element", element);
             let serviceData = {
-              "id": element._id,
-              "name": element.servicename,
-            }
+              id: element._id,
+              name: element.servicename
+            };
             serviceArr.push(serviceData);
           });
           this.serviceList = serviceArr;
@@ -159,7 +155,6 @@ export class EmployeeComponent implements OnInit {
         });
       }
     );
-
   }
 
   options = this.serviceList;
@@ -167,7 +162,7 @@ export class EmployeeComponent implements OnInit {
 
   selected = this.selectedOptions;
   showError = false;
-  errorMessage = '';
+  errorMessage = "";
   multiSelect: any;
   onToggleDropdown() {
     this.multiSelect.toggleDropdown();
@@ -175,7 +170,6 @@ export class EmployeeComponent implements OnInit {
 
   getSelectedOptions(selected) {
     this.selected = selected;
-
   }
 
   onResetSelection(salon_service_id) {
@@ -183,7 +177,6 @@ export class EmployeeComponent implements OnInit {
   }
 
   openAssignServieModal(data) {
-    // console.log("Data", data)
     this.onResetSelection(data.salon_service_id);
     this.isAddModal = true;
     this.employeeData = data;
@@ -246,8 +239,6 @@ export class EmployeeComponent implements OnInit {
         });
       }
     );
-
-
   }
   updateEmpployee(updateData) {
 

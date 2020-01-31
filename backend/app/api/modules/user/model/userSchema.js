@@ -93,6 +93,10 @@ var userSchema = mongoose.Schema(
     resetkey: {
       type: String,
       default: null
+    },
+    isSubscribed: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }

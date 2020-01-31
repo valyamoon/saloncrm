@@ -55,11 +55,19 @@ module.exports = {
   REMOVED_ALL_DATA: "Removed The Data Successfully",
   USER_DELETED: "User Deleted Successfully",
   SALON_REQUEST_ACCEPTED: "Salon Request Accepted Successfully",
-  REQUEST_SEND_FOR_APPROVAL: "Your request has been sent successfully. Please wait for approval",
+  REQUEST_SEND_FOR_APPROVAL:
+    "Your request has been sent successfully. Please wait for approval",
   SALON_SUSPENDED: "Salon Suspended Successfully",
   FAILED_TO_ADD: "Failed To Add",
   NEW_DATA_ADDED: "Data Added Successfully",
   DELETED_SUCCESS: "Data Deleted Successfully",
   SERVICE_UPDATED: "Data Updated Successfully",
-
+  SUBSCRIPTION_CREATED: "Subscription Created Successfully",
+  SUBSCRIPTION_UPDATED: "Subscription Updated Successfully",
+  FAILED_TO_CREATE: "Failed To Create",
+  SALON_SUBSCRIBED_SUCCESSFULLY: "Salon Subscribed Successfully",
+  CARD_DATA_INVALID: "PLEASE CHECK YOUR CARD DETAILS",
+  FAILED_TO_SUBSCRIBE: "Salon Subscription Failed",
+  SUBSCRIPTION_EXPIRED: "Subscription Expired",
+  SUBSCRIPTION_RENEWED: "Subscription Renewed Successfully"
 };

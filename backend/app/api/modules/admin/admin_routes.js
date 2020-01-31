@@ -1,4 +1,4 @@
-module.exports = function (router) {
+module.exports = function(router) {
   var admin = require("./controllers/admin_ctrl");
 
   var utils = require("../../../lib/util");
@@ -12,9 +12,9 @@ module.exports = function (router) {
   router.post("/add-service", admin.addServices);
   router.post("/remove-service", admin.removeServices);
   router.post("/add-role", admin.addRoles);
-  router.post("/roles", middlewares, admin.getRoles);
+  router.post("/roles", admin.getRoles);
   router.post("/activesalons", admin.getActiveSalonsList);
-  router.post("/userscount", middlewares, admin.fetchActiveUsersCount);
+  router.post("/userscount", admin.fetchActiveUsersCount);
   router.post("/salonscount", admin.fetchActiveSalonsCount);
   router.post("/userslist", admin.fetchActiveUsersList);
   router.post("/remove-categories", admin.removeCategories);
@@ -32,6 +32,10 @@ module.exports = function (router) {
   router.post("/servicelist", admin.getServiceList);
   router.post("/active-user-check", admin.activeUsers);
   router.post("/deactive-user-check", admin.deactiveUsers);
+  router.post("/create-plan", admin.createSubscription);
+  router.post("/delete-plan", admin.deletePlan);
+  router.post("/get-plan", admin.getSubscription);
+  router.post("/get-subscriptions", admin.getSubscirbedSalonsList);
 
   return router;
 };

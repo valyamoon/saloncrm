@@ -42,9 +42,11 @@
   #mainSection {
     display: flex;
     // margin-top: 5px;
+
     margin-top: 0;
     justify-content: space-between;
     height: 100%;
+    background-color: #f1f5f9;
     .selectorSection {
       padding: 0;
       width: 210px;

@@ -1,0 +1,26 @@
+<div class="subscriptionWrapper">
+  <div class="mainSection">
+    <div class="field">
+      Name:
+      <div class="value">{{ subscriptionDetails.planDetails.id }}</div>
+    </div>
+    <div class="field">
+      Amount:
+      <div class="value">
+        {{ subscriptionDetails.planDetails.amount | currency: "USD" }}
+      </div>
+    </div>
+    <div class="field">
+      Billed:
+      <div class="value">{{ subscriptionDetails.planDetails.interval }}ly</div>
+    </div>
+    <div class="field">
+      Subscribed On:
+      <div class="value">{{ subscriptionDate }}</div>
+    </div>
+    <div class="field">
+      Expiry Date:
+      <div class="value">{{ expirationDate }}</div>
+    </div>
+  </div>
+</div>

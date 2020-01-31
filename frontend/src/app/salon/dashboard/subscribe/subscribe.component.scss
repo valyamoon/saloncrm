@@ -1,0 +1,76 @@
+.subscribeWrapper {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .card {
+    margin: 5px;
+    border: 1px solid lightgray;
+    box-shadow: 3px 4px 11px 1px lightgrey;
+    border-radius: 5px;
+    padding: 15px;
+
+    background: #fff;
+    border-color: transparent;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    height: auto;
+    h4 {
+      font-family: 'Roboto', sans-serif;
+      font-size: 15px;
+      float: left;
+    }
+    h3 {
+      color: #783a87;
+      margin-top: 10px;
+      // position: absolute;
+      // right: 15px;
+      // top: 10px;
+    }
+    p {
+      font-size: 14px;
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 11px;
+      right: 12px;
+    }
+  }
+  .card-details {
+    .form {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+.card-details {
+  width: 35%;
+}
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .loaderImage {
+    z-index: 9999;
+    width: 200px;
+    height: 200px;
+    background: transparent;
+    opacity: 0.5;
+  }
+}

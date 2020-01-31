@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
   selectedFile: File;
   checkIsApproved: boolean = true;
   tempUrl: string | ArrayBuffer;
-  public url = <any>'';
+  public url = <any>"";
   salonData: any;
   showPendingApproval: boolean = false;
   checkInitialApprovalStatus: boolean;
@@ -34,14 +34,12 @@ export class ProfileComponent implements OnInit {
     private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
-    private toastrServ: ToastrService,
-
+    private toastrServ: ToastrService
   ) {
     if (navigator) {
       navigator.geolocation.getCurrentPosition(pos => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
-
       });
     }
   }
@@ -70,20 +68,15 @@ export class ProfileComponent implements OnInit {
     } else {
       this.showPendingApproval = false;
     }
-
   }
 
   get contact() {
     return this.submitSalonDetails.get("contact");
   }
 
-  onOpenTimeSelect(event) {
-    console.log("event", event);
-  }
+  onOpenTimeSelect(event) {}
 
-  onCloseTimeSelect(event) {
-    console.log("event", event);
-  }
+  onCloseTimeSelect(event) {}
 
   uploadImage(event) {
     const file = (event.target as HTMLInputElement).files[0];
@@ -93,12 +86,9 @@ export class ProfileComponent implements OnInit {
 
   checkIsApprovedProfile() {
     this.checkIsApproved = JSON.parse(sessionStorage.getItem("isApproved"));
-
   }
 
   submitSalon(data) {
-    console.log("INSIDE DATA", JSON.stringify(data));
-    console.log(this.user_id);
     let dataToPass = {
       name: data.name,
       salonaddress: data.salonaddress,
@@ -122,18 +112,17 @@ export class ProfileComponent implements OnInit {
     postData.append("contact", dataToPass.contact);
     postData.append("user_id", dataToPass.user_id);
 
-    console.log("POSTDATA", postData);
-
     var options = { content: postData };
-    console.log(options);
 
-    console.log("DATATOPASS", dataToPass);
     this.commServ.saveSalonDetails(postData).subscribe(
       data => {
         if (data["code"] === 200) {
           this.showPendingApproval = true;
           this.isSubmitted = true;
-          sessionStorage.setItem("isSubmitted", JSON.stringify(this.isSubmitted));
+          sessionStorage.setItem(
+            "isSubmitted",
+            JSON.stringify(this.isSubmitted)
+          );
 
           this.toastrServ.success(
             "Salon Details Submitted Successfully",
@@ -156,10 +145,4 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-
-
-
-
-
-
 }

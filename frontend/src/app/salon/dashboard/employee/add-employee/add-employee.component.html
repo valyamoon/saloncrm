@@ -1,47 +1,75 @@
 <div class="check-spa-outer">
-    <div class="employee-tabs">
+  <div class="employee-tabs"></div>
+  <div class="create-availabillity">
+    <div class="create-availabillity-inner">
+      <div class="employee-sec">
+        <h2>Add Employees</h2>
+      </div>
     </div>
     <div class="create-availabillity">
-        <div class="create-availabillity-inner">
-            <div class="employee-sec">
-                <h2>Add Employees</h2>
-            </div>
-
+      <div class="create-availabillity-inner">
+        <div class="employee-sec">
+          <h2>Add Employees</h2>
         </div>
 
-
-        <div class="inner-tab-section">
-            <div class="add-employees-sec">
-                <form [formGroup]="employeeForm">
-                    <div class="add-employees-detail">
-                        <div class="add-employees-inner">
-                            <div class="add-employees2">
-                                <div class="row">
+      </div>
 
 
-                                    <label class="custom-label col-md-4 text-md-right align-middle">Name</label>
+      <div class="inner-tab-section">
+        <div class="add-employees-sec">
+          <form [formGroup]="employeeForm">
+            <div class="add-employees-detail">
+              <div class="add-employees-inner">
+                <div class="add-employees2">
+                  <div class="row">
 
-                                    <div class="select-employee col-md-5 ">
-                                        <input type="text" formControlName="name" class="form-control"
-                                            placeholder="Enter Employee Name">
-                                    </div>
-                                </div>
-                            </div>
 
+                    <label class="custom-label col-md-4 text-md-right align-middle">Name</label>
 
-                        </div>
-
-                        <div class="btn-sec text-md-center">
-                            <input type="button" class="btn  btn-save btn-cancel" value="CANCEL" (click)="resetForm()">
-
-                            <input type="submit" class="btn btn-save" value="SAVE" [disabled]="saveEmployee.invalid"
-                                (click)="saveEmployee(employeeForm.value)">
-                        </div>
+                    <div class="select-employee col-md-5 ">
+                      <input type="text" formControlName="name" class="form-control" placeholder="Enter Employee Name">
                     </div>
-                </form>
+                  </div>
+                </div>
 
+
+              </div>
+
+              <div class="btn-sec text-md-center">
+                <input type="button" class="btn  btn-save btn-cancel" value="CANCEL" (click)="resetForm()">
+
+                <input type="submit" class="btn btn-save" value="SAVE" [disabled]="saveEmployee.invalid"
+                  (click)="saveEmployee(employeeForm.value)">
+              </div>
             </div>
-        </div>
+          </form>
 
-    </div>
-</div>
+          <div class="inner-tab-section">
+            <div class="add-employees-sec">
+              <form [formGroup]="employeeForm">
+                <div class="add-employees-detail">
+                  <div class="add-employees-inner">
+                    <div class="add-employees2">
+                      <div class="row">
+                        <label class="custom-label col-md-4 text-md-right align-middle">Name</label>
+
+                        <div class="select-employee col-md-5 ">
+                          <input type="text" formControlName="name" class="form-control"
+                            placeholder="Enter Employee Name" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="btn-sec text-md-center">
+                    <input type="submit" class="btn  btn-save btn-cancel" value="CANCEL" />
+
+                    <input type="submit" class="btn btn-save" value="SAVE" [disabled]="employeeForm.invalid"
+                      (click)="saveEmployee(employeeForm.value)" />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>

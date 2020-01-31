@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
+import { BehaviorSubject, Observable } from "rxjs";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,8 +20,29 @@ const httpOptions = {
 export class CommonService {
   baseUrl = environment.backendBaseUrl + "/api";
 
-
   constructor(private http: HttpClient) { }
+
+  private customer_id = new BehaviorSubject<string>("");
+  private salon_id = new BehaviorSubject<string>("");
+
+  setCustomer_id(data: string) {
+    // Fire the update event with the new data
+    this.customer_id.next(data);
+  }
+
+  getCustomer_id(): Observable<string> {
+    return this.customer_id.asObservable();
+  }
+
+  setSalon_id(data: string) {
+    // Fire the update event with the new data
+    this.salon_id.next(data);
+  }
+
+  getSalon_id(): Observable<string> {
+    return this.salon_id.asObservable();
+  }
+
   saveSalonDetails(data) {
     return this.http.post(this.baseUrl + "/addsalon", data);
   }
@@ -30,22 +52,41 @@ export class CommonService {
   }
 
   addSalonService(data) {
-    return this.http.post(this.baseUrl + "/addsalonservices", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/addsalonservices",
+      data,
+      httpOptions
+    );
   }
 
   removeSalonService(data) {
-    return this.http.post(this.baseUrl + "/removesalonservice", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/removesalonservice",
+      data,
+      httpOptions
+    );
   }
 
   getSalonData(data) {
     return this.http.post(this.baseUrl + "/salondatabyuser", data, httpOptions);
   }
+  createToken(data) {
+    return this.http.post(this.baseUrl + "/create-token", data);
+  }
 
   getSalonServicesList(data) {
-    return this.http.post(this.baseUrl + "/salonservicelist", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/salonservicelist",
+      data,
+      httpOptions
+    );
   }
   getEmployeeServList(data) {
-    return this.http.post(this.baseUrl + "/employeeservicelist", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/employeeservicelist",
+      data,
+      httpOptions
+    );
   }
   getCategories(data) {
     return this.http.post(this.baseUrl + "/categories", data, httpOptions);
@@ -61,11 +102,18 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/assignservice", data, httpOptions);
   }
   addEmpService(data) {
-    return this.http.post(this.baseUrl + "/addsalonservices", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/addsalonservices",
+      data,
+      httpOptions
+    );
   }
   updateSalonService(data) {
-
-    return this.http.post(this.baseUrl + "/updatesalonservices", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/updatesalonservices",
+      data,
+      httpOptions
+    );
   }
 
   removeEmpService(data) {
@@ -88,7 +136,6 @@ export class CommonService {
 
   getSalonDetailsData(data) {
     return this.http.post(this.baseUrl + "/get-salon", data);
-
   }
 
   addSalonTIming(data) {
@@ -98,4 +145,7 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/salonweeklyslot", data, httpOptions);
   }
 
+  getSalonSubscriptionDetail(data) {
+    return this.http.post(this.baseUrl + "/salon-subscribe-detail", data);
+  }
 }

@@ -50,6 +50,10 @@ var salonSchema = mongoose.Schema({
     type: String,
     default: false
   },
+  isSubscribed: {
+    type: Boolean,
+    default: false
+  },
   employees: {
     type: [mongoose.Types.ObjectId],
     ref: "employees"
@@ -61,6 +65,10 @@ var salonSchema = mongoose.Schema({
   isDeclined: {
     type: Boolean,
     default: false
+  },
+  customer_id: {
+    type: String,
+    default: null
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));
