@@ -275,5 +275,9 @@ export class EmployeeComponent implements OnInit {
     this.isEMployeeModal = false;
 
   }
+  openEditServiceModal(element) {
+    this.isEMployeeModal = true;
+    this.employeeData = element;
+  }
 
 }

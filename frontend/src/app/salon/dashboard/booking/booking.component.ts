@@ -29,12 +29,20 @@ export class BookingComponent implements OnInit {
     this.user_id = sessionStorage.getItem("userId");
     this.getBookingData();
   }
+  paginate(event) {
+    this.page = event.pageIndex + 1;
+    this.count = event.pageSize;
+    this.getBookingData();
+  }
   getBookingData() {
     let Data = {
       user_id: this.user_id
     }
     this.noRecordsFound = false;
 
+  }
+  changeBooking(element) {
+    console.log("element", element)
   }
 
 }
