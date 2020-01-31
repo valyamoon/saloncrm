@@ -14,7 +14,7 @@ import { log } from 'util';
 })
 export class TimingComponent implements OnInit {
   timingForm: FormGroup;
-
+  min: any;
   user_id: string;
   salonData: any;
   salonTiming: any = [];
@@ -85,27 +85,9 @@ export class TimingComponent implements OnInit {
 
   ngOnInit() {
     this.user_id = sessionStorage.getItem("userId");
-
-    // this.timingForm = this.fb.group({
-    //   days: ["", Validators.required],
-    //   status: ["", Validators.required],
-    //   opentime: ["", Validators.required],
-    //   closetime: ["", Validators.required]
-    // });
     this.getSalonData();
-    // this.createform();
-
 
   }
-
-  // BuildFormDynamic(allDays): FormGroup {
-  //   return this.fb.group({
-  //     days: [allDays.days],
-  //     opentime: [allDays.opentime],
-  //     closetime: [allDays.closetime],
-  //     status: [allDays.status]
-  //   })
-  // }
 
 
   onOpenTimeSelect(event) {
