@@ -1,0 +1,82 @@
+<div class="promcodeWrapper">
+  <div class="header">
+    <button
+      class="addPromoCode btn btn-primary btn-sign-in"
+      (click)="showAddModal()"
+    >
+      Add Promocode
+    </button>
+  </div>
+  <div class="mainSection">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Promocodes
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="promocodesArea" *ngFor="let item of promocodesListing">
+          <div class="promocode">{{ item.name }}</div>
+          <div class="promocode">{{ item.value | currency: "USD" }}</div>
+          <div class="promocode" (click)="deletePromocode(item)">
+            <img src="../../../../assets/images/delete.svg" class="delete" />
+          </div>
+        </div>
+        <div class="noRecords" *ngIf="noRecordsFound">
+          No Promocodes Yet!!!
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="modelOverlay" *ngIf="showAddPromocode">
+    <div class="headerText"><h3>Add Promocode</h3></div>
+    <div class="main-content">
+      <form [formGroup]="addPromocodeForm">
+        <div class="fields">
+          <label class="labels">Name</label>
+          <input
+            type="text"
+            placeholder="Name"
+            class="form-control inp"
+            formControlName="name"
+          />
+        </div>
+        <div class="fields">
+          <label class="labels">Value</label>
+          <input
+            type="number"
+            placeholder="$"
+            class="form-control inp"
+            formControlName="value"
+          />
+        </div>
+        <div class="fields">
+          <label class="labels">Description</label>
+          <input
+            type="text"
+            placeholder="Description"
+            class="form-control inp"
+            formControlName="description"
+          />
+        </div>
+        <div class="fields">
+          <label class="labels">Terms & Condition</label>
+          <input
+            type="text"
+            placeholder="Terms & Condition"
+            class="form-control inp"
+            formControlName="termsAndCondition"
+          />
+        </div>
+        <button
+          class="btn btn-primary btn-sign-in add"
+          [disabled]="addPromocodeForm.invalid"
+          (click)="addPromocodes(addPromocodeForm.value)"
+        >
+          Add
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

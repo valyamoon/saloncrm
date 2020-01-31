@@ -14,6 +14,7 @@ import { SalondetailsComponent } from "./dashboard/salondetails/salondetails.com
 import { EditsalonComponent } from "./dashboard/editsalon/editsalon.component";
 import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
 import { SubscriptionComponent } from "./dashboard/subscription/subscription.component";
+import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
 
 const routes: Routes = [
   { path: "", component: LoginComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
       { path: "subscription", component: SubscriptionComponent },
       { path: "add-service", component: AddServiceComponent },
       { path: "timing", component: TimingComponent },
+      { path: "promocode", component: PromcodeComponent },
       { path: "subscribe", component: SubscribeComponent }
     ]
   }
@@ -41,4 +43,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [AuthGuard, AuthService]
 })
-export class SalonRoutingModule { }
+export class SalonRoutingModule {}

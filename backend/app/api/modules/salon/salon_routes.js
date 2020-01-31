@@ -1,4 +1,4 @@
-module.exports = function (router) {
+module.exports = function(router) {
   var salon = require("./controllers/salon_ctrl");
 
   var utils = require("../../../lib/util");
@@ -30,6 +30,7 @@ module.exports = function (router) {
   router.post("/salon-subscribe-detail", salon.subscribedSalonDetails);
   router.post("/create-token", salon.createCardToken);
   router.post("/updateemployee", salon.updateEmployee);
+  router.post("/delete-promocode", salon.deletePromocode);
 
   // router.get('/listUser', middlewares, user.getUserList);
   return router;

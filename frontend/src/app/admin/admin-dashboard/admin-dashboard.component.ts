@@ -12,12 +12,17 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.adminServ.getHeaderResponse().subscribe((data: any) => {
+      console.log("DATA", data);
       this.isSelectorShown = !data;
 
       this.isSelectorShown = !this.isSelectorShown;
+      console.log(this.isSelectorShown);
     });
   }
 
+  hideMenu() {
+    this.isSelectorShown = true;
+  }
   // this.adminServ.g(data){
   //   this.isSelectorShown =  !this.isSelectorShown;
 

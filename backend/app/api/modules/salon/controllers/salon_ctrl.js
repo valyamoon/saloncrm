@@ -58,7 +58,7 @@ module.exports = {
   bookSlot: bookSlot,
   getSalonWeeklySlots: getSalonWeeklySlots,
   updateEmployee: updateEmployee,
-
+  deletePromocode: deletePromocode,
   subscribedSalonDetails: subscribedSalonDetails,
   createCardToken: createCardToken
 };
@@ -71,7 +71,6 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
-
   async function saveSalonDetails() {
     try {
       var image_path;
@@ -96,7 +95,7 @@ function saveSalonDetails(req, res) {
             coordinates: coordinates
           };
           if (req.files) {
-            mkdirp(constant.PROFILEIMAGE, async function (err) {
+            mkdirp(constant.PROFILEIMAGE, async function(err) {
               let timeStamp = Date.now();
 
               let extension;
@@ -142,7 +141,7 @@ function saveSalonDetails(req, res) {
                                 country: "US"
                               }
                             },
-                            async function (err, customer) {
+                            async function(err, customer) {
                               if (err) {
                                 console.log(err);
                               } else {
@@ -221,7 +220,7 @@ function saveSalonDetails(req, res) {
       );
     }
   }
-  saveSalonDetails().then(function () { });
+  saveSalonDetails().then(function() {});
 }
 /**
  * Function is use to Fetch salon List(This is going to change as per new requirement)
@@ -290,7 +289,7 @@ function getSalons(req, res) {
         if (!salonList) {
         } else {
           let slots = [];
-          salonList.forEach(async function (c) {
+          salonList.forEach(async function(c) {
             slots.push({
               salon: c.name,
               _id: c._id,
@@ -308,7 +307,7 @@ function getSalons(req, res) {
             });
           });
 
-          slots.forEach(function (v) {
+          slots.forEach(function(v) {
             let todaysDate = new Date();
 
             let comingDate = req.body.date;
@@ -411,7 +410,7 @@ function getSalons(req, res) {
     }
   }
 
-  getSalons().then(function () { });
+  getSalons().then(function() {});
 }
 
 /**
@@ -455,7 +454,7 @@ function getSalonDetails(req, res) {
       );
     }
   }
-  getSalonDetails().then(function () { });
+  getSalonDetails().then(function() {});
 }
 /**
  * Function is use to Fetch Reviews and ratings of salon
@@ -504,7 +503,7 @@ function getReviewsAndRatingsList(req, res) {
     }
   }
 
-  getReviewsAndRatingsList().then(function () { });
+  getReviewsAndRatingsList().then(function() {});
 }
 /**
  * Function is use to Add services with respect to salon
@@ -597,10 +596,10 @@ function addSalonServices(req, res) {
           );
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
-  addSalonServices().then(function () { });
+  addSalonServices().then(function() {});
 }
 
 async function getRemovesalonservice(req, res) {
@@ -670,7 +669,7 @@ function addPromocodes(req, res) {
       );
     }
   }
-  addPromocodes().then(function () { });
+  addPromocodes().then(function() {});
 }
 /**
  * Function is use to Fetch promocode with respect to salon
@@ -685,16 +684,20 @@ function getPromoCodes(req, res) {
     try {
       if (req.body && req.body.salon_id) {
         let conditon = {
-          salon_id: mongoose.Types.ObjectId(req.body.salon_id)
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+          isActive: true,
+          isDeleted: false
         };
 
         let fetchPromoCodes = await commonQuery.findAll(promocodes, conditon);
         if (!fetchPromoCodes) {
-          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
         } else {
           // fetchPromoCodes.forEach(function(v){ delete v.salon_id; delete v.usedbyusers; ret });
 
-          fetchPromoCodes.forEach(function (v) {
+          fetchPromoCodes.forEach(function(v) {
             v.salon_id = undefined;
             v.usedbyusers = undefined;
           });
@@ -714,7 +717,7 @@ function getPromoCodes(req, res) {
       );
     }
   }
-  getPromoCodes().then(function () { });
+  getPromoCodes().then(function() {});
 }
 /**
  * Function is use to Fetch salon services chosen by salon
@@ -756,7 +759,7 @@ function getSalonServices(req, res) {
     }
   }
 
-  getSalonServices().then(function () { });
+  getSalonServices().then(function() {});
 }
 
 /**
@@ -811,7 +814,7 @@ function addEmployeeToSalon(req, res) {
       );
     }
   }
-  addEmployeeToSalon().then(function () { });
+  addEmployeeToSalon().then(function() {});
 }
 /**
  * Function is use to Update employee
@@ -826,22 +829,18 @@ async function updateEmployee(req, res) {
   if (req.body.id) {
     let updateCond = {
       _id: req.body.id
-    }
+    };
 
-    let updateEmp = await commonQuery.updateOneDocument(employees, updateCond, { name: req.body.name });
+    let updateEmp = await commonQuery.updateOneDocument(employees, updateCond, {
+      name: req.body.name
+    });
     if (updateEmp) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.SERVICE_UPDATED,
-          updateEmp
-        )
+        Response(constant.SUCCESS_CODE, constant.SERVICE_UPDATED, updateEmp)
       );
     }
   } else {
-    res.json(
-      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-    );
+    res.json(Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null));
   }
 }
 /**
@@ -856,7 +855,7 @@ function addServicesToEmployee(req, res) {
     try {
       if (req.body.employee_id && req.body) {
         let tempSev = [];
-        req.body.salonservices_id.forEach(function (v) {
+        req.body.salonservices_id.forEach(function(v) {
           tempSev.push(mongoose.Types.ObjectId(v));
         });
 
@@ -915,7 +914,7 @@ function addServicesToEmployee(req, res) {
       );
     }
   }
-  addServicesToEmployee().then(function () { });
+  addServicesToEmployee().then(function() {});
 }
 
 /**
@@ -959,7 +958,7 @@ function removeServiceToEmployee(req, res) {
     }
   }
 
-  removeServiceToEmployee().then(function () { });
+  removeServiceToEmployee().then(function() {});
 }
 
 function getCategoriesAndServicesOfSalon(req, res) {
@@ -984,9 +983,9 @@ function getCategoriesAndServicesOfSalon(req, res) {
           );
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   }
-  getCategoriesAndServicesOfSalon().then(function () { });
+  getCategoriesAndServicesOfSalon().then(function() {});
 }
 
 /**
@@ -1005,7 +1004,7 @@ function addSalonWeeklySlots(req, res) {
     try {
       async.each(
         req.body.daysData,
-        async function (record) {
+        async function(record) {
           let slotData = {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
@@ -1073,7 +1072,7 @@ function addSalonWeeklySlots(req, res) {
             }
           }
         },
-        function (err) {
+        function(err) {
           if (err) {
             console.log("Error @ 179", err);
           } else {
@@ -1155,7 +1154,7 @@ function viewSalonDetails(req, res) {
       );
     }
   }
-  viewSalonDetails().then(function () { });
+  viewSalonDetails().then(function() {});
 }
 
 function updateSalonDetails(req, res) {
@@ -1165,7 +1164,7 @@ function updateSalonDetails(req, res) {
     try {
       if (req.body && req.body.salon_id) {
         if (req.files) {
-          mkdirp(constant.PROFILEIMAGE, async function (err) {
+          mkdirp(constant.PROFILEIMAGE, async function(err) {
             let timeStamp = Date.now();
 
             let extension;
@@ -1276,7 +1275,7 @@ function updateSalonDetails(req, res) {
       );
     }
   }
-  updateSalonDetails().then(function () { });
+  updateSalonDetails().then(function() {});
 }
 
 function fetchSalonData(req, res) {
@@ -1312,7 +1311,7 @@ function fetchSalonData(req, res) {
     }
   }
 
-  fetchSalonData().then(function () { });
+  fetchSalonData().then(function() {});
 }
 
 function bookSlot(data) {
@@ -1343,7 +1342,7 @@ function bookSlot(data) {
       );
     }
   }
-  bookSlot().then(function () { });
+  bookSlot().then(function() {});
 }
 /**
  * Function is use to get Salon Details from user ID
@@ -1504,16 +1503,15 @@ async function getSalonWeeklySlots(req, res) {
     let cond = {
       user_id: req.body.user_id,
       salon_id: req.body.salon_id
-    }
-    let salonSotList = await commonQuery.fetch_all_sort_by_order(salonweeklyslot, cond);
+    };
+    let salonSotList = await commonQuery.fetch_all_sort_by_order(
+      salonweeklyslot,
+      cond
+    );
     //console.log("salonSotList", salonSotList);
     if (salonSotList) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.FETCHED_ALL_DATA,
-          salonSotList
-        )
+        Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonSotList)
       );
     }
   } else {
@@ -1521,7 +1519,6 @@ async function getSalonWeeklySlots(req, res) {
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
-
 }
 
 function createCardToken(req, res) {
@@ -1540,7 +1537,7 @@ function createCardToken(req, res) {
               cvc: req.body.cvc
             }
           },
-          async function (err, token) {
+          async function(err, token) {
             if (err) {
               console.log("ERROR", err);
               return res.json(
@@ -1557,7 +1554,7 @@ function createCardToken(req, res) {
               stripe.customers.createSource(
                 req.body.customer_id,
                 { source: token_id },
-                async function (err, card) {
+                async function(err, card) {
                   if (err) {
                     console.log(err);
                   } else {
@@ -1567,7 +1564,7 @@ function createCardToken(req, res) {
                         customer: req.body.customer_id,
                         items: [{ plan: req.body.plan_id }]
                       },
-                      async function (err, subscription) {
+                      async function(err, subscription) {
                         if (err) {
                           return res.json(
                             Response(
@@ -1657,7 +1654,7 @@ function createCardToken(req, res) {
       );
     }
   }
-  createCardToken().then(function () { });
+  createCardToken().then(function() {});
 }
 
 function subscribedSalonDetails(req, res) {
@@ -1693,5 +1690,42 @@ function subscribedSalonDetails(req, res) {
       );
     }
   }
-  subscribedSalonDetails().then(function () { });
+  subscribedSalonDetails().then(function() {});
+}
+
+function deletePromocode(req, res) {
+  console.log("ssssssss", req.body);
+  async function deletePromocode() {
+    try {
+      if (req.body && req.body.promocode_id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.promocode_id) };
+        let updateCondition = { isActive: false, isDeleted: true };
+
+        let deletePromocodes = await commonQuery.updateOneDocument(
+          promocodes,
+          condition,
+          updateCondition
+        );
+        console.log("DELETE PROMOCODE", deletePromocodes);
+        if (!deletePromocodes) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.DELETED_SUCCESS,
+              deletePromocodes
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  deletePromocode().then(function() {});
 }
