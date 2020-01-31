@@ -5,8 +5,12 @@
       <div class="col-lg-3">
         <div class="check-spa">
           <div class="edit-info">
-            <a [routerLink]="'edit-salon'" routerLinkActive="router-link-active">
-              <img src="../../../assets/images/edit.svg" /></a>
+            <a
+              [routerLink]="'edit-salon'"
+              routerLinkActive="router-link-active"
+            >
+              <img src="../../../assets/images/edit.svg"
+            /></a>
           </div>
 
           <div class="check-spa-image-outer">
@@ -31,7 +35,7 @@
               <h5>{{ salonData?.salonaddress }}</h5>
             </div>
           </div>
-          <div class="about-salon">
+          <!-- <div class="about-salon">
             <h2>
               About
             </h2>
@@ -41,13 +45,58 @@
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi ut aliquip ex ea commodo consequat.
             </p>
-          </div>
+          </div> -->
           <div class="about-salon">
             <h2>
-              <a [routerLink]="'subscription'" routerLinkActive="router-link-active">
+              <a
+                [routerLink]="'subscription'"
+                routerLinkActive="router-link-active"
+              >
                 Subscription Details
               </a>
             </h2>
+            <h2>
+              <a
+                [routerLink]="'promocode'"
+                routerLinkActive="router-link-active"
+              >
+                Manage Promocode
+              </a>
+            </h2>
+            <!-- <div class="subscription-box">
+              <div class="subscriptionWrapper">
+                <div class="mainSection">
+                  <div class="field">
+                    Name:
+                    <div class="value">
+                      hfghdfhg {{ subscriptionDetails.planDetails.id }}
+                    </div>
+                  </div>
+                  <div class="field">
+                    Amount:
+                    <div class="value">
+                      {{
+                      1250  subscriptionDetails.planDetails.amount | currency: "USD"
+                      }}
+                    </div>
+                  </div>
+                  <div class="field">
+                    Billed:
+                    <div class="value">
+                      1213132 {{ subscriptionDetails.planDetails.interval }}ly
+                    </div>
+                  </div>
+                  <div class="field">
+                    Subscribed On: 152251
+                    <div class="value">{{ subscriptionDate }}</div>
+                  </div>
+                  <div class="field">
+                    Expiry Date: 116321651
+                    <div class="value">{{ expirationDate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
           </div>
         </div>
       </div>

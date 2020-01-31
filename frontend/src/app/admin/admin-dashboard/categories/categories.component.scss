@@ -1,15 +1,15 @@
 .categoriesWrapper {
   .actionButtons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    // display: flex;
+    // align-items: center;
+    // justify-content: space-between;
 
     .headerTextArea {
-      width: 50%;
+      // width: 50%;
     }
 
     .btnActionArea {
-      width: 50%;
+      // width: 50%;
       display: flex;
       justify-content: flex-end;
       .btn-primary-btn {
@@ -87,4 +87,10 @@ table {
 }
 .btn-awke {
   margin-bottom: 9px;
+}
+@media screen and (max-width: 991px) {
+  .categoriesWrapper .modalSection .modal-content-area {
+    width: 100%;
+    margin: 15px;
+  }
 }
