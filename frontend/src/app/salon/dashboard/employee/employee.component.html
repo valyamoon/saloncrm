@@ -50,13 +50,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <mat-paginator
-        [length]="employeeCount"
-        [pageSize]="count"
-        (page)="paginate($event)"
-        [pageSizeOptions]="[5, 10, 15, 20]"
-        showFirstLastButtons
-      ></mat-paginator>
+      <mat-paginator [length]="employeeCount" [pageSize]="count" (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
     </div>
 
     <div *ngIf="noRecordsFound" class="noRecords">
@@ -74,20 +69,10 @@
       <div class="row add-employee">
         <div class="col-md-12">
           <label>Select Service:</label>
-          <mat-select-autocomplete
-            formControlName="service_id"
-            class="custom-ddl"
-            [placeholder]="'Options Selection'"
-            [errorMsg]="errorMessage"
-            [showErrorMsg]="showError"
-            [options]="serviceList"
-            [display]="'name'"
-            [value]="'id'"
-            [multiple]="true"
-            [labelCount]="2"
-            [selectedOptions]="selectedOptions"
-            (selectionChange)="getSelectedOptions($event)"
-          >
+          <mat-select-autocomplete formControlName="service_id" class="custom-ddl" [placeholder]="'Options Selection'"
+            [errorMsg]="errorMessage" [showErrorMsg]="showError" [options]="serviceList" [display]="'name'"
+            [value]="'id'" [multiple]="true" [labelCount]="2" [selectedOptions]="selectedOptions"
+            (selectionChange)="getSelectedOptions($event)">
           </mat-select-autocomplete>
         </div>
       </div>
@@ -101,4 +86,32 @@
       </button>
     </div>
   </div>
-</div>
+
+
+
+  <div class="userDetailsOverlay" *ngIf="isEMployeeModal">
+
+    <div class="main-section-area modal-md">
+      <div class="header">
+        <h4>Edit Employee</h4>
+      </div>
+      <div class="main-section">
+        <div class="row add-employee">
+          <div class="col-md-12">
+            <label>Employee Name:</label>
+            <input type="text" [(ngModel)]="editEmployeeData.name" class="form-control"
+              placeholder="Enter Employee Name">
+          </div>
+        </div>
+      </div>
+      <div class="btn-Area">
+        <button class="btn btn-primary btn-sign-in" (click)="updateEmpployee(editEmployeeData)">
+          Update
+        </button>
+        <button class=" btn btn-sign-in btn-primary" (click)="dismissEmpModal()">
+          Close
+        </button>
+
+      </div>
+    </div>
+  </div>

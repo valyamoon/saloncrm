@@ -23,6 +23,7 @@ const categories = require("../../admin/model/categoriesSchema");
 const salonservices = require("../model/salonservicesSchema");
 const reviewratings = require("../model/salonreviewsratingSchema");
 const services = require("../../admin/model/servicesSchema");
+const salonweeklyslot = require("../model/salonweeklyslotSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
@@ -55,6 +56,9 @@ module.exports = {
   updateSalonDetails: updateSalonDetails,
   fetchSalonData: fetchSalonData,
   bookSlot: bookSlot,
+  getSalonWeeklySlots: getSalonWeeklySlots,
+  updateEmployee: updateEmployee,
+
   subscribedSalonDetails: subscribedSalonDetails,
   createCardToken: createCardToken
 };
@@ -67,7 +71,7 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
-  console.log("SAVE SALON", req.body);
+
   async function saveSalonDetails() {
     try {
       var image_path;
@@ -92,7 +96,7 @@ function saveSalonDetails(req, res) {
             coordinates: coordinates
           };
           if (req.files) {
-            mkdirp(constant.PROFILEIMAGE, async function(err) {
+            mkdirp(constant.PROFILEIMAGE, async function (err) {
               let timeStamp = Date.now();
 
               let extension;
@@ -138,7 +142,7 @@ function saveSalonDetails(req, res) {
                                 country: "US"
                               }
                             },
-                            async function(err, customer) {
+                            async function (err, customer) {
                               if (err) {
                                 console.log(err);
                               } else {
@@ -217,7 +221,7 @@ function saveSalonDetails(req, res) {
       );
     }
   }
-  saveSalonDetails().then(function() {});
+  saveSalonDetails().then(function () { });
 }
 /**
  * Function is use to Fetch salon List(This is going to change as per new requirement)
@@ -286,7 +290,7 @@ function getSalons(req, res) {
         if (!salonList) {
         } else {
           let slots = [];
-          salonList.forEach(async function(c) {
+          salonList.forEach(async function (c) {
             slots.push({
               salon: c.name,
               _id: c._id,
@@ -304,7 +308,7 @@ function getSalons(req, res) {
             });
           });
 
-          slots.forEach(function(v) {
+          slots.forEach(function (v) {
             let todaysDate = new Date();
 
             let comingDate = req.body.date;
@@ -407,7 +411,7 @@ function getSalons(req, res) {
     }
   }
 
-  getSalons().then(function() {});
+  getSalons().then(function () { });
 }
 
 /**
@@ -451,7 +455,7 @@ function getSalonDetails(req, res) {
       );
     }
   }
-  getSalonDetails().then(function() {});
+  getSalonDetails().then(function () { });
 }
 /**
  * Function is use to Fetch Reviews and ratings of salon
@@ -500,7 +504,7 @@ function getReviewsAndRatingsList(req, res) {
     }
   }
 
-  getReviewsAndRatingsList().then(function() {});
+  getReviewsAndRatingsList().then(function () { });
 }
 /**
  * Function is use to Add services with respect to salon
@@ -593,10 +597,10 @@ function addSalonServices(req, res) {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
-  addSalonServices().then(function() {});
+  addSalonServices().then(function () { });
 }
 
 async function getRemovesalonservice(req, res) {
@@ -666,7 +670,7 @@ function addPromocodes(req, res) {
       );
     }
   }
-  addPromocodes().then(function() {});
+  addPromocodes().then(function () { });
 }
 /**
  * Function is use to Fetch promocode with respect to salon
@@ -690,7 +694,7 @@ function getPromoCodes(req, res) {
         } else {
           // fetchPromoCodes.forEach(function(v){ delete v.salon_id; delete v.usedbyusers; ret });
 
-          fetchPromoCodes.forEach(function(v) {
+          fetchPromoCodes.forEach(function (v) {
             v.salon_id = undefined;
             v.usedbyusers = undefined;
           });
@@ -710,7 +714,7 @@ function getPromoCodes(req, res) {
       );
     }
   }
-  getPromoCodes().then(function() {});
+  getPromoCodes().then(function () { });
 }
 /**
  * Function is use to Fetch salon services chosen by salon
@@ -752,7 +756,7 @@ function getSalonServices(req, res) {
     }
   }
 
-  getSalonServices().then(function() {});
+  getSalonServices().then(function () { });
 }
 
 /**
@@ -807,7 +811,38 @@ function addEmployeeToSalon(req, res) {
       );
     }
   }
-  addEmployeeToSalon().then(function() {});
+  addEmployeeToSalon().then(function () { });
+}
+/**
+ * Function is use to Update employee
+ * @access private
+ * @return json
+ * Created by Rashmi Ranjan
+ * @smartData Enterprises (I) Ltd
+ * Created on 30th Jan, 2020
+ */
+async function updateEmployee(req, res) {
+  console.log("req.body", req.body);
+  if (req.body.id) {
+    let updateCond = {
+      _id: req.body.id
+    }
+
+    let updateEmp = await commonQuery.updateOneDocument(employees, updateCond, { name: req.body.name });
+    if (updateEmp) {
+      res.json(
+        Response(
+          constant.SUCCESS_CODE,
+          constant.SERVICE_UPDATED,
+          updateEmp
+        )
+      );
+    }
+  } else {
+    res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+    );
+  }
 }
 /**
  * Function is use to assign services to employee
@@ -821,7 +856,7 @@ function addServicesToEmployee(req, res) {
     try {
       if (req.body.employee_id && req.body) {
         let tempSev = [];
-        req.body.salonservices_id.forEach(function(v) {
+        req.body.salonservices_id.forEach(function (v) {
           tempSev.push(mongoose.Types.ObjectId(v));
         });
 
@@ -880,7 +915,7 @@ function addServicesToEmployee(req, res) {
       );
     }
   }
-  addServicesToEmployee().then(function() {});
+  addServicesToEmployee().then(function () { });
 }
 
 /**
@@ -924,7 +959,7 @@ function removeServiceToEmployee(req, res) {
     }
   }
 
-  removeServiceToEmployee().then(function() {});
+  removeServiceToEmployee().then(function () { });
 }
 
 function getCategoriesAndServicesOfSalon(req, res) {
@@ -949,9 +984,9 @@ function getCategoriesAndServicesOfSalon(req, res) {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
-  getCategoriesAndServicesOfSalon().then(function() {});
+  getCategoriesAndServicesOfSalon().then(function () { });
 }
 
 /**
@@ -963,30 +998,35 @@ function getCategoriesAndServicesOfSalon(req, res) {
  * On dated 03-01-2020
  */
 function addSalonWeeklySlots(req, res) {
+  // console.log("req.body", req.body); return;
   if (req.body.salon_id && req.body.user_id) {
     var finalDataArr = [];
     var finalUpdateDataArr = [];
     try {
       async.each(
         req.body.daysData,
-        async function(record) {
+        async function (record) {
           let slotData = {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
             days: record.days,
-            starttime: record.fromTime,
-            endtime: record.toTime,
-            status: record.status
+            starttime: record.opentime,
+            endtime: record.closetime,
+            status: record.status,
+            order_sort: record.order_sort
           };
+          //console.log("req.body", req.body); return;
           let countCond = {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
             days: record.days
           };
+          //  console.log("countCond", countCond); return;
           let salonWeeklySlotCount = await commonQuery.countData(
             salonweeklyslot,
             countCond
           );
+
           if (salonWeeklySlotCount == 0) {
             let saveSalonWeeklySlot = await commonQuery.InsertIntoCollection(
               salonweeklyslot,
@@ -1018,9 +1058,10 @@ function addSalonWeeklySlots(req, res) {
               days: fetchOne.days
             };
             let updateSlotData = {
-              starttime: record.fromTime,
-              endtime: record.toTime,
-              status: record.status
+              starttime: record.opentime,
+              endtime: record.closetime,
+              status: record.status,
+              order_sort: record.order_sort
             };
             let updateSalonWeeklySlot = commonQuery.updateOne(
               salonweeklyslot,
@@ -1032,7 +1073,7 @@ function addSalonWeeklySlots(req, res) {
             }
           }
         },
-        function(err) {
+        function (err) {
           if (err) {
             console.log("Error @ 179", err);
           } else {
@@ -1114,7 +1155,7 @@ function viewSalonDetails(req, res) {
       );
     }
   }
-  viewSalonDetails().then(function() {});
+  viewSalonDetails().then(function () { });
 }
 
 function updateSalonDetails(req, res) {
@@ -1124,7 +1165,7 @@ function updateSalonDetails(req, res) {
     try {
       if (req.body && req.body.salon_id) {
         if (req.files) {
-          mkdirp(constant.PROFILEIMAGE, async function(err) {
+          mkdirp(constant.PROFILEIMAGE, async function (err) {
             let timeStamp = Date.now();
 
             let extension;
@@ -1235,7 +1276,7 @@ function updateSalonDetails(req, res) {
       );
     }
   }
-  updateSalonDetails().then(function() {});
+  updateSalonDetails().then(function () { });
 }
 
 function fetchSalonData(req, res) {
@@ -1271,7 +1312,7 @@ function fetchSalonData(req, res) {
     }
   }
 
-  fetchSalonData().then(function() {});
+  fetchSalonData().then(function () { });
 }
 
 function bookSlot(data) {
@@ -1302,7 +1343,7 @@ function bookSlot(data) {
       );
     }
   }
-  bookSlot().then(function() {});
+  bookSlot().then(function () { });
 }
 /**
  * Function is use to get Salon Details from user ID
@@ -1457,6 +1498,32 @@ async function removeEmployee(req, res) {
   }
 }
 
+async function getSalonWeeklySlots(req, res) {
+  //console.log("req.body", req.body);
+  if (req.body.user_id && req.body.salon_id) {
+    let cond = {
+      user_id: req.body.user_id,
+      salon_id: req.body.salon_id
+    }
+    let salonSotList = await commonQuery.fetch_all_sort_by_order(salonweeklyslot, cond);
+    //console.log("salonSotList", salonSotList);
+    if (salonSotList) {
+      res.json(
+        Response(
+          constant.SUCCESS_CODE,
+          constant.FETCHED_ALL_DATA,
+          salonSotList
+        )
+      );
+    }
+  } else {
+    return res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+    );
+  }
+
+}
+
 function createCardToken(req, res) {
   console.log(req.body);
   var card_id;
@@ -1473,7 +1540,7 @@ function createCardToken(req, res) {
               cvc: req.body.cvc
             }
           },
-          async function(err, token) {
+          async function (err, token) {
             if (err) {
               console.log("ERROR", err);
               return res.json(
@@ -1490,7 +1557,7 @@ function createCardToken(req, res) {
               stripe.customers.createSource(
                 req.body.customer_id,
                 { source: token_id },
-                async function(err, card) {
+                async function (err, card) {
                   if (err) {
                     console.log(err);
                   } else {
@@ -1500,7 +1567,7 @@ function createCardToken(req, res) {
                         customer: req.body.customer_id,
                         items: [{ plan: req.body.plan_id }]
                       },
-                      async function(err, subscription) {
+                      async function (err, subscription) {
                         if (err) {
                           return res.json(
                             Response(
@@ -1590,7 +1657,7 @@ function createCardToken(req, res) {
       );
     }
   }
-  createCardToken().then(function() {});
+  createCardToken().then(function () { });
 }
 
 function subscribedSalonDetails(req, res) {
@@ -1626,5 +1693,5 @@ function subscribedSalonDetails(req, res) {
       );
     }
   }
-  subscribedSalonDetails().then(function() {});
+  subscribedSalonDetails().then(function () { });
 }

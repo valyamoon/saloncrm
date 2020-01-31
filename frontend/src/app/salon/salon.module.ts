@@ -68,6 +68,7 @@ import { SubscriptionComponent } from './dashboard/subscription/subscription.com
     SelectAutocompleteModule,
     MatTabsModule,
     MatSelectModule,
+    MatTabsModule,
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg"
     }),
@@ -77,4 +78,4 @@ import { SubscriptionComponent } from './dashboard/subscription/subscription.com
     NgxMaskModule.forRoot()
   ]
 })
-export class SalonModule {}
+export class SalonModule { }

@@ -29,7 +29,7 @@ export class AddEmployeeComponent implements OnInit {
     private toastrServ: ToastrService,
     private router: Router,
     public dialog: MatDialog
-  ) {}
+  ) { }
   ngOnInit() {
     this.user_id = sessionStorage.getItem("userId");
     this.getSalonData(this.user_id);
@@ -61,6 +61,9 @@ export class AddEmployeeComponent implements OnInit {
     );
   }
 
+  resetForm() {
+    this.router.navigate(["salon/home/profile"]);
+  }
   saveEmployee(data) {
     let dataToPass = {
       name: data.name,

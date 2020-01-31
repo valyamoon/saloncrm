@@ -53,7 +53,9 @@ export class AddServiceComponent implements OnInit {
     })
   }
 
-
+  resetForm() {
+    this.router.navigate(["salon/home/profile"]);
+  }
   getSalonData() {
     // console.log("GetUser ID ", userId);
     let data = {
@@ -156,6 +158,14 @@ export class AddServiceComponent implements OnInit {
         });
       }
     );
+  }
+
+  removeField(index) {
+    // console.log("this.serviceArray.length", this.serviceArray.length)
+    if (this.serviceArray.length == 1)
+      return false;
+    else
+      this.serviceArray.removeAt(index);
   }
 
 }

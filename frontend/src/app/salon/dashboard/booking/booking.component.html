@@ -1,1 +1,53 @@
-<p>booking works!</p>
+<div class="check-spa-outer m-t-40">
+
+    <div class="create-availabillity">
+
+        <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+
+
+            <!-- <Modal Popup for add categories end here> -->
+            <table mat-table [dataSource]="bokingList">
+                <!-- Position Column -->
+                <ng-container matColumnDef="bookingid">
+                    <th mat-header-cell *matHeaderCellDef>Booking #ID</th>
+                    <td mat-cell *matCellDef="let element"></td>
+                </ng-container>
+                <!-- Name Column -->
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let element"></td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Booking Date</th>
+                    <td mat-cell *matCellDef="let element"></td>
+                </ng-container>
+                <ng-container matColumnDef="service">
+                    <th mat-header-cell *matHeaderCellDef>Service</th>
+                    <td mat-cell *matCellDef="let element"></td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element" class="action-btns ">
+
+                        <a (click)="changeBooking(element)" class="delete-info">
+                            <img src="../../../../assets/images/delete-icon.svg">
+                        </a>
+
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+            <mat-paginator [length]="bookingCount" [pageSize]="count" (page)="paginate($event)"
+                [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <div *ngIf="noRecordsFound" class="noRecords">
+            <div class="noRec">No Records Found</div>
+        </div>
+    </div>
+</div>

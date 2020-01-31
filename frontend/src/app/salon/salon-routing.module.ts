@@ -41,4 +41,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [AuthGuard, AuthService]
 })
-export class SalonRoutingModule {}
+export class SalonRoutingModule { }
