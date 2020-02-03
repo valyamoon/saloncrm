@@ -20,7 +20,7 @@ const httpOptions = {
 export class CommonService {
   baseUrl = environment.backendBaseUrl + "/api";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private customer_id = new BehaviorSubject<string>("");
   private salon_id = new BehaviorSubject<string>("");
@@ -124,11 +124,16 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/updateemployee", data, httpOptions);
   }
 
+  addPromocodes(data) {
+    return this.http.post(this.baseUrl + "/add-promocode", data);
+  }
 
-
-
-
-
+  getPromocode(data) {
+    return this.http.post(this.baseUrl + "/promocodes", data);
+  }
+  deletePromocodes(data) {
+    return this.http.post(this.baseUrl + "/delete-promocode", data);
+  }
 
   updateSalonDetails(data) {
     return this.http.post(this.baseUrl + "/update-salon", data);
@@ -139,7 +144,11 @@ export class CommonService {
   }
 
   addSalonTIming(data) {
-    return this.http.post(this.baseUrl + "/addsalonweeklyslot", data, httpOptions);
+    return this.http.post(
+      this.baseUrl + "/addsalonweeklyslot",
+      data,
+      httpOptions
+    );
   }
   getSalonTiming(data) {
     return this.http.post(this.baseUrl + "/salonweeklyslot", data, httpOptions);

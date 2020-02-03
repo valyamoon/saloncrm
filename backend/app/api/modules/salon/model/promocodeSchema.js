@@ -26,6 +26,14 @@ var promocodeSchema = mongoose.Schema(
     termsAndCondition: {
       type: String,
       default: null
+    },
+    isActive: {
+      type: Boolean,
+      default: true
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }

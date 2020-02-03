@@ -58,7 +58,7 @@ module.exports = {
   bookSlot: bookSlot,
   getSalonWeeklySlots: getSalonWeeklySlots,
   updateEmployee: updateEmployee,
-
+  deletePromocode: deletePromocode,
   subscribedSalonDetails: subscribedSalonDetails,
   createCardToken: createCardToken
 };
@@ -71,7 +71,6 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
-
   async function saveSalonDetails() {
     try {
       var image_path;
@@ -683,12 +682,16 @@ function getPromoCodes(req, res) {
     try {
       if (req.body && req.body.salon_id) {
         let conditon = {
-          salon_id: mongoose.Types.ObjectId(req.body.salon_id)
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+          isActive: true,
+          isDeleted: false
         };
 
         let fetchPromoCodes = await commonQuery.findAll(promocodes, conditon);
         if (!fetchPromoCodes) {
-          res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
         } else {
           // fetchPromoCodes.forEach(function(v){ delete v.salon_id; delete v.usedbyusers; ret });
 
@@ -824,22 +827,18 @@ async function updateEmployee(req, res) {
   if (req.body.id) {
     let updateCond = {
       _id: req.body.id
-    }
+    };
 
-    let updateEmp = await commonQuery.updateOneDocument(employees, updateCond, { name: req.body.name });
+    let updateEmp = await commonQuery.updateOneDocument(employees, updateCond, {
+      name: req.body.name
+    });
     if (updateEmp) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.SERVICE_UPDATED,
-          updateEmp
-        )
+        Response(constant.SUCCESS_CODE, constant.SERVICE_UPDATED, updateEmp)
       );
     }
   } else {
-    res.json(
-      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-    );
+    res.json(Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null));
   }
 }
 /**
@@ -1512,16 +1511,15 @@ async function getSalonWeeklySlots(req, res) {
     let cond = {
       user_id: req.body.user_id,
       salon_id: req.body.salon_id
-    }
-    let salonSotList = await commonQuery.fetch_all_sort_by_order(salonweeklyslot, cond);
+    };
+    let salonSotList = await commonQuery.fetch_all_sort_by_order(
+      salonweeklyslot,
+      cond
+    );
     //console.log("salonSotList", salonSotList);
     if (salonSotList) {
       res.json(
-        Response(
-          constant.SUCCESS_CODE,
-          constant.FETCHED_ALL_DATA,
-          salonSotList
-        )
+        Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonSotList)
       );
     }
   } else {
@@ -1529,7 +1527,6 @@ async function getSalonWeeklySlots(req, res) {
       Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
     );
   }
-
 }
 
 function createCardToken(req, res) {
@@ -1702,4 +1699,41 @@ function subscribedSalonDetails(req, res) {
     }
   }
   subscribedSalonDetails().then(function () { });
+}
+
+function deletePromocode(req, res) {
+  console.log("ssssssss", req.body);
+  async function deletePromocode() {
+    try {
+      if (req.body && req.body.promocode_id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.promocode_id) };
+        let updateCondition = { isActive: false, isDeleted: true };
+
+        let deletePromocodes = await commonQuery.updateOneDocument(
+          promocodes,
+          condition,
+          updateCondition
+        );
+        console.log("DELETE PROMOCODE", deletePromocodes);
+        if (!deletePromocodes) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.DELETED_SUCCESS,
+              deletePromocodes
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  deletePromocode().then(function () { });
 }

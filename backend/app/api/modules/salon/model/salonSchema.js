@@ -69,6 +69,10 @@ var salonSchema = mongoose.Schema({
   customer_id: {
     type: String,
     default: null
+  },
+  isStripeCreated: {
+    type: Boolean,
+    default: false
   }
 });
 var salon = (module.exports = mongoose.model("salon", salonSchema));

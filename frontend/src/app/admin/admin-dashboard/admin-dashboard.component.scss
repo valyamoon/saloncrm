@@ -49,7 +49,7 @@
     background-color: #f1f5f9;
     .selectorSection {
       padding: 0;
-      width: 210px;
+      width: 280px;
       background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%)
         0% 0% no-repeat padding-box;
       border-color: transparent;
@@ -58,7 +58,15 @@
       margin-top: 0;
       min-height: 400px;
       padding-top: 15px;
-
+      z-index: 0;
+      @media only screen and (max-width: 767px) {
+        width: 100%;
+        position: fixed;
+        z-index: 9;
+        bottom: 0;
+        top: 53px;
+        display: none;
+      }
       .menus-app {
         display: flex;
         flex-direction: column;
@@ -81,16 +89,34 @@
       }
     }
     .selectorSection.danger {
-      right: 14%;
       transition: 1s;
       width: 0;
+      overflow: hidden;
+      @media only screen and (max-width: 767px) {
+        display: block;
+        width: 100%;
+      }
     }
     .selectedSection {
       width: 85%;
       padding: 25px 15px;
+      @media only screen and (max-width: 767px) {
+        width: 100%;
+      }
     }
     .selectedSection.fullShow {
       width: 100% !important;
     }
+  }
+}
+.profile-sm {
+  color: #fff;
+  padding-left: 20px;
+  padding-right: 8px;
+  display: none;
+}
+@media screen and (max-width: 767px) {
+  .profile-sm {
+    display: block;
   }
 }
