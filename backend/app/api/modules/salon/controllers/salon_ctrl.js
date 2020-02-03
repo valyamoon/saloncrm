@@ -513,106 +513,104 @@ function getReviewsAndRatingsList(req, res) {
  * Created by SmartData
  * @smartData Enterprises (I) Ltd
  */
-function addSalonServices(req, res) {
-  async function addSalonServices() {
-    try {
-      let serviceName;
-      let categoryName;
-      if (req.body.salon_id && req.body) {
-        let servCondition = {
-          _id: mongoose.Types.ObjectId(req.body.service_id)
-        };
-        let isserviceName = await commonQuery.findoneData(
-          services,
-          servCondition
-        );
+async function addSalonServices(req, res) {
+  if (req.body.category_id && req.body.salon_id && req.body.services) {
+    var salonService = [];
+    var categoryId = req.body.category_id;
+    var salonId = req.body.salon_id;
+    async.each(req.body.services, async function (serviceData, firstCB) {
+      let serviceName = await util.getServcieName(services, serviceData.service_id);
+      var categoryName = await util.getCategoryName(categories, categoryId);
+      // console.log("serviceName+++categoryName", serviceName + "***" + categoryName); return;
+      var countCond = {
+        salon_id: salonId,
+        service_id: serviceData.service_id,
+        category_id: categoryId
+      };
+      let countRecord = await commonQuery.countData(salonservices, countCond);
 
-        if (!isserviceName) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-          );
-        } else {
-          serviceName = isserviceName.name;
-        }
-
-        let catCondition = {
-          _id: mongoose.Types.ObjectId(req.body.category_id)
-        };
-        let iscategorynname = await commonQuery.findoneData(
-          categories,
-          catCondition
-        );
-
-        if (!iscategorynname) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
-          );
-        } else {
-          categoryName = iscategorynname.catname;
-        }
-
+      if (countRecord == 0) {
         let newsalonService = new salonservices({
-          price: req.body.price,
-          duration: req.body.duration,
-          salon_id: req.body.salon_id,
-          service_id: req.body.service_id,
-          category_id: req.body.category_id,
+          price: serviceData.price,
+          duration: serviceData.duration,
+          salon_id: salonId,
+          service_id: serviceData.service_id,
+          category_id: categoryId,
           servicename: serviceName,
           categoryname: categoryName
         });
-
         let saveServiceToSalon = await commonQuery.InsertIntoCollection(
           salonservices,
           newsalonService
         );
-
         if (!saveServiceToSalon) {
           res.json(
             Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
           );
         } else {
-          let condition = {
-            _id: req.body.salon_id
-          };
 
-          let updateCondition = {
-            isservicesadded: true
-          };
+          salonService.push(saveServiceToSalon);
+          let condition = { _id: salonId };
+
+          let updateCondition = { isservicesadded: true };
 
           let updateSalonData = await commonQuery.updateOneDocument(
             salons,
             condition,
             updateCondition
           );
-          if (!updateSalonData) {
-          } else {
+          if (!updateSalonData) { } else {
+            console.log("saveServiceToSalon===========>", saveServiceToSalon);
           }
-
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.ADDED_SUCCESS,
-              saveServiceToSalon
-            )
-          );
         }
+      } else {
+        let updateData = {
+          price: serviceData.price,
+          duration: serviceData.duration,
+          salon_id: salonId,
+          service_id: serviceData.service_id,
+          category_id: categoryId,
+          servicename: serviceName,
+          categoryname: categoryName
+        }
+        let updateServiceToSalon = await commonQuery.updateOne(salonservices, countCond, updateData);
+        salonService.push(updateServiceToSalon);
       }
-    } catch (error) { }
+
+      // firstCB();
+    }, function (err, data) {
+      if (err) {
+        console.log("Error @427", err)
+      } else {
+        res.json(
+          Response(
+            constant.SUCCESS_CODE,
+            constant.ADDED_SUCCESS,
+            salonService
+          )
+        );
+      }
+    });
+
+
+  } else {
+    return res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
+    );
   }
 
-  addSalonServices().then(function () { });
 }
 
 async function getRemovesalonservice(req, res) {
-  if (req.body.user_id && req.body.salonService) {
-    let condition = {
-      user_id: mongoose.Types.ObjectId(req.body.user_id)
-    };
-    let salonObj = await commonQuery.findoneData(salons, condition, "_id");
+  if (req.body.salonService) {
+    // let condition = {
+    //   _id: req.body.salonService.salonId
+    // };
+    // let salonObj = await commonQuery.findoneData(salons, condition, "_id");
 
-    var salonId = salonObj._id;
-    condition = {
-      salon_id: salonId,
+    // var salonId = salonObj.salon_id;
+    let condition = {
+      salon_id: req.body.salonService.salon_id,
       service_id: req.body.salonService.service_id,
       category_id: req.body.salonService.category_id
     };
@@ -1478,7 +1476,7 @@ async function updateSalonServices(req, res) {
 }
 
 async function removeEmployee(req, res) {
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body); return;
   if (req.body._id) {
     let updateCond = {
       _id: req.body._id
@@ -1487,6 +1485,16 @@ async function removeEmployee(req, res) {
     let removeEmp = await commonQuery.hard_delete(employees, updateCond);
     // console.log("updateService", updateService);
     if (removeEmp) {
+      let salonUpdate = await commonQuery.removeEmployeeFromSalon(
+        salons,
+        req.body.salon_id,
+        req.body._id
+      );
+
+      if (!salonUpdate) {
+        Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error);
+      } else {
+      }
       res.json(
         Response(constant.SUCCESS_CODE, constant.DELETED_SUCCESS, removeEmp)
       );
