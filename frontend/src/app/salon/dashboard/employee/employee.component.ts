@@ -216,6 +216,8 @@ export class EmployeeComponent implements OnInit {
     );
   }
   deleteEmployee(dataToPass) {
+    dataToPass.salon_id = this.salonData._id;
+    // console.log("dataToPass", dataToPass)
     this.commServ.removeEmpService(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
