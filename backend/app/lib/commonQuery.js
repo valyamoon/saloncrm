@@ -1930,8 +1930,7 @@ commonQuery.sendEmailFunction = function sendEmailFunction(obj) {
     let mailKeyword = "";
     var mailData = {
       userId: dataObj.userId ? dataObj.userId : "",
-      email: dataObj.email ? dataObj.email : "",
-      password: dataObj.password ? dataObj.password : ""
+      email: dataObj.email ? dataObj.email : ""
     };
 
     if (obj.mailType == constant.varibleType) {
