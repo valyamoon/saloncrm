@@ -25,7 +25,7 @@ const routes: Routes = [
       import("../app/user/user.module").then(m => m.UserModule)
   },
   {
-    path: "create-password",
+    path: "create-password/:id",
     loadChildren: () =>
       import("../app/createpassword/createpassword.module").then(
         m => m.CreatepasswordModule
