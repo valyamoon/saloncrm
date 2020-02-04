@@ -168,26 +168,6 @@ var replacePlaceholders = function(data, mailbody, subj, callbackr) {
       case "BASEURL":
         return config.baseUrl;
         break;
-      case "FirstName":
-        return data.firstName.charAt(0).toUpperCase() +
-          data.firstName.slice(1).toLowerCase()
-          ? data.firstName.charAt(0).toUpperCase() +
-              data.firstName.slice(1).toLowerCase()
-          : "";
-        break;
-      case "LastName":
-        return (
-          data.lastName.charAt(0).toUpperCase() +
-          data.lastName.slice(1).toLowerCase()
-        );
-        break;
-      case "Username":
-        return data.userName.charAt(0).toUpperCase() +
-          data.userName.slice(1).toLowerCase()
-          ? data.userName.charAt(0).toUpperCase() +
-              data.userName.slice(1).toLowerCase()
-          : "";
-        break;
       case "Password":
         return data.password;
         break;
