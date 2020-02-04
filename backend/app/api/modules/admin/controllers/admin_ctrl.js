@@ -224,7 +224,7 @@ function acceptSalonRequest(req, res) {
               message: messageTemplates.acceptSalonRequest["message"]
             };
 
-            let sendEmailConfirmation = await mailer.sendMail(
+            let sendEmailConfirmation = await mailer.sendMailTO(
               activeSalonLogin.email,
               messagetTemplate
             );
@@ -1350,11 +1350,9 @@ function forgotPassword(req, res) {
             var userMailData = {
               userId: userObj._id,
               email: userObj.email ? userObj.email : "",
-              firstName: userObj.firstName ? userObj.firstName : "",
-              lastName: userObj.lastName ? userObj.lastName : "",
-              userName: userObj.userName ? userObj.userName : "",
               link: baseUrl + "#/create-password/" + updateKey.resetkey
             };
+            console.log("BSSSSS", userMailData);
             let obj = {
               data: userMailData,
               mailType: "Forget Password" //constant.varibleType.FORGET_PASSWORD //"Forget Password"
