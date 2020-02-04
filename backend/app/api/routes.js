@@ -5,5 +5,6 @@ module.exports = function(express) {
   require("./modules/user/user_routes")(router);
   require("./modules/salon/salon_routes")(router);
   require("./modules/admin/admin_routes")(router);
+
   return router;
 };

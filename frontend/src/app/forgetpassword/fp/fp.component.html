@@ -1,0 +1,26 @@
+<div class="forgetpasswordwrapper">
+  <form
+    class="main-content col-lg-6 col-md-6 col-sm-12"
+    [formGroup]="forgetPasswordForm"
+  >
+    <div class="inpArea">
+      <label>Email</label>
+      <input
+        type="text"
+        placeholder="Enter your email"
+        formControlName="email"
+        class="form-control"
+      />
+    </div>
+    <button
+      class="btn btn-sign-in"
+      [disabled]="forgetPasswordForm.invalid"
+      (click)="submitEmail(forgetPasswordForm.value)"
+    >
+      Submit
+    </button>
+    <button class="btn btn-sign-in" (click)="cancel()">
+      Cancel
+    </button>
+  </form>
+</div>

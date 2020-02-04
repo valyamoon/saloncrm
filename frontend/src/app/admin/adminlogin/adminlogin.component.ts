@@ -30,6 +30,10 @@ export class AdminloginComponent implements OnInit {
     });
   }
 
+  resetPassword() {
+    this.router.navigate(["forget-password"]);
+  }
+
   /**
    * Function is use to login Admin
    * @access private

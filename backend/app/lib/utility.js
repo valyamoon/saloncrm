@@ -17,6 +17,12 @@ utility.hashPassword = function(password) {
   return "";
 };
 
+utility.uuid = {
+  uuid: require("node-uuid"),
+  v1: function() {
+    return this.uuid.apply(this, arguments); //.v1()
+  }
+};
 utility.getUuid = function() {
   return new Promise((resolve, reject) => {
     try {
