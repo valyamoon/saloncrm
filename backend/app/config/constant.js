@@ -71,5 +71,7 @@ module.exports = {
   SUBSCRIPTION_EXPIRED: "Subscription Expired",
   SUBSCRIPTION_RENEWED: "Subscription Renewed Successfully",
   varibleType: "Forget Password",
-  forgotPassword: "forgot_password"
+  forgotPassword: "forgot_password",
+  ACCOUNT_CONNECTED: "Account Connected Successfully",
+  FAILED_TO_CONNECT: "Failed To Connect Account"
 };

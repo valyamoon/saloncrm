@@ -31,6 +31,7 @@ module.exports = function(router) {
   router.post("/create-token", salon.createCardToken);
   router.post("/updateemployee", salon.updateEmployee);
   router.post("/delete-promocode", salon.deletePromocode);
+  router.post("/connect-account", salon.connectStripeAccount);
 
   // router.get('/listUser', middlewares, user.getUserList);
   return router;

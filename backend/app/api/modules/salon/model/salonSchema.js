@@ -70,6 +70,10 @@ var salonSchema = mongoose.Schema({
     type: String,
     default: null
   },
+  connected_account_id: {
+    type: String,
+    default: null
+  },
   isStripeCreated: {
     type: Boolean,
     default: false
