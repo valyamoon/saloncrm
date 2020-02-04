@@ -3,7 +3,8 @@
 module.exports = {
   acceptSalonRequest: {
     subject: "Salon Activation Successful",
-    message: "Your request for salon activation has been accepted. Please login at "
+    message:
+      "Your request for salon activation has been accepted. Please login at "
   },
 
   rejectSalonRequest: {
@@ -19,10 +20,12 @@ module.exports = {
   },
 
   refundInWallet: {
+    subject: "Refund Notification",
     message: "Your total amount will be refunded in your wallet"
   },
 
   bookingDeclined: {
+    subject: "Booking Declined",
     message:
       "Your booking has been declined by the salon. Please try another salon"
   }

@@ -1,13 +1,9 @@
 "use strict";
 var mongoose = require("mongoose");
 
-
 __rootRequire("app/api/modules/user/model/userSchema");
 __rootRequire("app/api/modules/salon/model/salonSchema");
-
-
-
-
+__rootRequire("app/api/modules/admin/model/email_template/emailtemplateSchema");
 
 const config = require("./config.js").get(process.env.NODE_ENV);
 

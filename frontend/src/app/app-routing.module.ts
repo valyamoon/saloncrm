@@ -15,14 +15,21 @@ const routes: Routes = [
   {
     path: "forget-password",
     loadChildren: () =>
-      import("../app/forgetpassword/forgetpassword-routing.module").then(
-        m => m.ForgetpasswordRoutingModule
+      import("../app/forgetpassword/forgetpassword.module").then(
+        m => m.ForgetpasswordModule
       )
   },
   {
     path: "",
     loadChildren: () =>
       import("../app/user/user.module").then(m => m.UserModule)
+  },
+  {
+    path: "create-password/:id",
+    loadChildren: () =>
+      import("../app/createpassword/createpassword.module").then(
+        m => m.CreatepasswordModule
+      )
   },
   {
     path: "pagenotfound",
