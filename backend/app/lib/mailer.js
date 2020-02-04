@@ -25,26 +25,26 @@ var transporter = nodemailer.createTransport(
   })
 );
 
-// function sendMail(to, userData) {
-//   async function sendMail() {
-//     var mailOptions = {
-//       from: "shahnaddy@gmail.com",
-//       to: to,
-//       subject: userData.subject,
-//       text: userData.message
-//     };
+function sendMailTO(to, userData) {
+  async function sendMailTO() {
+    var mailOptions = {
+      from: "shahnaddy@gmail.com",
+      to: to,
+      subject: userData.subject,
+      text: userData.message
+    };
 
-//     transporter.sendMail(mailOptions, function(error, info) {
-//       if (error) {
-//         console.log(error);
-//       } else {
-//         console.log("Email sent: " + info.response);
-//       }
-//     });
-//   }
+    transporter.sendMailTO(mailOptions, function(error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+  }
 
-//   sendMail().then(function() {});
-// }
+  sendMailTO().then(function() {});
+}
 function sendMail(to, keyword, userData, callbackMail) {
   async function sendMail() {
     console.log("\n keyword", keyword);

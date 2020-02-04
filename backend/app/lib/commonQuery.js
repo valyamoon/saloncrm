@@ -1931,9 +1931,6 @@ commonQuery.sendEmailFunction = function sendEmailFunction(obj) {
     var mailData = {
       userId: dataObj.userId ? dataObj.userId : "",
       email: dataObj.email ? dataObj.email : "",
-      firstName: dataObj.firstName ? dataObj.firstName : "",
-      lastName: dataObj.lastName ? dataObj.lastName : "",
-      userName: dataObj.userName ? dataObj.userName : "",
       password: dataObj.password ? dataObj.password : ""
     };
 
