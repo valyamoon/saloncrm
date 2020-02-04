@@ -1312,16 +1312,11 @@ function fetchActiveUsersAll(req, res) {
  */
 
 function forgotPassword(req, res) {
+  console.log("EMAIL", req.body);
   async function forgot_password() {
     try {
       if (!req.body.email) {
-        res.json(
-          Error(
-            constant.statusCode.error,
-            constant.validateMsg.requiredFieldsMissing,
-            constant.validateMsg.requiredFieldsMissing
-          )
-        );
+        res.json(Error(constant.ERROR_CODE, "Required Fields are missing"));
       } else if (req.body.email && !validator.isEmail(req.body.email)) {
         res.json(Error(constant.ERROR_CODE, "Invalid Email"));
       } else {
