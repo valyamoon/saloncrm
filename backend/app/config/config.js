@@ -35,9 +35,10 @@ const config = {
     env: "staging",
     smtp: {
       service: "gmail",
-      username: "",
-      password: "",
-      host: "",
+      username: "salon.sdn@gmail.com",
+      password: "Smartdata@123",
+      mailUsername: "",
+      host: "gmail.com",
       mailUsername: "",
       verificationMail: ""
     }
