@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-createpassword",
@@ -8,7 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class CreatepasswordComponent implements OnInit {
   resetKey: any;
-  constructor(private activatedRoutes: ActivatedRoute) {}
+  constructor() {}
 
   ngOnInit() {}
 }
