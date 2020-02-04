@@ -24,6 +24,7 @@ export class CommonService {
 
   private customer_id = new BehaviorSubject<string>("");
   private salon_id = new BehaviorSubject<string>("");
+  private stripeConnected = new BehaviorSubject<boolean>(false);
 
   setCustomer_id(data: string) {
     // Fire the update event with the new data
@@ -32,6 +33,15 @@ export class CommonService {
 
   getCustomer_id(): Observable<string> {
     return this.customer_id.asObservable();
+  }
+
+  setStripeConnectedStatus(data: boolean) {
+    // Fire the update event with the new data
+    this.stripeConnected.next(data);
+  }
+
+  getStripeConnectedStatus(): Observable<boolean> {
+    return this.stripeConnected.asObservable();
   }
 
   setSalon_id(data: string) {
@@ -65,6 +75,10 @@ export class CommonService {
       data,
       httpOptions
     );
+  }
+  connectStripeAccount(data) {
+    console.log("DATATOPASS", data);
+    return this.http.post(this.baseUrl + "/connect-account", data);
   }
 
   getSalonData(data) {
