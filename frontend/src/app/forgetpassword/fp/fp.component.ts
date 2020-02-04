@@ -28,6 +28,8 @@ export class FpComponent implements OnInit {
   submitEmail(data) {
     this.fpServ.forgotPassword(data).subscribe(
       (data: any) => {
+        console.log("AFTER CALL", data);
+
         if (data["code"] === 200) {
           this.toastServ.success(data["message"], "", {
             timeOut: 1000
