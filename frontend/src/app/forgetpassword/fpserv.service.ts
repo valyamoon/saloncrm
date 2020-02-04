@@ -10,6 +10,7 @@ export class FpservService {
   constructor(private http: HttpClient) {}
 
   forgotPassword(data) {
+    console.log("INSIDE", data);
     return this.http.post(this.baseUrl + "/forgot-password", data);
   }
 }
