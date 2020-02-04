@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-cp",
@@ -7,10 +6,7 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ["./cp.component.css"]
 })
 export class CpComponent implements OnInit {
-  resetKey: any = "HIIIIIIIIIIIII";
-  constructor(private activatedRoutes: ActivatedRoute) {}
+  constructor() {}
 
-  ngOnInit() {
-    console.log("resetkey", this.resetKey);
-  }
+  ngOnInit() {}
 }
