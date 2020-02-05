@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { FpservService } from "../fpserv.service";
 import { ToastrService } from "ngx-toastr";
+import { AllservService } from "src/app/allserv.service";
 
 @Component({
   selector: "app-fp",
@@ -12,28 +13,34 @@ import { ToastrService } from "ngx-toastr";
 export class FpComponent implements OnInit {
   forgetPasswordForm: FormGroup;
   emailPattern: any = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+  currentRoute: any;
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private fpServ: FpservService,
-    private toastServ: ToastrService
+    private toastServ: ToastrService,
+    private allServ: AllservService
   ) {}
 
   ngOnInit() {
     this.forgetPasswordForm = this.fb.group({
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]]
     });
+    this.allServ.getRoute().subscribe((data: any) => {
+      this.currentRoute = data;
+    });
+    if (this.currentRoute) {
+      this.allServ.setPrevRoute(this.currentRoute);
+    }
   }
   submitEmail(data) {
     this.fpServ.forgotPassword(data).subscribe(
       (data: any) => {
-        console.log("AFTER CALL", data);
-
         if (data["code"] === 200) {
           this.toastServ.success(data["message"], "", {
             timeOut: 1000
           });
+          this.router.navigate([this.currentRoute]);
         } else if (data["code"] === 400) {
           this.toastServ.error(
             "Failed to send Password link",
@@ -45,7 +52,6 @@ export class FpComponent implements OnInit {
         }
       },
       error => {
-        console.log("ERRRO", error);
         this.toastServ.error("Server - Error", error["error"]["message"], {
           timeOut: 1000
         });
@@ -53,6 +59,6 @@ export class FpComponent implements OnInit {
     );
   }
   cancel() {
-    this.router.navigate(["/admin"]);
+    this.router.navigate([this.currentRoute]);
   }
 }
