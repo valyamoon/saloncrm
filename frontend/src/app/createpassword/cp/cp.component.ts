@@ -32,9 +32,8 @@ export class CpComponent implements OnInit {
         Validators.compose([Validators.required, Validators.minLength(3)])
       ]
     });
-    this.allServ.getPrevRoute().subscribe((data: any) => {
-      this.currentRoute = data;
-    });
+
+    this.currentRoute = localStorage.getItem("route");
   }
   submitNewPassword(data) {
     let dataToPass = {

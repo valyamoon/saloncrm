@@ -30,7 +30,9 @@ export class FpComponent implements OnInit {
       this.currentRoute = data;
     });
     if (this.currentRoute) {
-      this.allServ.setPrevRoute(this.currentRoute);
+      console.log("INFP", this.currentRoute);
+      // this.allServ.setPrevRoute(this.currentRoute);
+      localStorage.setItem("route", this.currentRoute);
     }
   }
   submitEmail(data) {
