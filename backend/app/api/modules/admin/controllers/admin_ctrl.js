@@ -62,7 +62,8 @@ module.exports = {
   getSubscription: getSubscription,
   deletePlan: deletePlan,
   getSubscirbedSalonsList: getSubscirbedSalonsList,
-  addEmailTemplate: addEmailTemplate
+  addEmailTemplate: addEmailTemplate,
+  resetPassword: resetPassword
 };
 
 /**
@@ -1758,4 +1759,45 @@ function addEmailTemplate(req, res) {
   }
 
   addEmailTemplate().then(function() {});
+}
+
+function resetPassword(req, res) {
+  async function resetPassword() {
+    try {
+      if (req.body && req.body.resetkey) {
+        let condition = { resetkey: req.body.resetkey };
+        let isResetkey = await commonQuery.findData(users, condition);
+        console.log("ISRESETKEY", isResetkey);
+        if (!isResetkey) {
+          return res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+          );
+        } else {
+          let id = isResetkey.data[0]["_id"];
+          console.log("ID", id);
+          users.findById(id, function(err, result) {
+            if (err) {
+              res.json(
+                Response(constant.ERROR_CODE, constant.FAILED_TO_RESET, null)
+              );
+            } else {
+              result.password = req.body.password;
+              result.resetkey = null;
+              result.save();
+
+              res.json(
+                Response(constant.SUCCESS_CODE, constant.PASSWORD_RESET, result)
+              );
+            }
+          });
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  resetPassword().then(function() {});
 }
