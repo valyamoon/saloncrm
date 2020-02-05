@@ -145,7 +145,6 @@ export class AdminServService {
   }
 
   deletePlans(data) {
- 
     return this.http.post(this.baseUrl + "/delete-plan", data);
   }
 
@@ -166,6 +165,10 @@ export class AdminServService {
 
   getSalonSubscriptionList(data) {
     return this.http.post(this.baseUrl + "/get-subscriptions", data);
+  }
+
+  resetNewPassword(data) {
+    return this.http.post(this.baseUrl + "/reset-password", data);
   }
 
   // errorHandler(error:HttpErrorResponse){

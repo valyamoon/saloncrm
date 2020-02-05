@@ -73,5 +73,6 @@ module.exports = {
   varibleType: "Forget Password",
   forgotPassword: "forgot_password",
   ACCOUNT_CONNECTED: "Account Connected Successfully",
-  FAILED_TO_CONNECT: "Failed To Connect Account"
+  FAILED_TO_CONNECT: "Failed To Connect Account",
+  FAILED_TO_RESET: "Failed to reset"
 };

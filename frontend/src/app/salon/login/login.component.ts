@@ -4,6 +4,7 @@ import { LoginService } from "./login.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { ToastrService } from "ngx-toastr";
+import { AllservService } from "src/app/allserv.service";
 
 @Component({
   selector: "app-login",
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
     private authServ: AuthService,
     private router: Router,
     private logServ: LoginService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private allServ: AllservService
   ) {}
 
   ngOnInit() {
@@ -31,6 +33,12 @@ export class LoginComponent implements OnInit {
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]],
       password: ["", Validators.required]
     });
+
+    this.allServ.setRoute(this.router.url);
+  }
+
+  resetPassword() {
+    this.router.navigate(["forget-password"]);
   }
 
   /**
@@ -78,8 +86,7 @@ export class LoginComponent implements OnInit {
             timeOut: 3000
           });
           this.userData = data.data;
-          console.log("sss", this.userData);
-          console.log("USER DATA", this.userData["userInfo"].isApproved);
+
           sessionStorage.setItem(
             "isApproved",
             this.userData["userInfo"].isApproved
