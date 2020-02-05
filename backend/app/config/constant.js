@@ -74,5 +74,7 @@ module.exports = {
   forgotPassword: "forgot_password",
   ACCOUNT_CONNECTED: "Account Connected Successfully",
   FAILED_TO_CONNECT: "Failed To Connect Account",
-  FAILED_TO_RESET: "Failed to reset"
+  FAILED_TO_RESET: "Failed to reset",
+  APPOINTMENT_BOOKED: "Your Appointment has been booked successfully",
+  FAILED_TO_BOOK: "Failed to book the Appointment"
 };
