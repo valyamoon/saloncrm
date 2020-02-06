@@ -2,6 +2,8 @@
 
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
+const fcm = require("fcm-notification");
+const FCM = require("../../../../lib/privatekey.json");
 var ts = require("time-slots-generator");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
@@ -1367,6 +1369,19 @@ function bookSlot(data) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_BOOK, null)
           );
         } else {
+          let message = {
+            subject: "MESSAGE SENT",
+            token: devicetoken
+          };
+
+          FCM.send(message, async function(err, response) {
+            if (err) {
+              console.log("error found", err);
+            } else {
+              console.log("response here", response);
+            }
+          });
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
