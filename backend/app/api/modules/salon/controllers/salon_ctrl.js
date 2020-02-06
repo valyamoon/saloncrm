@@ -3,6 +3,7 @@
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
 const fcm = require("fcm-notification");
+const async = require("async");
 const FCM = require("../../../../lib/privatekey.json");
 var ts = require("time-slots-generator");
 const moment = require("moment");
