@@ -36,6 +36,8 @@ module.exports = function(router) {
   router.post("/delete-plan", admin.deletePlan);
   router.post("/get-plan", admin.getSubscription);
   router.post("/get-subscriptions", admin.getSubscirbedSalonsList);
+  router.post("/add-email", admin.addEmailTemplate);
+  router.post("/reset-password", admin.resetPassword);
 
   return router;
 };

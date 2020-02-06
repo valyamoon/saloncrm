@@ -58,6 +58,9 @@ export class DashboardComponent implements OnInit {
 
           this.commServ.setCustomer_id(response.data["customer_id"]);
           this.commServ.setSalon_id(response.data["_id"]);
+          this.commServ.setStripeConnectedStatus(
+            response.data["isStripeCreated"]
+          );
         } else {
           this.toastrServ.error("Invalid salon details", "", {
             timeOut: 3000

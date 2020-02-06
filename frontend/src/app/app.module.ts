@@ -29,6 +29,7 @@ import { AdminComponent } from "./admin/admin.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
+import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.component";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
     SalonComponent,
     UserComponent,
     AdminComponent,
-    PagenotfoundComponent
+    PagenotfoundComponent,
+    ForgetpasswordComponent
   ],
   imports: [
     BrowserModule,

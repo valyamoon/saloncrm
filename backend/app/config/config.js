@@ -31,13 +31,14 @@ const config = {
     },
     baseUrl: "http://54.71.18.74:5977/",
     backendBaseUrl: "http://54.71.18.74:5977/",
-    imageBaseUrl: "http://52.34.207.5:5977",
+    imageBaseUrl: "http://54.71.18.74:5977",
     env: "staging",
     smtp: {
       service: "gmail",
-      username: "",
-      password: "",
-      host: "",
+      username: "salon.sdn@gmail.com",
+      password: "Smartdata@123",
+      mailUsername: "",
+      host: "gmail.com",
       mailUsername: "",
       verificationMail: ""
     }

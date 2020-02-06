@@ -38,6 +38,7 @@ import { EditsalonComponent } from "./dashboard/editsalon/editsalon.component";
 import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
 import { SubscriptionComponent } from "./dashboard/subscription/subscription.component";
 import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
+import { ConnectAccountComponent } from './dashboard/connect-account/connect-account.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
     EditsalonComponent,
     SubscribeComponent,
     SubscriptionComponent,
-    PromcodeComponent
+    PromcodeComponent,
+    ConnectAccountComponent
   ],
   imports: [
     CommonModule,

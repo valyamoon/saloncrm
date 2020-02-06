@@ -69,5 +69,10 @@ module.exports = {
   CARD_DATA_INVALID: "PLEASE CHECK YOUR CARD DETAILS",
   FAILED_TO_SUBSCRIBE: "Salon Subscription Failed",
   SUBSCRIPTION_EXPIRED: "Subscription Expired",
-  SUBSCRIPTION_RENEWED: "Subscription Renewed Successfully"
+  SUBSCRIPTION_RENEWED: "Subscription Renewed Successfully",
+  varibleType: "Forget Password",
+  forgotPassword: "forgot_password",
+  ACCOUNT_CONNECTED: "Account Connected Successfully",
+  FAILED_TO_CONNECT: "Failed To Connect Account",
+  FAILED_TO_RESET: "Failed to reset"
 };

@@ -13,6 +13,7 @@ const subscriptionplans = require("../model/subscriptionPlan");
 
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
+const emailtemplate = require("../model/email_template/emailtemplateSchema");
 const roles = require("../../user/model/rolesSchema");
 const salonSubscriptions = require("../../salon/model/salonSubscriptions");
 const salons = require("../../salon/model/salonSchema");
@@ -60,7 +61,9 @@ module.exports = {
   createSubscription: createSubscription,
   getSubscription: getSubscription,
   deletePlan: deletePlan,
-  getSubscirbedSalonsList: getSubscirbedSalonsList
+  getSubscirbedSalonsList: getSubscirbedSalonsList,
+  addEmailTemplate: addEmailTemplate,
+  resetPassword: resetPassword
 };
 
 /**
@@ -222,7 +225,7 @@ function acceptSalonRequest(req, res) {
               message: messageTemplates.acceptSalonRequest["message"]
             };
 
-            let sendEmailConfirmation = await mailer.sendMail(
+            let sendEmailConfirmation = await mailer.sendMailTO(
               activeSalonLogin.email,
               messagetTemplate
             );
@@ -1310,86 +1313,66 @@ function fetchActiveUsersAll(req, res) {
  */
 
 function forgotPassword(req, res) {
+  console.log("EMAIL", req.body);
   async function forgot_password() {
     try {
       if (!req.body.email) {
-        res.json(
-          Error(
-            constant.statusCode.error,
-            constant.validateMsg.requiredFieldsMissing,
-            constant.validateMsg.requiredFieldsMissing
-          )
-        );
+        res.json(Error(constant.ERROR_CODE, "Required Fields are missing"));
       } else if (req.body.email && !validator.isEmail(req.body.email)) {
-        res.json(
-          Error(
-            constant.statusCode.error,
-            constant.validateMsg.invalidEmail,
-            constant.validateMsg.invalidEmail
-          )
-        );
+        res.json(Error(constant.ERROR_CODE, "Invalid Email"));
       } else {
+        console.log("req==========", req.body);
         var model = users;
         var condition = {
           email: req.body.email,
           isDeleted: false,
           isActive: true
         };
-        var userObj = await query.findoneData(model, condition, fields);
+        var userObj = await commonQuery.findoneData(model, condition);
+        console.log("userObj", userObj);
 
-        if (userObj.data) {
+        if (userObj) {
           var condition = {
-            _id: userObj.data._id
+            _id: userObj._id
           };
           var updateData = {
             resetkey: ""
           };
           updateData.resetkey = utility.uuid.v1();
 
-          let updateKey = await query.updateOneDocument(
+          let updateKey = await commonQuery.updateOneDocument(
             model,
             condition,
             updateData
           );
-          if (updateKey.data._id) {
-            var baseUrl = config.baseUrl;
+          console.log("updateKeyupdateKey", updateKey);
+          if (updateKey._id) {
+            var baseUrl = Config.baseUrl;
             var userMailData = {
-              userId: userObj.data._id,
-              email: userObj.data.email ? userObj.data.email : "",
-              firstName: userObj.data.firstName ? userObj.data.firstName : "",
-              lastName: userObj.data.lastName ? userObj.data.lastName : "",
-              userName: userObj.data.userName ? userObj.data.userName : "",
-              link: baseUrl + "#/create-password/" + updateKey.data.resetkey
+              userId: userObj._id,
+              email: userObj.email ? userObj.email : "",
+              link: baseUrl + "#/create-password/" + updateKey.resetkey
             };
+            console.log("BSSSSS", userMailData);
             let obj = {
               data: userMailData,
-              mailType: constant.varibleType.FORGET_PASSWORD //"Forget Password"
+              mailType: "Forget Password" //constant.varibleType.FORGET_PASSWORD //"Forget Password"
             };
 
-            let sendMail = await sendEmailFunction(obj);
+            let sendMail = await commonQuery.sendEmailFunction(obj);
             if (sendMail) {
               res.json(
                 Response(
-                  constant.statusCode.ok,
-                  constant.messages.forgotPasswordSuccess
+                  constant.SUCCESS_CODE,
+                  "mail send successfully" //constant.messages.forgotPasswordSuccess
                 )
               );
             } else {
-              res.json(
-                Response(
-                  constant.statusCode.internalservererror,
-                  constant.validateMsg.internalError
-                )
-              );
+              res.json(Response(constant.ERROR_CODE, " can't send mail"));
             }
           }
         } else {
-          res.json(
-            Response(
-              constant.statusCode.notFound,
-              constant.validateMsg.emailNotExist
-            )
-          );
+          res.json(Response(constant.INTERNAL_ERROR, "Email doesn't exist"));
         }
       }
     } catch (error) {
@@ -1750,4 +1733,71 @@ function getSubscirbedSalonsList(req, res) {
     }
   }
   getSubscirbedSalonsList().then(function() {});
+}
+
+function addEmailTemplate(req, res) {
+  console.log(req.body);
+  async function addEmailTemplate() {
+    try {
+      if (req.body && req.body.title) {
+        let saveEmailTemplate = {
+          title: req.body.title,
+          unique_keyword: req.body.unique_keyword,
+          subject: req.body.subject,
+          description:
+            '<div class="body" style="padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#97d6c5; -webkit-text-size-adjust:none;"> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center" valign="top"> <table width="650" border="0" cellspacing="0" cellpadding="0" class="mobile-shell" style=" background: #FFF; padding: 20px 0; border-radius: 5px; margin: 15px 5px;"> <tr> <td class="td" style="width:650px; min-width:650px; font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;"> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center"> <img src="[[BASEURL]]assets/img/login.png" alt="" style="margin-bottom: 20px;"> </td></tr><tr> <td> &nbsp; </td></tr><tr style="background: #24b68d; width: 100%; height: 40px; font-size: 14px; text-align: center;"> <td> <a href="">Home</a> <a href="">About</a> <a href="">Contact Us</a> <a href="">Login</a> </td></tr></table> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr style="background: #ffffff; width: 100%; height: auto; font-size: 14px; text-align: center;"> <td style="padding: 60px 0 0 0"> <img src="[[BASEURL]]assets/img/email.png" alt="" style="width: 100%; max-width: 50px; margin: 0 0 20px 0;"> <h2 style="color: #57585b; font-weight: 500; font-size: 24px; margin: 20px 0;">Welcome To Dog-Grooming</h2> </td></tr></table> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td> <img src="[[BASEURL]]assets/img/free_white_blue.jpg" alt="" style="width: 100%;"> </td></tr><tr style="background: #E6FFF8; width: 100%; height: auto; font-size: 14px; text-align: center;"> <td style="text-align: left; padding: 0 30px 0 30px; vertical-align: top;"> <p style="font-size: 18px; font-weight: 500; margin: 0 0 12px 0;line-height: 20px;">Hello [[FirstName]] [[LastName]] ,</p><p style="font-size: 16px; line-height: 20px;">We have sent you this email in response to your request to reset your password on Dog-Grooming. For reset your password , please find below link . </p><p style="font-size: 16px; line-height: 26px;display: inlineblock; background: #05ad7c; padding: 5px 10px; color: #FFF;"><a href="[[NewPasswordLink]]" style="text-decoration: none;">Click here</a></p><p style="font-size: 13px; line-height: 26px;margin-top: 50px;">Thank You</p></td></tr><tr> <td> <img src="[[BASEURL]]assets/img/free_blue_white.jpg" alt="" style="width: 100%;"> </td></tr></table> </td></tr></table> </td></tr></table></div>'
+        };
+
+        let saveTemplate = await commonQuery.InsertIntoCollection(
+          emailtemplate,
+          saveEmailTemplate
+        );
+        console.log(saveTemplate);
+        res.send(saveTemplate);
+      }
+    } catch (error) {}
+  }
+
+  addEmailTemplate().then(function() {});
+}
+
+function resetPassword(req, res) {
+  async function resetPassword() {
+    try {
+      if (req.body && req.body.resetkey) {
+        let condition = { resetkey: req.body.resetkey };
+        let isResetkey = await commonQuery.findData(users, condition);
+        console.log("ISRESETKEY", isResetkey);
+        if (!isResetkey) {
+          return res.json(
+            Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+          );
+        } else {
+          let id = isResetkey.data[0]["_id"];
+          console.log("ID", id);
+          users.findById(id, function(err, result) {
+            if (err) {
+              res.json(
+                Response(constant.ERROR_CODE, constant.FAILED_TO_RESET, null)
+              );
+            } else {
+              result.password = req.body.password;
+              result.resetkey = null;
+              result.save();
+
+              res.json(
+                Response(constant.SUCCESS_CODE, constant.PASSWORD_RESET, result)
+              );
+            }
+          });
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  resetPassword().then(function() {});
 }

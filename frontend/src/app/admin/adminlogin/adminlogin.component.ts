@@ -5,6 +5,7 @@ import { ToastrService } from "ngx-toastr";
 import { AuthService } from "../auth.service";
 
 import { Router } from "@angular/router";
+import { AllservService } from "src/app/allserv.service";
 
 @Component({
   selector: "app-adminlogin",
@@ -20,7 +21,8 @@ export class AdminloginComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private adminServ: AdminService,
-    private authServ: AuthService
+    private authServ: AuthService,
+    private allServ: AllservService
   ) {}
 
   ngOnInit() {
@@ -28,6 +30,12 @@ export class AdminloginComponent implements OnInit {
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]],
       password: ["", Validators.required]
     });
+
+    this.allServ.setRoute(this.router.url);
+  }
+
+  resetPassword() {
+    this.router.navigate(["forget-password"]);
   }
 
   /**
@@ -50,7 +58,7 @@ export class AdminloginComponent implements OnInit {
           this.toastServ.success("Logged In Successfully", "", {
             timeOut: 3000
           });
-          console.log("DATA", data);
+
           sessionStorage.setItem("userDetails", data["data"]["userInfo"].email);
 
           this.authServ.sendToken(data.data.token);

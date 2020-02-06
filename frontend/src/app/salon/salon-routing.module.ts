@@ -15,6 +15,7 @@ import { EditsalonComponent } from "./dashboard/editsalon/editsalon.component";
 import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
 import { SubscriptionComponent } from "./dashboard/subscription/subscription.component";
 import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
+import { ConnectAccountComponent } from "./dashboard/connect-account/connect-account.component";
 
 
 const routes: Routes = [
@@ -35,7 +36,7 @@ const routes: Routes = [
       { path: "timing", component: TimingComponent },
       { path: "promocode", component: PromcodeComponent },
       { path: "subscribe", component: SubscribeComponent },
-
+      { path: "connect", component: ConnectAccountComponent }
     ]
   }
 ];

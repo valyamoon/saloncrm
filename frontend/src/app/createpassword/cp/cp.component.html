@@ -1,0 +1,21 @@
+<div class="createPasswordWrapper">
+  <div class="main-content col-lg-6 col-md-6 col-sm-12">
+    <form [formGroup]="setNewPasswordForm">
+      <label>Enter New Password</label>
+      <input
+        type="text"
+        placeholder=" New Password"
+        formControlName="newpassword"
+        class="form-control"
+      />
+
+      <button
+        class="btn btn-sign-in btnSbt"
+        [disabled]="setNewPasswordForm.invalid"
+        (click)="submitNewPassword(setNewPasswordForm.value)"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>

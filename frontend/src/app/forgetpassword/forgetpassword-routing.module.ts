@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { ForgetpasswordComponent } from "./forgetpassword.component";
+import { FpComponent } from "./fp/fp.component";
 
-const routes: Routes = [{ path: "", component: ForgetpasswordComponent }];
+const routes: Routes = [{ path: "", component: FpComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

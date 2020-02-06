@@ -1,0 +1,15 @@
+<div class="connectAccountWrapper">
+  <div class="content">
+    <div class="stripeStatus">
+      Your Stripe Account is
+      <span *ngIf="!isStripeConnected" class="disconnected">Disconnected.</span>
+      <span *ngIf="isStripeConnected" class="connected">Connected.</span>.
+    </div>
+    <p>Please ensure your stripe account is connected to recieve payments.</p>
+  </div>
+  <div class="stripeBtn">
+    <button class=" stripeButton" (click)="createStripeConnection()">
+      <img src="../../../../assets/images/stripe.png" />
+    </button>
+  </div>
+</div>
