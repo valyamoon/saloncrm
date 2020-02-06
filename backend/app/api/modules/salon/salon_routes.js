@@ -36,6 +36,8 @@ module.exports = function (router) {
 
   router.post('/updatesalonservices', salon.updateSalonServices);
 
+  router.post('/updatesalonservices', salon.updateSalonServices);
+
   // router.get('/listUser', middlewares, user.getUserList);
   return router;
 };
