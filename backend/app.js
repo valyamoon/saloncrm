@@ -13,11 +13,11 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./app/swagger/swagger.json");
 var cors = require("cors");
 
-global.__rootRequire = function (relpath) {
+global.__rootRequire = function(relpath) {
   return require(path.join(__dirname, relpath));
 };
 
-global.__debug = function () {
+global.__debug = function() {
   if (
     !process.env.NODE_ENV ||
     process.env.NODE_ENV === "local" ||
@@ -33,7 +33,7 @@ app.use(fileUpload());
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
+//process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
 process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
 // process.env.NODE_ENV = process.env.NODE_ENV || 'prod';    //prod server (mdout.com)
@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/modules/dashboard")));
 app.use(express.static(path.join(__dirname, "frontend")));
 // All api requests
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   // CORS headers
   res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
