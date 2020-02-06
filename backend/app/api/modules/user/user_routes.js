@@ -17,5 +17,6 @@ module.exports = function(router) {
   router.post("/deleteuser", user.softDeleteUser);
   router.post("/user-detail", user.getDetailsOfUser);
   router.post("/charge", user.userPayment);
+  router.post("/cancel-booking", user.cancelBooking);
   return router;
 };

@@ -129,7 +129,7 @@ export class TimingComponent implements OnInit {
       daysData: this.allDaysData
     }
     // dataToPass.salon_id = 
-    // console.log("Form Data dataToPass", dataToPass); return;
+    //console.log("Form Data dataToPass", dataToPass); return;
     this.commServ.addSalonTIming(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
@@ -176,6 +176,7 @@ export class TimingComponent implements OnInit {
                 'opentime': element.starttime,
                 'closetime': element.endtime,
                 'status': element.status,
+                'order_sort': element.order_sort,
               }
               slotsArr.push(slots);
             });

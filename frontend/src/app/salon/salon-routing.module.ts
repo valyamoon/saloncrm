@@ -17,6 +17,7 @@ import { SubscriptionComponent } from "./dashboard/subscription/subscription.com
 import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
 import { ConnectAccountComponent } from "./dashboard/connect-account/connect-account.component";
 
+
 const routes: Routes = [
   { path: "", component: LoginComponent },
   {
@@ -45,4 +46,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [AuthGuard, AuthService]
 })
-export class SalonRoutingModule {}
+export class SalonRoutingModule { }
