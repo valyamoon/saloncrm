@@ -40,6 +40,7 @@ import { SubscriptionComponent } from "./dashboard/subscription/subscription.com
 import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
 import { ConnectAccountComponent } from './dashboard/connect-account/connect-account.component';
 
+
 @NgModule({
   declarations: [
     LoginComponent,
@@ -84,4 +85,4 @@ import { ConnectAccountComponent } from './dashboard/connect-account/connect-acc
     MatExpansionModule
   ]
 })
-export class SalonModule {}
+export class SalonModule { }
