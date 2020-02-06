@@ -21,8 +21,10 @@ export class CategoriesComponent implements OnInit {
   noArchivedRecordsFound: boolean = false;
   disabled: boolean = true;
   archivedCategoriesList: any;
+  categoryID: any;
   archivedCategoriesCount: any;
   showArchived: boolean = false;
+  isShowUpdate: boolean = false;
   constructor(
     private adminServ: AdminServService,
     private fb: FormBuilder,
@@ -37,7 +39,9 @@ export class CategoriesComponent implements OnInit {
     this.fetchCategoriesList();
   }
 
-  openAddCategoryModal() {
+  openAddCategoryModal(data) {
+    this.categoryForm.get("name").setValue(data.catname);
+    this.categoryID = data._id;
     this.isAddModal = true;
     //console.log(this.isAddModal);
   }
@@ -54,6 +58,33 @@ export class CategoriesComponent implements OnInit {
     // console.log("p", this.page);
     this.count = event.pageSize;
     this.fetchCategoriesList();
+  }
+
+  update(data) {
+    //console.log(data);
+
+    let dataToPass = {
+      category_id: this.categoryID,
+      catname: data.name
+    };
+    this.adminServ.updateCategory(dataToPass).subscribe(
+      (data: any) => {
+        if (data["code"] === 200) {
+          this.isAddModal = false;
+          this.fetchCategoriesList();
+        } else if (data["code"] === 400) {
+          this.toastrSev.error("Failed", data["message"], {
+            timeOut: 1000
+          });
+        }
+      },
+      error => {
+        this.isAddModal = false;
+        this.toastrSev.error("Server Error", error.error["message"], {
+          timeOut: 1000
+        });
+      }
+    );
   }
 
   addCategory(data) {
@@ -205,5 +236,10 @@ export class CategoriesComponent implements OnInit {
         });
       }
     );
+  }
+
+  updateCategory(data) {
+    this.openAddCategoryModal(data);
+    this.isShowUpdate = true;
   }
 }

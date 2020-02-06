@@ -85,6 +85,13 @@ export class AdminServService {
   addCategories(data) {
     return this.http.post(this.baseUrl + "/add-categories", data, httpOptions);
   }
+
+  updateCategory(data) {
+    return this.http.post(this.baseUrl + "/update-category", data, httpOptions);
+  }
+  updateService(data) {
+    return this.http.post(this.baseUrl + "/update-service", data, httpOptions);
+  }
   deleteCategories(data) {
     return this.http.post(
       this.baseUrl + "/remove-categories",

@@ -63,7 +63,9 @@ module.exports = {
   deletePlan: deletePlan,
   getSubscirbedSalonsList: getSubscirbedSalonsList,
   addEmailTemplate: addEmailTemplate,
-  resetPassword: resetPassword
+  resetPassword: resetPassword,
+  updateCategories: updateCategories,
+  updateService: updateService
 };
 
 /**
@@ -1800,4 +1802,76 @@ function resetPassword(req, res) {
   }
 
   resetPassword().then(function() {});
+}
+
+function updateCategories(req, res) {
+  async function updateCategories() {
+    try {
+      if (req.body && req.body.category_id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.category_id) };
+        let updateCondition = { catname: req.body.catname };
+        let updateComplete = await commonQuery.updateOneDocument(
+          categories,
+          condition,
+          updateCondition
+        );
+
+        if (!updateComplete) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_UPDATE, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.UPDATE_SUCCESS,
+              updateComplete
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  updateCategories().then(function() {});
+}
+
+function updateService(req, res) {
+  async function updateService() {
+    try {
+      if (req.body && req.body.service_id) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.service_id) };
+        let updateCondition = { name: req.body.name };
+        let updateComplete = await commonQuery.updateOneDocument(
+          services,
+          condition,
+          updateCondition
+        );
+
+        if (!updateComplete) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_UPDATE, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.UPDATE_SUCCESS,
+              updateComplete
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  updateService().then(function() {});
 }

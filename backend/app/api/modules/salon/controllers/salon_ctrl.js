@@ -1327,7 +1327,7 @@ function fetchSalonData(req, res) {
   fetchSalonData().then(function() {});
 }
 
-function bookSlot(data) {
+function bookSlot(data, req, res) {
   console.log("INSIDE BOOKSLOT", data);
   async function bookSlot() {
     try {
@@ -1347,53 +1347,65 @@ function bookSlot(data) {
           endTimeCalculated = `${hours}:${minutes}`;
         }
 
-        let saveAppointment = new appointments({
-          salon_id: req.body.salon_id,
-          user_id: req.body.user_id,
-          totalamount: req.body.totalamount,
-          service: req.body.service_id,
-          duration: req.body.duration,
-          starttime: starttime,
-          endtime: endTimeCalculated,
-          date: req.body.date,
-          connected_account_id: req.body.connected_account_id
-        });
-
-        console.log("endTimeCalculated", endTimeCalculated);
-
-        let bookAppointment = await commonQuery.InsertIntoCollection(
-          appointments,
-          saveAppointment
+        let findEmp = await commonQuery.filterEmployee(
+          employees,
+          data.salon_id,
+          data.salonservices_id
         );
-        if (!bookAppointment) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_BOOK, null)
-          );
-        } else {
-          let message = {
-            subject: "MESSAGE SENT",
-            token: devicetoken
-          };
 
-          FCM.send(message, async function(err, response) {
-            if (err) {
-              console.log("error found", err);
-            } else {
-              console.log("response here", response);
-            }
+        if (!findEmp) {
+        } else {
+          var empId = findEmp[0]._id;
+
+          let saveAppointment = new appointments({
+            salon_id: data.salon_id,
+            user_id: data.user_id,
+            totalamount: data.totalamount,
+            service: data.service_id,
+            duration: data.duration,
+            starttime: starttime,
+            endtime: endTimeCalculated,
+            date: data.date,
+            connected_account_id: data.connected_account_id,
+            employee_id: empId
           });
 
-          res.json(
-            Response(
-              constant.SUCCESS_CODE,
-              constant.APPOINTMENT_BOOKED,
-              bookAppointment
-            )
+          console.log("endTimeCalculated", endTimeCalculated);
+
+          let bookAppointment = await commonQuery.InsertIntoCollection(
+            appointments,
+            saveAppointment
           );
+          if (!bookAppointment) {
+            res.json(
+              Response(constant.ERROR_CODE, constant.FAILED_TO_BOOK, null)
+            );
+          } else {
+            let message = {
+              subject: "MESSAGE SENT",
+              token: devicetoken
+            };
+
+            FCM.send(message, async function(err, response) {
+              if (err) {
+                console.log("error found", err);
+              } else {
+                console.log("response here", response);
+              }
+            });
+
+            res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.APPOINTMENT_BOOKED,
+                bookAppointment
+              )
+            );
+          }
         }
       }
     } catch (error) {
-      return res.json(
+      return res.send(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
       );
     }

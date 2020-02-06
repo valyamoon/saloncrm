@@ -38,6 +38,8 @@ module.exports = function(router) {
   router.post("/get-subscriptions", admin.getSubscirbedSalonsList);
   router.post("/add-email", admin.addEmailTemplate);
   router.post("/reset-password", admin.resetPassword);
+  router.post("/update-category", admin.updateCategories);
+  router.post("/update-service", admin.updateService);
 
   return router;
 };

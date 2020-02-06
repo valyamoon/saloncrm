@@ -34,11 +34,20 @@
           </div>
           <div class="fields">
             <button
+              *ngIf="!isShowUpdate"
               class="btn btn-primary btn-sign-in"
               [disabled]="saveServiceForm.invalid"
               (click)="addService(saveServiceForm.value)"
             >
               Add
+            </button>
+            <button
+              *ngIf="isShowUpdate"
+              class="btn btn-primary btn-sign-in"
+              [disabled]="saveServiceForm.invalid"
+              (click)="update(saveServiceForm.value)"
+            >
+              Update
             </button>
             <button
               class="btn btn-primary btn-sign-in"
@@ -87,6 +96,13 @@
                 <img
                   src="../../../../assets/images/delete.svg"
                   title="Delete Service"
+                />
+              </div>
+              <div class="editBtn" (click)="updateService(element)">
+                <img
+                  src="../../../../assets/images/edit.svg"
+                  width="16px"
+                  title="Update Service"
                 />
               </div>
             </div>

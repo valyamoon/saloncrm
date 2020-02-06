@@ -21,6 +21,7 @@ export class ServicesComponent implements OnInit {
   servicesCount: any;
   addServiceModal: boolean;
   saveServiceForm: FormGroup;
+  isShowUpdate: boolean;
 
   constructor(
     private adminServ: AdminServService,
@@ -38,6 +39,17 @@ export class ServicesComponent implements OnInit {
     this.fetchCategoriesList();
     this.fetchAllServices();
   }
+
+  update(data) {
+    console.log(data);
+    let dataToPass = {
+      service_id: data._id,
+      name: data
+    };
+  }
+
+  updateService(data) {}
+
   fetchCategoriesList() {
     let dataToPass = {
       type: "admin-categories",
@@ -69,8 +81,10 @@ export class ServicesComponent implements OnInit {
     );
   }
 
-  openAddServiceModal() {
+  openAddServiceModal(data) {
     this.addServiceModal = true;
+    this.isShowUpdate = true;
+    this.update(data);
   }
 
   deleteService(data) {

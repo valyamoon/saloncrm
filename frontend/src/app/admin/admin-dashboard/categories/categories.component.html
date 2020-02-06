@@ -41,11 +41,20 @@
         />
       </form>
       <button
+        *ngIf="!isShowUpdate"
         class="btn btn-primary btn-sign-in"
         [disabled]="categoryForm.invalid"
         (click)="addCategory(categoryForm.value)"
       >
         Add
+      </button>
+      <button
+        *ngIf="isShowUpdate"
+        class="btn btn-primary btn-sign-in"
+        [disabled]="categoryForm.invalid"
+        (click)="update(categoryForm.value)"
+      >
+        Update
       </button>
       <button class="btn btn-primary btn-sign-in" (click)="dismissModal()">
         Cancel
@@ -153,6 +162,14 @@
                   src="../../../../assets/images/delete.svg"
                   alt="Delete"
                   title="Delete Category"
+                />
+              </div>
+              <div class="editBtn" (click)="updateCategory(element)">
+                <img
+                  src="../../../../assets/images/edit.svg"
+                  width="16px"
+                  alt="Update"
+                  title="Update Category"
                 />
               </div>
             </div>

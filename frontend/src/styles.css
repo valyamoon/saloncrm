@@ -109,6 +109,17 @@ img {
   padding-top: 15px;
 }
 
+.error-show {
+  margin: 0 !important;
+  padding: 2px !important;
+  padding-left: 9px !important;
+  width: auto !important;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  font-size: 12px !important;
+}
+
 /* @media only screen and (max-width: 768px) {
   .selectorSection {
     z-index: 10;
