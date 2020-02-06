@@ -2,6 +2,8 @@
 
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
+const fcm = require("fcm-notification");
+const FCM = require("../../../../lib/privatekey.json");
 var ts = require("time-slots-generator");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
@@ -12,8 +14,10 @@ const mkdirp = require("mkdirp");
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 
 const constant = require("../../../../config/constant.js");
-
+const wallets = require("../../user/model/walletSchema");
+const userCtrl = require("../../user/controllers/user_ctrl");
 const users = mongoose.model("users");
+const appointments = require("../model/appointmentsSchema");
 const salonSubscriptions = require("../model/salonSubscriptions");
 const roles = require("../../user/model/rolesSchema");
 const salons = require("../model/salonSchema");
@@ -61,7 +65,8 @@ module.exports = {
   deletePromocode: deletePromocode,
   subscribedSalonDetails: subscribedSalonDetails,
   createCardToken: createCardToken,
-  connectStripeAccount: connectStripeAccount
+  connectStripeAccount: connectStripeAccount,
+  appointmentCompleted: appointmentCompleted
 };
 
 /**
@@ -1341,7 +1346,50 @@ function bookSlot(data) {
           endTimeCalculated = `${hours}:${minutes}`;
         }
 
+        let saveAppointment = new appointments({
+          salon_id: req.body.salon_id,
+          user_id: req.body.user_id,
+          totalamount: req.body.totalamount,
+          service: req.body.service_id,
+          duration: req.body.duration,
+          starttime: starttime,
+          endtime: endTimeCalculated,
+          date: req.body.date,
+          connected_account_id: req.body.connected_account_id
+        });
+
         console.log("endTimeCalculated", endTimeCalculated);
+
+        let bookAppointment = await commonQuery.InsertIntoCollection(
+          appointments,
+          saveAppointment
+        );
+        if (!bookAppointment) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_BOOK, null)
+          );
+        } else {
+          let message = {
+            subject: "MESSAGE SENT",
+            token: devicetoken
+          };
+
+          FCM.send(message, async function(err, response) {
+            if (err) {
+              console.log("error found", err);
+            } else {
+              console.log("response here", response);
+            }
+          });
+
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.APPOINTMENT_BOOKED,
+              bookAppointment
+            )
+          );
+        }
       }
     } catch (error) {
       return res.json(
@@ -1793,4 +1841,54 @@ function connectStripeAccount(req, res) {
   }
 
   connectStripeAccount().then(function() {});
+}
+
+function appointmentCompleted(req, res) {
+  async function appointmentCompleted() {
+    try {
+      if (req.body && req.body.isCompleted) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.booking_id) };
+
+        let findBooking = await commonQuery.findoneData(
+          appointments,
+          condition
+        );
+        if (!findBooking) {
+        } else {
+          let condition = {
+            _id: mongoose.Types.ObjectId(findBooking["salon_id"])
+          };
+          let findConnectedId = await commonQuery.findoneData(
+            salons,
+            condition
+          );
+
+          console.log(findConnectedId);
+          if (findConnectedId) {
+            stripe.paymentIntents
+              .create({
+                payment_method_types: ["card"],
+                amount: findBooking.totalamount,
+                currency: "USD",
+                transfer_data: {
+                  destination: findConnectedId.connected_account_id
+                }
+              })
+              .then(async function(paymentIntent) {
+                // asynchronously called
+                console.log("PAYMENT INTENT", paymentIntent);
+                if (paymentIntent) {
+                  userCtrl.minusWalletAmount();
+                }
+              });
+          }
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  appointmentCompleted().then(function() {});
 }

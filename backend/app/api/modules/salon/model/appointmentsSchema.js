@@ -6,6 +6,10 @@ var appointmentsSchema = mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "salons"
     },
+    employee_id: {
+      type: mongoose.Types.ObjectId,
+      ref: "employees"
+    },
     user_id: {
       type: mongoose.Types.ObjectId,
       ref: "users"
@@ -35,6 +39,14 @@ var appointmentsSchema = mongoose.Schema(
       default: true
     },
     isCancelled: {
+      type: Boolean,
+      default: false
+    },
+    connected_account_id: {
+      type: String,
+      default: null
+    },
+    isCompleted: {
       type: Boolean,
       default: false
     }
