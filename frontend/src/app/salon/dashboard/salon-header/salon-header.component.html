@@ -3,15 +3,8 @@
     <a class="navbar-brand" href="#">
       <img src="../../../assets/images/logo_white.png" />
     </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <i class="material-icons text-white">
         menu
       </i>
@@ -20,9 +13,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="profile"
-            >PROFILE <span class="sr-only">(current)</span></a
-          >
+          <a class="nav-link" routerLink="profile">PROFILE <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="add-employee"> EMPLOYEES</a>
@@ -39,16 +30,12 @@
           </a>
         </li>
 
-        <button
-          mat-button
-          [matMenuTriggerFor]="menu"
-          class="logout-section-btn"
-        >
+        <button mat-button [matMenuTriggerFor]="menu" class="logout-section-btn">
           {{ salonData?.name }}
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="logout()">Log out</button>
           <button mat-menu-item>Subscription</button>
+          <button mat-menu-item (click)="logout()">Log out</button>
         </mat-menu>
       </ul>
     </div>
