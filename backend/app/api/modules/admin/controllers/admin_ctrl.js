@@ -65,7 +65,8 @@ module.exports = {
   addEmailTemplate: addEmailTemplate,
   resetPassword: resetPassword,
   updateCategories: updateCategories,
-  updateService: updateService
+  updateService: updateService,
+  updateSubscription: updateSubscription
 };
 
 /**
@@ -1611,8 +1612,38 @@ function createSubscription(req, res) {
   createSubscription().then(function() {});
 }
 
+function updateSubscription(req, res) {
+  console.log("UPDATESSSS", req.body);
+  async function updateSubscription() {
+    try {
+      stripe.plans.update(
+        req.body.plan_id,
+        {
+          amount: req.body.amount,
+          interval: req.body.interval,
+          trial_period_days: req.body.trial_period_days
+        },
+        function(err, plan) {
+          if (err) {
+            console.log(err);
+            res.json(
+              Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+            );
+          } else {
+          }
+        }
+      );
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  updateSubscription().then(function() {});
+}
+
 function deletePlan(req, res) {
-  console.log(req.body);
   async function deletePlan() {
     try {
       if (req.body && req.body.planid) {
@@ -1624,8 +1655,6 @@ function deletePlan(req, res) {
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
             );
           } else {
-            console.log("PLAN", confirmation);
-
             let condition = { _id: req.body._id };
             let updateCondition = { isActive: false };
 

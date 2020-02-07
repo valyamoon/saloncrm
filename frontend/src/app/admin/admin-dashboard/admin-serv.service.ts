@@ -31,6 +31,17 @@ export class AdminServService {
   // Initialize with emtpy string
   private headerResponse = new BehaviorSubject<boolean>(true);
 
+  // private dialogResponse = new BehaviorSubject<boolean>();
+
+  // setDialogResponse(data: boolean) {
+  //   // Fire the update event with the new data
+  //   this.dialogResponse.next(data);
+  // }
+
+  // getDialogResponse(): Observable<boolean> {
+  //   return this.dialogResponse.asObservable();
+  // }
+
   setHeaderResponse(data: boolean) {
     // Fire the update event with the new data
     this.headerResponse.next(data);
@@ -61,7 +72,7 @@ export class AdminServService {
   }
 
   getActiveSalonsCount(data) {
-    return this.http.post(this.baseUrl + "/salonscount", data);
+    return this.http.post(this.baseUrl + "/salonscount", data, httpOptions);
   }
   getActiveUsersCount(data) {
     return this.http.post(this.baseUrl + "/userscount", data, httpOptions);
@@ -149,6 +160,9 @@ export class AdminServService {
   }
   getPlans(data) {
     return this.http.post(this.baseUrl + "/get-plan", data);
+  }
+  editPlans(data) {
+    return this.http.post(this.baseUrl + "/update-plan", data);
   }
 
   deletePlans(data) {

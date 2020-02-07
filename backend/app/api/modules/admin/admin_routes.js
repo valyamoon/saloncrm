@@ -40,6 +40,7 @@ module.exports = function(router) {
   router.post("/reset-password", admin.resetPassword);
   router.post("/update-category", admin.updateCategories);
   router.post("/update-service", admin.updateService);
+  router.post("/update-plan", admin.updateSubscription);
 
   return router;
 };

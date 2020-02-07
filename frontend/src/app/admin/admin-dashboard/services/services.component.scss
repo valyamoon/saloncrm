@@ -80,3 +80,12 @@ table {
 .serviceForm {
   margin-top: 15px;
 }
+
+.buttonArea {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  .editBtn {
+    margin-left: 10px;
+  }
+}

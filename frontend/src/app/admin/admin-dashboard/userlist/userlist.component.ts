@@ -10,19 +10,13 @@ import { ToastrService } from "ngx-toastr";
 export class UserlistComponent implements OnInit {
   activeUsersList: any;
   activeSalons: any;
+  isLoader: boolean;
   noRecordsFound: boolean = false;
   userDetails: any;
   userDetailHeaderText: any = "User Details";
   showUserDetails: boolean;
 
-  displayedColumns = [
-    "firstName",
-    "lastName",
-    "email",
-    "phone",
-    "isactive",
-    "action"
-  ];
+  displayedColumns = ["firstName", "lastName", "email", "phone", "action"];
   page: any;
   limit: any = 0;
   count: any = 5;
@@ -41,27 +35,27 @@ export class UserlistComponent implements OnInit {
   }
 
   getActiveUsersList() {
+    this.isLoader = true;
     let dataToPass = {
       type: "user"
     };
     this.adminServ.getActiveUsersList(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
+          this.isLoader = false;
           this.activeUsersList = data["data"];
           if (this.activeUsersList.length == 0) {
             this.noRecordsFound = true;
           }
-     
-          this.toastrServ.success("Users Fetched Successfully", "Success", {
-            timeOut: 2000
-          });
         } else {
+          this.isLoader = false;
           this.toastrServ.error("Failed To Fetch Users List", "", {
             timeOut: 2000
           });
         }
       },
       error => {
+        this.isLoader = false;
         this.toastrServ.error("Server Error", error, {
           timeOut: 2000
         });
@@ -74,18 +68,21 @@ export class UserlistComponent implements OnInit {
   }
 
   viewUserDetails(data) {
+    this.isLoader = true;
     let dataToPass = {
       user_id: data._id
     };
 
     this.adminServ.getUserDetails(dataToPass).subscribe((data: any) => {
       if (data["code"] === 200) {
+        this.isLoader = false;
         this.showUserDetails = true;
         this.userDetails = data["data"];
         if (this.userDetails["profilepic"] === null) {
           this.userDetails.profilepic = "../../../assets/images/profilepic.png";
         }
       } else {
+        this.isLoader = false;
         this.toastrServ.error("Failed To Fetch User Details", "Error", {
           timeOut: 2000
         });

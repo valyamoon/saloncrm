@@ -4,7 +4,7 @@
     <div class="actionBtn">
       <button
         class="btn btn-primary btn-sign-in"
-        (click)="openAddServiceModal()"
+        (click)="openAddServiceModal('null')"
       >
         Add Service
       </button>
@@ -12,10 +12,12 @@
   </div>
   <div class="addServiceModal" *ngIf="addServiceModal">
     <div class="modalContent">
-      <div class="headerText"><h3>Add Service</h3></div>
+      <div class="headerText">
+        <h3>{{ action }}Service</h3>
+      </div>
       <div class="mainSection">
         <form class="serviceForm" [formGroup]="saveServiceForm">
-          <div class="fields">
+          <div class="fields" *ngIf="!isShowUpdate">
             <label class="label">Select Category:</label>
             <select class="selectOption select-css" formControlName="category">
               <option *ngFor="let item of categoriesList" [value]="item._id">{{
@@ -45,7 +47,7 @@
               *ngIf="isShowUpdate"
               class="btn btn-primary btn-sign-in"
               [disabled]="saveServiceForm.invalid"
-              (click)="update(saveServiceForm.value)"
+              (click)="updateData(saveServiceForm.value)"
             >
               Update
             </button>
@@ -72,7 +74,7 @@
           <td mat-cell *matCellDef="let element">{{ element.name }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="status">
+        <!-- <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef class="status-check">Status</th>
           <td mat-cell *matCellDef="let element">
             <mat-slide-toggle
@@ -80,7 +82,7 @@
               [disabled]="disabled"
             ></mat-slide-toggle>
           </td>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="status-check">Action</th>
@@ -126,3 +128,4 @@
     </div>
   </div>
 </div>
+<app-loader *ngIf="isLoader"></app-loader>
