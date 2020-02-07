@@ -19,6 +19,17 @@
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
+              <div
+                *ngIf="email.invalid && (email.dirty || email.touched)"
+                class="error-show"
+              >
+                <div *ngIf="email.errors.required">
+                  Name is required.
+                </div>
+                <div *ngIf="email.errors.pattern">
+                  Invalid Email
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-md-12">
@@ -31,6 +42,23 @@
                 id="exampleInputPassword1"
                 placeholder="Password"
               />
+              <div
+                *ngIf="password.invalid && (password.dirty || password.touched)"
+                class="error-show"
+              >
+                <div *ngIf="password.errors.required">
+                  Password is required.
+                </div>
+                <div *ngIf="password.errors">
+                  Password must be minimum 3 letters
+                </div>
+                <div *ngIf="password.errors.pattern">
+                  Password cannot contain space
+                </div>
+                <div *ngIf="password.errors.maxlength">
+                  Maximum allowed letters are 10
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-md-12">
@@ -55,12 +83,16 @@
           </div>
           <div class="col-md-12" *ngIf="isLogin">
             <div class="sign-up">
-              Don't have an account ? <a (click)="goToSignUp()">SIGN UP</a>
+              Don't have an account ?
+              <button class="resetPassword" (click)="goToSignUp()">
+                SIGN UP
+              </button>
             </div>
           </div>
           <div class="col-md-12" *ngIf="!isLogin">
             <div class="sign-up">
-              Already have an account ? <a (click)="goToLogin()">LOGIN</a>
+              Already have an account ?
+              <button class="resetPassword" (click)="goToLogin()">LOGIN</button>
             </div>
           </div>
           <div class="col-md-12">

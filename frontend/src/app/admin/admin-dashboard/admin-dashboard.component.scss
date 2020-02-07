@@ -78,6 +78,17 @@
           word-break: break-all;
           text-decoration: none;
         }
+
+        .selectors:hover {
+          padding: 8px 20px 8px 20px;
+          color: #783a87;
+          background-color: white;
+          word-break: break-all;
+          border-top-left-radius: 20px;
+          border-bottom-left-radius: 20px;
+          margin-right: 5px;
+          text-decoration: none;
+        }
         .active {
           background: white;
           color: #783a87;

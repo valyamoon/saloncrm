@@ -14,6 +14,7 @@ import { Router } from "@angular/router";
 export class AddEmployeeComponent implements OnInit {
   user_id: any;
   noRecordsFound: boolean;
+  inputPattern: any = /^\S*$/;
   categoryList: any = [];
   categoryCount: number;
   category_id: any;
@@ -29,14 +30,25 @@ export class AddEmployeeComponent implements OnInit {
     private toastrServ: ToastrService,
     private router: Router,
     public dialog: MatDialog
-  ) { }
+  ) {}
   ngOnInit() {
     this.user_id = sessionStorage.getItem("userId");
     this.getSalonData(this.user_id);
     this.employeeForm = this.fb.group({
-      name: ["", Validators.required]
+      name: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.pattern(this.inputPattern)
+        ])
+      ]
     });
   }
+
+  get name() {
+    return this.employeeForm.get("name");
+  }
+
   getSalonData(userId) {
     // console.log("GetUser ID ", userId);
     let data = {

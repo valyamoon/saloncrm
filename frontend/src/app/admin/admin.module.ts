@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { NotifierModule } from "angular-notifier";
+import { SimpleModalModule } from "ngx-simple-modal";
 import { AdminRoutingModule } from "./admin-routing.module";
 import { AdminloginComponent } from "./adminlogin/adminlogin.component";
 import { AdminDashboardComponent } from "./admin-dashboard/admin-dashboard.component";
@@ -14,7 +15,8 @@ import { DashboardComponent } from "./admin-dashboard/dashboard/dashboard.compon
 import {
   MatPaginatorModule,
   MatTableModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatProgressSpinnerModule
 } from "@angular/material";
 import { CategoriesComponent } from "./admin-dashboard/categories/categories.component";
 import { ServicesComponent } from "./admin-dashboard/services/services.component";
@@ -22,8 +24,10 @@ import { RolesComponent } from "./admin-dashboard/roles/roles.component";
 import { HeaderTextComponent } from "./admin-dashboard/header-text/header-text.component";
 import { ConfirmationComponent } from "./admin-dashboard/confirmation/confirmation.component";
 import { ManageAdminComponent } from "./admin-dashboard/manage-admin/manage-admin.component";
-import { ManageplanComponent } from './admin-dashboard/manageplan/manageplan.component';
-import { SubcriptionsListComponent } from './admin-dashboard/subcriptions-list/subcriptions-list.component';
+import { ManageplanComponent } from "./admin-dashboard/manageplan/manageplan.component";
+import { SubcriptionsListComponent } from "./admin-dashboard/subcriptions-list/subcriptions-list.component";
+import { LoaderComponent } from "./admin-dashboard/loader/loader.component";
+import { DeleteDialogComponent } from "./admin-dashboard/delete-dialog/delete-dialog.component";
 
 @NgModule({
   declarations: [
@@ -40,7 +44,9 @@ import { SubcriptionsListComponent } from './admin-dashboard/subcriptions-list/s
     ConfirmationComponent,
     ManageAdminComponent,
     ManageplanComponent,
-    SubcriptionsListComponent
+    SubcriptionsListComponent,
+    LoaderComponent,
+    DeleteDialogComponent
   ],
   imports: [
     CommonModule,
@@ -52,8 +58,10 @@ import { SubcriptionsListComponent } from './admin-dashboard/subcriptions-list/s
     RouterModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule,
+    SimpleModalModule.forRoot({ container: "modal-container" })
   ],
   entryComponents: [ConfirmationComponent]
 })
-export class AdminModule { }
+export class AdminModule {}

@@ -17,11 +17,16 @@ table {
   }
 }
 .status-check {
-  width: 120px;
+  width: 10%;
 }
-
+.status-check:nth-child(2) {
+  width: 25%;
+}
+.status-check:nth-child(1) {
+  width: 20%;
+}
 .suspend-sec {
-  width: 13%;
+  width: 20%;
   margin-left: 10px;
 }
 .actionArea {
@@ -29,7 +34,6 @@ table {
   align-items: center;
 }
 .status-check-action {
-  width: 240px;
 }
 // .noRecords{
 //     display: flex;
