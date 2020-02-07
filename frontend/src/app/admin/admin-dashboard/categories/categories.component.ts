@@ -44,13 +44,20 @@ export class CategoriesComponent implements OnInit {
   }
 
   openAddCategoryModal(data) {
-    if (data) {
+    if (data === "add") {
+      this.isAddModal = true;
+      this.isShowUpdate = false;
+    } else {
       this.categoryForm.get("name").setValue(data.catname);
       this.categoryID = data._id;
       this.isAddModal = true;
-    } else if (data === "null") {
-      this.isAddModal = true;
+      this.isShowUpdate = true;
     }
+
+    // if (data) {
+    // } else if (data === "null") {
+    //   this.isAddModal = true;
+    // }
 
     //console.log(this.isAddModal);
   }
