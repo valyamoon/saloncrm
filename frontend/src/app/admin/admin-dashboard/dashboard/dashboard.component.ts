@@ -85,9 +85,13 @@ export class DashboardComponent implements OnInit {
         // console.log("COUNT", this.count, this.SalonRequestList);
       },
       error => {
-        this.toastServ.error("Failed To Fetch Salons Request", error.error, {
-          timeOut: 1000
-        });
+        this.toastServ.error(
+          "Failed To Fetch Salons Request",
+          error.error["message"],
+          {
+            timeOut: 1000
+          }
+        );
       }
     );
   }
@@ -128,9 +132,13 @@ export class DashboardComponent implements OnInit {
         }
       },
       error => {
-        this.toastServ.error("Failed To Approve Salon", error.error, {
-          timeOut: 1000
-        });
+        this.toastServ.error(
+          "Failed To Approve Salon",
+          error.error["message"],
+          {
+            timeOut: 1000
+          }
+        );
       }
     );
   }
@@ -155,7 +163,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error => {
-        this.toastServ.error("Server Error", error.error, {
+        this.toastServ.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -183,7 +191,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error => {
-        this.toastServ.error("Server Error", error.error, {
+        this.toastServ.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -247,7 +255,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error => {
-        this.toastServ.error("Server Error", error.error, {
+        this.toastServ.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }

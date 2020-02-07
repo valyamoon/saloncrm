@@ -111,7 +111,7 @@ export class ServicesComponent implements OnInit {
         }
       },
       error => {
-        this.toastrServ.error("Server Error", error.error, {
+        this.toastrServ.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -162,7 +162,7 @@ export class ServicesComponent implements OnInit {
             }
           },
           error => {
-            this.toastrServ.error("Server Error", error.error, {
+            this.toastrServ.error("Server Error", error.error["message"], {
               timeOut: 1000,
               progressAnimation: "decreasing"
             });
@@ -199,7 +199,7 @@ export class ServicesComponent implements OnInit {
         }
       },
       error => {
-        this.toastrServ.error("Server Error", error.error, {
+        this.toastrServ.error("Server Error", error.error["message"], {
           timeOut: 1000,
           progressAnimation: "decreasing"
         });
@@ -246,7 +246,7 @@ export class ServicesComponent implements OnInit {
         }
       },
       error => {
-        this.toastrServ.error("Server Error", error.error, {
+        this.toastrServ.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
