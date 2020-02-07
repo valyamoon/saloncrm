@@ -132,7 +132,7 @@ export class CategoriesComponent implements OnInit {
       error => {
         this.isLoader = false;
         this.isAddModal = false;
-        this.toastrSev.error("Server Error", error.error, {
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -166,7 +166,7 @@ export class CategoriesComponent implements OnInit {
       },
       error => {
         this.isLoader = false;
-        this.toastrSev.error("Server Error", error.error, {
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -200,7 +200,7 @@ export class CategoriesComponent implements OnInit {
           },
           error => {
             this.isLoader = false;
-            this.toastrSev.error("Server Error", error.error, {
+            this.toastrSev.error("Server Error", error.error["message"], {
               timeOut: 1000
             });
           }
@@ -237,7 +237,7 @@ export class CategoriesComponent implements OnInit {
         }
       },
       error => {
-        this.toastrSev.error("Server Error", error.error, {
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -264,7 +264,7 @@ export class CategoriesComponent implements OnInit {
         }
       },
       error => {
-        this.toastrSev.error("Server Error", error.error, {
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }

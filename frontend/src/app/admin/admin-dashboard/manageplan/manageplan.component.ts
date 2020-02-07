@@ -85,7 +85,7 @@ export class ManageplanComponent implements OnInit {
           },
           error => {
             this.isLoader = false;
-            this.toastServ.error("Server- Error", error, {
+            this.toastServ.error("Server- Error", error.error["message"], {
               timeOut: 1000
             });
           }
@@ -123,7 +123,7 @@ export class ManageplanComponent implements OnInit {
         }
       },
       error => {
-        this.toastServ.error("Server- Error", error, {
+        this.toastServ.error("Server- Error", error.error["message"], {
           timeOut: 1000
         });
         this.isLoader = false;
@@ -174,7 +174,7 @@ export class ManageplanComponent implements OnInit {
       },
       error => {
         this.isLoader = false;
-        this.toastServ.error("Server- Error", error, {
+        this.toastServ.error("Server- Error", error.error["message"], {
           timeOut: 1000
         });
       }

@@ -97,7 +97,7 @@ export class SubcriptionsListComponent implements OnInit {
       },
       error => {
         this.isLoader = false;
-        this.toastServ.error("Server- Error", error.error, {
+        this.toastServ.error("Server- Error", error.error["message"], {
           timeOut: 1000
         });
       }

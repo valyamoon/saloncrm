@@ -78,7 +78,7 @@ export class SalonlistComponent implements OnInit {
       },
       error => {
         this.isLoader = false;
-        this.toastrServ.success("Server Error", error, {
+        this.toastrServ.success("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -98,7 +98,7 @@ export class SalonlistComponent implements OnInit {
         }
       },
       error => {
-        this.toastrServ.error("Server Error", error, {
+        this.toastrServ.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -168,7 +168,7 @@ export class SalonlistComponent implements OnInit {
       },
       error => {
         this.isLoader = false;
-        this.toastrServ.error("Server Error", error, {
+        this.toastrServ.error("Server Error", error.error["message"], {
           timeOut: 3000
         });
       }

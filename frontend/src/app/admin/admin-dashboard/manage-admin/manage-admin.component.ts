@@ -102,7 +102,7 @@ export class ManageAdminComponent implements OnInit {
       },
       error => {
         this.isLoader = false;
-        this.toastrServ.error("Server - Error", error.error, {
+        this.toastrServ.error("Server - Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -131,7 +131,7 @@ export class ManageAdminComponent implements OnInit {
       },
       error => {
         this.isLoader = false;
-        this.toastrServ.error("Server - Error", error.error, {
+        this.toastrServ.error("Server - Error", error.error["message"], {
           timeOut: 1000
         });
       }
