@@ -9,6 +9,7 @@ import { ToastrService } from "ngx-toastr";
 })
 export class SubcriptionsListComponent implements OnInit {
   salonSubscriptionsList: any;
+  isLoader: boolean;
   convertedSalonSubscriptionList: any;
   salonSubscriptionCount: any;
   displayedColumns = ["name", "startdate", "enddate"];
@@ -37,6 +38,7 @@ export class SubcriptionsListComponent implements OnInit {
   }
 
   getSubscribedSalonsList() {
+    this.isLoader = true;
     let dataToPass = {
       type: "subscriptions",
       pageSize: this.count,
@@ -44,9 +46,8 @@ export class SubcriptionsListComponent implements OnInit {
     };
     this.adminServ.getSalonSubscriptionList(dataToPass).subscribe(
       (data: any) => {
-      
-
         if (data["code"] === 200) {
+          this.isLoader = false;
           this.salonSubscriptionsList = data["data"]["salons"];
 
           this.salonSubscriptionsList.forEach(function(c) {
@@ -81,7 +82,6 @@ export class SubcriptionsListComponent implements OnInit {
           });
 
           this.convertedSalonSubscriptionList = this.salonSubscriptionsList;
-      
 
           this.salonSubscriptionCount = data["data"]["count"];
 
@@ -89,12 +89,14 @@ export class SubcriptionsListComponent implements OnInit {
             timeOut: 1000
           });
         } else if (data["code"] === 400) {
+          this.isLoader = false;
           this.toastServ.error("Failed to fetch", data["message"], {
             timeOut: 1000
           });
         }
       },
       error => {
+        this.isLoader = false;
         this.toastServ.error("Server- Error", error.error, {
           timeOut: 1000
         });

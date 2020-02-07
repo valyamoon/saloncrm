@@ -14,7 +14,7 @@ import { AllservService } from "src/app/allserv.service";
 export class LoginComponent implements OnInit {
   salonLoginForm: FormGroup;
   emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
-
+  inputPattern: any = /^\S*$/;
   headerText: any = "Login";
   isLogin: boolean = true;
   userData: any;
@@ -31,10 +31,25 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.salonLoginForm = this.fb.group({
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]],
-      password: ["", Validators.required]
+      password: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+          Validators.pattern(this.inputPattern)
+        ])
+      ]
     });
 
     this.allServ.setRoute(this.router.url);
+  }
+
+  get password() {
+    return this.salonLoginForm.get("password");
+  }
+  get email() {
+    return this.salonLoginForm.get("email");
   }
 
   resetPassword() {

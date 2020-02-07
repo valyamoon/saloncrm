@@ -24,9 +24,16 @@
           <img
             src="../../../../assets/images/delete.svg"
             alt="Delete"
-            title="Delete Category"
+            title="Delete Plan"
           />
         </a>
+        <!-- <a (click)="updatePlan(item)">
+          <img
+            src="../../../../assets/images/edit.svg"
+            alt="Update"
+            title="Update Plan"
+          />
+        </a> -->
 
         <!-- <button
           class="btn-primary btn btn-sign-in edit"
@@ -78,7 +85,7 @@
         <div class="inpFeilds">
           <label>Amount:</label>
           <input
-            type="text"
+            type="number"
             class="form-control"
             formControlName="amount"
             placeholder="Amount"
@@ -87,7 +94,7 @@
         <div class="inpFeilds">
           <label>Trial Period:</label>
           <input
-            type="text"
+            type="number"
             class="form-control"
             formControlName="trialperiod"
             placeholder="Trial Days"
@@ -95,8 +102,8 @@
         </div>
         <div class="inpFeilds">
           <label>Cycle:</label>
-          <select class="select-css " formControlName="interval">
-            <option *ngFor="let item of intervals" [value]="item.value">{{
+          <select formControlName="interval">
+            <option *ngFor="let item of intervals" [ngValue]="item.value">{{
               item.key
             }}</option>
           </select>
@@ -110,6 +117,14 @@
           >
             Add
           </button>
+          <button
+            *ngIf="isEditPlan"
+            class="btn btn-primary btn-sign-in"
+            [disabled]="savePlan.invalid"
+            (click)="update(savePlan.value)"
+          >
+            Update
+          </button>
 
           <button class="btn btn-primary btn-sign-in" (click)="close('add')">
             Cancel
@@ -122,3 +137,4 @@
     No Records Found
   </div>
 </div>
+<app-loader *ngIf="isLoader"></app-loader>

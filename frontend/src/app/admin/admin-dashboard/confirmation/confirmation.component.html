@@ -1,14 +1,16 @@
-<!-- <h1 mat-dialog-title>
-  {{title}}
-</h1>
- 
-<div mat-dialog-content>
-  <p>{{message}}</p>
+<div class="modal-content">
+  <div class="modal-header">
+    <h4>{{ title || "Confirm" }}</h4>
+  </div>
+  <div class="modal-body">
+    <p>{{ message || "Are you sure?" }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="cancel()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="confirm()">
+      OK
+    </button>
+  </div>
 </div>
- 
-<div mat-dialog-actions>
-  <button mat-button (click)="onDismiss()">No</button>
-  <button mat-raised-button color="primary" (click)="onConfirm()">Yes</button>
-</div> -->
-<input id="pac-input" class="controls" type="text" placeholder="Search Box" />
-<div id="map"></div>

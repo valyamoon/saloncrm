@@ -72,9 +72,7 @@ export class DashboardComponent implements OnInit {
         if (data["code"] == 200) {
           this.SalonRequestList = data["data"]["data"];
           this.limit = data["data"]["countNumber"];
-          this.toastServ.success("Salon Requests Fetched Successfully", "", {
-            timeOut: 1000
-          });
+
           if (this.limit == 0 || this.SalonRequestList.length === 0) {
             this.noRecordFound = true;
           }

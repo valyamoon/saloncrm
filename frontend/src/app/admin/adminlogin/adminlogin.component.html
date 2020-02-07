@@ -11,12 +11,25 @@
               <label for="InputEmail">Email address</label>
               <input
                 type="email"
+                required
                 formControlName="email"
                 class="form-control"
                 id="InputEmail"
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
+
+              <div
+                *ngIf="email.invalid && (email.dirty || email.touched)"
+                class="error-show"
+              >
+                <div *ngIf="email.errors.required">
+                  Name is required.
+                </div>
+                <div *ngIf="email.errors.pattern">
+                  Invalid Email
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-md-12">
@@ -24,11 +37,26 @@
               <label for="InputPassword">Password</label>
               <input
                 type="password"
+                required
                 formControlName="password"
                 class="form-control"
                 id="exampleInputPassword1"
                 placeholder="Password"
               />
+              <div
+                *ngIf="password.invalid && (password.dirty || password.touched)"
+                class="error-show"
+              >
+                <div *ngIf="password.errors.required">
+                  Password is required.
+                </div>
+                <div *ngIf="password.errors.minlength">
+                  Password must be minimum 3 letters
+                </div>
+                <div *ngIf="password.errors.maxlength">
+                  Maximum allowed letters are 10
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-md-12">

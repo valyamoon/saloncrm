@@ -37,6 +37,7 @@ export class RolesComponent implements OnInit {
   isDeleteDialog: boolean = false;
   isConfirm: any;
   dataToDelete: any;
+  isLoader: boolean;
 
   constructor(
     private admnServ: AdminServService,
@@ -74,6 +75,7 @@ export class RolesComponent implements OnInit {
   }
 
   fetchRoles() {
+    this.isLoader = true;
     let dataToPass = {
       type: "roles",
       pageSize: this.count,
@@ -83,16 +85,14 @@ export class RolesComponent implements OnInit {
       (data: any) => {
         //   console.log(data);
         if (data["code"] == 200) {
+          this.isLoader = false;
           this.rolesList = data["data"]["data"];
           this.rolesCount = data["data"]["count"];
           if (this.rolesList.length == 0) {
             this.noRecordsFound = true;
           }
-
-          this.toastrServ.success("Fetched Roles", "Success", {
-            timeOut: 1000
-          });
         } else {
+          this.isLoader = false;
           this.noRecordsFound = false;
           this.toastrServ.error("Failed To Fetch Roles", "Error", {
             timeOut: 1000
@@ -100,6 +100,7 @@ export class RolesComponent implements OnInit {
         }
       },
       error => {
+        this.isLoader = false;
         this.toastrServ.error("Server Error", error.error, {
           timeOut: 1000
         });

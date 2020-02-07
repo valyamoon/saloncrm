@@ -516,6 +516,28 @@ commonQuery.updateAllDocument = function updateAllDocument(
       });
   });
 };
+
+commonQuery.filterEmployee = function filterEmployee(
+  model,
+  salon_id,
+  salonservices_id
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .aggregate([
+        { $match: { salon_id: salon_id, salonservices_id: salonservices_id } },
+        { $sort: { name: 1 } }
+      ])
+      .exec((err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(response);
+        }
+      });
+  });
+};
+
 commonQuery.updateMany = function updateMany(
   model,
   updateCond,

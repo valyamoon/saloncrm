@@ -6,12 +6,16 @@ var employeeSchema = mongoose.Schema({
   },
   salonservices_id: {
     type: [mongoose.Types.ObjectId],
-    ref: 'salonservices'
+    ref: "salonservices"
   },
   salon_id: {
     type: mongoose.Types.ObjectId,
     ref: "salons",
     unique: false
+  },
+  isBooked: {
+    type: Boolean,
+    default: false
   }
 });
 var employees = (module.exports = mongoose.model("employees", employeeSchema));
