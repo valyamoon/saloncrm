@@ -4,7 +4,7 @@
     <div class="actionBtn">
       <button
         class="btn btn-primary btn-sign-in"
-        (click)="openAddServiceModal('null')"
+        (click)="openAddServiceModal('add')"
       >
         Add Service
       </button>
@@ -100,7 +100,7 @@
                   title="Delete Service"
                 />
               </div>
-              <div class="editBtn" (click)="updateService(element)">
+              <div class="editBtn" (click)="openAddServiceModal(element)">
                 <img
                   src="../../../../assets/images/edit.svg"
                   width="16px"

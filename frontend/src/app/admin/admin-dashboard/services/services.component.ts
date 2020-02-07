@@ -119,23 +119,19 @@ export class ServicesComponent implements OnInit {
   }
 
   openAddServiceModal(data) {
-    if (data) {
-      this.serviceData = data;
-      console.log("serviceData", this.serviceData);
+    if (data === "add") {
+      this.action = "Add";
+      this.addServiceModal = true;
+      this.isShowUpdate = false;
+    } else {
       this.action = "Edit";
       this.isShowUpdate = true;
-    } else if (data === "null") {
-      this.action = "Add";
-      this.isShowUpdate = false;
-    }
-
-    this.addServiceModal = true;
-    this.serviceID = data["_id"];
-    this.saveServiceForm.get("name").setValue(data.name);
-
-    if (this.isShowUpdate === true) {
+      this.serviceData = data;
       this.saveServiceForm.get("category").setValidators(null);
       this.saveServiceForm.updateValueAndValidity();
+      this.addServiceModal = true;
+      this.serviceID = data["_id"];
+      this.saveServiceForm.get("name").setValue(data.name);
     }
   }
 

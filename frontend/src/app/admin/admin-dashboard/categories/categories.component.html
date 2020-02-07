@@ -10,7 +10,7 @@
         <div class="btnActionArea">
           <button
             class="btn btn-primary btn-sign-in"
-            (click)="openAddCategoryModal('null')"
+            (click)="openAddCategoryModal('add')"
           >
             Add Category
           </button>
@@ -154,7 +154,7 @@
                   title="Delete Category"
                 />
               </div>
-              <div class="editBtn" (click)="updateCategory(element)">
+              <div class="editBtn" (click)="openAddCategoryModal(element)">
                 <img
                   src="../../../../assets/images/edit.svg"
                   width="16px"
