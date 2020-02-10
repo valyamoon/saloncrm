@@ -1316,7 +1316,6 @@ function fetchActiveUsersAll(req, res) {
  */
 
 function forgotPassword(req, res) {
-  console.log("EMAIL", req.body);
   async function forgot_password() {
     try {
       if (!req.body.email) {
@@ -1324,7 +1323,6 @@ function forgotPassword(req, res) {
       } else if (req.body.email && !validator.isEmail(req.body.email)) {
         res.json(Error(constant.ERROR_CODE, "Invalid Email"));
       } else {
-        console.log("req==========", req.body);
         var model = users;
         var condition = {
           email: req.body.email,
@@ -1332,7 +1330,6 @@ function forgotPassword(req, res) {
           isActive: true
         };
         var userObj = await commonQuery.findoneData(model, condition);
-        console.log("userObj", userObj);
 
         if (userObj) {
           var condition = {
@@ -1348,7 +1345,7 @@ function forgotPassword(req, res) {
             condition,
             updateData
           );
-          console.log("updateKeyupdateKey", updateKey);
+
           if (updateKey._id) {
             var baseUrl = Config.baseUrl;
             var userMailData = {
@@ -1356,7 +1353,7 @@ function forgotPassword(req, res) {
               email: userObj.email ? userObj.email : "",
               link: baseUrl + "#/create-password/" + updateKey.resetkey
             };
-            console.log("BSSSSS", userMailData);
+
             let obj = {
               data: userMailData,
               mailType: "Forget Password" //constant.varibleType.FORGET_PASSWORD //"Forget Password"
@@ -1395,7 +1392,6 @@ function forgotPassword(req, res) {
  * Created On 09/01/2020
  */
 async function getServiceList(req, res) {
-  console.log("req.body", req.body);
   if (req.body.user_id) {
     var salonId = await util.getSalonId(req.body.user_id);
     let finalServiceArr = [];
@@ -1407,7 +1403,7 @@ async function getServiceList(req, res) {
     let pageSize = 100;
     let page = 1;
     let serviceList = await commonQuery.fetch_all(services, salonCond);
-    //  console.log("serviceList", serviceList); return;
+
     async.each(
       serviceList,
       async function(serviceData, firstCB) {
@@ -1437,8 +1433,16 @@ async function getServiceList(req, res) {
     );
   }
 }
+
+/**
+ * Function is use to get list of all services
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 async function getServices(req, res) {
-  console.log("res.body", res.body);
   if (req.body.category_id) {
     let cond = {
       category_id: req.body.category_id
@@ -1459,6 +1463,15 @@ async function getServices(req, res) {
     );
   }
 }
+
+/**
+ * Function is use to get list of active users
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function activeUsers(req, res) {
   async function activeUsers() {
     try {
@@ -1499,6 +1512,15 @@ function activeUsers(req, res) {
   }
   activeUsers().then(function() {});
 }
+
+/**
+ * Function is use to deactive a user
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function deactiveUsers() {
   async function deactiveUsers() {
     try {
@@ -1540,14 +1562,22 @@ function deactiveUsers() {
   deactiveUsers().then(function() {});
 }
 
-function viewDetails(req, res) {
-  async function viewDetails() {
-    try {
-    } catch (error) {}
-  }
+// function viewDetails(req, res) {
+//   async function viewDetails() {
+//     try {
+//     } catch (error) {}
+//   }
 
-  viewDetails().then(function() {});
-}
+//   viewDetails().then(function() {});
+// }
+
+/**
+ * Function is use to create subscription
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
 function createSubscription(req, res) {
   console.log(req.body);
@@ -1568,8 +1598,6 @@ function createSubscription(req, res) {
                 Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
               );
             } else {
-              console.log("PLAN", plan);
-
               let subscriptionSave = new subscriptionplans({
                 id: req.body.planname,
                 plan_id: plan.id,
@@ -1584,7 +1612,6 @@ function createSubscription(req, res) {
                 subscriptionSave
               );
               if (saveSubscription) {
-                console.log(saveSubscription);
               }
 
               res.json(
@@ -1612,8 +1639,15 @@ function createSubscription(req, res) {
   createSubscription().then(function() {});
 }
 
+/**
+ * Function is use to update subscription
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function updateSubscription(req, res) {
-  console.log("UPDATESSSS", req.body);
   async function updateSubscription() {
     try {
       stripe.plans.update(
@@ -1643,6 +1677,14 @@ function updateSubscription(req, res) {
   updateSubscription().then(function() {});
 }
 
+/**
+ * Function is use to delete a plan
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function deletePlan(req, res) {
   async function deletePlan() {
     try {
@@ -1664,7 +1706,6 @@ function deletePlan(req, res) {
               updateCondition
             );
             if (updateSubscription) {
-              console.log("HEEELO", updateSubscription);
             }
 
             res.json(
@@ -1691,15 +1732,21 @@ function deletePlan(req, res) {
   deletePlan().then(function() {});
 }
 
+/**
+ * Function is use to get subscription
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function getSubscription(req, res) {
-  console.log(req.body);
   async function getSubscription() {
     try {
       if (req.body && req.body.type === "plans") {
-        console.log("sssssssss");
         let condition = { isActive: true };
         let plansList = await commonQuery.findAll(subscriptionplans, condition);
-        console.log(plansList);
+
         if (!plansList) {
           res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -1723,6 +1770,14 @@ function getSubscription(req, res) {
 
   getSubscription().then(function() {});
 }
+
+/**
+ * Function is use to get list of subscribed salons
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
 function getSubscirbedSalonsList(req, res) {
   let count;
@@ -1766,8 +1821,15 @@ function getSubscirbedSalonsList(req, res) {
   getSubscirbedSalonsList().then(function() {});
 }
 
+/**
+ * Function is use to add an email template to DB
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function addEmailTemplate(req, res) {
-  console.log(req.body);
   async function addEmailTemplate() {
     try {
       if (req.body && req.body.title) {
@@ -1783,7 +1845,7 @@ function addEmailTemplate(req, res) {
           emailtemplate,
           saveEmailTemplate
         );
-        console.log(saveTemplate);
+
         res.send(saveTemplate);
       }
     } catch (error) {}
@@ -1792,20 +1854,28 @@ function addEmailTemplate(req, res) {
   addEmailTemplate().then(function() {});
 }
 
+/**
+ * Function is use to reset password
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
+
 function resetPassword(req, res) {
   async function resetPassword() {
     try {
       if (req.body && req.body.resetkey) {
         let condition = { resetkey: req.body.resetkey };
         let isResetkey = await commonQuery.findData(users, condition);
-        console.log("ISRESETKEY", isResetkey);
+
         if (!isResetkey) {
           return res.json(
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
           );
         } else {
           let id = isResetkey.data[0]["_id"];
-          console.log("ID", id);
+
           users.findById(id, function(err, result) {
             if (err) {
               res.json(
@@ -1832,6 +1902,14 @@ function resetPassword(req, res) {
 
   resetPassword().then(function() {});
 }
+
+/**
+ * Function is use to update categories
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
 function updateCategories(req, res) {
   async function updateCategories() {
@@ -1868,6 +1946,14 @@ function updateCategories(req, res) {
 
   updateCategories().then(function() {});
 }
+
+/**
+ * Function is use to update services
+ * @access private
+ * @return json
+ * Created by SmartData
+ * @smartData Enterprises (I) Ltd
+ */
 
 function updateService(req, res) {
   async function updateService() {

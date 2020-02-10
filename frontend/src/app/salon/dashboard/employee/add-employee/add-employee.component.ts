@@ -14,7 +14,7 @@ import { Router } from "@angular/router";
 export class AddEmployeeComponent implements OnInit {
   user_id: any;
   noRecordsFound: boolean;
-  inputPattern: any = /^\S*$/;
+
   categoryList: any = [];
   categoryCount: number;
   category_id: any;
@@ -35,13 +35,7 @@ export class AddEmployeeComponent implements OnInit {
     this.user_id = sessionStorage.getItem("userId");
     this.getSalonData(this.user_id);
     this.employeeForm = this.fb.group({
-      name: [
-        "",
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(this.inputPattern)
-        ])
-      ]
+      name: ["", Validators.compose([Validators.required])]
     });
   }
 
@@ -81,9 +75,10 @@ export class AddEmployeeComponent implements OnInit {
       name: data.name,
       salon_id: this.salonData._id
     };
-
+    console.log("DATA", data);
     this.commServ.addEmployee(dataToPass).subscribe(
       data => {
+        console.log("DATA", data);
         if (data["code"] === 200) {
           this.toastrServ.success("Employee Added", "Success", {
             timeOut: 2000
