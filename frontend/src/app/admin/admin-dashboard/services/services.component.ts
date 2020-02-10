@@ -12,7 +12,7 @@ import { SimpleModalService } from "ngx-simple-modal";
   styleUrls: ["./services.component.scss"]
 })
 export class ServicesComponent implements OnInit {
-  noRecordsFound: boolean;
+  noRecordsFound: boolean = false;
   action: any;
   isLoader: boolean = false;
   pageSize: any = 5;
@@ -93,16 +93,17 @@ export class ServicesComponent implements OnInit {
       pageSize: this.count,
       page: this.page
     };
-    //  console.log(dataToPass);
+
     this.adminServ.getAdmincategoriesList(dataToPass).subscribe(
       data => {
-        //  console.log(data);
         if (data["code"] === 200) {
           this.adminCategoriesCount = data["data"]["count"];
-          this.categoriesList = data["data"]["data"];
-          //   console.log("cate",this.categoriesList);
-          if (this.categoriesList.length == 0) {
-            this.noRecordsFound = true;
+          if (data["data"]["data"].length === 0) {
+            this.showNoRecords(true);
+          }
+          if (data["data"]["data"].length > 0) {
+            this.showNoRecords(false);
+            this.categoriesList = data["data"]["data"];
           }
         } else {
           this.toastrServ.error("Failed To Fetch", "Error", {
@@ -116,6 +117,9 @@ export class ServicesComponent implements OnInit {
         });
       }
     );
+  }
+  showNoRecords(data) {
+    this.noRecordsFound = data;
   }
 
   openAddServiceModal(data) {
@@ -136,7 +140,6 @@ export class ServicesComponent implements OnInit {
   }
 
   deleteService(data) {
-    console.log(data);
     this.SimpleModalService.addModal(ConfirmationComponent, {
       title: "Warning",
       message: "Are you sure you want to delete?"
@@ -212,10 +215,8 @@ export class ServicesComponent implements OnInit {
     this.saveServiceForm.reset();
   }
   paginate(event) {
-    // console.log(event);
     this.page = event.pageIndex + 1;
-    // console.log("c", this.count);
-    // console.log("p", this.page);
+
     this.count = event.pageSize;
     this.fetchAllServices();
   }
@@ -228,13 +229,14 @@ export class ServicesComponent implements OnInit {
     };
     this.adminServ.getServices(dataToPass).subscribe(
       (data: any) => {
-        // console.log("Sevrices",data);
         if (data["code"] === 200) {
           this.servicesList = data["data"]["data"];
-          // console.log("SERVICES", this.servicesList);
+
           this.servicesCount = data["data"]["count"];
-          if (this.servicesList.length == 0) {
+          if (data["data"]["data"].length == 0) {
             this.noRecordsFound = true;
+          } else {
+            this.noRecordsFound = false;
           }
           // this.toastrServ.success("Fetched Services", "Success", {
           //   timeOut: 1000
