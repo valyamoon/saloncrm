@@ -64,7 +64,7 @@
   </div>
 
   <div class="table-responsive tablecustom">
-    <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+    <div class="mat-elevation-z8">
       <table mat-table [dataSource]="servicesList">
         <!-- Position Column -->
 
@@ -122,9 +122,9 @@
         [pageSizeOptions]="[5, 10, 15, 20]"
         showFirstLastButtons
       ></mat-paginator>
-    </div>
-    <div *ngIf="noRecordsFound" class="noRecords">
-      <div class="noRec">No Records Found</div>
+      <div *ngIf="noRecordsFound" class="noRecords">
+        <div class="noRec">No Records Found</div>
+      </div>
     </div>
   </div>
 </div>
