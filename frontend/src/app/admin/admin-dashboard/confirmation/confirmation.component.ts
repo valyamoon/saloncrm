@@ -9,9 +9,9 @@ export class ConfirmationComponent implements OnInit {
   title: string;
   message: string;
   isConfirm: boolean;
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
   //  onConfirm() {
   //   // Close the dialog, return true
   //  return this.isConfirm =  true;
@@ -36,14 +36,14 @@ export class ConfirmationComponent implements OnInit {
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
     // Bias the SearchBox results towards current map's viewport.
-    map.addListener("bounds_changed", function() {
+    map.addListener("bounds_changed", function () {
       searchBox.setBounds(map.getBounds());
     });
 
     var markers = [];
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
-    searchBox.addListener("places_changed", function() {
+    searchBox.addListener("places_changed", function () {
       var places = searchBox.getPlaces();
 
       if (places.length == 0) {
@@ -51,16 +51,16 @@ export class ConfirmationComponent implements OnInit {
       }
 
       // Clear out the old markers.
-      markers.forEach(function(marker) {
+      markers.forEach(function (marker) {
         marker.setMap(null);
       });
       markers = [];
 
       // For each place, get the icon, name and location.
       var bounds = new google.maps.LatLngBounds();
-      places.forEach(function(place) {
+      places.forEach(function (place) {
         if (!place.geometry) {
-          console.log("Returned place contains no geometry");
+
           return;
         }
         var icon = {

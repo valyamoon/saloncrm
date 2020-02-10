@@ -47,7 +47,7 @@ export class SalondetailsComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(pos => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
-        console.log("DDD", this.lat, this.lng);
+
       });
     }
   }
@@ -58,7 +58,7 @@ export class SalondetailsComponent implements OnInit {
     this.userid = this.user_id;
     this.isApprovedStatus = JSON.parse(sessionStorage.getItem("isApproved"));
 
-    console.log("ISAPPROVEDSTATUS", this.isApprovedStatus);
+
     this.chechIsApprovedStatus(this.isApprovedStatus);
 
     this.submitSalonDetails = this.fb.group({
@@ -75,7 +75,7 @@ export class SalondetailsComponent implements OnInit {
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
 
-    console.log(this.user_id);
+
     this.checkInitialApprovalStatus = JSON.parse(
       sessionStorage.getItem("isSubmitted")
     );
@@ -118,12 +118,11 @@ export class SalondetailsComponent implements OnInit {
 
   checkIsApprovedProfile() {
     this.checkIsApproved = JSON.parse(sessionStorage.getItem("isApproved"));
-    console.log(this.checkIsApproved);
+
   }
 
   submitSalon(data) {
-    console.log("INSIDE DATA", JSON.stringify(data));
-    console.log(this.user_id);
+
     let dataToPass = {
       name: data.name,
       salonaddress: data.salonaddress,
@@ -148,12 +147,12 @@ export class SalondetailsComponent implements OnInit {
     postData.append("user_id", dataToPass.user_id);
     postData.append("email", this.salonEmail);
 
-    console.log("POSTDATA", postData);
+
 
     var options = { content: postData };
-    console.log(options);
 
-    console.log("DATATOPASS", dataToPass);
+
+
     this.commServ.saveSalonDetails(postData).subscribe(
       data => {
         if (data["code"] === 200) {
@@ -199,11 +198,11 @@ export class SalondetailsComponent implements OnInit {
     };
     this.commServ.getSalonDetailsData(dataToPass).subscribe(
       (data: any) => {
-        console.log(data);
+
         if (data["code"] === 200) {
           this.salonDetailsData = data["data"];
           this.salonid = data["data"]._id;
-          console.log(this.salonid);
+
         } else {
           this.toastrServ.error("Failed to fetch salon details", "error", {
             timeOut: 1000
@@ -219,7 +218,7 @@ export class SalondetailsComponent implements OnInit {
   }
 
   editSalonDetailsShow() {
-    console.log("this.salonDetailsData", this.salonDetailsData);
+
     this.editSalonDetails = true;
     this.submitSalonDetails.get("name").setValue(this.salonDetailsData.name);
     this.submitSalonDetails
@@ -237,7 +236,7 @@ export class SalondetailsComponent implements OnInit {
   }
 
   updatetSalon(data) {
-    console.log("ASSSSSAAAA", data);
+
     let dataToPass = {
       salon_id: this.salonid,
       name: data.name,
