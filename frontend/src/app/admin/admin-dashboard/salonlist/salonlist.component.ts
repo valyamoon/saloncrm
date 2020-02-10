@@ -10,13 +10,13 @@ import { ToastrService } from "ngx-toastr";
 export class SalonlistComponent implements OnInit {
   activeSalons: any;
   noRecordsFound: boolean;
+  isLoader: boolean;
   displayedColumns = [
     "name",
     "salonaddress",
     "contact",
     "opentime",
     "closetime",
-    "isactive",
     "action"
   ];
 
@@ -50,6 +50,7 @@ export class SalonlistComponent implements OnInit {
    * @smartData Enterprises (I) Ltd
    */
   getActiveSalonsList() {
+    this.isLoader = true;
     let dataToPass = {
       type: "activesalons",
       pageSize: this.count,
@@ -60,6 +61,7 @@ export class SalonlistComponent implements OnInit {
         // console.log(data);
         // console.log("SalonsList", data["data"]);
         if (data["code"] === 200) {
+          this.isLoader = false;
           this.activeSalons = data["data"];
           if (this.activeSalons.length == 0) {
             this.noRecordsFound = true;
@@ -68,13 +70,15 @@ export class SalonlistComponent implements OnInit {
             timeOut: 1000
           });
         } else {
+          this.isLoader = false;
           this.toastrServ.error("Failed To Fetch Salons", "Failed", {
             timeOut: 1000
           });
         }
       },
       error => {
-        this.toastrServ.success("Server Error", error, {
+        this.isLoader = false;
+        this.toastrServ.success("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -94,7 +98,7 @@ export class SalonlistComponent implements OnInit {
         }
       },
       error => {
-        this.toastrServ.error("Server Error", error, {
+        this.toastrServ.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -109,6 +113,7 @@ export class SalonlistComponent implements OnInit {
   }
 
   showSalonDetails(data) {
+    this.isLoader = true;
     // console.log(data);
     let dataToPass = {
       salon_id: data._id
@@ -119,12 +124,14 @@ export class SalonlistComponent implements OnInit {
 
       if (data["code"] === 200) {
         this.showSalonDetail = true;
+        this.isLoader = false;
         this.salonDetails = data["data"]["salondetail"];
         this.salonEmail = data["data"]["email"];
         if (this.salonDetails["image"] === null) {
           this.salonDetails["image"] = "../../../assets/images/profilepic.png";
         }
       } else {
+        this.isLoader = false;
         this.toastrServ.error("Failed To Fetch User Details", "Error", {
           timeOut: 1000
         });
@@ -137,6 +144,7 @@ export class SalonlistComponent implements OnInit {
   }
 
   declineSalonRequest(data) {
+    this.isLoader = true;
     // console.log("ApproveFor", data);
     let dataToPass = {
       salon_id: data._id
@@ -145,19 +153,22 @@ export class SalonlistComponent implements OnInit {
       data => {
         // console.log("FFFF", data);
         if (data["code"] === 200) {
+          this.isLoader = false;
           this.toastrServ.success("Salon Declined Successfully", "", {
             timeOut: 3000
           });
           this.getActiveSalonsList();
           this.getActiveSalonsCount();
         } else {
+          this.isLoader = false;
           this.toastrServ.error("Failed To Decline", "", {
             timeOut: 3000
           });
         }
       },
       error => {
-        this.toastrServ.error("Server Error", error, {
+        this.isLoader = false;
+        this.toastrServ.error("Server Error", error.error["message"], {
           timeOut: 3000
         });
       }

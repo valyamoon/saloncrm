@@ -13,12 +13,15 @@ const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 const jwtKey = "saloncrm";
 const mkdirp = require("mkdirp");
 const multer = require("multer");
+const wallets = require("../model/walletSchema");
 const expiry = "1h";
 const countryData = require("country-data").countries;
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
 const salons = require("../../salon/model/salonSchema");
 const reviewratings = require("../../salon/model/salonreviewsratingSchema");
+
+const appointments = require("../../salon/model/appointmentsSchema");
 
 const roles = require("../model/rolesSchema");
 const Response = require("../../../../lib/response_handler.js");
@@ -41,7 +44,10 @@ module.exports = {
   addReviewAndRatings: addReviewAndRatings,
   softDeleteUser: softDeleteUser,
   getDetailsOfUser: getDetailsOfUser,
-  userPayment: userPayment
+  userPayment: userPayment,
+  cancelBooking: cancelBooking,
+  addWalletAmount: addWalletAmount,
+  minusWalletAmount: minusWalletAmount
 };
 
 // /* Function is use to Request Otp
@@ -994,6 +1000,7 @@ function userPayment(req, res) {
         if (err) {
           console.log(err);
         } else {
+          console.log(charge);
           let dataToPass = {
             name: "NADIM"
           };
@@ -1005,4 +1012,105 @@ function userPayment(req, res) {
   }
 
   userPayment().then(function() {});
+}
+
+function cancelBooking(req, res) {
+  async function cancelBooking() {
+    try {
+      if (req.body && req.body.isCancelled === true) {
+        let condition = { _id: mongoose.Types.ObjectId(req.body.booking_id) };
+        let updateCondition = { isCancelled: true, isActive: false };
+        let updateBooking = await commonQuery.updateOneDocument(
+          appointments,
+          condition,
+          updateCondition
+        );
+        if (!updateBooking) {
+        } else {
+          let dataToPass = {
+            user_id: updateBooking.user_id,
+            amount: updateBooking.totalamount
+          };
+
+          addWalletAmount(dataToPass);
+        }
+      }
+    } catch (error) {}
+  }
+  cancelBooking().then(function() {
+    return res.json(
+      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+    );
+  });
+}
+
+function addWalletAmount(dataToPass) {
+  async function addWalletAmount() {
+    try {
+      if (dataToPass) {
+        var amounts = 0;
+        let amount = amounts + dataToPass.amount;
+
+        let saveWalletAmount = new wallets({
+          amount: amount,
+          user_id: dataToPass.user_id
+        });
+
+        let addWalletAmount = await commonQuery.InsertIntoCollection(
+          wallets,
+          saveWalletAmount
+        );
+
+        if (!addWalletAmount) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              addWalletAmount
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addWalletAmount().then(function() {});
+}
+
+function minusWalletAmount(data) {
+  async function minusWalletAmount() {
+    try {
+      if (data && data.user_id) {
+        let condition = { _id: mongoose.Types.ObjectId(data.user_id) };
+        let fetchWalletAmount = await commonQuery.findoneData(
+          wallets,
+          condition
+        );
+        if (fetchWalletAmount) {
+          var updatedAmount = fetchWalletAmount - data.amount;
+          let updateCondition = { amount: updatedAmount };
+          let updateWallet = await commonQuery.updateOneDocument(
+            wallets,
+            condition,
+            updateCondition
+          );
+          if (updateWallet) {
+            console.log("WALLET", updateWallet);
+          }
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  minusWalletAmount().then(function() {});
 }

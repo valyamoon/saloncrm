@@ -76,10 +76,23 @@
   border-color: transparent;
   margin: 2px 0;
   transition: 0.4s;
+  cursor: pointer;
 }
+.bar1,
+.bar2,
+.bar3:hover {
+  width: 35px;
+  height: 5px;
+  background-color: white;
+  border-color: #783a87;
+  margin: 2px 0;
+  transition: 0.4s;
+}
+
 .hamburgerIcon {
   position: absolute;
   left: 220px;
+  cursor: pointer;
   top: 7px;
 }
 .username {

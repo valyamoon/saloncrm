@@ -20,11 +20,12 @@ export class ManageAdminComponent implements OnInit {
   toggle: boolean;
   noRecordsFound: boolean = false;
   disabled: boolean = true;
-  displayedColumns = ["email", "isactive", "action"];
+  displayedColumns = ["email", "action"];
   adminCountTotal: any;
   adminList: any;
   pageSize: any = 5;
   registerAdminForm: FormGroup;
+  isLoader: boolean;
   constructor(
     private adminServ: AdminServService,
     private toastrServ: ToastrService,
@@ -38,17 +39,30 @@ export class ManageAdminComponent implements OnInit {
     this.fetchAllAdmins();
     this.registerAdminForm = this.fb.group({
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]],
-      password: ["", Validators.required]
+      password: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10)
+        ])
+      ]
     });
+  }
+
+  get email() {
+    return this.registerAdminForm.get("email");
+  }
+  get password() {
+    return this.registerAdminForm.get("password");
   }
 
   openRegisterModal() {
     this.isAddModal = true;
   }
   paginate(event) {
-  
     this.page = event.pageIndex + 1;
-  
+
     this.count = event.pageSize;
     this.fetchAllAdmins();
   }
@@ -57,6 +71,7 @@ export class ManageAdminComponent implements OnInit {
     this.isAddModal = false;
   }
   registerUser(data) {
+    this.isLoader = true;
     let dataToPass = {
       role: "admin",
       email: data.email,
@@ -65,6 +80,7 @@ export class ManageAdminComponent implements OnInit {
     this.logServ.signUpSalon(dataToPass).subscribe(
       (res: any) => {
         if (res.code === 200) {
+          this.isLoader = false;
           this.toastrServ.success("Registered Successfully", "Please Login", {
             timeOut: 1000
           });
@@ -75,15 +91,18 @@ export class ManageAdminComponent implements OnInit {
           this.toastrServ.warning("User Already Exist", "Please Login", {
             timeOut: 1000
           });
+          this.isLoader = false;
           this.isAddModal = false;
         } else {
+          this.isLoader = false;
           this.toastrServ.error("Failed to register", "Please try again", {
             timeOut: 1000
           });
         }
       },
       error => {
-        this.toastrServ.error("Server - Error", error.error, {
+        this.isLoader = false;
+        this.toastrServ.error("Server - Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -91,6 +110,7 @@ export class ManageAdminComponent implements OnInit {
   }
 
   fetchAllAdmins() {
+    this.isLoader = true;
     let dataToPass = {
       type: "admin",
       pageSize: this.count,
@@ -99,6 +119,7 @@ export class ManageAdminComponent implements OnInit {
     this.adminServ.fetchAllUsersCommon(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] == 200) {
+          this.isLoader = false;
           //   console.log(data["data"]["data"]);
           this.adminList = data["data"]["data"];
           this.adminCountTotal = data["data"]["count"];
@@ -109,7 +130,8 @@ export class ManageAdminComponent implements OnInit {
         }
       },
       error => {
-        this.toastrServ.error("Server - Error", error.error, {
+        this.isLoader = false;
+        this.toastrServ.error("Server - Error", error.error["message"], {
           timeOut: 1000
         });
       }

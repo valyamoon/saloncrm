@@ -28,10 +28,24 @@ export class AdminloginComponent implements OnInit {
   ngOnInit() {
     this.adminLogin = this.fb.group({
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]],
-      password: ["", Validators.required]
+      password: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10)
+        ])
+      ]
     });
 
     this.allServ.setRoute(this.router.url);
+  }
+
+  get password() {
+    return this.adminLogin.get("password");
+  }
+  get email() {
+    return this.adminLogin.get("email");
   }
 
   resetPassword() {
@@ -71,7 +85,7 @@ export class AdminloginComponent implements OnInit {
         }
       },
       error => {
-        this.toastServ.error("Failed to Login", error, {
+        this.toastServ.error("Failed to Login", error.error["message"], {
           timeOut: 3000
         });
       }

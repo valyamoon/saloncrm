@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { ConfirmationComponent } from "../confirmation/confirmation.component";
+import { SimpleModalService } from "ngx-simple-modal";
 
 @Component({
   selector: "app-categories",
@@ -11,22 +13,26 @@ import { ToastrService } from "ngx-toastr";
 export class CategoriesComponent implements OnInit {
   isAddModal: boolean = false;
   categoryForm: FormGroup;
+  isLoader: boolean;
   categoriesList: any;
   pageSize: any = 5;
   count: any = 5;
   adminCategoriesCount: any;
   page: any = 1;
-  displayedColumns = ["catname", "isactive", "action"];
+  displayedColumns = ["catname", "action"];
   noRecordsFound: boolean;
   noArchivedRecordsFound: boolean = false;
   disabled: boolean = true;
   archivedCategoriesList: any;
+  categoryID: any;
   archivedCategoriesCount: any;
   showArchived: boolean = false;
+  isShowUpdate: boolean = false;
   constructor(
     private adminServ: AdminServService,
     private fb: FormBuilder,
-    private toastrSev: ToastrService
+    private toastrSev: ToastrService,
+    private SimpleModalService: SimpleModalService
   ) {}
 
   ngOnInit() {
@@ -37,8 +43,22 @@ export class CategoriesComponent implements OnInit {
     this.fetchCategoriesList();
   }
 
-  openAddCategoryModal() {
-    this.isAddModal = true;
+  openAddCategoryModal(data) {
+    if (data === "add") {
+      this.isAddModal = true;
+      this.isShowUpdate = false;
+    } else {
+      this.categoryForm.get("name").setValue(data.catname);
+      this.categoryID = data._id;
+      this.isAddModal = true;
+      this.isShowUpdate = true;
+    }
+
+    // if (data) {
+    // } else if (data === "null") {
+    //   this.isAddModal = true;
+    // }
+
     //console.log(this.isAddModal);
   }
   dismissModal() {
@@ -56,8 +76,39 @@ export class CategoriesComponent implements OnInit {
     this.fetchCategoriesList();
   }
 
+  update(data) {
+    //console.log(data);
+    this.isLoader = true;
+    let dataToPass = {
+      category_id: this.categoryID,
+      catname: data.name
+    };
+    this.adminServ.updateCategory(dataToPass).subscribe(
+      (data: any) => {
+        if (data["code"] === 200) {
+          this.isLoader = false;
+          this.isAddModal = false;
+          this.fetchCategoriesList();
+        } else if (data["code"] === 400) {
+          this.isLoader = false;
+          this.toastrSev.error("Failed", data["message"], {
+            timeOut: 1000
+          });
+        }
+      },
+      error => {
+        this.isLoader = false;
+        this.isAddModal = false;
+        this.toastrSev.error("Server Error", error.error["message"], {
+          timeOut: 1000
+        });
+      }
+    );
+  }
+
   addCategory(data) {
     // console.log("ADD", data);
+    this.isLoader = true;
     let dataToPass = {
       catname: data.name
     };
@@ -65,11 +116,13 @@ export class CategoriesComponent implements OnInit {
       data => {
         if (data["code"] === 200) {
           this.isAddModal = false;
+          this.isLoader = false;
           this.toastrSev.success("Catgory Added", "Success", {
             timeOut: 1000
           });
           this.fetchCategoriesList();
         } else {
+          this.isLoader = false;
           this.isAddModal = true;
           this.toastrSev.error("Failed To Added", "Error", {
             timeOut: 1000
@@ -77,8 +130,9 @@ export class CategoriesComponent implements OnInit {
         }
       },
       error => {
+        this.isLoader = false;
         this.isAddModal = false;
-        this.toastrSev.error("Server Error", error.error, {
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -86,6 +140,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   fetchCategoriesList() {
+    this.isLoader = true;
     let dataToPass = {
       type: "admin-categories",
       pageSize: this.count,
@@ -96,53 +151,62 @@ export class CategoriesComponent implements OnInit {
       data => {
         //   console.log(data);
         if (data["code"] === 200) {
+          this.isLoader = false;
           this.adminCategoriesCount = data["data"]["count"];
           this.categoriesList = data["data"]["data"];
           if (this.categoriesList.length == 0) {
             this.noRecordsFound = true;
           }
-
-          this.toastrSev.success("Catgories Fetched", "Success", {
-            timeOut: 1000,
-            progressAnimation: "decreasing"
-          });
         } else {
+          this.isLoader = false;
           this.toastrSev.error("Failed To Fetch", "Error", {
             timeOut: 1000
           });
         }
       },
       error => {
-        this.toastrSev.error("Server Error", error.error, {
+        this.isLoader = false;
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
     );
   }
   deleteCategory(data) {
-    let dataToPass = {
-      category_id: data._id
-    };
-    this.adminServ.deleteCategories(dataToPass).subscribe(
-      data => {
-        if (data["code"] === 200) {
-          this.fetchCategoriesList();
-          this.toastrSev.success("Catgories Deleted", "Success", {
-            timeOut: 1000
-          });
-          this.fetchArchivedCategoryList();
-        } else {
-          this.toastrSev.error("Failed To Delete", "Error", {
-            timeOut: 1000
-          });
-        }
-      },
-      error => {
-        this.toastrSev.error("Server Error", error.error, {
-          timeOut: 1000
-        });
+    this.SimpleModalService.addModal(ConfirmationComponent, {
+      title: "Warning",
+      message: "Are you sure you want to delete?"
+    }).subscribe(isConfirmed => {
+      if (isConfirmed === true) {
+        this.isLoader = true;
+        let dataToPass = {
+          category_id: data._id
+        };
+        this.adminServ.deleteCategories(dataToPass).subscribe(
+          data => {
+            if (data["code"] === 200) {
+              this.isLoader = false;
+              this.fetchCategoriesList();
+              this.toastrSev.success("Catgories Deleted", "Success", {
+                timeOut: 1000
+              });
+              this.fetchArchivedCategoryList();
+            } else {
+              this.isLoader = false;
+              this.toastrSev.error("Failed To Delete", "Error", {
+                timeOut: 1000
+              });
+            }
+          },
+          error => {
+            this.isLoader = false;
+            this.toastrSev.error("Server Error", error.error["message"], {
+              timeOut: 1000
+            });
+          }
+        );
       }
-    );
+    });
   }
 
   fetchArchivedCategoryList() {
@@ -173,7 +237,7 @@ export class CategoriesComponent implements OnInit {
         }
       },
       error => {
-        this.toastrSev.error("Server Error", error.error, {
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
@@ -200,10 +264,15 @@ export class CategoriesComponent implements OnInit {
         }
       },
       error => {
-        this.toastrSev.error("Server Error", error.error, {
+        this.toastrSev.error("Server Error", error.error["message"], {
           timeOut: 1000
         });
       }
     );
+  }
+
+  updateCategory(data) {
+    this.openAddCategoryModal(data);
+    this.isShowUpdate = true;
   }
 }

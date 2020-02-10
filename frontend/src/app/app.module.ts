@@ -2,6 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { MyInterceptor } from "./my-interceptor";
 import { AppRoutingModule } from "./app-routing.module";
+import { SimpleModalModule } from "ngx-simple-modal";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
@@ -11,8 +12,10 @@ import {
   MatButtonModule,
   MatDialogModule,
   MatSelectModule,
-  MatOptionModule
+  MatOptionModule,
+  MatProgressSpinnerModule
 } from "@angular/material";
+
 import { MatTabsModule } from "@angular/material/tabs";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
@@ -62,7 +65,9 @@ import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.compone
     SelectAutocompleteModule,
     NgxMaterialTimepickerModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    MatProgressSpinnerModule,
+    SimpleModalModule.forRoot({ container: "modal-container" })
   ],
   providers: [
     {

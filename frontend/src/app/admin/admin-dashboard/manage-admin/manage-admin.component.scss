@@ -71,6 +71,7 @@ table {
 .register-sec {
   display: flex;
   margin-bottom: 5px;
+  flex-direction: column;
 }
 .valueField:first-child {
   opacity: 0.5;
