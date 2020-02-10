@@ -17,13 +17,13 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authServ: AuthService,
     private admnServ: AdminServService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getAdminName();
   }
   showSelection() {
-    console.log("HHHH");
+
 
     this.isShowSelection = !this.isShowSelection;
     this.admnServ.setHeaderResponse(this.isShowSelection);

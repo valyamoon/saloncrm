@@ -15,6 +15,7 @@ export class ConfirmationComponent
   implements ConfirmModel {
   title: string;
   message: string;
+  result: any;
   constructor() {
     super();
   }

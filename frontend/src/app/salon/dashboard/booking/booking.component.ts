@@ -42,7 +42,7 @@ export class BookingComponent implements OnInit {
 
   }
   changeBooking(element) {
-    console.log("element", element)
+    // console.log("element", element)
   }
 
 }

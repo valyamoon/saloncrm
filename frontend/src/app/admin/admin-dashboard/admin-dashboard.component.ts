@@ -8,15 +8,15 @@ import { AdminServService } from "./admin-serv.service";
 })
 export class AdminDashboardComponent implements OnInit {
   isSelectorShown: boolean = true;
-  constructor(private adminServ: AdminServService) {}
+  constructor(private adminServ: AdminServService) { }
 
   ngOnInit() {
     this.adminServ.getHeaderResponse().subscribe((data: any) => {
-      console.log("DATA", data);
+
       this.isSelectorShown = !data;
 
       this.isSelectorShown = !this.isSelectorShown;
-      console.log(this.isSelectorShown);
+
     });
   }
 

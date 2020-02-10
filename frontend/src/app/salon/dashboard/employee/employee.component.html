@@ -34,14 +34,14 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Action</th>
           <td mat-cell *matCellDef="let element" class="action-btns ">
-            <a (click)="openAssignServieModal(element)" class="asign-primary">
+            <a href="javascript:void(0);" (click)="openAssignServieModal(element)" class="asign-primary">
               <img src="../../../../assets/images/assign.svg" />
             </a>
 
-            <a (click)="openEditServiceModal(element)">
+            <a href="javascript:void(0);" (click)="openEditServiceModal(element)">
               <img src="../../../../assets/images/edit-ico.svg" />
             </a>
-            <a (click)="deleteEmployee(element)" class="delete-info">
+            <a href="javascript:void(0);" (click)="deleteEmployee(element)" class="delete-info">
               <img src="../../../../assets/images/delete-icon.svg" />
             </a>
           </td>

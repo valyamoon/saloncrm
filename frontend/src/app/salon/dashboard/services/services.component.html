@@ -37,21 +37,17 @@
         <ng-container matColumnDef="is_active">
           <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let element">
-            <span *ngIf="element.is_active === true" class="badge badge-success"
-              >Active</span
-            >
-            <span *ngIf="element.is_active === false" class="badge badge-danger"
-              >Deleted</span
-            >
+            <span *ngIf="element.is_active === true" class="badge badge-success">Active</span>
+            <span *ngIf="element.is_active === false" class="badge badge-danger">Deleted</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Action</th>
           <td mat-cell *matCellDef="let element" class="action-btns">
-            <a (click)="openEditServiceModal(element)">
+            <a href="javascript:void(0);" (click)="openEditServiceModal(element)">
               <img src="../../../../assets/images/edit-ico.svg" />
             </a>
-            <a (click)="deleteService(element, 'delete')" class="delete-info">
+            <a href="javascript:void(0);" (click)="deleteService(element, 'delete')" class="delete-info">
               <img src="../../../../assets/images/delete-icon.svg" />
             </a>
             <!-- <a (click)="deleteService(element, 'restore')" class="resotre-info">
@@ -63,13 +59,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <mat-paginator
-        [length]="salonServicesCount"
-        [pageSize]="count"
-        (page)="paginate($event)"
-        [pageSizeOptions]="[5, 10, 15, 20]"
-        showFirstLastButtons
-      ></mat-paginator>
+      <mat-paginator [length]="salonServicesCount" [pageSize]="count" (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
     </div>
 
     <div *ngIf="noRecordsFound" class="noRecords">
@@ -89,29 +80,18 @@
           <div class="col-md-12">
             <div class="form-group">
               <label class="custom-label">Price</label>
-              <input
-                type="text"
-                formControlName="price"
-                class="form-control"
-                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;"
-              />
+              <input type="text" formControlName="price" class="form-control"
+                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;" />
             </div>
             <div class="form-group">
               <label class="custom-label">Duration</label>
-              <input
-                type="text"
-                formControlName="duration"
-                class="form-control"
-                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;"
-              />
+              <input type="text" formControlName="duration" class="form-control"
+                onkeypress="var key = window.event ? event.keyCode : event.which;if (event.keyCode == 8 || event.keyCode == 127)  return true; else if ( key < 48 || key > 57 ) return false; else return true;" />
             </div>
           </div>
         </div>
         <div class="btn-Area">
-          <button
-            class="btn btn-primary btn-sign-in"
-            (click)="updateEmpService(editServiceForm.value)"
-          >
+          <button class="btn btn-primary btn-sign-in" (click)="updateEmpService(editServiceForm.value)">
             Update
           </button>
           <button class=" btn btn-sign-in btn-primary" (click)="dismissModal()">
