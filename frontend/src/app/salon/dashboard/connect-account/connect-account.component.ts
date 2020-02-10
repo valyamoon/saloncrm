@@ -16,7 +16,7 @@ export class ConnectAccountComponent implements OnInit {
     private activatedRoutes: ActivatedRoute,
     private commServ: CommonService,
     private toastServ: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.stripeCode = this.activatedRoutes.snapshot.queryParams["code"];
@@ -28,7 +28,7 @@ export class ConnectAccountComponent implements OnInit {
 
   checkISStripeConnected() {
     this.commServ.getStripeConnectedStatus().subscribe((data: any) => {
-      console.log("INSIDE", data);
+
       this.isStripeConnected = data;
     });
   }
@@ -50,7 +50,7 @@ export class ConnectAccountComponent implements OnInit {
 
         this.commServ.connectStripeAccount(dataToPass).subscribe(
           (data: any) => {
-            console.log("INSIDE AFTER", data);
+
             if (data["code"] === 200) {
               this.toastServ.success(data["message"], "Success", {
                 timeOut: 1000

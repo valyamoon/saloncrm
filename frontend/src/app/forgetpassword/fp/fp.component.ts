@@ -20,7 +20,7 @@ export class FpComponent implements OnInit {
     private fpServ: FpservService,
     private toastServ: ToastrService,
     private allServ: AllservService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.forgetPasswordForm = this.fb.group({
@@ -30,7 +30,7 @@ export class FpComponent implements OnInit {
       this.currentRoute = data;
     });
     if (this.currentRoute) {
-      console.log("INFP", this.currentRoute);
+
       // this.allServ.setPrevRoute(this.currentRoute);
       localStorage.setItem("route", this.currentRoute);
     }
