@@ -961,6 +961,66 @@ function userPayment(req, res) {
   console.log("INSIDE USER FI", req.body);
 
   async function userPayment() {
+    if (req.body.payType === "cash") {
+      let dataToPass = {
+        totalamount: req.body.totalAmt,
+        salon_id: req.body.salon_id,
+        date: req.body.date,
+        time: req.body.time,
+        service_id: req.body.service_id,
+        promocode_id: req.body.promocode_id,
+        deviceToken: req.body.deviceToken,
+        duration: req.body.duration
+      };
+
+      salonCtrl.bookSlot(dataToPass);
+    } else if (req.body.payType === "card") {
+      let amount = +req.body.totalAmt * 100; // 500 cents means $5
+
+      stripe.charges.create(
+        {
+          amount: amount,
+          currency: "usd",
+          source: req.body.stripeToken,
+          description: "Charge for" + req.body.stripeEmail,
+          shipping: {
+            name: "Jenny Rosen",
+            address: {
+              line1: "510 Townsend St",
+              postal_code: "98140",
+              city: "San Francisco",
+              state: "CA",
+              country: "US"
+            }
+          }
+        },
+        function(err, charge) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("CHARGE", charge);
+            let dataToPass = {
+              totalamount: req.body.totalAmt,
+              salon_id: req.body.salon_id,
+              stripeToken: req.body.stripeToken,
+              date: req.body.date,
+              time: req.body.time,
+              service_id: req.body.service_id,
+              stripeEmail: req.body.stripeEmail,
+              promocode_id: req.body.promocode_id,
+              deviceToken: req.body.deviceToken,
+              createdon: charge.created,
+              payment_method: charge.payment_method,
+              card_last_digit: charge.payment_method_details["card"]["last4"],
+              duration: req.body.duration
+            };
+
+            salonCtrl.bookSlot(dataToPass);
+          }
+        }
+      );
+    }
+
     //**********
     //   //
     //   { date: '2019-12-20T17:26:55.029Z',
@@ -976,39 +1036,6 @@ function userPayment(req, res) {
     //
     //
     //*****/
-
-    let amount = +req.body.totalAmt * 100; // 500 cents means $5
-
-    stripe.charges.create(
-      {
-        amount: amount,
-        currency: "usd",
-        source: req.body.stripeToken,
-        description: "Charge for" + req.body.stripeEmail,
-        shipping: {
-          name: "Jenny Rosen",
-          address: {
-            line1: "510 Townsend St",
-            postal_code: "98140",
-            city: "San Francisco",
-            state: "CA",
-            country: "US"
-          }
-        }
-      },
-      function(err, charge) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(charge);
-          let dataToPass = {
-            name: "NADIM"
-          };
-
-          salonCtrl.bookSlot(dataToPass);
-        }
-      }
-    );
   }
 
   userPayment().then(function() {});

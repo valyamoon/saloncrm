@@ -39,7 +39,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
   distance,
   name
 ) {
-  console.log(second_fromTable, second_localFieldVal, second_foreignFieldVal);
+  // console.log(second_fromTable, second_localFieldVal, second_foreignFieldVal);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
@@ -106,7 +106,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
         resolve(result);
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
         reject(error);
       });
   });
@@ -120,23 +120,23 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
   lat,
   long
 ) {
-  console.log("CHHHH", dynamicQuery, pageSize, page, lat, long);
+  //console.log("CHHHH", dynamicQuery, pageSize, page, lat, long);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
 
     let serviceQuery = [];
-    console.log("lenght", dynamicQuery.length);
+    //console.log("lenght", dynamicQuery.length);
     // q["$and"].push({ services_id: { $in: dynamicQuery.split(",") } });
     //  if(dynamicQuery.length > 0){
     //   q["$and"].push({ services_id: {$in: dynamicQuery.split(",") }});
     // }
     dynamicQuery.forEach(async function(v) {
       serviceQuery.push(mongoose.Types.ObjectId(v));
-      console.log(serviceQuery);
+      // console.log(serviceQuery);
     });
 
-    console.log("qqq", serviceQuery);
+    //console.log("qqq", serviceQuery);
 
     let postQuery = model.aggregate([
       {
@@ -206,7 +206,7 @@ commonQuery.fetch_near_salons = function fetch_near_salons(
     postQuery
       .then(result => {
         // console.log("999999999999999999999", result);
-        console.log("RESULT", result);
+        // console.log("RESULT", result);
         resolve(result);
       })
       .catch(error => {
@@ -261,7 +261,7 @@ commonQuery.findAll = async function findAll(model, condition, pageSize, page) {
     }
     postQuery.exec(function(err, data) {
       if (err) {
-        console.log("err---->>>>>", err);
+        //  console.log("err---->>>>>", err);
         reject(err);
       } else {
         resolve(data);
@@ -287,7 +287,7 @@ commonQuery.findoneBySort = function findoneBySort(
       .sort(sortby)
       .exec(function(err, data) {
         if (err) {
-          console.log("err---->>>>>", err);
+          //   console.log("err---->>>>>", err);
           reject(err);
         } else {
           resolve(data);
@@ -388,7 +388,7 @@ commonQuery.InsertIntoCollection = function InsertIntoCollection(model, obj) {
   return new Promise(function(resolve, reject) {
     new model(obj).save(function(err, insertedData) {
       if (err) {
-        console.log("errrrrrrrr", err);
+        //  console.log("errrrrrrrr", err);
         reject(err);
       } else {
         resolve(insertedData);
@@ -425,7 +425,7 @@ commonQuery.updateOneDocument = function updateOneDocument(
       .exec(function(err, result) {
         //console.log("HHHHHH", err, result);
         if (err) {
-          console.log("errerrerrerrerrerr", err);
+          //  console.log("errerrerrerrerrerr", err);
           reject(0);
         } else {
           //console.log("updatedData", result);
@@ -444,7 +444,7 @@ commonQuery.updateOne = function updateOne(model, updateCond, updateData) {
       .exec(async function(err, result) {
         // console.log("HHHHHH", err, result);
         if (err) {
-          console.log("errerrerrerrerrerr", err);
+          // console.log("errerrerrerrerrerr", err);
           reject(0);
         } else {
           // console.log("updatedData", result);
@@ -520,18 +520,21 @@ commonQuery.updateAllDocument = function updateAllDocument(
 commonQuery.filterEmployee = function filterEmployee(
   model,
   salon_id,
-  salonservices_id
+  service_id
 ) {
   return new Promise(function(resolve, reject) {
     model
       .aggregate([
-        { $match: { salon_id: salon_id, salonservices_id: salonservices_id } },
+        { $match: { salon_id: salon_id, salonservices_id: service_id } },
         { $sort: { name: 1 } }
       ])
       .exec((err, response) => {
         if (err) {
+          console.log("errpr", err);
           reject(err);
         } else {
+          console.log("response", response);
+
           resolve(response);
         }
       });
@@ -623,7 +626,7 @@ commonQuery.fetch_one = function fetch_one(model, cond = {}, fetchd = {}) {
   return new Promise(function(resolve, reject) {
     model.findOne(cond, fetchd).exec(function(err, userData) {
       if (err) {
-        console.log("errrrrrr", err);
+        // console.log("errrrrrr", err);
         reject(err);
       } else {
         resolve(userData);
@@ -635,10 +638,10 @@ commonQuery.hard_delete = function hard_delete(model, cond = {}) {
   return new Promise(function(resolve, reject) {
     model.remove(cond).exec(function(err, Data) {
       if (err) {
-        console.log("errrrrrr", err);
+        //  console.log("errrrrrr", err);
         reject(err);
       } else {
-        console.log("Data", Data);
+        // console.log("Data", Data);
 
         resolve(Data);
       }
@@ -804,10 +807,10 @@ commonQuery.deleteManyfromCollection = function deleteManyfromCollection(
   return new Promise(function(resolve, reject) {
     model.deleteMany(obj, function(error, inserted) {
       if (error) {
-        console.log("Reject", error);
+        // console.log("Reject", error);
         resolve(0);
       } else {
-        console.log("Resolved");
+        //  console.log("Resolved");
         reject(1);
       }
     });
@@ -962,16 +965,16 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
           let finalArray = [];
 
           data.forEach(function(v) {
-            console.log("V", v);
+            //  console.log("V", v);
             v.category.forEach(function(c) {
-              console.log("SSSSSSSSS", c);
+              //console.log("SSSSSSSSS", c);
               catergoriesTemp.push({
                 categories: c.category.catname,
                 services: c.services,
                 prices: c.pricing
               });
             });
-            console.log("catergoriesTemp", catergoriesTemp);
+            // console.log("catergoriesTemp", catergoriesTemp);
             dataToPass.name = v._id;
             dataToPass.salonaddress = v.salonaddress;
             dataToPass.location = v.location;
@@ -981,10 +984,10 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
           });
 
           //dataToPass.push.apply(catergoriesTemp);
-          console.log("DAAA", dataToPass);
+          // console.log("DAAA", dataToPass);
           finalArray = [].concat(dataToPass, catergoriesTemp);
           //;tempArray.concat(catergoriesTemp);
-          console.log("FInAL ARRYA", finalArray);
+          //  console.log("FInAL ARRYA", finalArray);
           //console.log("DATATOPASS", data[0]);
           resolve(finalArray);
         }
@@ -1057,7 +1060,7 @@ commonQuery.getNextSequenceValue = function(sequenceName) {
           console.log("errerrerrerrerrerr", err);
           reject(0);
         } else {
-          console.log("updatedData", updatedData);
+          // console.log("updatedData", updatedData);
           resolve(updatedData);
         }
       });
@@ -1147,7 +1150,7 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
-    console.log("pageSizes", cond);
+    //console.log("pageSizes", cond);
 
     if (cond) {
       cond = cond;
@@ -1174,7 +1177,7 @@ commonQuery.fetch_all_paginated = function fetch_all_paginated(
       .then(result => {
         console.log(result);
 
-        console.log("DATATOPASS", result);
+        //   console.log("DATATOPASS", result);
         resolve(result);
       })
       .catch(error => {
@@ -1421,7 +1424,7 @@ commonQuery.getSalonOnPrice = function getSalonOnPrice() {
 commonQuery.ensureIndex = function ensureIndex(model) {
   return new Promise(function(resolve, reject) {
     model.createIndex({ location: "2dsphere" }).exec(function(err, userData) {
-      console.log("userData", userData);
+      //console.log("userData", userData);
       if (err) {
         console.log("errrrrrr", err);
         reject(err);
@@ -1574,7 +1577,7 @@ commonQuery.removeServicesInCategories = function removeServicesInCategories(
         { safe: true, upsert: true }
       )
       .exec(function(err, userData) {
-        console.log("userData", userData);
+        // console.log("userData", userData);
         if (err) {
           console.log("errrrrrr", err);
           reject(err);
@@ -1655,13 +1658,13 @@ commonQuery.addServiceToEmployee = function addServiceToEmployee(
   empId,
   dataToAdd
 ) {
-  console.log("dataToAdd++model", dataToAdd + "***");
+  //console.log("dataToAdd++model", dataToAdd + "***");
   return new Promise(function(resolve, reject) {
     model
       .update({ _id: empId }, { $addToSet: { salonservices_id: dataToAdd } })
       .exec(function(err, data) {
         if (err) {
-          console.log(err);
+          // console.log(err);
           reject(err);
         } else {
           resolve(data);
@@ -1675,7 +1678,7 @@ commonQuery.removeServiceToEmp = function removeServiceToEmp(
   empId,
   dataToRemove
 ) {
-  console.log("dataToRemove", dataToRemove);
+  // console.log("dataToRemove", dataToRemove);
   return new Promise(function(resolve, reject) {
     model
       .update({ _id: empId }, { $pull: { salonservices_id: dataToRemove } })
@@ -1699,9 +1702,10 @@ commonQuery.fetchCategories = function fetchCategories(model, condition) {
             from: "salonservices",
             localField: "_id",
             foreignField: "category_id",
-            as: "servvv"
+            as: "inventory_docs"
           }
         },
+        { $unwind: "$inventory_docs" },
         {
           $match: condition
         },
@@ -1710,7 +1714,7 @@ commonQuery.fetchCategories = function fetchCategories(model, condition) {
           $group: {
             _id: "$catname",
             id: { $first: "$_id" },
-            services: { $first: "$servvv" }
+            services: { $push: "$inventory_docs" }
           }
         },
         {
@@ -1725,6 +1729,7 @@ commonQuery.fetchCategories = function fetchCategories(model, condition) {
         if (err) {
           reject(err);
         } else {
+          console.log("INRESPONSE", res);
           resolve(res);
         }
       });
@@ -1825,7 +1830,7 @@ commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
   name,
   sortParam
 ) {
-  console.log("AAAA", sortParam);
+  //console.log("AAAA", sortParam);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
@@ -1946,7 +1951,7 @@ commonQuery.getSalonSubscriptionDetails = function getSalonSubscriptionDetails(
 commonQuery.sendEmailFunction = function sendEmailFunction(obj) {
   try {
     let dataObj;
-    console.log("dataObjdataObj", obj.data);
+    // console.log("dataObjdataObj", obj.data);
     dataObj = obj.data;
     let mailObjRes = {};
     let mailKeyword = "";
@@ -1960,12 +1965,12 @@ commonQuery.sendEmailFunction = function sendEmailFunction(obj) {
       delete mailData["userName"];
       mailKeyword = constant.forgotPassword;
       mailData.newpasswordlink = dataObj.link;
-      console.log(
-        "FORGET_PASSWORDFORGET_PASSWORD mailData",
-        mailData,
-        "mailKeyword",
-        mailKeyword
-      );
+      // console.log(
+      //   "FORGET_PASSWORDFORGET_PASSWORD mailData",
+      //   mailData,
+      //   "mailKeyword",
+      //   mailKeyword
+      // );
     }
 
     // if (obj.mailType == constant.varibleType.MANAGER_WELCOME) {
@@ -1996,7 +2001,7 @@ commonQuery.sendEmailFunction = function sendEmailFunction(obj) {
         err,
         resp
       ) {
-        console.log("response=========");
+        // console.log("response=========");
         if (err) {
           mailObjRes.status = false;
           mailObjRes.err = err;
@@ -2009,8 +2014,8 @@ commonQuery.sendEmailFunction = function sendEmailFunction(obj) {
       });
     });
   } catch (error) {
-    console.log("error----------------------", error);
-    //    res.json({
+    // console.log("error----------------------", error);
+    ///    res.json({
     //        code : constant.statusCode.error,
     //        message : error
     //    })
