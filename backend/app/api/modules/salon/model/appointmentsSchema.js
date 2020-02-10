@@ -26,13 +26,13 @@ var appointmentsSchema = mongoose.Schema(
       default: null
     },
     starttime: {
-      type: Number
+      type: String
     },
     endtime: {
-      type: Number
+      type: String
     },
     date: {
-      type: Number
+      type: String
     },
     isActive: {
       type: Boolean,
@@ -49,6 +49,14 @@ var appointmentsSchema = mongoose.Schema(
     isCompleted: {
       type: Boolean,
       default: false
+    },
+    paymentType: {
+      type: String,
+      default: null
+    },
+    promocode_id: {
+      type: mongoose.Types.ObjectId,
+      ref: "promocodes"
     }
   },
   { timestamps: true }

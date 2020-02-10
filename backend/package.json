@@ -6,7 +6,6 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "apns": "^0.1.0",
     "async": "^3.1.0",
     "authy": "^1.4.0",
     "bcrypt": "^3.0.7",
@@ -21,6 +20,7 @@
     "ejs": "^3.0.1",
     "express": "~4.16.1",
     "express-fileupload": "^1.1.6",
+    "fcm-node": "^1.5.2",
     "fcm-notification": "^2.0.0",
     "file-upload": "0.0.0",
     "http-errors": "~1.6.3",

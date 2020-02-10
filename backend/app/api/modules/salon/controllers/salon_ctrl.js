@@ -2,9 +2,15 @@
 
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
-const fcm = require("fcm-notification");
+// const fcm = require("fcm-notification");
+// const privateKey = require("./privatekey");
+// const FCM = new fcm(privateKey);
 const async = require("async");
-const FCM = require("../../../../lib/privatekey.json");
+
+var FCM = require("fcm-node");
+var serverKey =
+  "AAAAP9-1hEk:APA91bGrDLB0V_5g70-D6Mxt5vbZ-bkVKs8DF3yZkkU_wpgd6wafwOPwTjYdB3vCH4vNO8pGcX8gu6NoGMdqRAosdevEANZGUcSf-XJ-jgkh1n540C9FTMc_knbz-zexTudk6fHpiT2O";
+var fcm = new FCM(serverKey);
 var ts = require("time-slots-generator");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
@@ -206,7 +212,6 @@ function saveSalonDetails(req, res) {
                               }
                             }
                           );
-                          console.log("customer_id_value", customer_id_value);
                         } else {
                         }
                       });
@@ -383,12 +388,20 @@ function getSalons(req, res) {
 
             var times_ara = calculate_time_slot(start_time, end_time, interval);
 
+            let timeArray = [];
+
+            times_ara.forEach(function(jj) {
+              timeArray.push({ time: jj, status: false });
+            });
+
+            // /console.log("TIMEARRAY", timeArray);
+
             salonListingNew.push({
               starttime: v.optime,
               _id: v._id,
               closetime: v.cltime,
               name: v.salon,
-              slots: times_ara,
+              slots: timeArray,
               image: v.image,
               contact: v.contact,
               avgRatings: v.avgRatings,
@@ -571,7 +584,7 @@ async function addSalonServices(req, res) {
             );
             if (!updateSalonData) {
             } else {
-              console.log("saveServiceToSalon===========>", saveServiceToSalon);
+              //console.log("saveServiceToSalon===========>", saveServiceToSalon);
             }
           }
         } else {
@@ -838,7 +851,6 @@ function addEmployeeToSalon(req, res) {
  * Created on 30th Jan, 2020
  */
 async function updateEmployee(req, res) {
-  console.log("req.body", req.body);
   if (req.body.id) {
     let updateCond = {
       _id: req.body.id
@@ -979,7 +991,7 @@ function getCategoriesAndServicesOfSalon(req, res) {
     try {
       if (req.body && req.body.salon_id) {
         let condition = {
-          "servvv.salon_id": mongoose.Types.ObjectId(req.body.salon_id)
+          "inventory_docs.salon_id": mongoose.Types.ObjectId(req.body.salon_id)
         };
         let catgoriesList = await commonQuery.fetchCategories(
           categories,
@@ -1172,7 +1184,7 @@ function viewSalonDetails(req, res) {
 
 function updateSalonDetails(req, res) {
   var image_path;
-  console.log(req.body);
+  //console.log(req.body);
   async function updateSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -1292,7 +1304,7 @@ function updateSalonDetails(req, res) {
 }
 
 function fetchSalonData(req, res) {
-  console.log("HERE", req.body);
+  // console.log("HERE", req.body);
   async function fetchSalonData() {
     try {
       if (req.body && req.body.user_id) {
@@ -1301,7 +1313,7 @@ function fetchSalonData(req, res) {
         };
 
         let getSalonData = await commonQuery.findoneData(salons, condition);
-        console.log(getSalonData);
+        //  console.log(getSalonData);
 
         if (!getSalonData) {
           return res.json(
@@ -1331,9 +1343,9 @@ function bookSlot(data, req, res) {
   console.log("INSIDE BOOKSLOT", data);
   async function bookSlot() {
     try {
-      if (req.body && req.body.starttime) {
-        var starttime = req.body.starttime;
-        var duration = req.body.duration;
+      if (data && data.time) {
+        var starttime = data.time;
+        var duration = data.duration;
         var hour = starttime.split(":");
         var hourInt = hour[0] * 60;
         var minInt = hour[1];
@@ -1346,16 +1358,32 @@ function bookSlot(data, req, res) {
           const minutes = num % 60;
           endTimeCalculated = `${hours}:${minutes}`;
         }
-
+        console.log("endTimeCalculated", endTimeCalculated);
         let findEmp = await commonQuery.filterEmployee(
           employees,
-          data.salon_id,
-          data.salonservices_id
+          mongoose.Types.ObjectId(data.salon_id),
+          mongoose.Types.ObjectId(data.service_id)
         );
+
+        console.log("FINDEMP", findEmp);
 
         if (!findEmp) {
         } else {
           var empId = findEmp[0]._id;
+
+          console.log(empId);
+
+          let salon_connected_id;
+          let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
+          let connectedAccountId = await commonQuery.findoneData(
+            salons,
+            condition
+          );
+          console.log("CONNECTEDID", connectedAccountId);
+          if (connectedAccountId) {
+            salon_connected_id = connectedAccountId.connected_account_id;
+            console.log("connected_account_id", salon_connected_id);
+          }
 
           let saveAppointment = new appointments({
             salon_id: data.salon_id,
@@ -1366,11 +1394,11 @@ function bookSlot(data, req, res) {
             starttime: starttime,
             endtime: endTimeCalculated,
             date: data.date,
-            connected_account_id: data.connected_account_id,
+            connected_account_id: salon_connected_id,
             employee_id: empId
           });
 
-          console.log("endTimeCalculated", endTimeCalculated);
+          console.log("saveAppointment", saveAppointment);
 
           let bookAppointment = await commonQuery.InsertIntoCollection(
             appointments,
@@ -1381,33 +1409,59 @@ function bookSlot(data, req, res) {
               Response(constant.ERROR_CODE, constant.FAILED_TO_BOOK, null)
             );
           } else {
-            let message = {
-              subject: "MESSAGE SENT",
-              token: devicetoken
+            // let message = {
+            //   subject: "MESSAGE SENT",
+            //   token: data.deviceToken
+            // };
+
+            // FCM.send(message, async function(err, response) {
+            //   if (err) {
+            //     console.log("error found", err);
+            //   } else {
+            //     console.log("response here", response);
+            //   }
+            // });
+
+            var message = {
+              //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+              to: data.deviceToken,
+              collapse_key: "your_collapse_key",
+
+              notification: {
+                title: "HI AMrut",
+                body: "Body of your push notification"
+              },
+
+              data: {
+                //you can send only notification or only data(or include both)
+                my_key: "AMRUT",
+                my_another_key: "NADIM"
+              }
             };
 
-            FCM.send(message, async function(err, response) {
+            fcm.send(message, function(err, response) {
               if (err) {
-                console.log("error found", err);
+                console.log("Something has gone wrong!");
               } else {
-                console.log("response here", response);
+                console.log("Successfully sent with response: ", response);
               }
             });
 
-            res.json(
-              Response(
-                constant.SUCCESS_CODE,
-                constant.APPOINTMENT_BOOKED,
-                bookAppointment
-              )
-            );
+            // res.json(
+            //   Response(
+            //     constant.SUCCESS_CODE,
+            //     constant.APPOINTMENT_BOOKED,
+            //     bookAppointment
+            //   )
+            // );
           }
         }
       }
     } catch (error) {
-      return res.send(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
+      console.log(error);
+      // return res.send(
+      //   Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      // );
     }
   }
   bookSlot().then(function() {});
