@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ToastrService } from "ngx-toastr";
 
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ConfirmationComponent } from "../confirmation/confirmation.component";
 import { SimpleModalService } from "ngx-simple-modal";
+import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
 
 @Component({
   selector: "app-services",
@@ -21,6 +22,7 @@ export class ServicesComponent implements OnInit {
   page: any = 1;
   showDeleteDialog: boolean;
   displayedColumns = ["name", "action"];
+
   disabled: boolean = true;
   categoriesList: any;
   serviceID: any;
@@ -30,7 +32,8 @@ export class ServicesComponent implements OnInit {
   addServiceModal: boolean;
   saveServiceForm: FormGroup;
   isShowUpdate: boolean;
-
+  dataSource: any;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(
     private adminServ: AdminServService,
     private toastrServ: ToastrService,
@@ -49,6 +52,11 @@ export class ServicesComponent implements OnInit {
     this.fetchAllServices();
   }
 
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   updateData(data) {
     this.isLoader = true;
 
@@ -98,6 +106,7 @@ export class ServicesComponent implements OnInit {
       data => {
         if (data["code"] === 200) {
           this.adminCategoriesCount = data["data"]["count"];
+
           if (data["data"]["data"].length === 0) {
             this.showNoRecords(true);
           }
@@ -231,7 +240,8 @@ export class ServicesComponent implements OnInit {
       (data: any) => {
         if (data["code"] === 200) {
           this.servicesList = data["data"]["data"];
-
+          this.dataSource = new MatTableDataSource(this.servicesList);
+          this.dataSource.sort = this.sort;
           this.servicesCount = data["data"]["count"];
           if (data["data"]["data"].length == 0) {
             this.noRecordsFound = true;

@@ -33,6 +33,7 @@ module.exports = function(router) {
   router.post("/delete-promocode", salon.deletePromocode);
   router.post("/connect-account", salon.connectStripeAccount);
   router.post("/appointment-complete", salon.appointmentCompleted);
+  router.post("/upcoming-appointment", salon.getUpcomingbookings);
 
   router.post("/updatesalonservices", salon.updateSalonServices);
 

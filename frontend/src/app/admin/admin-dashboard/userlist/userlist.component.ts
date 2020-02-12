@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ToastrService } from "ngx-toastr";
+import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
 
 @Component({
   selector: "app-userlist",
@@ -15,7 +16,7 @@ export class UserlistComponent implements OnInit {
   userDetails: any;
   userDetailHeaderText: any = "User Details";
   showUserDetails: boolean;
-
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   displayedColumns = ["firstName", "lastName", "email", "phone", "action"];
   page: any;
   limit: any = 0;
@@ -23,6 +24,7 @@ export class UserlistComponent implements OnInit {
   pageSize: any = 5;
   ActiveUsersCount: any;
   disabled: boolean = true;
+  dataSource: any;
   constructor(
     private adminServ: AdminServService,
     private toastrServ: ToastrService
@@ -44,8 +46,12 @@ export class UserlistComponent implements OnInit {
         if (data["code"] === 200) {
           this.isLoader = false;
           this.activeUsersList = data["data"];
+          this.dataSource = new MatTableDataSource(this.activeUsersList);
+          this.dataSource.sort = this.sort;
           if (this.activeUsersList.length == 0) {
             this.noRecordsFound = true;
+          } else {
+            this.noRecordsFound = false;
           }
         } else {
           this.isLoader = false;
@@ -65,6 +71,11 @@ export class UserlistComponent implements OnInit {
   closeUserDetail() {
     this.showUserDetails = false;
     this.userDetails = null;
+  }
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   viewUserDetails(data) {
