@@ -530,10 +530,10 @@ commonQuery.filterEmployee = function filterEmployee(
       ])
       .exec((err, response) => {
         if (err) {
-          console.log("errpr", err);
+          //console.log("errpr", err);
           reject(err);
         } else {
-          console.log("response", response);
+          // console.log("response", response);
 
           resolve(response);
         }
@@ -783,7 +783,7 @@ commonQuery.InsertManyIntoCollection = function InsertManyIntoCollection(
   return new Promise(function(resolve, reject) {
     model.insertMany(obj, function(error, inserted) {
       if (error) {
-        console.log("---------------------", error);
+        //console.log("---------------------", error);
         resolve(error);
       } else {
         resolve(inserted);
@@ -1057,7 +1057,7 @@ commonQuery.getNextSequenceValue = function(sequenceName) {
       .lean()
       .exec(function(err, updatedData) {
         if (err) {
-          console.log("errerrerrerrerrerr", err);
+          //  console.log("errerrerrerrerrerr", err);
           reject(0);
         } else {
           // console.log("updatedData", updatedData);
@@ -1441,7 +1441,7 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
   pageSize,
   page
 ) {
-  console.log("inFETCHALLPAGINATED", cond, pageSize, page);
+  //console.log("inFETCHALLPAGINATED", cond, pageSize, page);
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
@@ -1482,7 +1482,7 @@ commonQuery.fetch_ReviewRatings = function fetch_ReviewRatings(
     }
     postQuery
       .then(result => {
-        console.log(result);
+        // console.log(result);
         resolve(result);
       })
       .catch(error => {
@@ -1729,7 +1729,7 @@ commonQuery.fetchCategories = function fetchCategories(model, condition) {
         if (err) {
           reject(err);
         } else {
-          console.log("INRESPONSE", res);
+          // console.log("INRESPONSE", res);
           resolve(res);
         }
       });
@@ -2075,7 +2075,7 @@ commonQuery.sendEmailFunction = function sendEmailFunction(obj) {
     // }
 
     return new Promise(function(resolve, reject) {
-      console.log("--email----------", mailData.email);
+      // console.log("--email----------", mailData.email);
 
       mailer.sendMail(mailData.email, mailKeyword, mailData, function(
         err,
