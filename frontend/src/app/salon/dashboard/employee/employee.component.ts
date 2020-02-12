@@ -1,9 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CommonService } from "../common.service";
 import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { MatDialog } from "@angular/material";
+import { ConfirmationDialogComponent } from "../confirmation-dialog/confirmation-dialog.component";
+import { SimpleModalService } from "ngx-simple-modal";
+import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
 
 @Component({
   selector: "app-employee",
@@ -35,13 +38,15 @@ export class EmployeeComponent implements OnInit {
   public cancelClicked: boolean = false;
   isEMployeeModal: boolean = false;
   editEmployeeData: any;
+  dataSource: any;
 
   constructor(
     private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
     private toastrServ: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private SimpleModalService: SimpleModalService
   ) {
     this.assignServiceForm = this.fb.group({
       service_id: ["", [Validators.required]]
@@ -52,6 +57,7 @@ export class EmployeeComponent implements OnInit {
     this.getSalonData(this.user_id);
     this.getEmployeeService();
   }
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   getSalonData(userId) {
     let data = {
       user_id: userId
@@ -123,6 +129,11 @@ export class EmployeeComponent implements OnInit {
     this.isEMployeeModal = true;
     this.editEmployeeData = element;
   }
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   getServiceList() {
     let postData = {
       user_id: this.user_id,
@@ -141,6 +152,8 @@ export class EmployeeComponent implements OnInit {
             serviceArr.push(serviceData);
           });
           this.serviceList = serviceArr;
+          this.dataSource = new MatTableDataSource(this.serviceList);
+          this.dataSource.sort = this.sort;
           //console.log("serviceList", this.serviceList);
         } else {
           this.noRecordsFound = false;
@@ -190,7 +203,7 @@ export class EmployeeComponent implements OnInit {
       employee_id: this.employeeData._id,
       salonservices_id: this.selected
     }
-    // console.log("dataToPass", dataToPass);
+    // console.log("dataToPass", dataToPass); //return;
     this.commServ.assignEmpService(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
@@ -216,31 +229,44 @@ export class EmployeeComponent implements OnInit {
     );
   }
   deleteEmployee(dataToPass) {
-    dataToPass.salon_id = this.salonData._id;
-    // console.log("dataToPass", dataToPass)
-    this.commServ.removeEmpService(dataToPass).subscribe(
-      data => {
-        if (data["code"] === 200) {
-          this.isAddModal = false;
-          this.toastrServ.success("Employee Removed", "Success", {
-            timeOut: 2000
-          });
-          this.assignServiceForm.reset();
-          this.dismissModal();
-          this.getEmployeeService();
-        } else {
-          this.isAddModal = true;
-          this.toastrServ.error("Failed To Add", "Error", {
-            timeOut: 2000
-          });
-        }
-      },
-      error => {
-        this.toastrServ.error("Server Error", error.error, {
-          timeOut: 2000
-        });
+    // this.SimpleModalService.addModal(ConfirmationDialogComponent, {
+    //   title: 'Warning',
+    //   message: 'Are you sure you want to delete?'
+    // }).subscribe(isConfirmed => {
+    //   console.log(isConfirmed);
+    // })
+    this.SimpleModalService.addModal(ConfirmationDialogComponent, {
+      title: "Warning",
+      message: "Are you sure you want to delete?"
+    }).subscribe(isConfirmed => {
+      if (isConfirmed === true) {
+        dataToPass.salon_id = this.salonData._id;
+        // console.log("dataToPass", dataToPass)
+        this.commServ.removeEmpService(dataToPass).subscribe(
+          data => {
+            if (data["code"] === 200) {
+              this.isAddModal = false;
+              this.toastrServ.success("Employee Removed", "Success", {
+                timeOut: 2000
+              });
+              this.assignServiceForm.reset();
+              this.dismissModal();
+              this.getEmployeeService();
+            } else {
+              this.isAddModal = true;
+              this.toastrServ.error("Failed To Add", "Error", {
+                timeOut: 2000
+              });
+            }
+          },
+          error => {
+            this.toastrServ.error("Server Error", error.error, {
+              timeOut: 2000
+            });
+          }
+        );
       }
-    );
+    });
   }
   updateEmpployee(updateData) {
 

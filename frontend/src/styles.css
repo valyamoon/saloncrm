@@ -2052,6 +2052,7 @@ img {
   border: 1px solid lightgray;
   background: white;
 }
+
 .btn-primary:not(:disabled):not(.disabled):active {
   background: transparent linear-gradient(90deg, #783a87 0%, #bc2e65 100%) 0% 0%
     no-repeat padding-box;
