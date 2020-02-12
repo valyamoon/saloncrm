@@ -38,6 +38,16 @@ img {
   max-width: 100%;
 }
 
+.search {
+  width: 50%;
+  margin-bottom: 10px;
+  padding-left: 15px;
+  border-radius: 5px;
+  padding: 8px;
+  outline: none;
+  border: 1px solid lightgray;
+}
+
 .select-css {
   display: block;
   font-size: 12px;

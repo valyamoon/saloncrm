@@ -4,6 +4,7 @@ import { ToastrService } from "ngx-toastr";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "src/app/salon/login/login.service";
 import { AuthService } from "src/app/salon/auth.service";
+import { MatTableDataSource } from "@angular/material";
 
 @Component({
   selector: "app-manage-admin",
@@ -26,6 +27,7 @@ export class ManageAdminComponent implements OnInit {
   pageSize: any = 5;
   registerAdminForm: FormGroup;
   isLoader: boolean;
+  dataSource: any;
   constructor(
     private adminServ: AdminServService,
     private toastrServ: ToastrService,
@@ -52,6 +54,12 @@ export class ManageAdminComponent implements OnInit {
 
   get email() {
     return this.registerAdminForm.get("email");
+  }
+
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   get password() {
     return this.registerAdminForm.get("password");
@@ -122,6 +130,7 @@ export class ManageAdminComponent implements OnInit {
           this.isLoader = false;
           //   console.log(data["data"]["data"]);
           this.adminList = data["data"]["data"];
+          this.dataSource = new MatTableDataSource(this.adminList);
           this.adminCountTotal = data["data"]["count"];
           if (this.adminList.length == 0) {
             this.noRecordsFound = true;

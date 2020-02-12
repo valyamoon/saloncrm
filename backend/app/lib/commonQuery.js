@@ -1757,7 +1757,7 @@ commonQuery.getSalonDetailsQuery = function getSalonDetailsQuery(
         {
           $project: {
             name: 1,
-            salonaddress: 1,
+            address: "$salonaddress",
             location: 1,
             opentime: 1,
             closetime: 1,
@@ -1936,6 +1936,86 @@ commonQuery.getSalonSubscriptionDetails = function getSalonSubscriptionDetails(
         } else {
           resolve(res);
         }
+      });
+  });
+};
+
+commonQuery.getUpcomingBookings = function getUpcomingBookings(
+  model,
+  condition,
+  from,
+  localField,
+  foreignField,
+  pageSizes,
+  currentPage,
+  ascend
+) {
+  return new Promise(function(resolve, reject) {
+    let postQuery = model.aggregate([
+      {
+        $lookup: {
+          from: "salonservices",
+          localField: "service",
+          foreignField: "_id",
+          as: "services"
+        }
+      },
+      { $unwind: "$services" },
+      {
+        $lookup: {
+          from: "employees",
+          localField: "employee_id",
+          foreignField: "_id",
+          as: "employees"
+        }
+      },
+      { $unwind: "$employees" },
+      {
+        $lookup: {
+          from: from,
+          localField: localField,
+          foreignField: foreignField,
+          as: "userss"
+        }
+      },
+      { $unwind: "$userss" },
+      { $match: condition },
+      { $sort: { date: ascend } },
+      {
+        $project: {
+          _id: 1,
+          duration: 1,
+          isActive: 1,
+          isCancelled: 1,
+          isCompleted: 1,
+          starttime: 1,
+          date: 1,
+          paymentType: 1,
+          totalamount: 1,
+          servicename: "$services.servicename",
+          empname: "$employees.name",
+          firstName: "$userss.firstName",
+          lastName: "$userss.lastName",
+          address: "$userss.salonaddress",
+          name: "$userss.name",
+          image: "$userss.image",
+          salon_id: "$userss._id"
+        }
+      }
+    ]);
+
+    if (pageSizes && currentPage) {
+      postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
+    }
+    postQuery
+      .then(result => {
+        // console.log("999999999999999999999", result);
+
+        resolve(result);
+      })
+      .catch(error => {
+        // console.log(error);
+        reject(error);
       });
   });
 };

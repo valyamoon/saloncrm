@@ -71,9 +71,15 @@
     </div>
   </div>
 
+  <input
+    class="from-control search"
+    (keyup)="applyFilter($event)"
+    placeholder="Search"
+  />
+
   <div class="table-responsive tablecustom">
-    <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
-      <table mat-table [dataSource]="adminList">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
         <!-- Position Column -->
 
         <!-- Name Column -->
@@ -127,9 +133,9 @@
         [pageSizeOptions]="[5, 10, 15, 20]"
         showFirstLastButtons
       ></mat-paginator>
-    </div>
-    <div *ngIf="noRecordsFound" class="noRecords">
-      <div class="noRec">No Records Found</div>
+      <div *ngIf="noRecordsFound" class="noRecords">
+        <div class="noRec">No Records Found</div>
+      </div>
     </div>
   </div>
 </div>

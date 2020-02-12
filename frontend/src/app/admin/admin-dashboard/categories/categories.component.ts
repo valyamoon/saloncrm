@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
 import { ConfirmationComponent } from "../confirmation/confirmation.component";
 import { SimpleModalService } from "ngx-simple-modal";
 
@@ -28,6 +29,8 @@ export class CategoriesComponent implements OnInit {
   archivedCategoriesCount: any;
   showArchived: boolean = false;
   isShowUpdate: boolean = false;
+  dataSource: any;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(
     private adminServ: AdminServService,
     private fb: FormBuilder,
@@ -41,6 +44,7 @@ export class CategoriesComponent implements OnInit {
       name: ["", Validators.required]
     });
     this.fetchCategoriesList();
+    this.fetchArchivedCategoryList();
   }
 
   openAddCategoryModal(data) {
@@ -154,6 +158,8 @@ export class CategoriesComponent implements OnInit {
           this.isLoader = false;
           this.adminCategoriesCount = data["data"]["count"];
           this.categoriesList = data["data"]["data"];
+          this.dataSource = new MatTableDataSource(this.categoriesList);
+          this.dataSource.sort = this.sort;
           if (this.categoriesList.length == 0) {
             this.noRecordsFound = true;
           }
@@ -223,13 +229,11 @@ export class CategoriesComponent implements OnInit {
 
           this.archivedCategoriesList = data["data"];
           this.archivedCategoriesCount = this.archivedCategoriesList.length;
-          if (this.archivedCategoriesList.length == 0) {
+          if (data["data"].length == 0) {
             this.noArchivedRecordsFound = true;
+          } else {
+            this.noArchivedRecordsFound = false;
           }
-
-          this.toastrSev.success("Archive Catgories Fetched", "Success", {
-            timeOut: 1000
-          });
         } else {
           this.toastrSev.error("Failed To Fetch", "Error", {
             timeOut: 1000
@@ -274,5 +278,11 @@ export class CategoriesComponent implements OnInit {
   updateCategory(data) {
     this.openAddCategoryModal(data);
     this.isShowUpdate = true;
+  }
+
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
