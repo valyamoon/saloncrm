@@ -988,7 +988,7 @@ function userPayment(req, res) {
           currency: "usd",
           source: req.body.stripeToken,
           description: "Charge for" + req.body.stripeEmail,
-          captured: true,
+          destination: "acct_1GAviKKdbv3T0t1o",
           shipping: {
             name: "Jenny Rosen",
             address: {

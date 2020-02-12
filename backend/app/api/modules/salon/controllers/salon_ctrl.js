@@ -1461,23 +1461,18 @@ function bookSlot(data, req, res) {
               }
             });
 
-            return res.send({ message: "send" });
-
-            // res.json(
-            //   Response(
-            //     constant.SUCCESS_CODE,
-            //     constant.APPOINTMENT_BOOKED,
-            //     bookAppointment
-            //   )
-            // );
+            return res.json(
+              Response(
+                constant.SUCCESS_CODE,
+                constant.APPOINTMENT_BOOKED,
+                bookAppointment
+              )
+            );
           }
         }
       }
     } catch (error) {
       console.log(error);
-      // return res.send(
-      //   Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      // );
     }
   }
   bookSlot().then(function () { });
