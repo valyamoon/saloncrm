@@ -16,7 +16,8 @@ import {
   MatPaginatorModule,
   MatTableModule,
   MatSlideToggleModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatSortModule
 } from "@angular/material";
 import { CategoriesComponent } from "./admin-dashboard/categories/categories.component";
 import { ServicesComponent } from "./admin-dashboard/services/services.component";
@@ -60,7 +61,8 @@ import { DeleteDialogComponent } from "./admin-dashboard/delete-dialog/delete-di
     MatTableModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    SimpleModalModule.forRoot({ container: "modal-container" })
+    SimpleModalModule.forRoot({ container: "modal-container" }),
+    MatSortModule
   ],
   entryComponents: [ConfirmationComponent]
 })

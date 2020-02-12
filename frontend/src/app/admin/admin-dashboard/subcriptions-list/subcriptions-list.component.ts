@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ToastrService } from "ngx-toastr";
+import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
 
 @Component({
   selector: "app-subcriptions-list",
@@ -10,6 +11,7 @@ import { ToastrService } from "ngx-toastr";
 export class SubcriptionsListComponent implements OnInit {
   salonSubscriptionsList: any;
   isLoader: boolean;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   convertedSalonSubscriptionList: any;
   salonSubscriptionCount: any;
   displayedColumns = ["name", "startdate", "enddate"];
@@ -18,6 +20,7 @@ export class SubcriptionsListComponent implements OnInit {
   count: any = 5;
   adminCategoriesCount: any;
   page: any = 1;
+  dataSource: any;
   constructor(
     private adminServ: AdminServService,
     private toastServ: ToastrService
@@ -50,6 +53,12 @@ export class SubcriptionsListComponent implements OnInit {
           this.isLoader = false;
           this.salonSubscriptionsList = data["data"]["salons"];
 
+          if (this.salonSubscriptionsList.length === 0) {
+            this.noRecordsFound = true;
+          } else {
+            this.noRecordsFound = false;
+          }
+
           this.salonSubscriptionsList.forEach(function(c) {
             var months_arr = [
               "Jan",
@@ -80,14 +89,12 @@ export class SubcriptionsListComponent implements OnInit {
             c.created_on = finalSubscribedDate;
             c.expiry_date = finalExpiryDate;
           });
-
           this.convertedSalonSubscriptionList = this.salonSubscriptionsList;
-
+          this.dataSource = new MatTableDataSource(
+            this.convertedSalonSubscriptionList
+          );
+          this.dataSource.sort = this.sort;
           this.salonSubscriptionCount = data["data"]["count"];
-
-          this.toastServ.success("Fetched Subscribed Salons", "", {
-            timeOut: 1000
-          });
         } else if (data["code"] === 400) {
           this.isLoader = false;
           this.toastServ.error("Failed to fetch", data["message"], {
@@ -102,5 +109,10 @@ export class SubcriptionsListComponent implements OnInit {
         });
       }
     );
+  }
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

@@ -42,6 +42,27 @@ const config = {
       mailUsername: "",
       verificationMail: ""
     }
+  },
+  live: {
+    port: 5977,
+    db: {
+      user: "saloncrm",
+      password: "DFr533456yt",
+      url: "mongodb://54.71.18.74:27017/saloncrm"
+    },
+    baseUrl: "http://bookapp.ch/",
+    backendBaseUrl: "http://bookapp.ch/",
+    imageBaseUrl: "http://bookapp.ch/",
+    env: "prod",
+    smtp: {
+      service: "gmail",
+      username: "salon.sdn@gmail.com",
+      password: "Smartdata@123",
+      mailUsername: "",
+      host: "gmail.com",
+      mailUsername: "",
+      verificationMail: ""
+    }
   }
 };
 module.exports.get = function get(env) {

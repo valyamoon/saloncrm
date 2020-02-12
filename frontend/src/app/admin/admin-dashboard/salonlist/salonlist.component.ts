@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ToastrService } from "ngx-toastr";
+import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
 
 @Component({
   selector: "app-salonlist",
@@ -10,6 +11,8 @@ import { ToastrService } from "ngx-toastr";
 export class SalonlistComponent implements OnInit {
   activeSalons: any;
   noRecordsFound: boolean;
+
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   isLoader: boolean;
   displayedColumns = [
     "name",
@@ -30,6 +33,7 @@ export class SalonlistComponent implements OnInit {
   salonDetails: any;
   showSalonDetail: boolean = false;
   salonEmail: any;
+  dataSource: any;
 
   constructor(
     private adminServ: AdminServService,
@@ -63,12 +67,13 @@ export class SalonlistComponent implements OnInit {
         if (data["code"] === 200) {
           this.isLoader = false;
           this.activeSalons = data["data"];
+          this.dataSource = new MatTableDataSource(this.activeSalons);
+          this.dataSource.sort = this.sort;
           if (this.activeSalons.length == 0) {
             this.noRecordsFound = true;
+          } else {
+            this.noRecordsFound = false;
           }
-          this.toastrServ.success("Fetched Salons List", "Success", {
-            timeOut: 1000
-          });
         } else {
           this.isLoader = false;
           this.toastrServ.error("Failed To Fetch Salons", "Failed", {
@@ -83,6 +88,12 @@ export class SalonlistComponent implements OnInit {
         });
       }
     );
+  }
+
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getActiveSalonsCount() {

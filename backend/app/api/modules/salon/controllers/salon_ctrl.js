@@ -2,14 +2,21 @@
 
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
-const fcm = require("fcm-notification");
+// const fcm = require("fcm-notification");
+// const privateKey = require("./privatekey");
+// const FCM = new fcm(privateKey);
 const async = require("async");
-const FCM = require("../../../../lib/privatekey.json");
+
+var FCM = require("fcm-node");
+var serverKey =
+  "AAAAP9-1hEk:APA91bGeTlqXHIGH3ttGdruGj0icePvUSqWQ2H64s_zoP9bt8EhsOcqMKKszpGY8bMAGPxs_nq4ySmYUuBCacmLeplDsq5pNodO4GFXGsTNgXaAGTdu6hreogdM4rRbU8OP3s-QZ2rK7";
+var fcm = new FCM(serverKey);
 var ts = require("time-slots-generator");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
 const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
-//const stripe = require("stripe")("pk_test_qTMNt7hjKJiVtbBOr2xjDUsr00yAO2oDBq");
+//const stripe = require("stripe")("sk_test_KIPp24RuZLwG2pgVc8Hsd6lS00iSpeKk3X");
+
 const mkdirp = require("mkdirp");
 //const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
@@ -18,6 +25,7 @@ const constant = require("../../../../config/constant.js");
 const wallets = require("../../user/model/walletSchema");
 const userCtrl = require("../../user/controllers/user_ctrl");
 const users = mongoose.model("users");
+
 const appointments = require("../model/appointmentsSchema");
 const salonSubscriptions = require("../model/salonSubscriptions");
 const roles = require("../../user/model/rolesSchema");
@@ -67,7 +75,8 @@ module.exports = {
   subscribedSalonDetails: subscribedSalonDetails,
   createCardToken: createCardToken,
   connectStripeAccount: connectStripeAccount,
-  appointmentCompleted: appointmentCompleted
+  appointmentCompleted: appointmentCompleted,
+  getUpcomingbookings: getUpcomingbookings
 };
 
 /**
@@ -120,7 +129,11 @@ function saveSalonDetails(req, res) {
                     constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
                   // constant.directoryPath.SERVICEIMAGE
                   // return false;
-                  db_path = webUrl + timeStamp + "_" + imgOriginalName;
+                  db_path =
+                    "uploads/profileImages/" +
+                    timeStamp +
+                    "_" +
+                    imgOriginalName;
                 }
                 if (db_path) {
                   //image_path= db_path;
@@ -206,7 +219,6 @@ function saveSalonDetails(req, res) {
                               }
                             }
                           );
-                          console.log("customer_id_value", customer_id_value);
                         } else {
                         }
                       });
@@ -383,12 +395,20 @@ function getSalons(req, res) {
 
             var times_ara = calculate_time_slot(start_time, end_time, interval);
 
+            let timeArray = [];
+
+            times_ara.forEach(function (jj) {
+              timeArray.push({ time: jj, status: false });
+            });
+
+            // /console.log("TIMEARRAY", timeArray);
+
             salonListingNew.push({
               starttime: v.optime,
               _id: v._id,
               closetime: v.cltime,
               name: v.salon,
-              slots: times_ara,
+              slots: timeArray,
               image: v.image,
               contact: v.contact,
               avgRatings: v.avgRatings,
@@ -450,7 +470,7 @@ function getSalonDetails(req, res) {
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
-              salonDetails
+              salonDetails[0]
             )
           );
         }
@@ -571,7 +591,6 @@ async function addSalonServices(req, res) {
             );
             if (!updateSalonData) {
             } else {
-              console.log("saveServiceToSalon===========>", saveServiceToSalon);
             }
           }
         } else {
@@ -838,7 +857,6 @@ function addEmployeeToSalon(req, res) {
  * Created on 30th Jan, 2020
  */
 async function updateEmployee(req, res) {
-  console.log("req.body", req.body);
   if (req.body.id) {
     let updateCond = {
       _id: req.body.id
@@ -983,7 +1001,7 @@ function getCategoriesAndServicesOfSalon(req, res) {
     try {
       if (req.body && req.body.salon_id) {
         let condition = {
-          "servvv.salon_id": mongoose.Types.ObjectId(req.body.salon_id)
+          "inventory_docs.salon_id": mongoose.Types.ObjectId(req.body.salon_id)
         };
         let catgoriesList = await commonQuery.fetchCategories(
           categories,
@@ -1176,7 +1194,7 @@ function viewSalonDetails(req, res) {
 
 function updateSalonDetails(req, res) {
   var image_path;
-  console.log(req.body);
+  //console.log(req.body);
   async function updateSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -1296,7 +1314,7 @@ function updateSalonDetails(req, res) {
 }
 
 function fetchSalonData(req, res) {
-  console.log("HERE", req.body);
+  // console.log("HERE", req.body);
   async function fetchSalonData() {
     try {
       if (req.body && req.body.user_id) {
@@ -1305,13 +1323,15 @@ function fetchSalonData(req, res) {
         };
 
         let getSalonData = await commonQuery.findoneData(salons, condition);
-        console.log(getSalonData);
+        //  console.log(getSalonData);
 
         if (!getSalonData) {
           return res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
+          console.log("GETSALONDATA", getSalonData);
+
           return res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -1335,9 +1355,9 @@ function bookSlot(data, req, res) {
   console.log("INSIDE BOOKSLOT", data);
   async function bookSlot() {
     try {
-      if (req.body && req.body.starttime) {
-        var starttime = req.body.starttime;
-        var duration = req.body.duration;
+      if (data && data.time) {
+        var starttime = data.time;
+        var duration = data.duration;
         var hour = starttime.split(":");
         var hourInt = hour[0] * 60;
         var minInt = hour[1];
@@ -1350,16 +1370,32 @@ function bookSlot(data, req, res) {
           const minutes = num % 60;
           endTimeCalculated = `${hours}:${minutes}`;
         }
-
+        console.log("endTimeCalculated", endTimeCalculated);
         let findEmp = await commonQuery.filterEmployee(
           employees,
-          data.salon_id,
-          data.salonservices_id
+          mongoose.Types.ObjectId(data.salon_id),
+          mongoose.Types.ObjectId(data.service_id)
         );
+
+        console.log("FINDEMP", findEmp);
 
         if (!findEmp) {
         } else {
           var empId = findEmp[0]._id;
+
+          console.log(empId);
+
+          let salon_connected_id;
+          let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
+          let connectedAccountId = await commonQuery.findoneData(
+            salons,
+            condition
+          );
+          console.log("CONNECTEDID", connectedAccountId);
+          if (connectedAccountId) {
+            salon_connected_id = connectedAccountId.connected_account_id;
+            console.log("connected_account_id", salon_connected_id);
+          }
 
           let saveAppointment = new appointments({
             salon_id: data.salon_id,
@@ -1368,13 +1404,15 @@ function bookSlot(data, req, res) {
             service: data.service_id,
             duration: data.duration,
             starttime: starttime,
+            user_id: data.user_id,
             endtime: endTimeCalculated,
             date: data.date,
-            connected_account_id: data.connected_account_id,
-            employee_id: empId
+            connected_account_id: salon_connected_id,
+            employee_id: empId,
+            paymentType: data.paymentType
           });
 
-          console.log("endTimeCalculated", endTimeCalculated);
+          console.log("saveAppointment", saveAppointment);
 
           let bookAppointment = await commonQuery.InsertIntoCollection(
             appointments,
@@ -1385,33 +1423,61 @@ function bookSlot(data, req, res) {
               Response(constant.ERROR_CODE, constant.FAILED_TO_BOOK, null)
             );
           } else {
-            let message = {
-              subject: "MESSAGE SENT",
-              token: devicetoken
+            // let message = {
+            //   subject: "MESSAGE SENT",
+            //   token: data.deviceToken
+            // };
+
+            // FCM.send(message, async function(err, response) {
+            //   if (err) {
+            //     console.log("error found", err);
+            //   } else {
+            //     console.log("response here", response);
+            //   }
+            // });
+
+            var message = {
+              //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+              to: data.deviceToken,
+              collapse_key: "your_collapse_key",
+
+              notification: {
+                title: "HI AMrut",
+                body: "Body of your push notification"
+              },
+
+              data: {
+                //you can send only notification or only data(or include both)
+                my_key: "AMRUT",
+                my_another_key: "NADIM"
+              }
             };
 
-            FCM.send(message, async function (err, response) {
+            fcm.send(message, function (err, response) {
               if (err) {
-                console.log("error found", err);
+                console.log("Something has gone wrong!");
               } else {
-                console.log("response here", response);
+                console.log("Successfully sent with response: ", response);
               }
             });
 
-            res.json(
-              Response(
-                constant.SUCCESS_CODE,
-                constant.APPOINTMENT_BOOKED,
-                bookAppointment
-              )
-            );
+            return res.send({ message: "send" });
+
+            // res.json(
+            //   Response(
+            //     constant.SUCCESS_CODE,
+            //     constant.APPOINTMENT_BOOKED,
+            //     bookAppointment
+            //   )
+            // );
           }
         }
       }
     } catch (error) {
-      return res.send(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
+      console.log(error);
+      // return res.send(
+      //   Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      // );
     }
   }
   bookSlot().then(function () { });
@@ -1863,15 +1929,18 @@ function connectStripeAccount(req, res) {
 function appointmentCompleted(req, res) {
   async function appointmentCompleted() {
     try {
-      if (req.body && req.body.isCompleted) {
+      if (req.body && req.body.booking_id) {
         let condition = { _id: mongoose.Types.ObjectId(req.body.booking_id) };
-
-        let findBooking = await commonQuery.findoneData(
+        let updateCondition = { isActive: false, isCompleted: true };
+        let findBooking = await commonQuery.updateOneDocument(
           appointments,
-          condition
+          condition,
+          updateCondition
         );
         if (!findBooking) {
         } else {
+          console.log("Booking", findBooking);
+
           let condition = {
             _id: mongoose.Types.ObjectId(findBooking["salon_id"])
           };
@@ -1880,24 +1949,38 @@ function appointmentCompleted(req, res) {
             condition
           );
 
-          console.log(findConnectedId);
+          console.log(findConnectedId.connected_account_id);
           if (findConnectedId) {
-            stripe.paymentIntents
-              .create({
-                payment_method_types: ["card"],
+            // stripe.paymentIntents
+            //   .create({
+            //     payment_method_types: ["card"],
+            //     amount: findBooking.totalamount,
+            //     currency: "USD",
+            //     transfer_data: {
+            //       destination: findConnectedId.connected_account_id
+            //     }
+            //   })
+            //   .then(async function(paymentIntent) {
+            //     // asynchronously called
+            //     console.log("PAYMENT INTENT", paymentIntent);
+            //     if (paymentIntent) {
+            //     }
+            //   });
+            stripe.transfers.create(
+              {
                 amount: findBooking.totalamount,
                 currency: "USD",
-                transfer_data: {
-                  destination: findConnectedId.connected_account_id
-                }
-              })
-              .then(async function (paymentIntent) {
+                destination: findConnectedId.connected_account_id
+              },
+              function (err, transfer) {
                 // asynchronously called
-                console.log("PAYMENT INTENT", paymentIntent);
-                if (paymentIntent) {
-                  userCtrl.minusWalletAmount();
+                if (err) {
+                  console.log("error", err);
+                } else {
+                  console.log("TRANSFER", transfer);
                 }
-              });
+              }
+            );
           }
         }
       }
@@ -1908,4 +1991,67 @@ function appointmentCompleted(req, res) {
     }
   }
   appointmentCompleted().then(function () { });
+}
+
+function getUpcomingbookings(req, res) {
+  console.log(req.body);
+  async function getUpcomingbookings() {
+    try {
+      let from = "users";
+      let localfield = "user_id";
+      let foreignfield = "_id";
+
+      let condition = {};
+      let ascend;
+      if (req.body && req.body.salon_id) {
+        if (req.body.type === "upcoming") {
+          ascend = -1;
+          condition = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: false,
+            isActive: true
+          };
+        } else if (req.body.type === "completed") {
+          ascend = 1;
+          condition = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: true,
+            isActive: false
+          };
+        } else {
+          ascend = -1;
+          condition = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: false,
+            isActive: true
+          };
+        }
+
+        let bookingList = await commonQuery.getUpcomingBookings(
+          appointments,
+          condition,
+          from,
+          localfield,
+          foreignfield,
+          ascend
+        );
+        if (!bookingList) {
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              bookingList
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getUpcomingbookings().then(function () { });
 }
