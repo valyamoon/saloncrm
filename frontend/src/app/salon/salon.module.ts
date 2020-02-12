@@ -28,7 +28,8 @@ import {
   MatPaginatorModule,
   MatTableModule,
   MatSlideToggleModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatSortModule
 } from "@angular/material";
 import { TimingComponent } from "./dashboard/timing/timing.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
@@ -39,6 +40,8 @@ import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
 import { SubscriptionComponent } from "./dashboard/subscription/subscription.component";
 import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
 import { ConnectAccountComponent } from './dashboard/connect-account/connect-account.component';
+import { ConfirmationDialogComponent } from './dashboard/confirmation-dialog/confirmation-dialog.component'
+import { SimpleModalModule } from 'ngx-simple-modal';
 
 
 @NgModule({
@@ -59,7 +62,8 @@ import { ConnectAccountComponent } from './dashboard/connect-account/connect-acc
     SubscribeComponent,
     SubscriptionComponent,
     PromcodeComponent,
-    ConnectAccountComponent
+    ConnectAccountComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     CommonModule,
@@ -82,7 +86,10 @@ import { ConnectAccountComponent } from './dashboard/connect-account/connect-acc
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     NgxMaskModule.forRoot(),
-    MatExpansionModule
-  ]
+    MatExpansionModule,
+    SimpleModalModule.forRoot({ container: "modal-container" }),
+    MatSortModule
+  ],
+  entryComponents: [ConfirmationDialogComponent]
 })
 export class SalonModule { }

@@ -102,7 +102,7 @@ function saveSalonDetails(req, res) {
             coordinates: coordinates
           };
           if (req.files) {
-            mkdirp(constant.PROFILEIMAGE, async function(err) {
+            mkdirp(constant.PROFILEIMAGE, async function (err) {
               let timeStamp = Date.now();
 
               let extension;
@@ -148,7 +148,7 @@ function saveSalonDetails(req, res) {
                                 country: "US"
                               }
                             },
-                            async function(err, customer) {
+                            async function (err, customer) {
                               if (err) {
                                 console.log(err);
                               } else {
@@ -227,7 +227,7 @@ function saveSalonDetails(req, res) {
       );
     }
   }
-  saveSalonDetails().then(function() {});
+  saveSalonDetails().then(function () { });
 }
 /**
  * Function is use to Fetch salon List(This is going to change as per new requirement)
@@ -296,7 +296,7 @@ function getSalons(req, res) {
         if (!salonList) {
         } else {
           let slots = [];
-          salonList.forEach(async function(c) {
+          salonList.forEach(async function (c) {
             slots.push({
               salon: c.name,
               _id: c._id,
@@ -314,7 +314,7 @@ function getSalons(req, res) {
             });
           });
 
-          slots.forEach(function(v) {
+          slots.forEach(function (v) {
             let todaysDate = new Date();
 
             let comingDate = req.body.date;
@@ -417,7 +417,7 @@ function getSalons(req, res) {
     }
   }
 
-  getSalons().then(function() {});
+  getSalons().then(function () { });
 }
 
 /**
@@ -461,7 +461,7 @@ function getSalonDetails(req, res) {
       );
     }
   }
-  getSalonDetails().then(function() {});
+  getSalonDetails().then(function () { });
 }
 /**
  * Function is use to Fetch Reviews and ratings of salon
@@ -510,7 +510,7 @@ function getReviewsAndRatingsList(req, res) {
     }
   }
 
-  getReviewsAndRatingsList().then(function() {});
+  getReviewsAndRatingsList().then(function () { });
 }
 /**
  * Function is use to Add services with respect to salon
@@ -526,7 +526,7 @@ async function addSalonServices(req, res) {
     var salonId = req.body.salon_id;
     async.each(
       req.body.services,
-      async function(serviceData, firstCB) {
+      async function (serviceData, firstCB) {
         let serviceName = await util.getServcieName(
           services,
           serviceData.service_id
@@ -594,7 +594,7 @@ async function addSalonServices(req, res) {
 
         // firstCB();
       },
-      function(err, data) {
+      function (err, data) {
         if (err) {
           console.log("Error @427", err);
         } else {
@@ -682,7 +682,7 @@ function addPromocodes(req, res) {
       );
     }
   }
-  addPromocodes().then(function() {});
+  addPromocodes().then(function () { });
 }
 /**
  * Function is use to Fetch promocode with respect to salon
@@ -710,7 +710,7 @@ function getPromoCodes(req, res) {
         } else {
           // fetchPromoCodes.forEach(function(v){ delete v.salon_id; delete v.usedbyusers; ret });
 
-          fetchPromoCodes.forEach(function(v) {
+          fetchPromoCodes.forEach(function (v) {
             v.salon_id = undefined;
             v.usedbyusers = undefined;
           });
@@ -730,7 +730,7 @@ function getPromoCodes(req, res) {
       );
     }
   }
-  getPromoCodes().then(function() {});
+  getPromoCodes().then(function () { });
 }
 /**
  * Function is use to Fetch salon services chosen by salon
@@ -772,7 +772,7 @@ function getSalonServices(req, res) {
     }
   }
 
-  getSalonServices().then(function() {});
+  getSalonServices().then(function () { });
 }
 
 /**
@@ -827,7 +827,7 @@ function addEmployeeToSalon(req, res) {
       );
     }
   }
-  addEmployeeToSalon().then(function() {});
+  addEmployeeToSalon().then(function () { });
 }
 /**
  * Function is use to Update employee
@@ -865,10 +865,12 @@ async function updateEmployee(req, res) {
  */
 function addServicesToEmployee(req, res) {
   async function addServicesToEmployee() {
+    // console.log("req.body.employee_id", req.body.employee_id); //return;
     try {
       if (req.body.employee_id && req.body) {
+        // console.log("call here in if condition");
         let tempSev = [];
-        req.body.salonservices_id.forEach(function(v) {
+        req.body.salonservices_id.forEach(function (v) {
           tempSev.push(mongoose.Types.ObjectId(v));
         });
 
@@ -877,7 +879,7 @@ function addServicesToEmployee(req, res) {
           _id: empId
         };
         let isEmployeExist = await commonQuery.countData(employees, empCond);
-        //console.log("isEmployeExist", isEmployeExist); return;
+
         if (isEmployeExist == 0) {
           let addEmpService = await commonQuery.addServiceToEmployee(
             employees,
@@ -906,6 +908,7 @@ function addServicesToEmployee(req, res) {
             empCond,
             updateData
           );
+          // console.log("updateService", updateService); return;
           if (!updateService) {
             res.json(
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -921,13 +924,14 @@ function addServicesToEmployee(req, res) {
           }
         }
       }
+      // console.log("req.body =============>", req.body); return;
     } catch (error) {
       res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
       );
     }
   }
-  addServicesToEmployee().then(function() {});
+  addServicesToEmployee().then(function () { });
 }
 
 /**
@@ -971,7 +975,7 @@ function removeServiceToEmployee(req, res) {
     }
   }
 
-  removeServiceToEmployee().then(function() {});
+  removeServiceToEmployee().then(function () { });
 }
 
 function getCategoriesAndServicesOfSalon(req, res) {
@@ -996,9 +1000,9 @@ function getCategoriesAndServicesOfSalon(req, res) {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
-  getCategoriesAndServicesOfSalon().then(function() {});
+  getCategoriesAndServicesOfSalon().then(function () { });
 }
 
 /**
@@ -1017,7 +1021,7 @@ function addSalonWeeklySlots(req, res) {
     try {
       async.each(
         req.body.daysData,
-        async function(record) {
+        async function (record) {
           let slotData = {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
@@ -1085,7 +1089,7 @@ function addSalonWeeklySlots(req, res) {
             }
           }
         },
-        function(err) {
+        function (err) {
           if (err) {
             console.log("Error @ 179", err);
           } else {
@@ -1167,7 +1171,7 @@ function viewSalonDetails(req, res) {
       );
     }
   }
-  viewSalonDetails().then(function() {});
+  viewSalonDetails().then(function () { });
 }
 
 function updateSalonDetails(req, res) {
@@ -1177,7 +1181,7 @@ function updateSalonDetails(req, res) {
     try {
       if (req.body && req.body.salon_id) {
         if (req.files) {
-          mkdirp(constant.PROFILEIMAGE, async function(err) {
+          mkdirp(constant.PROFILEIMAGE, async function (err) {
             let timeStamp = Date.now();
 
             let extension;
@@ -1288,7 +1292,7 @@ function updateSalonDetails(req, res) {
       );
     }
   }
-  updateSalonDetails().then(function() {});
+  updateSalonDetails().then(function () { });
 }
 
 function fetchSalonData(req, res) {
@@ -1324,7 +1328,7 @@ function fetchSalonData(req, res) {
     }
   }
 
-  fetchSalonData().then(function() {});
+  fetchSalonData().then(function () { });
 }
 
 function bookSlot(data, req, res) {
@@ -1386,7 +1390,7 @@ function bookSlot(data, req, res) {
               token: devicetoken
             };
 
-            FCM.send(message, async function(err, response) {
+            FCM.send(message, async function (err, response) {
               if (err) {
                 console.log("error found", err);
               } else {
@@ -1410,7 +1414,7 @@ function bookSlot(data, req, res) {
       );
     }
   }
-  bookSlot().then(function() {});
+  bookSlot().then(function () { });
 }
 /**
  * Function is use to get Salon Details from user ID
@@ -1615,7 +1619,7 @@ function createCardToken(req, res) {
               cvc: req.body.cvc
             }
           },
-          async function(err, token) {
+          async function (err, token) {
             if (err) {
               console.log("ERROR", err);
               return res.json(
@@ -1632,7 +1636,7 @@ function createCardToken(req, res) {
               stripe.customers.createSource(
                 req.body.customer_id,
                 { source: token_id },
-                async function(err, card) {
+                async function (err, card) {
                   if (err) {
                     console.log(err);
                   } else {
@@ -1642,7 +1646,7 @@ function createCardToken(req, res) {
                         customer: req.body.customer_id,
                         items: [{ plan: req.body.plan_id }]
                       },
-                      async function(err, subscription) {
+                      async function (err, subscription) {
                         if (err) {
                           return res.json(
                             Response(
@@ -1732,7 +1736,7 @@ function createCardToken(req, res) {
       );
     }
   }
-  createCardToken().then(function() {});
+  createCardToken().then(function () { });
 }
 
 function subscribedSalonDetails(req, res) {
@@ -1768,7 +1772,7 @@ function subscribedSalonDetails(req, res) {
       );
     }
   }
-  subscribedSalonDetails().then(function() {});
+  subscribedSalonDetails().then(function () { });
 }
 
 function deletePromocode(req, res) {
@@ -1804,7 +1808,7 @@ function deletePromocode(req, res) {
       );
     }
   }
-  deletePromocode().then(function() {});
+  deletePromocode().then(function () { });
 }
 
 function connectStripeAccount(req, res) {
@@ -1816,7 +1820,7 @@ function connectStripeAccount(req, res) {
             grant_type: "authorization_code",
             code: req.body.code
           })
-          .then(async function(response) {
+          .then(async function (response) {
             // asynchronously called
             var connected_account_ID = response.stripe_user_id;
             console.log(connected_account_ID);
@@ -1853,7 +1857,7 @@ function connectStripeAccount(req, res) {
     }
   }
 
-  connectStripeAccount().then(function() {});
+  connectStripeAccount().then(function () { });
 }
 
 function appointmentCompleted(req, res) {
@@ -1887,7 +1891,7 @@ function appointmentCompleted(req, res) {
                   destination: findConnectedId.connected_account_id
                 }
               })
-              .then(async function(paymentIntent) {
+              .then(async function (paymentIntent) {
                 // asynchronously called
                 console.log("PAYMENT INTENT", paymentIntent);
                 if (paymentIntent) {
@@ -1903,5 +1907,5 @@ function appointmentCompleted(req, res) {
       );
     }
   }
-  appointmentCompleted().then(function() {});
+  appointmentCompleted().then(function () { });
 }
