@@ -10,6 +10,7 @@ const salonCtrl = require("../../salon/controllers/salon_ctrl");
 //const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
 const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
+//const stripe = require("stripe")("sk_test_KIPp24RuZLwG2pgVc8Hsd6lS00iSpeKk3X");
 const jwtKey = "saloncrm";
 const mkdirp = require("mkdirp");
 const multer = require("multer");
@@ -47,7 +48,9 @@ module.exports = {
   userPayment: userPayment,
   cancelBooking: cancelBooking,
   addWalletAmount: addWalletAmount,
-  minusWalletAmount: minusWalletAmount
+  minusWalletAmount: minusWalletAmount,
+  getBookingList: getBookingList,
+  getWalletAmount: getWalletAmount
 };
 
 // /* Function is use to Request Otp
@@ -558,7 +561,8 @@ function updateUser(req, res) {
                   constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
                 // constant.directoryPath.SERVICEIMAGE
                 // return false;
-                db_path = webUrl + timeStamp + "_" + imgOriginalName;
+                db_path =
+                  "uploads/profileImages/" + timeStamp + "_" + imgOriginalName;
                 console.log("DB PATH", db_path);
                 console.log("PATH IS", path);
               }
@@ -912,7 +916,6 @@ function softDeleteUser(req, res) {
  */
 
 function getDetailsOfUser(req, res) {
-  console.log("USEREEE", req.body);
   async function getDetailsOfUser() {
     try {
       if (req.body.user_id) {
@@ -965,12 +968,14 @@ function userPayment(req, res) {
       let dataToPass = {
         totalamount: req.body.totalAmt,
         salon_id: req.body.salon_id,
+        user_id: req.body.user_id,
         date: req.body.date,
         time: req.body.time,
         service_id: req.body.service_id,
         promocode_id: req.body.promocode_id,
         deviceToken: req.body.deviceToken,
-        duration: req.body.duration
+        duration: req.body.duration,
+        paymentType: req.body.payType
       };
 
       salonCtrl.bookSlot(dataToPass);
@@ -983,6 +988,7 @@ function userPayment(req, res) {
           currency: "usd",
           source: req.body.stripeToken,
           description: "Charge for" + req.body.stripeEmail,
+          captured: true,
           shipping: {
             name: "Jenny Rosen",
             address: {
@@ -1006,13 +1012,15 @@ function userPayment(req, res) {
               date: req.body.date,
               time: req.body.time,
               service_id: req.body.service_id,
+              user_id: req.body.user_id,
               stripeEmail: req.body.stripeEmail,
               promocode_id: req.body.promocode_id,
               deviceToken: req.body.deviceToken,
               createdon: charge.created,
               payment_method: charge.payment_method,
               card_last_digit: charge.payment_method_details["card"]["last4"],
-              duration: req.body.duration
+              duration: req.body.duration,
+              paymentType: req.body.payType
             };
 
             salonCtrl.bookSlot(dataToPass);
@@ -1044,9 +1052,13 @@ function userPayment(req, res) {
 function cancelBooking(req, res) {
   async function cancelBooking() {
     try {
-      if (req.body && req.body.isCancelled === true) {
+      if (req.body && req.body.booking_id) {
         let condition = { _id: mongoose.Types.ObjectId(req.body.booking_id) };
-        let updateCondition = { isCancelled: true, isActive: false };
+        let updateCondition = {
+          isCancelled: true,
+          isActive: false,
+          isCompleted: false
+        };
         let updateBooking = await commonQuery.updateOneDocument(
           appointments,
           condition,
@@ -1054,21 +1066,30 @@ function cancelBooking(req, res) {
         );
         if (!updateBooking) {
         } else {
+          console.log("UPADT", updateBooking);
           let dataToPass = {
             user_id: updateBooking.user_id,
             amount: updateBooking.totalamount
           };
 
+          console.log("DATATIPASS", dataToPass);
           addWalletAmount(dataToPass);
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              updateBooking
+            )
+          );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
   }
-  cancelBooking().then(function() {
-    return res.json(
-      Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-    );
-  });
+  cancelBooking().then(function() {});
 }
 
 function addWalletAmount(dataToPass) {
@@ -1093,11 +1114,42 @@ function addWalletAmount(dataToPass) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
+          console.log(addWalletAmount);
+          // res.json(
+          //   Response(
+          //     constant.SUCCESS_CODE,
+          //     constant.ADDED_SUCCESS,
+          //     addWalletAmount
+          //   )
+          // );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addWalletAmount().then(function() {});
+}
+
+function getWalletAmount(req, res) {
+  async function getWalletAmount() {
+    try {
+      if (req.body.user_id && req.body) {
+        let condition = { user_id: mongoose.Types.ObjectId(req.body.user_id) };
+        let getWalletAmount = await commonQuery.fetch_all(wallets, condition);
+
+        if (!getWalletAmount) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
           res.json(
             Response(
               constant.SUCCESS_CODE,
-              constant.ADDED_SUCCESS,
-              addWalletAmount
+              constant.FETCHED_ALL_DATA,
+              getWalletAmount
             )
           );
         }
@@ -1108,7 +1160,7 @@ function addWalletAmount(dataToPass) {
       );
     }
   }
-  addWalletAmount().then(function() {});
+  getWalletAmount().then(function() {});
 }
 
 function minusWalletAmount(data) {
@@ -1140,4 +1192,71 @@ function minusWalletAmount(data) {
     }
   }
   minusWalletAmount().then(function() {});
+}
+
+function getBookingList(req, res) {
+  let pageSize =
+    +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+  let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+  async function getBookingList() {
+    try {
+      let from = "salons";
+      let localField = "salon_id";
+      let foreignField = "_id";
+
+      if (req.body && req.body.user_id) {
+        let condition = {};
+        let ascend;
+
+        if (req.body.type === "upcoming") {
+          ascend = 1;
+          condition = {
+            user_id: mongoose.Types.ObjectId(req.body.user_id),
+            isActive: true,
+            isCompleted: false
+          };
+        } else if (req.body.type === "completed") {
+          ascend = -1;
+          condition = {
+            user_id: mongoose.Types.ObjectId(req.body.user_id),
+            isActive: false,
+            isCompleted: true
+          };
+        } else {
+          ascend = 1;
+          condition = {
+            user_id: mongoose.Types.ObjectId(req.body.user_id),
+            isActive: true,
+            isCompleted: false
+          };
+        }
+        let bookingList = await commonQuery.getUpcomingBookings(
+          appointments,
+          condition,
+          from,
+          localField,
+          foreignField,
+          pageSize,
+          currentPage,
+          ascend
+        );
+        if (!bookingList) {
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              bookingList
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getBookingList().then(function() {});
 }

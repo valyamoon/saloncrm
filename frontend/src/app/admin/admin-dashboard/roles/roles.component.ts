@@ -1,8 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ConfirmationComponent } from "../confirmation/confirmation.component";
 import { ToastrService } from "ngx-toastr";
-import { MatDialog } from "@angular/material";
+import {
+  MatDialog,
+  MatTableDataSource,
+  MatSortHeader,
+  MatSort
+} from "@angular/material";
 
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
@@ -15,7 +20,7 @@ export class RolesComponent implements OnInit {
   rolesList: any;
   noRecordsFound: boolean;
   rolesCount: any;
-
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   isAddModal: boolean = false;
   isAddButton: boolean;
   roleForm: FormGroup;
@@ -38,6 +43,7 @@ export class RolesComponent implements OnInit {
   isConfirm: any;
   dataToDelete: any;
   isLoader: boolean;
+  dataSource: any;
 
   constructor(
     private admnServ: AdminServService,
@@ -53,6 +59,12 @@ export class RolesComponent implements OnInit {
 
     this.fetchRoles();
     this.admnServ.setHeaderText("Manage Roles");
+  }
+
+  applyFilter(event: Event) {
+    console.log(event);
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   paginate(event) {
@@ -87,6 +99,8 @@ export class RolesComponent implements OnInit {
         if (data["code"] == 200) {
           this.isLoader = false;
           this.rolesList = data["data"]["data"];
+          this.dataSource = new MatTableDataSource(this.rolesList);
+          this.dataSource.sort = this.sort;
           this.rolesCount = data["data"]["count"];
           if (this.rolesList.length == 0) {
             this.noRecordsFound = true;

@@ -68,7 +68,6 @@ export class DashboardComponent implements OnInit {
     this.dataDefault = dataToPass;
     this.adminServ.getSalonsRequest(dataToPass).subscribe(
       data => {
-        console.log("HERE DATA iS", data);
         if (data["code"] == 200) {
           this.SalonRequestList = data["data"]["data"];
           this.limit = data["data"]["countNumber"];

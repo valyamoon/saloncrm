@@ -18,5 +18,7 @@ module.exports = function(router) {
   router.post("/user-detail", user.getDetailsOfUser);
   router.post("/charge", user.userPayment);
   router.post("/cancel-booking", user.cancelBooking);
+  router.post("/users-booking", user.getBookingList);
+  router.post("/users-wallet", user.getWalletAmount);
   return router;
 };

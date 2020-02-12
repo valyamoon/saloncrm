@@ -9,13 +9,14 @@ const async = require("async");
 
 var FCM = require("fcm-node");
 var serverKey =
-  "AAAAP9-1hEk:APA91bGrDLB0V_5g70-D6Mxt5vbZ-bkVKs8DF3yZkkU_wpgd6wafwOPwTjYdB3vCH4vNO8pGcX8gu6NoGMdqRAosdevEANZGUcSf-XJ-jgkh1n540C9FTMc_knbz-zexTudk6fHpiT2O";
+  "AAAAP9-1hEk:APA91bGeTlqXHIGH3ttGdruGj0icePvUSqWQ2H64s_zoP9bt8EhsOcqMKKszpGY8bMAGPxs_nq4ySmYUuBCacmLeplDsq5pNodO4GFXGsTNgXaAGTdu6hreogdM4rRbU8OP3s-QZ2rK7";
 var fcm = new FCM(serverKey);
 var ts = require("time-slots-generator");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
 const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
-//const stripe = require("stripe")("pk_test_qTMNt7hjKJiVtbBOr2xjDUsr00yAO2oDBq");
+//const stripe = require("stripe")("sk_test_KIPp24RuZLwG2pgVc8Hsd6lS00iSpeKk3X");
+
 const mkdirp = require("mkdirp");
 //const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
@@ -24,6 +25,7 @@ const constant = require("../../../../config/constant.js");
 const wallets = require("../../user/model/walletSchema");
 const userCtrl = require("../../user/controllers/user_ctrl");
 const users = mongoose.model("users");
+
 const appointments = require("../model/appointmentsSchema");
 const salonSubscriptions = require("../model/salonSubscriptions");
 const roles = require("../../user/model/rolesSchema");
@@ -73,7 +75,8 @@ module.exports = {
   subscribedSalonDetails: subscribedSalonDetails,
   createCardToken: createCardToken,
   connectStripeAccount: connectStripeAccount,
-  appointmentCompleted: appointmentCompleted
+  appointmentCompleted: appointmentCompleted,
+  getUpcomingbookings: getUpcomingbookings
 };
 
 /**
@@ -126,7 +129,11 @@ function saveSalonDetails(req, res) {
                     constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
                   // constant.directoryPath.SERVICEIMAGE
                   // return false;
-                  db_path = webUrl + timeStamp + "_" + imgOriginalName;
+                  db_path =
+                    "uploads/profileImages/" +
+                    timeStamp +
+                    "_" +
+                    imgOriginalName;
                 }
                 if (db_path) {
                   //image_path= db_path;
@@ -463,7 +470,7 @@ function getSalonDetails(req, res) {
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
-              salonDetails
+              salonDetails[0]
             )
           );
         }
@@ -584,7 +591,6 @@ async function addSalonServices(req, res) {
             );
             if (!updateSalonData) {
             } else {
-              //console.log("saveServiceToSalon===========>", saveServiceToSalon);
             }
           }
         } else {
@@ -1320,6 +1326,8 @@ function fetchSalonData(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
+          console.log("GETSALONDATA", getSalonData);
+
           return res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -1392,10 +1400,12 @@ function bookSlot(data, req, res) {
             service: data.service_id,
             duration: data.duration,
             starttime: starttime,
+            user_id: data.user_id,
             endtime: endTimeCalculated,
             date: data.date,
             connected_account_id: salon_connected_id,
-            employee_id: empId
+            employee_id: empId,
+            paymentType: data.paymentType
           });
 
           console.log("saveAppointment", saveAppointment);
@@ -1446,6 +1456,8 @@ function bookSlot(data, req, res) {
                 console.log("Successfully sent with response: ", response);
               }
             });
+
+            return res.send({ message: "send" });
 
             // res.json(
             //   Response(
@@ -1913,15 +1925,18 @@ function connectStripeAccount(req, res) {
 function appointmentCompleted(req, res) {
   async function appointmentCompleted() {
     try {
-      if (req.body && req.body.isCompleted) {
+      if (req.body && req.body.booking_id) {
         let condition = { _id: mongoose.Types.ObjectId(req.body.booking_id) };
-
-        let findBooking = await commonQuery.findoneData(
+        let updateCondition = { isActive: false, isCompleted: true };
+        let findBooking = await commonQuery.updateOneDocument(
           appointments,
-          condition
+          condition,
+          updateCondition
         );
         if (!findBooking) {
         } else {
+          console.log("Booking", findBooking);
+
           let condition = {
             _id: mongoose.Types.ObjectId(findBooking["salon_id"])
           };
@@ -1930,24 +1945,38 @@ function appointmentCompleted(req, res) {
             condition
           );
 
-          console.log(findConnectedId);
+          console.log(findConnectedId.connected_account_id);
           if (findConnectedId) {
-            stripe.paymentIntents
-              .create({
-                payment_method_types: ["card"],
+            // stripe.paymentIntents
+            //   .create({
+            //     payment_method_types: ["card"],
+            //     amount: findBooking.totalamount,
+            //     currency: "USD",
+            //     transfer_data: {
+            //       destination: findConnectedId.connected_account_id
+            //     }
+            //   })
+            //   .then(async function(paymentIntent) {
+            //     // asynchronously called
+            //     console.log("PAYMENT INTENT", paymentIntent);
+            //     if (paymentIntent) {
+            //     }
+            //   });
+            stripe.transfers.create(
+              {
                 amount: findBooking.totalamount,
                 currency: "USD",
-                transfer_data: {
-                  destination: findConnectedId.connected_account_id
-                }
-              })
-              .then(async function(paymentIntent) {
+                destination: findConnectedId.connected_account_id
+              },
+              function(err, transfer) {
                 // asynchronously called
-                console.log("PAYMENT INTENT", paymentIntent);
-                if (paymentIntent) {
-                  userCtrl.minusWalletAmount();
+                if (err) {
+                  console.log("error", err);
+                } else {
+                  console.log("TRANSFER", transfer);
                 }
-              });
+              }
+            );
           }
         }
       }
@@ -1958,4 +1987,67 @@ function appointmentCompleted(req, res) {
     }
   }
   appointmentCompleted().then(function() {});
+}
+
+function getUpcomingbookings(req, res) {
+  console.log(req.body);
+  async function getUpcomingbookings() {
+    try {
+      let from = "users";
+      let localfield = "user_id";
+      let foreignfield = "_id";
+
+      let condition = {};
+      let ascend;
+      if (req.body && req.body.salon_id) {
+        if (req.body.type === "upcoming") {
+          ascend = -1;
+          condition = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: false,
+            isActive: true
+          };
+        } else if (req.body.type === "completed") {
+          ascend = 1;
+          condition = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: true,
+            isActive: false
+          };
+        } else {
+          ascend = -1;
+          condition = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: false,
+            isActive: true
+          };
+        }
+
+        let bookingList = await commonQuery.getUpcomingBookings(
+          appointments,
+          condition,
+          from,
+          localfield,
+          foreignfield,
+          ascend
+        );
+        if (!bookingList) {
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              bookingList
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getUpcomingbookings().then(function() {});
 }
