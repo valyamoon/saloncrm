@@ -81,6 +81,12 @@ export class BookingComponent implements OnInit {
       this.getUpcomingBookingData(dataToPass);
     }
   }
+  getDetails(data) {
+    console.log(data);
+  }
+  completeAppointment(data) {
+    console.log(data);
+  }
 
   paginate(event) {
     this.page = event.pageIndex + 1;
