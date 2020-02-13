@@ -77,8 +77,10 @@ export class CommonService {
     );
   }
   connectStripeAccount(data) {
-    console.log("DATATOPASS", data);
     return this.http.post(this.baseUrl + "/connect-account", data);
+  }
+  getAppointmentList(data) {
+    return this.http.post(this.baseUrl + "/upcoming-appointment", data);
   }
 
   getSalonData(data) {

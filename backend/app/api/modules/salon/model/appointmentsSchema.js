@@ -57,6 +57,10 @@ var appointmentsSchema = mongoose.Schema(
     promocode_id: {
       type: mongoose.Types.ObjectId,
       ref: "promocodes"
+    },
+    orderId: {
+      type: String,
+      default: null
     }
   },
   { timestamps: true }

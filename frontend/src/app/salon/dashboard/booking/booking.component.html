@@ -1,53 +1,159 @@
-<div class="check-spa-outer m-t-40">
+<mat-tab-group (selectedIndexChange)="selectedIndexChange($event)">
+  <mat-tab label="Ucoming Bookings"
+    ><div class="check-spa-outer m-t-40">
+      <div class="create-availabillity">
+        <div class="mat-elevation-z8">
+          <!-- <Modal Popup for add categories end here> -->
+          <table mat-table [dataSource]="dataSource">
+            <!-- Position Column -->
+            <ng-container matColumnDef="bookingid">
+              <th mat-header-cell *matHeaderCellDef>Order Id</th>
+              <td mat-cell *matCellDef="let element">{{ element.orderId }}</td>
+            </ng-container>
+            <!-- Name Column -->
 
-    <div class="create-availabillity">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.firstName }}<span class="space"></span
+                >{{ element.lastName }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="completed" *ngIf="element.isCompleted === true"
+                  >Completed</span
+                >
+                <span class="completed" *ngIf="element.isActive === true"
+                  >Active</span
+                >
+                <span class="completed" *ngIf="element.isCancelled === true">
+                  Cancelled
+                </span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="service">
+              <th mat-header-cell *matHeaderCellDef>Service</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.servicename }}
+              </td>
+            </ng-container>
 
-        <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element" class="action-btns ">
+                <a
+                  title="Detaisl"
+                  (click)="getDetails(element)"
+                  class="delete-info"
+                >
+                  <img
+                    title="Details"
+                    src="../../../../assets/images/view.svg"
+                    width="20px"
+                  />
+                </a>
+                <button
+                  (click)="completeAppointment(element)"
+                  class="btn btn-sign-in bts"
+                >
+                  Complete
+                </button>
+              </td>
+            </ng-container>
 
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
 
-            <!-- <Modal Popup for add categories end here> -->
-            <table mat-table [dataSource]="bokingList">
-                <!-- Position Column -->
-                <ng-container matColumnDef="bookingid">
-                    <th mat-header-cell *matHeaderCellDef>Booking #ID</th>
-                    <td mat-cell *matCellDef="let element"></td>
-                </ng-container>
-                <!-- Name Column -->
-
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>Name</th>
-                    <td mat-cell *matCellDef="let element"></td>
-                </ng-container>
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef>Booking Date</th>
-                    <td mat-cell *matCellDef="let element"></td>
-                </ng-container>
-                <ng-container matColumnDef="service">
-                    <th mat-header-cell *matHeaderCellDef>Service</th>
-                    <td mat-cell *matCellDef="let element"></td>
-                </ng-container>
-
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef>Action</th>
-                    <td mat-cell *matCellDef="let element" class="action-btns ">
-
-                        <a (click)="changeBooking(element)" class="delete-info">
-                            <img src="../../../../assets/images/delete-icon.svg">
-                        </a>
-
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-
-            <mat-paginator [length]="bookingCount" [pageSize]="count" (page)="paginate($event)"
-                [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
-        </div>
-
-        <div *ngIf="noRecordsFound" class="noRecords">
+          <mat-paginator
+            [length]="bookingCount"
+            [pageSize]="count"
+            (page)="paginate($event)"
+            [pageSizeOptions]="[5, 10, 15, 20]"
+            showFirstLastButtons
+          ></mat-paginator>
+          <div *ngIf="noRecordsFound" class="noRecords">
             <div class="noRec">No Records Found</div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </mat-tab>
+  <mat-tab label="Completed Bookings">
+    <div class="check-spa-outer m-t-40">
+      <div class="create-availabillity">
+        <div class="mat-elevation-z8">
+          <!-- <Modal Popup for add categories end here> -->
+          <table mat-table [dataSource]="dataSource">
+            <!-- Position Column -->
+            <ng-container matColumnDef="bookingid">
+              <th mat-header-cell *matHeaderCellDef>Order Id</th>
+              <td mat-cell *matCellDef="let element">{{ element.orderId }}</td>
+            </ng-container>
+            <!-- Name Column -->
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.firstName }}{{ element.lastName }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="completed" *ngIf="element.isCompleted === true"
+                  >Completed</span
+                >
+                <span class="completed" *ngIf="element.isActive === true"
+                  >Active</span
+                >
+                <span class="completed" *ngIf="element.isCancelled === true">
+                  Cancelled
+                </span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="service">
+              <th mat-header-cell *matHeaderCellDef>Service</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.servicename }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element" class="action-btns ">
+                <a
+                  title="Detaisl"
+                  (click)="getDetails(element)"
+                  class="delete-info"
+                >
+                  <img
+                    title="Details"
+                    src="../../../../assets/images/view.svg"
+                    width="20px"
+                  />
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <mat-paginator
+            [length]="bookingCount"
+            [pageSize]="count"
+            (page)="paginate($event)"
+            [pageSizeOptions]="[5, 10, 15, 20]"
+            showFirstLastButtons
+          ></mat-paginator>
+          <div *ngIf="noRecordsFound" class="noRecords">
+            <div class="noRec">No Records Found</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

@@ -24,7 +24,7 @@ export class CategoriesComponent implements OnInit {
   noRecordsFound: boolean;
   noArchivedRecordsFound: boolean = false;
   disabled: boolean = true;
-  archivedCategoriesList: any;
+
   categoryID: any;
   archivedCategoriesCount: any;
   showArchived: boolean = false;
@@ -44,7 +44,6 @@ export class CategoriesComponent implements OnInit {
       name: ["", Validators.required]
     });
     this.fetchCategoriesList();
-    this.fetchArchivedCategoryList();
   }
 
   openAddCategoryModal(data) {
@@ -196,7 +195,6 @@ export class CategoriesComponent implements OnInit {
               this.toastrSev.success("Catgories Deleted", "Success", {
                 timeOut: 1000
               });
-              this.fetchArchivedCategoryList();
             } else {
               this.isLoader = false;
               this.toastrSev.error("Failed To Delete", "Error", {
@@ -213,66 +211,6 @@ export class CategoriesComponent implements OnInit {
         );
       }
     });
-  }
-
-  fetchArchivedCategoryList() {
-    this.showArchived = true;
-    let dataToPass = {
-      type: "archive-categories"
-    };
-    //  console.log(dataToPass);
-    this.adminServ.getArchivedCategories(dataToPass).subscribe(
-      data => {
-        //    console.log(data);
-        if (data["code"] === 200) {
-          //   console.log("archivedCategoriesCount", this.archivedCategoriesCount);
-
-          this.archivedCategoriesList = data["data"];
-          this.archivedCategoriesCount = this.archivedCategoriesList.length;
-          if (data["data"].length == 0) {
-            this.noArchivedRecordsFound = true;
-          } else {
-            this.noArchivedRecordsFound = false;
-          }
-        } else {
-          this.toastrSev.error("Failed To Fetch", "Error", {
-            timeOut: 1000
-          });
-        }
-      },
-      error => {
-        this.toastrSev.error("Server Error", error.error["message"], {
-          timeOut: 1000
-        });
-      }
-    );
-  }
-  awakeCategory(data) {
-    // console.log(data);
-    let dataToPass = {
-      _id: data._id
-    };
-    this.adminServ.awakeCategories(dataToPass).subscribe(
-      (data: any) => {
-        if (data["code"] === 200) {
-          this.fetchArchivedCategoryList();
-          this.fetchCategoriesList();
-          this.showArchived = false;
-          this.toastrSev.success("Awake Catgory", "Success", {
-            timeOut: 1000
-          });
-        } else {
-          this.toastrSev.error("Failed To Awake", "Error", {
-            timeOut: 1000
-          });
-        }
-      },
-      error => {
-        this.toastrSev.error("Server Error", error.error["message"], {
-          timeOut: 1000
-        });
-      }
-    );
   }
 
   updateCategory(data) {
