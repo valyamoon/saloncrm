@@ -43,16 +43,16 @@ const config = {
       verificationMail: ""
     }
   },
-  live: {
+  prod: {
     port: 5977,
     db: {
       user: "saloncrm",
-      password: "DFr533456yt",
-      url: "mongodb://54.71.18.74:27017/saloncrm"
+      password: "SDfr456ty56",
+      url: "mongodb://15.236.28.12:27017/saloncrm"
     },
-    baseUrl: "http://bookapp.ch/",
-    backendBaseUrl: "http://bookapp.ch/",
-    imageBaseUrl: "http://bookapp.ch/",
+    baseUrl: "http://15.236.28.12:5977/",
+    backendBaseUrl: "http://15.236.28.12:5977/",
+    imageBaseUrl: "http://15.236.28.12:5977/",
     env: "prod",
     smtp: {
       service: "gmail",
