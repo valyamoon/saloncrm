@@ -48,7 +48,7 @@ const config = {
     db: {
       user: "saloncrm",
       password: "SDfr456ty56",
-      url: "mongodb://15.236.28.12:27017/saloncrm"
+      url: "mongodb://localhost/saloncrm"
     },
     baseUrl: "http://15.236.28.12:5977/",
     backendBaseUrl: "http://15.236.28.12:5977/",
