@@ -100,6 +100,11 @@
   font-size: 14px;
 }
 
+@media screen and (max-width: 991px) {
+  .header .headerSection .detailSection {
+    display: none;
+  }
+}
 // .bar1.change {
 //   -webkit-transform: rotate(-45deg) translate(-9px, 6px);
 //   transform: rotate(-45deg) translate(-9px, 4px);

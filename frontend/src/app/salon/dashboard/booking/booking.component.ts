@@ -6,24 +6,26 @@ import { ToastrService } from "ngx-toastr";
 import { MatDialog } from "@angular/material";
 
 @Component({
-  selector: 'app-booking',
-  templateUrl: './booking.component.html',
-  styleUrls: ['./booking.component.css']
+  selector: "app-booking",
+  templateUrl: "./booking.component.html",
+  styleUrls: ["./booking.component.scss"]
 })
 export class BookingComponent implements OnInit {
   bokingList: any = [];
   pageSize: any = 5;
   count: any = 5;
   page: any = 1;
-  displayedColumns = ['bookingid', 'name', 'date', 'service', 'action'];
+  displayedColumns = ["bookingid", "name", "date", "service", "action"];
   bookingCount: number;
   noRecordsFound: boolean;
   user_id: any;
-  constructor(private authServ: AuthService,
+  constructor(
+    private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
     private toastrServ: ToastrService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.user_id = sessionStorage.getItem("userId");
@@ -37,12 +39,10 @@ export class BookingComponent implements OnInit {
   getBookingData() {
     let Data = {
       user_id: this.user_id
-    }
+    };
     this.noRecordsFound = false;
-
   }
   changeBooking(element) {
     // console.log("element", element)
   }
-
 }

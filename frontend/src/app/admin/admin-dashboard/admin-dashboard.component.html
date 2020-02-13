@@ -2,12 +2,6 @@
   <div id="navigationBar">
     <app-header></app-header>
   </div>
-
-  <!-- <div class="hamburgerIcon" (click)="showSelection('data')">
-    <div class="bar1" [ngClass]="isSelectorShown ? 'bar1' : 'change'"></div>
-    <div class="bar2" [ngClass]="isSelectorShown ? 'bar2' : 'change'"></div>
-    <div class="bar3" [ngClass]="isSelectorShown ? 'bar3' : 'change'"></div>
-  </div> -->
   <div id="mainSection">
     <div
       class="selectorSection"
@@ -15,9 +9,9 @@
     >
       <div class="menus-app" (click)="hideMenu()">
         <div class="clearfix profile-sm">
-          <div class="float-left font-weight-bold">Nadim Shah</div>
+          <div class="float-left font-weight-bold">{{ adminName }}</div>
           <div class="float-right">
-            <i class="material-icons">
+            <i class="material-icons" (click)="logout()" title="Logout">
               exit_to_app
             </i>
           </div>
