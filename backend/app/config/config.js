@@ -10,7 +10,7 @@ const config = {
     },
     baseUrl: "http://localhost:4001/",
     backendBaseUrl: "http://localhost:4001/",
-    imageBaseUrl: "http://localhost:4001/",
+    imageBaseUrl: "http://172.10.230.180:4001/",
     env: "local",
     smtp: {
       service: "gmail",
