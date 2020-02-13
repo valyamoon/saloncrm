@@ -809,7 +809,8 @@ function removeCategories(req, res) {
         };
         let updateCondition = {
           isActive: false,
-          isDeleted: true
+          isDeleted: true,
+          services: []
         };
         let deleteCategory = await commonQuery.updateOneDocument(
           categories,

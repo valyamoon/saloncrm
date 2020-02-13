@@ -1456,6 +1456,10 @@ function fetchSalonData(req, res) {
 //   bookSlot().then(function() {});
 // }
 async function bookSlot(data) {
+  var orderId = Math.random(1234567910)
+    .toString(25)
+    .replace(/[^a-z-^0-1000-z-aA-Z]+/g, "")
+    .substr(0, 100);
   if (data && data.time) {
     var starttime = data.time;
     var duration = data.duration;
@@ -1507,7 +1511,8 @@ async function bookSlot(data) {
         date: data.date,
         connected_account_id: salon_connected_id,
         employee_id: empId,
-        paymentType: data.paymentType
+        paymentType: data.paymentType,
+        orderId: orderId
       });
 
       console.log("saveAppointment", saveAppointment);
@@ -2061,7 +2066,14 @@ function appointmentCompleted(req, res) {
 }
 
 function getUpcomingbookings(req, res) {
-  console.log(req.body);
+  let pageSize =
+    +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
+  let page = +req.body.page || +req.body.page ? req.body.page : +1;
+  console.log("II", req.body);
+  var ascend = req.body.ascend;
+  let bookingCount;
+  let upcond;
+  let compcond;
   async function getUpcomingbookings() {
     try {
       let from = "users";
@@ -2069,25 +2081,37 @@ function getUpcomingbookings(req, res) {
       let foreignfield = "_id";
 
       let condition = {};
-      let ascend;
+
       if (req.body && req.body.salon_id) {
         if (req.body.type === "upcoming") {
-          ascend = -1;
           condition = {
             salon_id: mongoose.Types.ObjectId(req.body.salon_id),
             isCompleted: false,
             isActive: true
           };
+          upcond = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: false,
+            isActive: true
+          };
         } else if (req.body.type === "completed") {
-          ascend = 1;
           condition = {
             salon_id: mongoose.Types.ObjectId(req.body.salon_id),
             isCompleted: true,
             isActive: false
           };
+          compcond = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: true,
+            isActive: false
+          };
         } else {
-          ascend = -1;
           condition = {
+            salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+            isCompleted: false,
+            isActive: true
+          };
+          upcond = {
             salon_id: mongoose.Types.ObjectId(req.body.salon_id),
             isCompleted: false,
             isActive: true
@@ -2100,15 +2124,31 @@ function getUpcomingbookings(req, res) {
           from,
           localfield,
           foreignfield,
+          pageSize,
+          page,
           ascend
         );
         if (!bookingList) {
         } else {
+          console.log(bookingList);
+          let cond;
+          if (req.body.type === "upcoming") {
+            cond = upcond;
+          } else {
+            cond = compcond;
+          }
+          bookingCount = await commonQuery.findCount(appointments, cond);
+
+          let dataToPass = {
+            data: bookingList,
+            count: bookingCount
+          };
+          console.log("dataToPass", dataToPass);
           res.json(
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
-              bookingList
+              dataToPass
             )
           );
         }
