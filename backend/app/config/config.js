@@ -31,7 +31,7 @@ const config = {
     },
     baseUrl: "http://54.71.18.74:5977/",
     backendBaseUrl: "http://54.71.18.74:5977/",
-    imageBaseUrl: "http://54.71.18.74:5977",
+    imageBaseUrl: "http://54.71.18.74:5977/",
     env: "staging",
     smtp: {
       service: "gmail",
