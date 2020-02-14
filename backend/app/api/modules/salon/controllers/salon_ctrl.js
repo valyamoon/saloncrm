@@ -1460,7 +1460,98 @@ async function bookSlot(data) {
     .toString(25)
     .replace(/[^a-z-^0-1000-z-aA-Z]+/g, "")
     .substr(0, 100);
-  if (data && data.time) {
+  if (data.paymentType === "cash") {
+    var starttime = data.time;
+    var duration = data.duration;
+    var hour = starttime.split(":");
+    var hourInt = hour[0] * 60;
+    var minInt = hour[1];
+    var totaltime = parseInt(hourInt) + parseInt(minInt);
+    var endtime = totaltime + parseInt(duration);
+    var endTimeCalculated;
+    time_convert(endtime);
+    function time_convert(num) {
+      const hours = Math.floor(num / 60);
+      const minutes = num % 60;
+      endTimeCalculated = `${hours}:${minutes}`;
+    }
+    console.log("endTimeCalculated", endTimeCalculated);
+    let findEmp = await commonQuery.filterEmployee(
+      employees,
+      mongoose.Types.ObjectId(data.salon_id),
+      mongoose.Types.ObjectId(data.service_id)
+    );
+
+    console.log("FINDEMP", findEmp);
+
+    if (!findEmp) {
+    } else {
+      var empId = findEmp[0]._id;
+
+      console.log(empId);
+
+      // let salon_connected_id;
+      // let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
+      // let connectedAccountId = await commonQuery.findoneData(salons, condition);
+      // console.log("CONNECTEDID", connectedAccountId);
+      // if (connectedAccountId) {
+      //   salon_connected_id = connectedAccountId.connected_account_id;
+      //   console.log("connected_account_id", salon_connected_id);
+      // }
+
+      let saveAppointment = new appointments({
+        salon_id: data.salon_id,
+        user_id: data.user_id,
+        totalamount: data.totalamount,
+        service: data.service_id,
+        duration: data.duration,
+        starttime: starttime,
+        user_id: data.user_id,
+        endtime: endTimeCalculated,
+        date: data.date,
+        employee_id: empId,
+        paymentType: data.paymentType,
+        orderId: orderId
+      });
+
+      console.log("saveAppointment", saveAppointment);
+
+      let bookAppointment = await commonQuery.InsertIntoCollection(
+        appointments,
+        saveAppointment
+      );
+      if (!bookAppointment) {
+        reject("ERROR");
+      } else {
+        var message = {
+          to: data.deviceToken,
+          collapse_key: "your_collapse_key",
+
+          notification: {
+            title: "HI AMrut",
+            body: "Body of your push notification"
+          },
+
+          data: {
+            my_key: "AMRUT",
+            my_another_key: "NADIM"
+          }
+        };
+
+        fcm.send(message, async function(err, response) {
+          if (err) {
+            console.log("Something has gone wrong!", err);
+          } else {
+            console.log("Successfully sent with response: ", response);
+          }
+        });
+        console.log("BOOKAA", bookAppointment);
+
+        return bookAppointment;
+      }
+    }
+  }
+  if (data.paymentType === "card") {
     var starttime = data.time;
     var duration = data.duration;
     var hour = starttime.split(":");
@@ -1794,7 +1885,6 @@ function createCardToken(req, res) {
                             )
                           );
                         } else {
-                          console.log("subbb", subscription);
                           let condition = {
                             _id: mongoose.Types.ObjectId(req.body.salon_id)
                           };

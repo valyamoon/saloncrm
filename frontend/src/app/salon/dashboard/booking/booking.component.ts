@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CommonService } from "../common.service";
 import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
-import { MatDialog, throwToolbarMixedModesError } from "@angular/material";
+import { MatDialog, MatSort, MatSortHeader } from "@angular/material";
 
 @Component({
   selector: "app-booking",
@@ -12,6 +12,7 @@ import { MatDialog, throwToolbarMixedModesError } from "@angular/material";
 })
 export class BookingComponent implements OnInit {
   bokingList: any = [];
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   ascend: any = 1;
   type: any;
   dataSource: any;
@@ -107,6 +108,7 @@ export class BookingComponent implements OnInit {
     this.commServ.getAppointmentList(data).subscribe((data: any) => {
       console.log(data);
       this.dataSource = data["data"]["data"];
+      this.dataSource.sort = this.sort;
       console.log(this.dataSource);
       this.bookingCount = data["data"]["count"];
       console.log(this.bookingCount);
