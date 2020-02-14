@@ -1527,8 +1527,8 @@ async function getSalonServiceList(req, res) {
     let serviceCond = {
       salon_id: salonId
     };
-    let pageSize = 100;
-    let page = 1;
+    // let pageSize = 100;
+    // let page = 1;
     // let serviceList = await commonQuery.fetch_all(services, salonCond);
     let serviceList = await commonQuery.fetch_all_paginated(
       salonservices,
@@ -1536,9 +1536,17 @@ async function getSalonServiceList(req, res) {
       pageSize,
       currentPage
     );
+    let serviceCount = await commonQuery.findCount(
+      salonservices,
+      serviceCond
+    );
+    let serviceDetails = {
+      'serviceList': serviceList,
+      'serviceCount': serviceCount
+    }
     //console.log("serviceList", serviceList); return;
     res.json(
-      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, serviceList)
+      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, serviceDetails)
     );
   } else {
     return res.json(
@@ -1555,18 +1563,19 @@ async function getSalonServiceList(req, res) {
  * Created On 21/01/2020
  */
 async function getEmployeeServiceList(req, res) {
-  // console.log("req.body", req.body);
+  //console.log("req.body", req.body); //return;
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   if (req.body.user_id) {
-    var employeeList = [];
+    // var employeeList = [];
     var salonId = await util.getSalonId(req.body.user_id);
     let empCond = {
       salon_id: salonId
     };
-    let pageSize = 100;
-    let page = 1;
+    // console.log("pageSize", pageSize);
+    //let pageSize = 100;
+    //let page = 1;
 
     let employeeData = await commonQuery.find_all_employee_paginate(
       employees,
@@ -1574,10 +1583,14 @@ async function getEmployeeServiceList(req, res) {
       pageSize,
       currentPage
     );
-
+    let employeeCount = await commonQuery.findCount(employees, empCond)
+    let employeeDetails = {
+      'employeeData': employeeData,
+      'employeeCount': employeeCount
+    }
     // console.log("employeeList", employeeList); return;
     res.json(
-      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, employeeData)
+      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, employeeDetails)
     );
   } else {
     return res.json(
