@@ -42,6 +42,7 @@ const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
   process.env.NODE_ENV || "local"
 );
+const imageUrl = Config;
 const commonQuery = require("../../../../lib/commonQuery.js");
 const util = require("../../../../lib/util");
 
@@ -420,7 +421,12 @@ function getSalons(req, res) {
               service: v.services
             });
           });
-
+          salonListingNew.forEach(function(c) {
+            var TempUrl = imageUrl.imageBaseUrl;
+            var url = TempUrl + c.image;
+            c.image = url;
+          });
+          //console.log(salonListingNew);
           return res.json(
             Response(
               constant.SUCCESS_CODE,
