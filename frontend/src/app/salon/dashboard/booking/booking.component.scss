@@ -1,0 +1,474 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.header-sec .navbar {
+  background: transparent linear-gradient(267deg, #783a87 0%, #bc2e65 100%) 0%
+    0% no-repeat padding-box;
+  box-shadow: 0px 2px 6px #0000000a;
+  opacity: 1;
+}
+.header-sec .navbar-brand {
+  margin-left: 12px;
+}
+.header-sec .navbar-nav {
+  margin-right: 12px;
+}
+
+.header-sec .navbar-collapse {
+  justify-content: flex-end;
+}
+.header-sec ul li:nth-child(2) {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+.header-sec .navbar ul li.active {
+  text-align: left;
+  letter-spacing: 1.4px;
+  color: #ffffff;
+  opacity: 1;
+  font-weight: bold;
+  font-size: 14px;
+}
+.header-sec .navbar ul li a {
+  text-align: left;
+  letter-spacing: 1.4px;
+  color: #ffffff;
+  opacity: 1;
+  font-size: 14px;
+}
+.header-sec .navbar ul li.notification-img {
+  border-right: 1px solid #fff;
+  margin-left: 60px;
+  height: 25px;
+  margin-top: 5px;
+}
+.header-sec .navbar ul li.notification-img img {
+  margin-right: 15px;
+  margin-top: -15px;
+}
+
+.header-sec .navbar .dropdown-toggle::after {
+  display: none;
+}
+.header-sec .navbar .nav-link.dropdown-toggle {
+  margin-right: 50px;
+  margin-left: 15px;
+  letter-spacing: 0;
+}
+
+.header-sec .navbar .dropdown-item {
+  text-align: left;
+  letter-spacing: 1.4px;
+  color: #333;
+  opacity: 1;
+  font-size: 12px;
+  line-height: 1;
+  color: #454f60;
+}
+
+.header-sec .navbar ul li a .salon-icon {
+  height: 45px;
+  width: 45px;
+  border: 1px solid #ff7d7d;
+  border-radius: 28px;
+  opacity: 1;
+  line-height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -4px;
+  right: 0;
+  background: #fff;
+}
+.check-spa-outer .check-spa .check-spa-image-outer .check-spa-image {
+  border: 2px solid #813882;
+  border-radius: 90px;
+  opacity: 1;
+  height: 180px;
+  width: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+.check-spa-outer .check-spa .check-spa-image-outer {
+  border-bottom: 1px solid #e1e1e1;
+  padding: 25px 40px;
+  padding-top: 40px;
+}
+.check-spa-outer .check-spa h4 {
+  /* 
+    text-align: left; */
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-weight: 500;
+  text-align: center;
+  font-size: 18px;
+  padding-top: 25px;
+}
+.check-spa-outer .check-spa .salon-info .salon-info-inner h5 {
+  text-align: left;
+  letter-spacing: 0;
+  color: #9c3ee8;
+  opacity: 1;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-top: 10px;
+  font-weight: 500;
+}
+.check-spa-outer .check-spa .salon-info {
+  border-bottom: 1px solid #e1e1e1;
+  /* padding: 25px 40px; */
+  padding: 25px 25px;
+}
+.check-spa-outer .check-spa .salon-info .salon-info-inner {
+  display: flex;
+  margin-bottom: 5px;
+}
+.check-spa-outer .check-spa .about-salon {
+  text-align: left;
+  letter-spacing: 0;
+  color: #9c3ee8;
+  opacity: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+.check-spa-outer .check-spa .about-salon {
+  border-bottom: 1px solid #e1e1e1;
+  /* padding: 25px 40px; */
+  padding: 25px 25px;
+}
+.check-spa-outer .check-spa .about-salon p {
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-size: 14px;
+}
+.check-spa-outer .check-spa .about-salon h2 {
+  text-align: left;
+  letter-spacing: 0;
+  color: #9c3ee8;
+  opacity: 1;
+  font-size: 14px;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+
+.check-spa-outer .check-spa {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 2px 6px #0000000a;
+  border-radius: 6px;
+  opacity: 1;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  position: relative;
+  /* padding: 30px; */
+}
+.check-spa-outer {
+  background: #ffffff;
+}
+.edit-info {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+}
+.edit-info img {
+  cursor: pointer;
+}
+.employee-tabs {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border-radius: 6px;
+  opacity: 1;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  align-items: center;
+}
+.employee-tabs .nav-tabs .nav-link {
+  border: none;
+  border-top-left-radius: unset;
+  border-top-right-radius: unset;
+}
+
+.employee-tabs .nav-tabs {
+  border-bottom: none;
+}
+.create-availabillity .check-timing {
+  display: flex;
+}
+.create-availabillity .check-timing .check-timing-inner {
+  display: flex;
+}
+.create-availabillity .check-timing .check-day h3 {
+  font-size: 14px;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-weight: bold;
+  padding-top: 5px;
+  padding-left: 25px;
+}
+
+.create-availabillity ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+.create-availabillity ul li h4 {
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+.create-availabillity ul li h4.days {
+  padding-left: 48px;
+}
+
+.create-availabillity-inner {
+  min-height: 85px;
+  border-bottom: 1px solid #e1e1e1;
+  display: flex;
+  align-items: center;
+  padding-left: 40px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 40px;
+}
+.create-availabillity .employee-sec h2 {
+  font-size: 16px;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-weight: bold;
+  margin: 0;
+}
+.add-employee-inner {
+  height: 25px;
+  width: 25px;
+  line-height: 25px;
+  border: 1px solid #4ad991;
+  border-radius: 50%;
+  line-height: 25px;
+  text-align: center;
+  cursor: pointer;
+}
+.add-employee-inner i {
+  color: #4ad991;
+}
+.add-employee {
+  display: flex;
+}
+
+.add-employee h2 {
+  font-size: 14px;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-weight: bold;
+  margin: 0;
+  padding-top: 5px;
+  padding-left: 10px;
+}
+.check-spa-outer .tab-content {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 2px 6px #0000000a;
+  border-radius: 6px;
+  opacity: 1;
+  margin-top: 0;
+}
+
+.create-availabillity .btn-sec .btn-save {
+  background: transparent linear-gradient(101deg, #cc2b5e 0%, #753a88 100%) 0%
+    0% no-repeat padding-box;
+  box-shadow: 0px 3px 12px #00000029;
+  border-radius: 25px;
+  opacity: 1;
+  height: 50px;
+  text-align: center;
+  letter-spacing: 1.4px;
+  color: #ffffff;
+  opacity: 1;
+  font-size: 14px;
+  text-transform: uppercase;
+  min-width: 152px;
+}
+.create-availabillity .btn-sec .btn-cancel {
+  background: #454f60 0% 0% no-repeat padding-box;
+  margin-right: 5px;
+}
+.create-availabillity .btn-sec {
+  text-align: right;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-right: 25px;
+}
+
+.create-availabillity .nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link {
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-size: 16px;
+  font-weight: 500;
+}
+.create-availabillity .nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: #9c3ee8;
+}
+.check-timing-sec {
+  max-width: 1320px;
+}
+.employee-tabs ul li:nth-child(2) {
+  margin-left: 80px;
+  margin-right: 80px;
+}
+
+.create-availabillity .table thead th {
+  border-bottom: none;
+  border-top: none;
+  font-size: 12px;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-weight: 500;
+  padding-top: 30px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.create-availabillity .table tbody tr td {
+  border-top: none;
+  border-bottom: 1px solid #f1f1f3;
+  text-align: left;
+  letter-spacing: 0;
+  color: #454f60;
+  opacity: 1;
+  font-size: 14px;
+  padding-top: 30px;
+  padding-left: 40px;
+  padding-bottom: 30px;
+  padding-right: 40px;
+}
+.create-availabillity .table tbody tr td .delete-info {
+  margin-left: 35px;
+}
+.footer-sec {
+  text-align: left;
+  letter-spacing: 0;
+  color: #bcbccb;
+  opacity: 1;
+  font-size: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 150px;
+}
+.header-sec .navbar-expand-lg .navbar-nav .dropdown-menu {
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 40px;
+}
+table {
+  width: 100%;
+}
+.action-btns a img {
+  margin-right: 10px;
+}
+.space {
+  width: 5px;
+  margin-right: 5px;
+}
+.bts {
+  margin: 0 !important;
+}
+
+.m-t-40 {
+  margin-top: 40px;
+}
+@media (max-width: 1200px) {
+  .create-availabillity .table tbody tr td {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .create-availabillity .table thead tr th {
+    padding-left: 20px;
+    padding-right: 45px;
+  }
+  .create-availabillity .table tbody tr td .delete-info {
+    margin-left: 25px;
+  }
+  .check-spa-outer .check-spa .salon-info .salon-info-inner h5 {
+    word-break: break-word;
+  }
+  .check-spa-outer .check-spa .check-spa-image-outer {
+    padding: 25px 15px;
+  }
+  .check-spa-outer .check-spa .salon-info {
+    padding: 25px 15px;
+  }
+}
+
+@media (max-width: 991px) {
+  .check-spa-outer .check-spa .salon-info .salon-info-inner h5 {
+    word-break: unset;
+  }
+  .check-spa-outer .check-spa .check-spa-image-outer {
+    padding: 25px 40px;
+  }
+  .check-spa-outer .check-spa .salon-info {
+    padding: 25px 40px;
+  }
+}
+@media (max-width: 767px) {
+  .employee-tabs ul li:nth-child(2) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .create-availabillity .table tbody tr td {
+    padding-top: 30px;
+    padding-left: 15px;
+    padding-bottom: 30px;
+    padding-right: 15px;
+  }
+  .create-availabillity .btn-sec {
+    margin-right: 10px;
+  }
+  .create-availabillity .btn-sec .btn-save {
+    height: 40px;
+    min-width: 120px;
+  }
+  .create-availabillity .nav-tabs .nav-item.show .nav-link,
+  .nav-tabs .nav-link {
+    padding: 5px;
+  }
+  .create-availabillity-inner {
+    padding-left: 20px;
+
+    padding-right: 20px;
+  }
+}
+.noRec {
+  padding: 1em;
+  margin: 1em !important;
+  width: 100% !important;
+}

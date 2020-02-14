@@ -3,6 +3,7 @@
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
 const authy = require("authy")("Y23QOjmAiKdXpEU1MEVAp1g99X77QqFp");
+
 const jwt = require("jsonwebtoken");
 
 const salonCtrl = require("../../salon/controllers/salon_ctrl");
@@ -31,7 +32,7 @@ const Config = require("../../../../config/config").get(
   process.env.NODE_ENV || "local"
 );
 const commonQuery = require("../../../../lib/commonQuery.js");
-
+const imageUrl = Config;
 module.exports = {
   requestVerification: requestVerification,
   getCountryCodes: getCountryCodes,
@@ -601,6 +602,11 @@ function updateUser(req, res) {
                           );
                         } else {
                           delete userUpdated.password;
+
+                          var TempUrl = imageUrl.imageBaseUrl;
+                          var url = TempUrl + userUpdated.profilepic;
+
+                          userUpdated.profilepic = url;
                           res.json(
                             Response(
                               constant.SUCCESS_CODE,
@@ -917,6 +923,8 @@ function softDeleteUser(req, res) {
 
 function getDetailsOfUser(req, res) {
   async function getDetailsOfUser() {
+    var TempUrl;
+    var url;
     try {
       if (req.body.user_id) {
         let condition = {
@@ -933,6 +941,11 @@ function getDetailsOfUser(req, res) {
           );
         } else {
           userDetails.password = undefined;
+          TempUrl = imageUrl.imageBaseUrl;
+
+          url = TempUrl + userDetails.profilepic;
+
+          userDetails.profilepic = url;
 
           res.json(
             Response(
@@ -988,7 +1001,6 @@ function userPayment(req, res) {
           currency: "usd",
           source: req.body.stripeToken,
           description: "Charge for" + req.body.stripeEmail,
-          captured: true,
           shipping: {
             name: "Jenny Rosen",
             address: {
@@ -1000,11 +1012,9 @@ function userPayment(req, res) {
             }
           }
         },
-        function(err, charge) {
+        async function(err, charge) {
           if (err) {
-            console.log(err);
           } else {
-            console.log("CHARGE", charge);
             let dataToPass = {
               totalamount: req.body.totalAmt,
               salon_id: req.body.salon_id,
@@ -1023,27 +1033,22 @@ function userPayment(req, res) {
               paymentType: req.body.payType
             };
 
-            salonCtrl.bookSlot(dataToPass);
+            let bookingDetails = salonCtrl.bookSlot(dataToPass);
+
+            bookingDetails.then(result => {
+              console.log("BOOKINFDETAILA", err, result);
+              res.json(
+                Response(
+                  constant.SUCCESS_CODE,
+                  constant.FETCHED_ALL_DATA,
+                  result
+                )
+              );
+            });
           }
         }
       );
     }
-
-    //**********
-    //   //
-    //   { date: '2019-12-20T17:26:55.029Z',
-    // user_id: '5dfc6c9f7811131ea68087c4',
-    // time: '2019-12-20T17:26:56.805Z',
-    // stripeEmail: 'salon.sdn@gmail.com',
-    // promocode_id: '',
-    // salon_id: '5dfc7062448be621427b91e8',
-    // stripeToken: 'tok_1Frk6lKEPNVh8nfQAkGILmwW',
-    // services: [ '5dfc7092448be621427b91ea' ],
-    // totalAmt: 30 }
-    //
-    //
-    //
-    //*****/
   }
 
   userPayment().then(function() {});

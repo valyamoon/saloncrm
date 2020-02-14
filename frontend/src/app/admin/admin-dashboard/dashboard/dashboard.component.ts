@@ -12,7 +12,7 @@ import { MatTableDataSource } from "@angular/material/table";
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.scss"]
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   SalonRequestList: any;
   displayedColumns = ["name", "salonaddress", "contact", "isactive", "action"];
   page: any;
@@ -35,10 +35,13 @@ export class DashboardComponent implements OnInit {
     private toastServ: ToastrService
   ) {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.getRequests();
     this.getActiveSalonsCount();
     this.getActiveUsersCount();
+  }
+
+  ngOnInit() {
     //this.checkRequest();
     this.adminServ.setHeaderText("Salons Request");
     this.subscription = timer(0, 200000)
@@ -74,6 +77,8 @@ export class DashboardComponent implements OnInit {
 
           if (this.limit == 0 || this.SalonRequestList.length === 0) {
             this.noRecordFound = true;
+          } else {
+            this.noRecordFound = false;
           }
         } else {
           this.toastServ.error("Failed To Fetch Salons Request", "", {
