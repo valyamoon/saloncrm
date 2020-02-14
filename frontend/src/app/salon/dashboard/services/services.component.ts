@@ -99,10 +99,10 @@ export class ServicesComponent implements OnInit {
     this.commServ.getSalonServicesList(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] == 200) {
-          this.salonServicesList = data["data"];
+          this.salonServicesList = data["data"].serviceList;
+          this.salonServicesCount = data["data"].serviceCount;
           this.dataSource = new MatTableDataSource(this.salonServicesList);
           this.dataSource.sort = this.sort;
-          this.salonServicesCount = data.responseStatus;
           if (this.salonServicesList.length == 0) {
             this.noRecordsFound = true;
           }

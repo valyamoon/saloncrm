@@ -396,6 +396,11 @@ commonQuery.InsertIntoCollection = function InsertIntoCollection(model, obj) {
     });
   });
 };
+
+commonQuery.insertUserID = function insertUserID(model, obj) {
+  return new Promise(function(resolve, reject) {});
+};
+
 /**
  * Function is use to Update One Document
  * @access private
@@ -581,6 +586,39 @@ commonQuery.fetch_all = function fetch_all(model, cond = {}, fetchd = {}) {
         resolve(userData);
       }
     });
+  });
+};
+
+// model
+//     .aggregate([
+//       { $match: condition },
+//       {
+//         $group: {
+//           _id: "$days",
+//           status: { $first: "$status" }
+//         }
+//       }
+//     ])
+
+commonQuery.fetchSalonDays = function fetchSalonDays(model, condition) {
+  return new Promise(function(resolve, reject) {
+    model
+      .aggregate([
+        { $match: condition },
+        {
+          $group: {
+            _id: "$days",
+            status: { $first: "$status" }
+          }
+        }
+      ])
+      .exec(function(err, res) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
   });
 };
 
@@ -1196,7 +1234,8 @@ commonQuery.find_all_employee_paginate = function find_all_employee_paginate(
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
-    // console.log("pageSizes", cond);
+    console.log("pageSizes", pageSizes);
+    console.log("currentPage", currentPage);
 
     if (cond) {
       cond = cond;
@@ -1583,6 +1622,25 @@ commonQuery.removeServicesInCategories = function removeServicesInCategories(
           reject(err);
         } else {
           resolve(userData);
+        }
+      });
+  });
+};
+
+commonQuery.addUserIdToPromocode = function addUserIdToPromocode(
+  model,
+  promoId,
+  dataToPass
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .update({ _id: promoId }, { $addToSet: { usedbyusers: dataToPass } })
+      .exec(function(err, data) {
+        if (err) {
+          // console.log(err);
+          reject(err);
+        } else {
+          resolve(data);
         }
       });
   });

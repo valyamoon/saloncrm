@@ -36,7 +36,7 @@ const categories = require("../../admin/model/categoriesSchema");
 const salonservices = require("../model/salonservicesSchema");
 const reviewratings = require("../model/salonreviewsratingSchema");
 const services = require("../../admin/model/servicesSchema");
-const salonweeklyslot = require("../model/salonweeklyslotSchema");
+const salonweeklyslots = require("../model/salonweeklyslotSchema");
 const Response = require("../../../../lib/response_handler.js");
 const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
@@ -76,7 +76,8 @@ module.exports = {
   createCardToken: createCardToken,
   connectStripeAccount: connectStripeAccount,
   appointmentCompleted: appointmentCompleted,
-  getUpcomingbookings: getUpcomingbookings
+  getUpcomingbookings: getUpcomingbookings,
+  getSalonWeeklyDetails: getSalonWeeklyDetails
 };
 
 /**
@@ -712,6 +713,7 @@ function addPromocodes(req, res) {
  */
 
 function getPromoCodes(req, res) {
+  //console.log(req.body.user_id);
   async function getPromoCodes() {
     try {
       if (req.body && req.body.salon_id) {
@@ -722,6 +724,9 @@ function getPromoCodes(req, res) {
         };
 
         let fetchPromoCodes = await commonQuery.findAll(promocodes, conditon);
+        //{ usedbyusers: { $nin: [ ObjectId("5e43e6ceafc9ca277790242f") ] } }
+        // console.log("PROMOCODE", fetchPromoCodes);
+
         if (!fetchPromoCodes) {
           res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -1057,13 +1062,13 @@ function addSalonWeeklySlots(req, res) {
           };
           //  console.log("countCond", countCond); return;
           let salonWeeklySlotCount = await commonQuery.countData(
-            salonweeklyslot,
+            salonweeklyslots,
             countCond
           );
 
           if (salonWeeklySlotCount == 0) {
             let saveSalonWeeklySlot = await commonQuery.InsertIntoCollection(
-              salonweeklyslot,
+              salonweeklyslots,
               slotData
             );
             if (saveSalonWeeklySlot) {
@@ -1081,7 +1086,7 @@ function addSalonWeeklySlots(req, res) {
               days: record.days
             };
             let fetchOne = await commonQuery.fetch_one(
-              salonweeklyslot,
+              salonweeklyslots,
               fetchCond,
               fetchData
             );
@@ -1098,7 +1103,7 @@ function addSalonWeeklySlots(req, res) {
               order_sort: record.order_sort
             };
             let updateSalonWeeklySlot = commonQuery.updateOne(
-              salonweeklyslot,
+              salonweeklyslots,
               updateCond,
               updateSlotData
             );
@@ -1351,111 +1356,8 @@ function fetchSalonData(req, res) {
   fetchSalonData().then(function() {});
 }
 
-// function bookSlot(data) {
-//   console.log("INSIDE BOOKSLOT", data);
-//   async function bookSlot() {
-//     try {
-//       if (data && data.time) {
-//         var starttime = data.time;
-//         var duration = data.duration;
-//         var hour = starttime.split(":");
-//         var hourInt = hour[0] * 60;
-//         var minInt = hour[1];
-//         var totaltime = parseInt(hourInt) + parseInt(minInt);
-//         var endtime = totaltime + parseInt(duration);
-//         var endTimeCalculated;
-//         time_convert(endtime);
-//         function time_convert(num) {
-//           const hours = Math.floor(num / 60);
-//           const minutes = num % 60;
-//           endTimeCalculated = `${hours}:${minutes}`;
-//         }
-//         console.log("endTimeCalculated", endTimeCalculated);
-//         let findEmp = await commonQuery.filterEmployee(
-//           employees,
-//           mongoose.Types.ObjectId(data.salon_id),
-//           mongoose.Types.ObjectId(data.service_id)
-//         );
-
-//         console.log("FINDEMP", findEmp);
-
-//         if (!findEmp) {
-//         } else {
-//           var empId = findEmp[0]._id;
-
-//           console.log(empId);
-
-//           let salon_connected_id;
-//           let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
-//           let connectedAccountId = await commonQuery.findoneData(
-//             salons,
-//             condition
-//           );
-//           console.log("CONNECTEDID", connectedAccountId);
-//           if (connectedAccountId) {
-//             salon_connected_id = connectedAccountId.connected_account_id;
-//             console.log("connected_account_id", salon_connected_id);
-//           }
-
-//           let saveAppointment = new appointments({
-//             salon_id: data.salon_id,
-//             user_id: data.user_id,
-//             totalamount: data.totalamount,
-//             service: data.service_id,
-//             duration: data.duration,
-//             starttime: starttime,
-//             user_id: data.user_id,
-//             endtime: endTimeCalculated,
-//             date: data.date,
-//             connected_account_id: salon_connected_id,
-//             employee_id: empId,
-//             paymentType: data.paymentType
-//           });
-
-//           console.log("saveAppointment", saveAppointment);
-
-//           let bookAppointment = await commonQuery.InsertIntoCollection(
-//             appointments,
-//             saveAppointment
-//           );
-//           if (!bookAppointment) {
-//             reject(!bookAppointment);
-//           } else {
-//             var message = {
-//               to: data.deviceToken,
-//               collapse_key: "your_collapse_key",
-
-//               notification: {
-//                 title: "HI AMrut",
-//                 body: "Body of your push notification"
-//               },
-
-//               data: {
-//                 my_key: "AMRUT",
-//                 my_another_key: "NADIM"
-//               }
-//             };
-
-//             fcm.send(message, function(err, response) {
-//               if (err) {
-//                 console.log("Something has gone wrong!", err);
-//               } else {
-//                 console.log("Successfully sent with response: ", response);
-//               }
-//             });
-//             console.log("BOOKAA", bookAppointment);
-
-//             return bookAppointment;
-//           }
-//         }
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-//   bookSlot().then(function() {});
-// }
 async function bookSlot(data) {
+  let bookedAppointmentData;
   var orderId = Math.random(1234567910)
     .toString(25)
     .replace(/[^a-z-^0-1000-z-aA-Z]+/g, "")
@@ -1481,6 +1383,17 @@ async function bookSlot(data) {
       mongoose.Types.ObjectId(data.salon_id),
       mongoose.Types.ObjectId(data.service_id)
     );
+
+    if (data.promocode_id) {
+      let _id = mongoose.Types.ObjectId(data.promocode_id);
+      let dataToPass = mongoose.Types.ObjectId(data.user_id);
+      let addInPromocode = await commonQuery.addUserIdToPromocode(
+        promocodes,
+        _id,
+        dataToPass
+      );
+      console.log("INA", addInPromocode);
+    }
 
     console.log("FINDEMP", findEmp);
 
@@ -1545,13 +1458,12 @@ async function bookSlot(data) {
             console.log("Successfully sent with response: ", response);
           }
         });
-        console.log("BOOKAA", bookAppointment);
-
-        return bookAppointment;
+        console.log("BOOKAAINCASH", bookAppointment);
+        bookedAppointmentData = bookAppointment;
+        // return bookAppointment;
       }
     }
-  }
-  if (data.paymentType === "card") {
+  } else if (data.paymentType === "card") {
     var starttime = data.time;
     var duration = data.duration;
     var hour = starttime.split(":");
@@ -1572,6 +1484,17 @@ async function bookSlot(data) {
       mongoose.Types.ObjectId(data.salon_id),
       mongoose.Types.ObjectId(data.service_id)
     );
+
+    if (data.promocode_id) {
+      let _id = mongoose.Types.ObjectId(data.promocode_id);
+      let dataToPass = mongoose.Types.ObjectId(data.user_id);
+      let addInPromocode = await commonQuery.addUserIdToPromocode(
+        promocodes,
+        _id,
+        dataToPass
+      );
+      console.log("INA", addInPromocode);
+    }
 
     console.log("FINDEMP", findEmp);
 
@@ -1637,13 +1560,17 @@ async function bookSlot(data) {
             console.log("Successfully sent with response: ", response);
           }
         });
-        console.log("BOOKAA", bookAppointment);
-
-        return bookAppointment;
+        console.log("BOOKAAIN CARD", bookAppointment);
+        bookedAppointmentData = bookAppointment;
+        // return bookAppointment;
       }
     }
   }
+  console.log("BOOKEDAPPOINTMENTDATA", bookedAppointmentData);
+  return bookedAppointmentData;
 }
+
+/****************************************** */
 
 /**
  * Function is use to get Salon Details from user ID
@@ -1690,8 +1617,8 @@ async function getSalonServiceList(req, res) {
     let serviceCond = {
       salon_id: salonId
     };
-    let pageSize = 100;
-    let page = 1;
+    // let pageSize = 100;
+    // let page = 1;
     // let serviceList = await commonQuery.fetch_all(services, salonCond);
     let serviceList = await commonQuery.fetch_all_paginated(
       salonservices,
@@ -1699,9 +1626,14 @@ async function getSalonServiceList(req, res) {
       pageSize,
       currentPage
     );
+    let serviceCount = await commonQuery.findCount(salonservices, serviceCond);
+    let serviceDetails = {
+      serviceList: serviceList,
+      serviceCount: serviceCount
+    };
     //console.log("serviceList", serviceList); return;
     res.json(
-      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, serviceList)
+      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, serviceDetails)
     );
   } else {
     return res.json(
@@ -1718,18 +1650,19 @@ async function getSalonServiceList(req, res) {
  * Created On 21/01/2020
  */
 async function getEmployeeServiceList(req, res) {
-  // console.log("req.body", req.body);
+  //console.log("req.body", req.body); //return;
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
   if (req.body.user_id) {
-    var employeeList = [];
+    // var employeeList = [];
     var salonId = await util.getSalonId(req.body.user_id);
     let empCond = {
       salon_id: salonId
     };
-    let pageSize = 100;
-    let page = 1;
+    // console.log("pageSize", pageSize);
+    //let pageSize = 100;
+    //let page = 1;
 
     let employeeData = await commonQuery.find_all_employee_paginate(
       employees,
@@ -1737,10 +1670,18 @@ async function getEmployeeServiceList(req, res) {
       pageSize,
       currentPage
     );
-
+    let employeeCount = await commonQuery.findCount(employees, empCond);
+    let employeeDetails = {
+      employeeData: employeeData,
+      employeeCount: employeeCount
+    };
     // console.log("employeeList", employeeList); return;
     res.json(
-      Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, employeeData)
+      Response(
+        constant.SUCCESS_CODE,
+        constant.FETCHED_ALL_DATA,
+        employeeDetails
+      )
     );
   } else {
     return res.json(
@@ -2251,4 +2192,40 @@ function getUpcomingbookings(req, res) {
   }
 
   getUpcomingbookings().then(function() {});
+}
+
+function getSalonWeeklyDetails(req, res) {
+  async function getSalonWeeklyDetails() {
+    try {
+      if (req.body && req.body.salon_id) {
+        let condition = {
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id)
+        };
+
+        let salonWeekDays = await commonQuery.fetchSalonDays(
+          salonweeklyslots,
+          condition
+        );
+
+        if (!salonWeekDays) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              salonWeekDays
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getSalonWeeklyDetails().then(function() {});
 }

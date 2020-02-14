@@ -991,7 +991,13 @@ function userPayment(req, res) {
         paymentType: req.body.payType
       };
 
-      salonCtrl.bookSlot(dataToPass);
+      let bookingDetails = salonCtrl.bookSlot(dataToPass);
+      bookingDetails.then(result => {
+        console.log("BOOKINFDETAILA", result);
+        res.json(
+          Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, result)
+        );
+      });
     } else if (req.body.payType === "card") {
       let amount = +req.body.totalAmt * 100; // 500 cents means $5
 
@@ -1034,6 +1040,7 @@ function userPayment(req, res) {
             };
 
             let bookingDetails = salonCtrl.bookSlot(dataToPass);
+            console.log("BOokDetails", bookingDetails, typeof bookingDetails);
 
             bookingDetails.then(result => {
               console.log("BOOKINFDETAILA", err, result);

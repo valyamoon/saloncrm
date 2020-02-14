@@ -14,8 +14,10 @@
         </a>
       </div>
     </div>
+
     <input class="from-control search" (keyup)="applyFilter($event)" placeholder="Search" />
     <div class="mat-elevation-z8" *ngIf="!noRecordsFound">
+
       <!-- <Modal Popup for add categories end here> -->
       <table mat-table [dataSource]="dataSource" matSort>
         <!-- Position Column -->

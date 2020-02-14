@@ -100,13 +100,16 @@ export class EmployeeComponent implements OnInit {
       pageSize: this.count,
       page: this.page
     };
+    console.log("dataToPass", dataToPass);
 
     this.commServ.getEmployeeServList(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] == 200) {
-          this.employeeList = data["data"];
-          this.employeeCount = data.responseStatus;
-
+          // console.log("data[data]", data["data"]); //return;
+          this.employeeList = data["data"].employeeData;
+          this.employeeCount = data["data"].employeeCount;
+          this.dataSource = new MatTableDataSource(this.employeeList);
+          this.dataSource.sort = this.sort;
           if (this.employeeList.length == 0) {
             this.noRecordsFound = true;
           }
@@ -141,10 +144,11 @@ export class EmployeeComponent implements OnInit {
     };
     this.commServ.getSalonServicesList(postData).subscribe(
       (data: any) => {
+        // console.log("serviceList element --------->", data["data"].serviceList);
         if (data["code"] == 200) {
           let serviceArr = [];
-          data["data"].forEach(element => {
-            //console.log("serviceList element", element);
+          data["data"].serviceList.forEach(element => {
+
             let serviceData = {
               id: element._id,
               name: element.servicename
@@ -152,8 +156,8 @@ export class EmployeeComponent implements OnInit {
             serviceArr.push(serviceData);
           });
           this.serviceList = serviceArr;
-          this.dataSource = new MatTableDataSource(this.serviceList);
-          this.dataSource.sort = this.sort;
+          // this.dataSource = new MatTableDataSource(this.serviceList);
+          // this.dataSource.sort = this.sort;
           //console.log("serviceList", this.serviceList);
         } else {
           this.noRecordsFound = false;
