@@ -161,6 +161,8 @@ export class CategoriesComponent implements OnInit {
           this.dataSource.sort = this.sort;
           if (this.categoriesList.length == 0) {
             this.noRecordsFound = true;
+          } else {
+            this.noRecordsFound = false;
           }
         } else {
           this.isLoader = false;
