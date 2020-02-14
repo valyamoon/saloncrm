@@ -473,6 +473,9 @@ function getSalonDetails(req, res) {
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
+          var TempUrl = imageUrl.imageBaseUrl;
+          var url = TempUrl + salonDetails[0].image;
+          salonDetails[0].image = url;
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -1326,6 +1329,7 @@ function updateSalonDetails(req, res) {
 
 function fetchSalonData(req, res) {
   // console.log("HERE", req.body);
+
   async function fetchSalonData() {
     try {
       if (req.body && req.body.user_id) {
@@ -1341,8 +1345,10 @@ function fetchSalonData(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
-          console.log("GETSALONDATA", getSalonData);
-
+          console.log(getSalonData);
+          var TempUrl = imageUrl.imageBaseUrl;
+          var url = TempUrl + getSalonData.image;
+          getSalonData.image = url;
           return res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -1763,7 +1769,7 @@ async function getSalonWeeklySlots(req, res) {
       salon_id: req.body.salon_id
     };
     let salonSotList = await commonQuery.fetch_all_sort_by_order(
-      salonweeklyslot,
+      salonweeklyslots,
       cond
     );
     //console.log("salonSotList", salonSotList);
