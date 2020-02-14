@@ -34,6 +34,7 @@ module.exports = function(router) {
   router.post("/connect-account", salon.connectStripeAccount);
   router.post("/appointment-complete", salon.appointmentCompleted);
   router.post("/upcoming-appointment", salon.getUpcomingbookings);
+  router.post("/salon-days", salon.getSalonWeeklyDetails);
 
   router.post("/updatesalonservices", salon.updateSalonServices);
 
