@@ -1396,22 +1396,24 @@ async function bookSlot(data) {
       mongoose.Types.ObjectId(data.service_id)
     );
 
-    if (data.promocode_id) {
-      let _id = mongoose.Types.ObjectId(data.promocode_id);
-      let dataToPass = mongoose.Types.ObjectId(data.user_id);
-      let addInPromocode = await commonQuery.addUserIdToPromocode(
-        promocodes,
-        _id,
-        dataToPass
-      );
-      console.log("INA", addInPromocode);
-    }
-
-    console.log("FINDEMP", findEmp);
+    console.log(findEmp);
 
     if (!findEmp) {
     } else {
       var empId = findEmp[0]._id;
+
+      if (data.promocode_id) {
+        let _id = mongoose.Types.ObjectId(data.promocode_id);
+        let dataToPass = mongoose.Types.ObjectId(data.user_id);
+        let addInPromocode = await commonQuery.addUserIdToPromocode(
+          promocodes,
+          _id,
+          dataToPass
+        );
+        console.log("INA", addInPromocode);
+      }
+
+      console.log("FINDEMP", findEmp);
 
       console.log(empId);
 
