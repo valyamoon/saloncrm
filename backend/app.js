@@ -74,6 +74,7 @@ app.use(function(req, res, next) {
 app.use("/api", require("./app/api/routes")(express));
 
 app.use((req, res, next) => {
+  console.log("sss");
   res.sendFile(path.join(__dirname, "frontend", "index.html"));
   //res.sendFile("./frontend/index.html");
 });
