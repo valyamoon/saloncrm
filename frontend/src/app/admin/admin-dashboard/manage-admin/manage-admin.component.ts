@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ToastrService } from "ngx-toastr";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { LoginService } from "src/app/salon/login/login.service";
-import { AuthService } from "src/app/salon/auth.service";
+import { LoginService } from "../../../salon/login/login.service";
+import { AuthService } from "../../../salon/auth.service";
 import { MatTableDataSource } from "@angular/material";
 
 @Component({

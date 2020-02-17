@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AdminServService } from "./admin-serv.service";
-import { AuthService } from "src/app/salon/auth.service";
+import { AuthService } from "../../salon/auth.service";
 
 @Component({
   selector: "app-admin-dashboard",

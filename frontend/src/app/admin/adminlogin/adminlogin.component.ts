@@ -5,7 +5,7 @@ import { ToastrService } from "ngx-toastr";
 import { AuthService } from "../auth.service";
 
 import { Router } from "@angular/router";
-import { AllservService } from "src/app/allserv.service";
+import { AllservService } from "../../allserv.service";
 
 @Component({
   selector: "app-adminlogin",
