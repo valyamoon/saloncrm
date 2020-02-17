@@ -193,6 +193,9 @@ function saveSalonDetails(req, res) {
 
                                 if (!saveSalon) {
                                 } else {
+                                  var TempUrl = imageUrl.imageBaseUrl;
+                                  var url = TempUrl + saveSalon.image;
+                                  saveSalon.image = url;
                                   let updateCondition = {
                                     isSubmitted: true
                                   };
@@ -422,12 +425,12 @@ function getSalons(req, res) {
               service: v.services
             });
           });
-          salonListingNew.forEach(function(c) {
+          salonListingNew.forEach(async function(c) {
             var TempUrl = imageUrl.imageBaseUrl;
             var url = TempUrl + c.image;
             c.image = url;
           });
-          //console.log(salonListingNew);
+          console.log(salonListingNew);
           return res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -1232,7 +1235,8 @@ function updateSalonDetails(req, res) {
                   constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
                 // constant.directoryPath.SERVICEIMAGE
                 // return false;
-                db_path = webUrl + timeStamp + "_" + imgOriginalName;
+                db_path =
+                  "uploads/profileImages/" + timeStamp + "_" + imgOriginalName;
               }
               if (db_path) {
                 //image_path= db_path;
