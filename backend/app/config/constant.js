@@ -78,5 +78,7 @@ module.exports = {
   APPOINTMENT_BOOKED: "Your Appointment has been booked successfully",
   FAILED_TO_BOOK: "Failed to book the Appointment",
   UPDATE_SUCCESS: "Updated Successfully",
-  FAILED_TO_UPDATE: "Failed to update"
+  FAILED_TO_UPDATE: "Failed to update",
+  PROMOCODE_APPLIED: "Promocode Applied Successfully",
+  PROMOCODE_USED_ALREADY: "Promocode already used by this user"
 };

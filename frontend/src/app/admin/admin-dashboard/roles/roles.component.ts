@@ -175,6 +175,7 @@ export class RolesComponent implements OnInit {
       data => {
         if (data["code"] === 200) {
           this.isAddModal = false;
+          this.roleForm.reset();
           this.toastrServ.success("Role Added", "Success", {
             timeOut: 1000
           });
