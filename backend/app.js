@@ -34,9 +34,9 @@ app.use(fileUpload());
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
-//process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
+process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
-process.env.NODE_ENV = process.env.NODE_ENV || "prod"; //prod server (mdout.com)
+//process.env.NODE_ENV = process.env.NODE_ENV || "prod"; //prod server (mdout.com)
 
 const config = require("./app/config/config.js").get(process.env.NODE_ENV);
 require("./app/config/db");
@@ -74,7 +74,8 @@ app.use(function(req, res, next) {
 app.use("/api", require("./app/api/routes")(express));
 
 app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, "frontend", "index.html"));
+  //res.sendFile(path.join(__dirname, "frontend", "index.html"));
+  res.sendFile("./frontend/index.html");
 });
 
 // start server
