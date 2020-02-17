@@ -18,6 +18,8 @@ export class BookingComponent implements OnInit {
   dataSource: any;
   pageSize: any = 5;
   count: any = 5;
+  isModal: boolean = false;
+  appointmentDetails: any;
   page: any = 1;
   salonId: any;
   displayedColumns = ["bookingid", "name", "status", "service", "action"];
@@ -83,10 +85,16 @@ export class BookingComponent implements OnInit {
     }
   }
   getDetails(data) {
+    this.isModal = true;
     console.log(data);
+    this.appointmentDetails = data;
   }
   completeAppointment(data) {
     console.log(data);
+  }
+  dismissModal() {
+    this.isModal = false;
+    this.appointmentDetails = [];
   }
 
   paginate(event) {

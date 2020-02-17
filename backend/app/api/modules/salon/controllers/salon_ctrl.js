@@ -78,7 +78,8 @@ module.exports = {
   connectStripeAccount: connectStripeAccount,
   appointmentCompleted: appointmentCompleted,
   getUpcomingbookings: getUpcomingbookings,
-  getSalonWeeklyDetails: getSalonWeeklyDetails
+  getSalonWeeklyDetails: getSalonWeeklyDetails,
+  validatePromocode: validatePromocode
 };
 
 /**
@@ -1345,7 +1346,7 @@ function fetchSalonData(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
-          console.log(getSalonData);
+          //   console.log(getSalonData);
           var TempUrl = imageUrl.imageBaseUrl;
           var url = TempUrl + getSalonData.image;
           getSalonData.image = url;
@@ -1389,42 +1390,22 @@ async function bookSlot(data) {
       const minutes = num % 60;
       endTimeCalculated = `${hours}:${minutes}`;
     }
-    console.log("endTimeCalculated", endTimeCalculated);
+    // console.log("endTimeCalculated", endTimeCalculated);
     let findEmp = await commonQuery.filterEmployee(
       employees,
       mongoose.Types.ObjectId(data.salon_id),
       mongoose.Types.ObjectId(data.service_id)
     );
 
-    console.log(findEmp);
+    // console.log(findEmp);
 
     if (!findEmp) {
     } else {
       var empId = findEmp[0]._id;
 
-      if (data.promocode_id) {
-        let _id = mongoose.Types.ObjectId(data.promocode_id);
-        let dataToPass = mongoose.Types.ObjectId(data.user_id);
-        let addInPromocode = await commonQuery.addUserIdToPromocode(
-          promocodes,
-          _id,
-          dataToPass
-        );
-        console.log("INA", addInPromocode);
-      }
-
-      console.log("FINDEMP", findEmp);
+      //  console.log("FINDEMP", findEmp);
 
       console.log(empId);
-
-      // let salon_connected_id;
-      // let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
-      // let connectedAccountId = await commonQuery.findoneData(salons, condition);
-      // console.log("CONNECTEDID", connectedAccountId);
-      // if (connectedAccountId) {
-      //   salon_connected_id = connectedAccountId.connected_account_id;
-      //   console.log("connected_account_id", salon_connected_id);
-      // }
 
       let saveAppointment = new appointments({
         salon_id: data.salon_id,
@@ -1441,7 +1422,7 @@ async function bookSlot(data) {
         orderId: orderId
       });
 
-      console.log("saveAppointment", saveAppointment);
+      // console.log("saveAppointment", saveAppointment);
 
       let bookAppointment = await commonQuery.InsertIntoCollection(
         appointments,
@@ -1450,6 +1431,17 @@ async function bookSlot(data) {
       if (!bookAppointment) {
         reject("ERROR");
       } else {
+        if (data.promocode_id) {
+          let _id = mongoose.Types.ObjectId(data.promocode_id);
+          let dataToPass = mongoose.Types.ObjectId(data.user_id);
+          let addInPromocode = await commonQuery.addUserIdToPromocode(
+            promocodes,
+            _id,
+            dataToPass
+          );
+          console.log(addInPromocode);
+        }
+
         var message = {
           to: data.deviceToken,
           collapse_key: "your_collapse_key",
@@ -1467,12 +1459,12 @@ async function bookSlot(data) {
 
         fcm.send(message, async function(err, response) {
           if (err) {
-            console.log("Something has gone wrong!", err);
+            // console.log("Something has gone wrong!", err);
           } else {
-            console.log("Successfully sent with response: ", response);
+            // console.log("Successfully sent with response: ", response);
           }
         });
-        console.log("BOOKAAINCASH", bookAppointment);
+        //   console.log("BOOKAAINCASH", bookAppointment);
         bookedAppointmentData = bookAppointment;
         // return bookAppointment;
       }
@@ -1492,39 +1484,39 @@ async function bookSlot(data) {
       const minutes = num % 60;
       endTimeCalculated = `${hours}:${minutes}`;
     }
-    console.log("endTimeCalculated", endTimeCalculated);
+    // console.log("endTimeCalculated", endTimeCalculated);
     let findEmp = await commonQuery.filterEmployee(
       employees,
       mongoose.Types.ObjectId(data.salon_id),
       mongoose.Types.ObjectId(data.service_id)
     );
 
-    if (data.promocode_id) {
-      let _id = mongoose.Types.ObjectId(data.promocode_id);
-      let dataToPass = mongoose.Types.ObjectId(data.user_id);
-      let addInPromocode = await commonQuery.addUserIdToPromocode(
-        promocodes,
-        _id,
-        dataToPass
-      );
-      console.log("INA", addInPromocode);
-    }
+    // if (data.promocode_id) {
+    //   let _id = mongoose.Types.ObjectId(data.promocode_id);
+    //   let dataToPass = mongoose.Types.ObjectId(data.user_id);
+    //   let addInPromocode = await commonQuery.addUserIdToPromocode(
+    //     promocodes,
+    //     _id,
+    //     dataToPass
+    //   );
+    //   // console.log("INA", addInPromocode);
+    // }
 
-    console.log("FINDEMP", findEmp);
+    //console.log("FINDEMP", findEmp);
 
     if (!findEmp) {
     } else {
       var empId = findEmp[0]._id;
 
-      console.log(empId);
+      // console.log(empId);
 
       let salon_connected_id;
       let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
       let connectedAccountId = await commonQuery.findoneData(salons, condition);
-      console.log("CONNECTEDID", connectedAccountId);
+      // console.log("CONNECTEDID", connectedAccountId);
       if (connectedAccountId) {
         salon_connected_id = connectedAccountId.connected_account_id;
-        console.log("connected_account_id", salon_connected_id);
+        // console.log("connected_account_id", salon_connected_id);
       }
 
       let saveAppointment = new appointments({
@@ -1543,7 +1535,7 @@ async function bookSlot(data) {
         orderId: orderId
       });
 
-      console.log("saveAppointment", saveAppointment);
+      // console.log("saveAppointment", saveAppointment);
 
       let bookAppointment = await commonQuery.InsertIntoCollection(
         appointments,
@@ -1552,6 +1544,17 @@ async function bookSlot(data) {
       if (!bookAppointment) {
         reject("ERROR");
       } else {
+        if (data.promocode_id) {
+          let _id = mongoose.Types.ObjectId(data.promocode_id);
+          let dataToPass = mongoose.Types.ObjectId(data.user_id);
+          let addInPromocode = await commonQuery.addUserIdToPromocode(
+            promocodes,
+            _id,
+            dataToPass
+          );
+          console.log(addInPromocode);
+        }
+
         var message = {
           to: data.deviceToken,
           collapse_key: "your_collapse_key",
@@ -1574,13 +1577,13 @@ async function bookSlot(data) {
             console.log("Successfully sent with response: ", response);
           }
         });
-        console.log("BOOKAAIN CARD", bookAppointment);
+        // console.log("BOOKAAIN CARD", bookAppointment);
         bookedAppointmentData = bookAppointment;
         // return bookAppointment;
       }
     }
   }
-  console.log("BOOKEDAPPOINTMENTDATA", bookedAppointmentData);
+  //console.log("BOOKEDAPPOINTMENTDATA", bookedAppointmentData);
   return bookedAppointmentData;
 }
 
@@ -1788,7 +1791,7 @@ async function getSalonWeeklySlots(req, res) {
 }
 
 function createCardToken(req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   var card_id;
   var token_id;
   async function createCardToken() {
@@ -1805,7 +1808,7 @@ function createCardToken(req, res) {
           },
           async function(err, token) {
             if (err) {
-              console.log("ERROR", err);
+              // console.log("ERROR", err);
               return res.json(
                 Response(
                   constant.ERROR_CODE,
@@ -1814,7 +1817,7 @@ function createCardToken(req, res) {
                 )
               );
             } else {
-              console.log(token);
+              // console.log(token);
               token_id = token["id"];
               card_id = token["card"]["id"];
               stripe.customers.createSource(
@@ -1824,7 +1827,7 @@ function createCardToken(req, res) {
                   if (err) {
                     console.log(err);
                   } else {
-                    console.log(card);
+                    //  console.log(card);
                     stripe.subscriptions.create(
                       {
                         customer: req.body.customer_id,
@@ -1849,7 +1852,7 @@ function createCardToken(req, res) {
                             condition,
                             updateCondition
                           );
-                          console.log("SSS", updateSalonDetails);
+                          //console.log("SSS", updateSalonDetails);
                           if (updateSalonDetails) {
                             let updateUserCondition = {
                               _id: mongoose.Types.ObjectId(
@@ -1862,7 +1865,7 @@ function createCardToken(req, res) {
                               updateUserCondition,
                               updateCondition
                             );
-                            console.log(updateUserTableDetails);
+                            //  console.log(updateUserTableDetails);
                             if (updateUserTableDetails) {
                               let saveSalonSubscription = new salonSubscriptions(
                                 {
@@ -1923,7 +1926,7 @@ function createCardToken(req, res) {
 }
 
 function subscribedSalonDetails(req, res) {
-  console.log("hello", req.body);
+  // console.log("hello", req.body);
   async function subscribedSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -1934,7 +1937,7 @@ function subscribedSalonDetails(req, res) {
           salonSubscriptions,
           condition
         );
-        console.log(salonSubscriptionDetails);
+        //  console.log(salonSubscriptionDetails);
         if (!salonSubscriptionDetails) {
           res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -2006,7 +2009,7 @@ function connectStripeAccount(req, res) {
           .then(async function(response) {
             // asynchronously called
             var connected_account_ID = response.stripe_user_id;
-            console.log(connected_account_ID);
+            // console.log(connected_account_ID);
             let condition = { _id: mongoose.Types.ObjectId(req.body.salon_id) };
             let updateCondition = {
               connected_account_id: connected_account_ID,
@@ -2056,7 +2059,7 @@ function appointmentCompleted(req, res) {
         );
         if (!findBooking) {
         } else {
-          console.log("Booking", findBooking);
+          //   console.log("Booking", findBooking);
 
           let condition = {
             _id: mongoose.Types.ObjectId(findBooking["salon_id"])
@@ -2066,7 +2069,7 @@ function appointmentCompleted(req, res) {
             condition
           );
 
-          console.log(findConnectedId.connected_account_id);
+          // console.log(findConnectedId.connected_account_id);
           if (findConnectedId) {
             // stripe.paymentIntents
             //   .create({
@@ -2092,9 +2095,9 @@ function appointmentCompleted(req, res) {
               function(err, transfer) {
                 // asynchronously called
                 if (err) {
-                  console.log("error", err);
+                  //  console.log("error", err);
                 } else {
-                  console.log("TRANSFER", transfer);
+                  // console.log("TRANSFER", transfer);
                 }
               }
             );
@@ -2114,7 +2117,7 @@ function getUpcomingbookings(req, res) {
   let pageSize =
     +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
   let page = +req.body.page || +req.body.page ? req.body.page : +1;
-  console.log("II", req.body);
+  //  console.log("II", req.body);
   var ascend = req.body.ascend;
   let bookingCount;
   let upcond;
@@ -2188,7 +2191,7 @@ function getUpcomingbookings(req, res) {
             data: bookingList,
             count: bookingCount
           };
-          console.log("dataToPass", dataToPass);
+          //console.log("dataToPass", dataToPass);
           res.json(
             Response(
               constant.SUCCESS_CODE,
@@ -2242,4 +2245,52 @@ function getSalonWeeklyDetails(req, res) {
     }
   }
   getSalonWeeklyDetails().then(function() {});
+}
+
+function validatePromocode(req, res) {
+  console.log(req.body);
+  async function validatePromocode() {
+    try {
+      if (req.body && req.body.user_id) {
+        let user_id = mongoose.Types.ObjectId(req.body.user_id);
+        let salon_id = mongoose.Types.ObjectId(req.body.salon_id);
+        let promocode_id = mongoose.Types.ObjectId(req.body.promocode_id);
+
+        let checkIfPromocode = await commonQuery.filterPromocode(
+          promocodes,
+          user_id,
+          salon_id,
+          promocode_id
+        );
+        if (!checkIfPromocode.length) {
+          let dataToPass = {
+            status: false
+          };
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.PROMOCODE_APPLIED,
+              dataToPass
+            )
+          );
+        } else {
+          let dataToPass = {
+            status: true
+          };
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.PROMOCODE_USED_ALREADY,
+              dataToPass
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  validatePromocode().then(function() {});
 }

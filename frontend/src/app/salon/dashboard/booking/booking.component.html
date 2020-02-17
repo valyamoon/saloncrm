@@ -159,3 +159,52 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+
+<div class="overlay" *ngIf="isModal">
+  <div class="mainSection col-lg-6 col-md-6 col-sm-12">
+    <div class="fields">
+      <label>Name:</label>
+      <div class="field">
+        {{ appointmentDetails.firstName }} {{ appointmentDetails.lastName }}
+      </div>
+    </div>
+    <div class="fields">
+      <label>Attended By:</label>
+      <div class="field">
+        {{ appointmentDetails.empname }}
+      </div>
+    </div>
+    <div class="fields">
+      <label>Duration:</label>
+      <div class="field">
+        {{ appointmentDetails.duration }}
+      </div>
+    </div>
+    <div class="fields">
+      <label>OrderId:</label>
+      <div class="field">
+        {{ appointmentDetails.orderId }}
+      </div>
+    </div>
+    <div class="fields">
+      <label>Payment Type:</label>
+      <div class="field">{{ appointmentDetails.paymentType }}</div>
+    </div>
+    <div class="fields">
+      <label>Start Time:</label>
+      <div class="field">{{ appointmentDetails.starttime }}</div>
+    </div>
+    <div class="fields">
+      <label>End Time:</label>
+      <div class="field">{{ appointmentDetails.endtime }}</div>
+    </div>
+    <div class="fields">
+      <label>Amount:</label>
+      <div class="field">{{ appointmentDetails.totalamount }}</div>
+    </div>
+
+    <div class="btn">
+      <button class="btn btn-sign-in" (click)="dismissModal()">Close</button>
+    </div>
+  </div>
+</div>
