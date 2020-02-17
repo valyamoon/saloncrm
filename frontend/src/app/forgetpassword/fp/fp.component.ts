@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { FpservService } from "../fpserv.service";
 import { ToastrService } from "ngx-toastr";
-import { AllservService } from "src/app/allserv.service";
+import { AllservService } from "../../allserv.service";
 
 @Component({
   selector: "app-fp",
@@ -20,7 +20,7 @@ export class FpComponent implements OnInit {
     private fpServ: FpservService,
     private toastServ: ToastrService,
     private allServ: AllservService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.forgetPasswordForm = this.fb.group({
@@ -30,7 +30,6 @@ export class FpComponent implements OnInit {
       this.currentRoute = data;
     });
     if (this.currentRoute) {
-
       // this.allServ.setPrevRoute(this.currentRoute);
       localStorage.setItem("route", this.currentRoute);
     }

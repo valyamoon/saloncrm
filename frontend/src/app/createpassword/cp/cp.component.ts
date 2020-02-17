@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Routes, Router } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AdminServService } from "src/app/admin/admin-dashboard/admin-serv.service";
+import { AdminServService } from "../../admin/admin-dashboard/admin-serv.service";
 import { ToastrService } from "ngx-toastr";
-import { AllservService } from "src/app/allserv.service";
+import { AllservService } from "../../allserv.service";
 
 @Component({
   selector: "app-cp",

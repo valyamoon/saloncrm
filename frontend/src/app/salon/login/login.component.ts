@@ -4,7 +4,7 @@ import { LoginService } from "./login.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { ToastrService } from "ngx-toastr";
-import { AllservService } from "src/app/allserv.service";
+import { AllservService } from "../../allserv.service";
 
 @Component({
   selector: "app-login",
