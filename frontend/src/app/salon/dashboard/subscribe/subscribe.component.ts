@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 // import * as stripe from "stripe";
 // import * as elements from "elements";
 
-import { AdminServService } from "src/app/admin/admin-dashboard/admin-serv.service";
+import { AdminServService } from "../../../admin/admin-dashboard/admin-serv.service";
 import { CommonService } from "../common.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
