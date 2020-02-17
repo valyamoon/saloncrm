@@ -93,6 +93,7 @@ export class ManageAdminComponent implements OnInit {
             timeOut: 1000
           });
           this.fetchAllAdmins();
+          this.registerAdminForm.reset();
           this.isAddModal = false;
           this.authServ.sendToken(res.data.token);
         } else if (res.code === 201) {

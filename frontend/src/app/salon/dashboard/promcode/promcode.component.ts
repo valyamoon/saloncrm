@@ -23,7 +23,7 @@ export class PromcodeComponent implements OnInit {
     private commonServ: CommonService,
     private toastServ: ToastrService,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.commonServ.getSalon_id().subscribe((data: any) => {
@@ -42,7 +42,6 @@ export class PromcodeComponent implements OnInit {
   }
 
   addPromocodes(data) {
-
     let dataToPass = {
       name: data.name,
       value: data.value,
@@ -53,6 +52,7 @@ export class PromcodeComponent implements OnInit {
     this.commonServ.addPromocodes(dataToPass).subscribe((data: any) => {
       if (data["code"] === 200) {
         this.showAddPromocode = false;
+        this.addPromocodeForm.reset();
         this.getPromocodes(this.salon_id);
         this.toastServ.success("Added Promocode", "Success", {
           timeOut: 1000
@@ -71,7 +71,6 @@ export class PromcodeComponent implements OnInit {
     };
     this.commonServ.getPromocode(dataToPass).subscribe(
       (data: any) => {
-
         if (data["code"] === 200) {
           this.promocodesListing = data["data"];
           if (this.promocodesListing.length === 0) {
@@ -95,13 +94,11 @@ export class PromcodeComponent implements OnInit {
     );
   }
   deletePromocode(data) {
-
     let dataToPass = {
       promocode_id: data["_id"]
     };
     this.commonServ.deletePromocodes(dataToPass).subscribe(
       (data: any) => {
-
         if (data["code"] === 200) {
           this.toastServ.success("Promocode Deleted", "Success", {
             timeOut: 1000

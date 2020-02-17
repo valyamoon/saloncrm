@@ -120,6 +120,7 @@ export class CategoriesComponent implements OnInit {
         if (data["code"] === 200) {
           this.isAddModal = false;
           this.isLoader = false;
+          this.categoryForm.reset();
           this.toastrSev.success("Catgory Added", "Success", {
             timeOut: 1000
           });

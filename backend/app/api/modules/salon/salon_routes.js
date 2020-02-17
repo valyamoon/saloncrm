@@ -35,7 +35,7 @@ module.exports = function(router) {
   router.post("/appointment-complete", salon.appointmentCompleted);
   router.post("/upcoming-appointment", salon.getUpcomingbookings);
   router.post("/salon-days", salon.getSalonWeeklyDetails);
-
+  router.post("/validate-promocode", salon.validatePromocode);
   router.post("/updatesalonservices", salon.updateSalonServices);
 
   // router.get('/listUser', middlewares, user.getUserList);

@@ -1641,8 +1641,36 @@ commonQuery.addUserIdToPromocode = function addUserIdToPromocode(
         if (err) {
           // console.log(err);
           reject(err);
+          console.log("err", err);
         } else {
           resolve(data);
+          // console.log(data);
+        }
+      });
+  });
+};
+
+commonQuery.filterPromocode = function filterPromocode(
+  model,
+  user_id,
+  salon_id,
+  promocode_id
+) {
+  console.log(model, user_id, promocode_id, salon_id);
+  return new Promise(function(resolve, reject) {
+    model
+      .aggregate([
+        { $match: { usedbyusers: user_id } },
+        { $match: { salon_id: salon_id } },
+        { $match: { _id: promocode_id } }
+      ])
+      .exec(function(err, result) {
+        if (err) {
+          reject(err);
+          //console.log("err", err);
+        } else {
+          //console.log("RSUKR", result);
+          resolve(result);
         }
       });
   });
@@ -1673,6 +1701,7 @@ commonQuery.fetch_categories = function fetch_categories(
           reject(err);
         } else {
           resolve(data);
+          console.log("data", data);
         }
       });
   });
@@ -2010,7 +2039,7 @@ commonQuery.getUpcomingBookings = function getUpcomingBookings(
   currentPage,
   ascend
 ) {
-  console.log("ascend", ascend);
+  //console.log("ascend", ascend);
   return new Promise(function(resolve, reject) {
     let postQuery = model.aggregate([
       {
@@ -2050,6 +2079,7 @@ commonQuery.getUpcomingBookings = function getUpcomingBookings(
           isCancelled: 1,
           isCompleted: 1,
           starttime: 1,
+          endtime: 1,
           date: 1,
           orderId: 1,
           paymentType: 1,
