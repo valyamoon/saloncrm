@@ -19,6 +19,7 @@ const salonSubscriptions = require("../../salon/model/salonSubscriptions");
 const salons = require("../../salon/model/salonSchema");
 const categories = require("../../admin/model/categoriesSchema");
 const reviewratings = require("../../salon/model/salonreviewsratingSchema");
+const admindetails = require("../model/admindetailSchema");
 const salonservice = require("../../salon/model/salonservicesSchema");
 const services = require("../model/servicesSchema");
 const Response = require("../../../../lib/response_handler.js");
@@ -66,7 +67,10 @@ module.exports = {
   resetPassword: resetPassword,
   updateCategories: updateCategories,
   updateService: updateService,
-  updateSubscription: updateSubscription
+  updateSubscription: updateSubscription,
+  addAdminDetails: addAdminDetails,
+  updateAdminDetails: updateAdminDetails,
+  getAdminDetails: getAdminDetails
 };
 
 /**
@@ -1990,4 +1994,112 @@ function updateService(req, res) {
   }
 
   updateService().then(function() {});
+}
+
+function addAdminDetails(req, res) {
+  async function addAdminDetails() {
+    try {
+      if (req.body && req.body.phone) {
+        let saveAdmin = new admindetails({
+          admin_id: req.body.admin_id,
+          phone: req.body.phone,
+          code: req.body.code,
+          about: req.body.about
+        });
+
+        let addAdminDetail = await commonQuery.InsertIntoCollection(
+          admindetails,
+          saveAdmin
+        );
+        if (!addAdminDetail) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.ADDED_SUCCESS,
+              addAdminDetail
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addAdminDetails().then(function() {});
+}
+
+function updateAdminDetails(req, res) {
+  async function updateAdminDetails() {
+    try {
+      if (req.body && req.body.phone) {
+        let condition = {
+          admin_id: mongoose.Types.ObjectId(req.body.admin_id)
+        };
+
+        let updateCondition = {
+          phone: req.body.phone,
+          code: req.body.code,
+          about: req.body.about
+        };
+
+        let updateAdmin = await commonQuery.updateOneDocument(
+          admindetails,
+          condition,
+          updateCondition
+        );
+        if (!updateAdmin) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.UPDATE_SUCCESS,
+              updateAdmin
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  updateAdminDetails().then(function() {});
+}
+
+function getAdminDetails(req, res) {
+  async function getAdminDetails() {
+    try {
+      if (req.body && req.body.type === "admin") {
+        let adminDetailsList = await commonQuery.fetch_all(admindetails);
+        if (!adminDetailsList) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              adminDetailsList
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getAdminDetails().then(function() {});
 }

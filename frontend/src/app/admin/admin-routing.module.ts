@@ -14,6 +14,7 @@ import { ManageAdminComponent } from "./admin-dashboard/manage-admin/manage-admi
 import { ConfirmationComponent } from "./admin-dashboard/confirmation/confirmation.component";
 import { ManageplanComponent } from "./admin-dashboard/manageplan/manageplan.component";
 import { SubcriptionsListComponent } from "./admin-dashboard/subcriptions-list/subcriptions-list.component";
+import { DetailsComponent } from "./admin-dashboard/details/details.component";
 
 // const routes: Routes = [{path:'',component:AdminloginComponent},
 
@@ -36,6 +37,7 @@ const routes: Routes = [
       { path: "services", component: ServicesComponent },
       { path: "categories", component: CategoriesComponent },
       { path: "roles", component: RolesComponent },
+      { path: "detail", component: DetailsComponent },
       { path: "manage-plan", component: ManageplanComponent },
       { path: "subscribed-salons", component: SubcriptionsListComponent },
       // { path: "location", component: ConfirmationComponent },

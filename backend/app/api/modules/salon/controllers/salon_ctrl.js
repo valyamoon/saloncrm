@@ -2182,7 +2182,7 @@ function getUpcomingbookings(req, res) {
         );
         if (!bookingList) {
         } else {
-          console.log(bookingList);
+          // console.log(bookingList);
           let cond;
           if (req.body.type === "upcoming") {
             cond = upcond;

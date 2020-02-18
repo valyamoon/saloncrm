@@ -39,11 +39,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.getRequests();
     this.getActiveSalonsCount();
     this.getActiveUsersCount();
-  }
-
-  ngOnInit() {
-    //this.checkRequest();
-    this.adminServ.setHeaderText("Salons Request");
     this.subscription = timer(0, 200000)
       .pipe(switchMap(() => this.adminServ.getSalonsRequest(this.dataDefault)))
       .subscribe(
@@ -52,6 +47,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           (this.limit = result["data"]["countNumber"])
         )
       );
+  }
+
+  ngOnInit() {
+    //this.checkRequest();
+    this.adminServ.setHeaderText("Salons Request");
   }
 
   /**

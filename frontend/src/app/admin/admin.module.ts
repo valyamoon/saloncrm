@@ -29,6 +29,7 @@ import { ManageplanComponent } from "./admin-dashboard/manageplan/manageplan.com
 import { SubcriptionsListComponent } from "./admin-dashboard/subcriptions-list/subcriptions-list.component";
 import { LoaderComponent } from "./admin-dashboard/loader/loader.component";
 import { DeleteDialogComponent } from "./admin-dashboard/delete-dialog/delete-dialog.component";
+import { DetailsComponent } from "./admin-dashboard/details/details.component";
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DeleteDialogComponent } from "./admin-dashboard/delete-dialog/delete-di
     ManageplanComponent,
     SubcriptionsListComponent,
     LoaderComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    DetailsComponent
   ],
   imports: [
     CommonModule,

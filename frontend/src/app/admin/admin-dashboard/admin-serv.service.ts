@@ -150,6 +150,19 @@ export class AdminServService {
   getUserDetails(data) {
     return this.http.post(this.baseUrl + "/user-detail", data, httpOptions);
   }
+  getAdminDetails(data) {
+    return this.http.post(
+      this.baseUrl + "/get-admin-detail",
+      data,
+      httpOptions
+    );
+  }
+  addAdminDetails(data) {
+    return this.http.post(this.baseUrl + "/admin-detail", data, httpOptions);
+  }
+  updateAdminDetails(data) {
+    return this.http.post(this.baseUrl + "/update-admin", data, httpOptions);
+  }
 
   getSalonDetails(data) {
     return this.http.post(this.baseUrl + "/view-salon", data, httpOptions);

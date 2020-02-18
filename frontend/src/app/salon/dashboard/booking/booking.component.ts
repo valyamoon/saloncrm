@@ -67,7 +67,7 @@ export class BookingComponent implements OnInit {
         pageSize: this.count,
         page: this.page
       };
-      console.log(dataToPass);
+      //console.log(dataToPass);
 
       this.getUpcomingBookingData(dataToPass);
     } else if (data === 1) {
@@ -80,17 +80,41 @@ export class BookingComponent implements OnInit {
         pageSize: this.count,
         page: this.page
       };
-      console.log("here", dataToPass);
+      //   console.log("here", dataToPass);
       this.getUpcomingBookingData(dataToPass);
     }
   }
   getDetails(data) {
     this.isModal = true;
-    console.log(data);
+    // console.log(data);
     this.appointmentDetails = data;
   }
   completeAppointment(data) {
-    console.log(data);
+    console.log("DATA", data);
+    let dataToPass = {
+      booking_id: data._id
+    };
+    this.commServ.completeAppointment(dataToPass).subscribe(
+      (data: any) => {
+        console.log("data", data);
+        if (data["code"] === 200) {
+          console.log("datassss");
+          this.toastrServ.success("Appointment Completed", "", {
+            timeOut: 1000
+          });
+          this.getUpcomingBookingData(this.dataTp);
+        } else if (data["code"] === 400) {
+          this.toastrServ.error("Failed to Complete", data["message"], {
+            timeOut: 1000
+          });
+        }
+      },
+      error => {
+        this.toastrServ.error("Server-Error", error.error["message"], {
+          timeOut: 1000
+        });
+      }
+    );
   }
   dismissModal() {
     this.isModal = false;
@@ -99,9 +123,9 @@ export class BookingComponent implements OnInit {
 
   paginate(event) {
     this.page = event.pageIndex + 1;
-    console.log(this.page);
+    // console.log(this.page);
     this.count = event.pageSize;
-    console.log(this.count);
+    // console.log(this.count);
     let dataToPass = {
       ascend: this.ascend,
       type: this.type,
@@ -112,14 +136,14 @@ export class BookingComponent implements OnInit {
     this.getUpcomingBookingData(dataToPass);
   }
   getUpcomingBookingData(data) {
-    console.log("IN", data);
+    //  console.log("IN", data);
     this.commServ.getAppointmentList(data).subscribe((data: any) => {
-      console.log(data);
+      //   console.log(data);
       this.dataSource = data["data"]["data"];
       this.dataSource.sort = this.sort;
-      console.log(this.dataSource);
+      // console.log(this.dataSource);
       this.bookingCount = data["data"]["count"];
-      console.log(this.bookingCount);
+      // console.log(this.bookingCount);
     });
   }
   changeBooking(element) {

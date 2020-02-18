@@ -41,6 +41,9 @@ module.exports = function(router) {
   router.post("/update-category", admin.updateCategories);
   router.post("/update-service", admin.updateService);
   router.post("/update-plan", admin.updateSubscription);
+  router.post("/admin-detail", admin.addAdminDetails);
+  router.post("/update-admin", admin.updateAdminDetails);
+  router.post("/get-admin-detail", admin.getAdminDetails);
 
   return router;
 };

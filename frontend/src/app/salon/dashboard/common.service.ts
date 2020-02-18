@@ -83,6 +83,10 @@ export class CommonService {
     return this.http.post(this.baseUrl + "/upcoming-appointment", data);
   }
 
+  completeAppointment(data) {
+    return this.http.post(this.baseUrl + "/appointment-complete", data);
+  }
+
   getSalonData(data) {
     return this.http.post(this.baseUrl + "/salondatabyuser", data, httpOptions);
   }
