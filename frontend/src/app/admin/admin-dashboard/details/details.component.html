@@ -1,0 +1,103 @@
+<div class="detailsWrapper">
+  <div class="actionButtons">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="headerArea">
+          <app-header-text></app-header-text>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="btnActionArea">
+          <button
+            [disabled]="!isAddCompleted"
+            class="btn btn-primary btn-sign-in"
+            (click)="openAddCategoryModal('add')"
+          >
+            Add
+          </button>
+          <button
+            class="btn btn-primary btn-sign-in"
+            (click)="openAddCategoryModal('edit')"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main-content col-lg-5 col-md-6 col-sm-12">
+    <div class="fields">
+      <label>Phone</label>
+      <div class="field">{{ adminDetails?.phone }}</div>
+    </div>
+    <div class="fields">
+      <label>Code</label>
+      <div class="field">{{ adminDetails?.code }}</div>
+    </div>
+    <div class="fields">
+      <label>About</label>
+      <div class="field">{{ adminDetails?.about }}</div>
+    </div>
+  </div>
+  <div class="modalSection" *ngIf="isModal">
+    <div class="modal-content-area col-lg-4 col-md-4 col-sm-12">
+      <form [formGroup]="adminDetailsForm">
+        <label>Phone</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="phone"
+          placeholder="Contact Number"
+        />
+        <div
+          *ngIf="phone.invalid && (phone.dirty || phone.touched)"
+          class="erroralert"
+        >
+          <div *ngIf="phone.errors.required">
+            Phone is required.
+          </div>
+          <div *ngIf="phone.errors.minlength">
+            Phone must be at least 3 characters long.
+          </div>
+          <div *ngIf="phone.errors.maxlength">
+            Cannot be more than 11
+          </div>
+        </div>
+        <label>Country Code</label>
+        <select class="select-css" formControlName="code">
+          <option *ngFor="let item of countriesData" [ngValue]="item.code"
+            >{{ item.name }} {{ item.code }}</option
+          >
+        </select>
+        <label>About Us</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="about"
+          placeholder="About Us"
+        />
+        <div style="display: flex;justify-content: space-between;">
+          <button
+            *ngIf="isAdd"
+            class="btn-sign-in bts"
+            [disabled]="adminDetailsForm.invalid"
+            (click)="addDetail(adminDetailsForm.value)"
+          >
+            Add
+          </button>
+          <button
+            *ngIf="!isAdd"
+            class="btn-sign-in bts"
+            [disabled]="adminDetailsForm.invalid"
+            (click)="updateDetails(adminDetailsForm.value)"
+          >
+            Update
+          </button>
+          <button class="btn-sign-in bts" (click)="dismissModal()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
