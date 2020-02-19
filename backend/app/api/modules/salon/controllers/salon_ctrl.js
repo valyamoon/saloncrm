@@ -317,10 +317,12 @@ function getSalons(req, res) {
         } else {
           let slots = [];
           salonList.forEach(async function(c) {
+            console.log("ee", c);
+           
             slots.push({
               salon: c.name,
               _id: c._id,
-              optime: moment
+               optime: moment
                 .utc(c.opentime)
                 .local()
                 .format(),
