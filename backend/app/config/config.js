@@ -4,9 +4,12 @@ const config = {
   local: {
     port: 4001,
     db: {
-      user: "",
-      password: "",
-      url: "mongodb://localhost:27017/salonCRM"
+      // user: "",
+      // password: "",
+      // url: "mongodb://localhost:27017/salonCRM"
+      user: "saloncrm",
+      password: "DFr533456yt",
+      url: "mongodb://54.71.18.74:27017/saloncrm"
     },
     baseUrl: "http://localhost:4001/",
     backendBaseUrl: "http://localhost:4001/",
@@ -25,9 +28,12 @@ const config = {
   staging: {
     port: 5977,
     db: {
-      user: "saloncrm",
-      password: "DFr533456yt",
-      url: "mongodb://54.71.18.74:27017/saloncrm"
+      // user: "saloncrm",
+      // password: "DFr533456yt",
+      // url: "mongodb://54.71.18.74:27017/saloncrm"
+      user: "",
+      password: "",
+      url: "mongodb://localhost:27017/salonCRM"
     },
     baseUrl: "http://54.71.18.74:5977/",
     backendBaseUrl: "http://54.71.18.74:5977/",

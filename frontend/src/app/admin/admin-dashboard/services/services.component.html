@@ -16,7 +16,7 @@
         <h3>{{ action }}Service</h3>
       </div>
       <div class="mainSection">
-        <form class="serviceForm" [formGroup]="saveServiceForm">
+        <form class="serviceForm" #form [formGroup]="saveServiceForm">
           <div class="fields" *ngIf="!isShowUpdate">
             <label class="label">Select Category:</label>
             <select class="selectOption select-css" formControlName="category">
@@ -36,6 +36,7 @@
           </div>
           <div class="fields">
             <button
+              name="addBtn"
               *ngIf="!isShowUpdate"
               class="btn btn-primary btn-sign-in"
               [disabled]="saveServiceForm.invalid"
