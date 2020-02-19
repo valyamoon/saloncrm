@@ -1374,6 +1374,7 @@ function fetchSalonData(req, res) {
 }
 
 async function bookSlot(data) {
+  console.log("AYADATA", data);
   let bookedAppointmentData;
   var orderId = Math.random(1234567910)
     .toString(25)
@@ -1381,19 +1382,44 @@ async function bookSlot(data) {
     .substr(0, 100);
   if (data.paymentType === "cash") {
     var starttime = data.time;
+
+    //  console.log("ST", starttime);
     var duration = data.duration;
     var hour = starttime.split(":");
     var hourInt = hour[0] * 60;
     var minInt = hour[1];
+    var curDate = data.date;
+    curDate = new Date(curDate);
+    curDate = new Date(curDate.getTime() + curDate.getTimezoneOffset() * 60000);
+    var starttimedate = new Date(
+      curDate.getFullYear() +
+        "-" +
+        (curDate.getMonth() + 1) +
+        "-" +
+        curDate.getDate() +
+        "-" +
+        starttime
+    );
     var totaltime = parseInt(hourInt) + parseInt(minInt);
     var endtime = totaltime + parseInt(duration);
     var endTimeCalculated;
+
     time_convert(endtime);
     function time_convert(num) {
       const hours = Math.floor(num / 60);
       const minutes = num % 60;
       endTimeCalculated = `${hours}:${minutes}`;
     }
+    var endtimedate = new Date(
+      curDate.getFullYear() +
+        "-" +
+        (curDate.getMonth() + 1) +
+        "-" +
+        curDate.getDate() +
+        "-" +
+        endTimeCalculated
+    );
+
     // console.log("endTimeCalculated", endTimeCalculated);
     let findEmp = await commonQuery.filterEmployee(
       employees,
@@ -1423,7 +1449,9 @@ async function bookSlot(data) {
         date: data.date,
         employee_id: empId,
         paymentType: data.paymentType,
-        orderId: orderId
+        orderId: orderId,
+        endtimedate: endtimedate.toISOString(),
+        starttimedate: starttimedate.toISOString()
       });
 
       // console.log("saveAppointment", saveAppointment);
@@ -1481,6 +1509,18 @@ async function bookSlot(data) {
     var minInt = hour[1];
     var totaltime = parseInt(hourInt) + parseInt(minInt);
     var endtime = totaltime + parseInt(duration);
+    var curDate = data.date;
+    curDate = new Date(curDate);
+    curDate = new Date(curDate.getTime() + curDate.getTimezoneOffset() * 60000);
+    var starttimedate = new Date(
+      curDate.getFullYear() +
+        "-" +
+        (curDate.getMonth() + 1) +
+        "-" +
+        curDate.getDate() +
+        "-" +
+        starttime
+    );
     var endTimeCalculated;
     time_convert(endtime);
     function time_convert(num) {
@@ -1488,6 +1528,15 @@ async function bookSlot(data) {
       const minutes = num % 60;
       endTimeCalculated = `${hours}:${minutes}`;
     }
+    var endtimedate = new Date(
+      curDate.getFullYear() +
+        "-" +
+        (curDate.getMonth() + 1) +
+        "-" +
+        curDate.getDate() +
+        "-" +
+        endTimeCalculated
+    );
     // console.log("endTimeCalculated", endTimeCalculated);
     let findEmp = await commonQuery.filterEmployee(
       employees,
@@ -1536,7 +1585,9 @@ async function bookSlot(data) {
         connected_account_id: salon_connected_id,
         employee_id: empId,
         paymentType: data.paymentType,
-        orderId: orderId
+        orderId: orderId,
+        starttimedate: starttimedate,
+        endtimedate: endtimedate
       });
 
       // console.log("saveAppointment", saveAppointment);
