@@ -318,18 +318,30 @@ function getSalons(req, res) {
           let slots = [];
           salonList.forEach(async function(c) {
             console.log("ee", c);
-           
+
+            var ottime = convertUTCToLocalDate(new Date(c.opentime));
+            var cttime = convertUTCToLocalDate(new Date(c.closetime));
+
+            function convertUTCToLocalDate(date) {
+              var newDate = new Date(
+                date.getTime() + date.getTimezoneOffset() * 60 * 1000
+              );
+
+              var offset = date.getTimezoneOffset() / 60;
+              var hours = date.getHours();
+
+              newDate.setHours(hours - offset);
+
+              return newDate;
+            }
+
+            console.log("OTTTIME", ottime, cttime);
+
             slots.push({
               salon: c.name,
               _id: c._id,
-               optime: moment
-                .utc(c.opentime)
-                .local()
-                .format(),
-              cltime: moment
-                .utc(c.closetime)
-                .local()
-                .format(),
+              optime: ottime,
+              cltime: cttime,
               image: c.image,
               contact: c.contact,
               avgRatings: c.avgRatings,
