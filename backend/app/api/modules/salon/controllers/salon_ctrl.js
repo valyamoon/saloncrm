@@ -322,8 +322,8 @@ function getSalons(req, res) {
             slots.push({
               salon: c.name,
               _id: c._id,
-              optime: Date.parseLocale(c.opentime),
-              cltime: Date.parseLocale(c.closetime),
+              optime: c.opentime,
+              cltime: c.closetime,
               image: c.image,
               contact: c.contact,
               avgRatings: c.avgRatings,
