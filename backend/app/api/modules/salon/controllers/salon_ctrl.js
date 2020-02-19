@@ -317,7 +317,6 @@ function getSalons(req, res) {
         } else {
           let slots = [];
           salonList.forEach(async function(c) {
-            console.log("ee", c);
             slots.push({
               salon: c.name,
               _id: c._id,
@@ -341,6 +340,8 @@ function getSalons(req, res) {
             });
           });
 
+          console.log("SLOTS", slots);
+
           slots.forEach(function(v) {
             let todaysDate = new Date();
 
@@ -357,6 +358,7 @@ function getSalons(req, res) {
               starttime = currentTime;
             } else {
               starttime = v.optime;
+              console.log("STARTTIME", starttime);
             }
 
             var difference = v.cltime - v.optime;
@@ -367,8 +369,8 @@ function getSalons(req, res) {
             endtime = v.cltime;
             timeslots = [starttime];
 
-            startTiming = moment(starttime).format("HH:mm");
-            endTiming = moment(endtime).format("HH:mm");
+            startTiming = moment(v.optime).format("HH:mm");
+            endTiming = moment(v.cltime).format("HH:mm");
 
             function parseTime(s) {
               var c = s.split(":");
