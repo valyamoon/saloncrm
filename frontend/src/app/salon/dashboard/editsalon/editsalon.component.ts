@@ -4,6 +4,7 @@ import { CommonService } from "../common.service";
 import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
+import { countries } from "../../../admin/country";
 
 @Component({
   selector: "app-editsalon",
@@ -14,6 +15,7 @@ export class EditsalonComponent implements OnInit {
   submitSalonDetails: FormGroup;
   closetime: any;
   opentime: any;
+  countriesData: any = countries;
   showNow: boolean = false;
   numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
@@ -58,6 +60,7 @@ export class EditsalonComponent implements OnInit {
         "",
         [Validators.required, Validators.pattern(this.numberPattern)]
       ],
+      code: ["", Validators.required],
       salonaddress: ["", Validators.required],
       image: null,
       opentime: ["", Validators.required],
@@ -99,6 +102,9 @@ export class EditsalonComponent implements OnInit {
           this.submitSalonDetails
             .get("name")
             .setValue(this.salonDetailsData.name);
+          this.submitSalonDetails
+            .get("code")
+            .setValue(this.salonDetailsData.code);
           this.submitSalonDetails
             .get("contact")
             .setValue(this.salonDetailsData.contact);
@@ -147,6 +153,7 @@ export class EditsalonComponent implements OnInit {
       name: data.name,
       salonaddress: data.salonaddress,
       contact: data.contact,
+      code: data.code,
       image: data.image,
       opentime: data.opentime,
       closetime: data.closetime
@@ -159,6 +166,7 @@ export class EditsalonComponent implements OnInit {
     postData.append("opentime", dataToPass.opentime);
     postData.append("closetime", dataToPass.closetime);
     postData.append("contact", dataToPass.contact);
+    postData.append("code", dataToPass.code);
     postData.append("salon_id", dataToPass.salon_id);
 
     var options = { content: postData };

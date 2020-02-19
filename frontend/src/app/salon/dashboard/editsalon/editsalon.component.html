@@ -83,6 +83,15 @@
           />
         </div> -->
       <div class="field">
+        <label class="label">Country Code:</label>
+        <select class="select-css" style="width: 60%;" formControlName="code">
+          <option *ngFor="let item of countriesData" [ngValue]="item.code"
+            >{{ item.name }} {{ item.code }}</option
+          >
+        </select>
+      </div>
+
+      <div class="field">
         <label class="label">Contact:</label>
         <div class="phoneArea">
           <input

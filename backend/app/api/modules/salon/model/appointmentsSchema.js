@@ -38,7 +38,7 @@ var appointmentsSchema = mongoose.Schema(
       type: String
     },
     date: {
-      type: String
+      type: Date
     },
     isActive: {
       type: Boolean,

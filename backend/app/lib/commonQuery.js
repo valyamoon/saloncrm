@@ -90,6 +90,7 @@ commonQuery.fetch_all_salons = function fetch_all_salons(
           location: "$salons.location",
           address: "$salons.salonaddress",
           contact: "$salons.contact",
+          code: "$salons.code",
           image: "$salons.image",
           avgRatings: { $avg: "$ratings.ratings" }
         }
@@ -979,6 +980,7 @@ commonQuery.salonDetailsFetch = function salonDetailsFetch(
             categoryId: { $first: "$categoriess._id" },
             salonaddress: { $first: "$salonaddress" },
             contact: { $first: "$contact" },
+            code: { $first: "$code" },
             location: { $first: "$location" },
             avgRating: { $first: { $avg: "$ratings.ratings" } },
             opentime: { $first: "$opentime" },
@@ -1850,6 +1852,7 @@ commonQuery.getSalonDetailsQuery = function getSalonDetailsQuery(
             location: 1,
             opentime: 1,
             closetime: 1,
+            code: 1,
             image: 1,
             contact: 1,
             avgRatings: { $avg: "$ratings.ratings" }
@@ -1975,6 +1978,7 @@ commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
           name: 1,
           address: "$salonaddress",
           contact: 1,
+          code: 1,
           closetime: 1,
           opentime: 1,
           location: 1,
