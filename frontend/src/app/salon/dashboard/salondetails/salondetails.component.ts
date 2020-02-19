@@ -4,6 +4,7 @@ import { CommonService } from "../common.service";
 import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
+import { countries } from "../../../admin/country";
 
 @Component({
   selector: "app-salondetails",
@@ -13,6 +14,7 @@ import { Router } from "@angular/router";
 export class SalondetailsComponent implements OnInit {
   submitSalonDetails: FormGroup;
   closetime: any;
+  countriesData: any = countries;
   salonEmail: any;
   opentime: any;
   showNow: boolean = false;
@@ -47,17 +49,16 @@ export class SalondetailsComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(pos => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
-
       });
     }
   }
 
   ngOnInit() {
+    console.log(this.countriesData);
     this.salonEmail = sessionStorage.getItem("email");
     this.user_id = sessionStorage.getItem("userId");
     this.userid = this.user_id;
     this.isApprovedStatus = JSON.parse(sessionStorage.getItem("isApproved"));
-
 
     this.chechIsApprovedStatus(this.isApprovedStatus);
 
@@ -67,6 +68,7 @@ export class SalondetailsComponent implements OnInit {
         "",
         [Validators.required, Validators.pattern(this.numberPattern)]
       ],
+      code: ["", Validators.required],
       salonaddress: ["", Validators.required],
       image: null,
       opentime: ["", Validators.required],
@@ -74,7 +76,6 @@ export class SalondetailsComponent implements OnInit {
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
-
 
     this.checkInitialApprovalStatus = JSON.parse(
       sessionStorage.getItem("isSubmitted")
@@ -118,11 +119,9 @@ export class SalondetailsComponent implements OnInit {
 
   checkIsApprovedProfile() {
     this.checkIsApproved = JSON.parse(sessionStorage.getItem("isApproved"));
-
   }
 
   submitSalon(data) {
-
     let dataToPass = {
       name: data.name,
       salonaddress: data.salonaddress,
@@ -147,11 +146,7 @@ export class SalondetailsComponent implements OnInit {
     postData.append("user_id", dataToPass.user_id);
     postData.append("email", this.salonEmail);
 
-
-
     var options = { content: postData };
-
-
 
     this.commServ.saveSalonDetails(postData).subscribe(
       data => {
@@ -198,11 +193,9 @@ export class SalondetailsComponent implements OnInit {
     };
     this.commServ.getSalonDetailsData(dataToPass).subscribe(
       (data: any) => {
-
         if (data["code"] === 200) {
           this.salonDetailsData = data["data"];
           this.salonid = data["data"]._id;
-
         } else {
           this.toastrServ.error("Failed to fetch salon details", "error", {
             timeOut: 1000
@@ -218,7 +211,6 @@ export class SalondetailsComponent implements OnInit {
   }
 
   editSalonDetailsShow() {
-
     this.editSalonDetails = true;
     this.submitSalonDetails.get("name").setValue(this.salonDetailsData.name);
     this.submitSalonDetails
@@ -236,7 +228,6 @@ export class SalondetailsComponent implements OnInit {
   }
 
   updatetSalon(data) {
-
     let dataToPass = {
       salon_id: this.salonid,
       name: data.name,

@@ -156,6 +156,7 @@ function saveSalonDetails(req, res) {
                               description: req.body.name,
                               name: req.body.name,
                               phone: req.body.phone,
+                              code: req.body.code,
                               address: {
                                 line1: req.body.salonaddress,
                                 postal_code: "98140",
@@ -174,6 +175,7 @@ function saveSalonDetails(req, res) {
                                   name: req.body.name,
                                   location: locations,
                                   contact: req.body.contact,
+                                  code: req.body.code,
                                   salonaddress: req.body.salonaddress,
                                   user_id: req.body.user_id,
                                   image: image_path,
@@ -315,11 +317,12 @@ function getSalons(req, res) {
         } else {
           let slots = [];
           salonList.forEach(async function(c) {
+            console.log("ee", c);
             slots.push({
               salon: c.name,
               _id: c._id,
-              optime: c.opentime,
-              cltime: c.closetime,
+              optime: new Date(c.opentime),
+              cltime: new Date(c.closetime),
               image: c.image,
               contact: c.contact,
               avgRatings: c.avgRatings,
@@ -1257,6 +1260,7 @@ function updateSalonDetails(req, res) {
                           name: req.body.name,
                           salonaddress: req.body.salonaddress,
                           contact: req.body.contact,
+                          code: req.body.code,
                           opentime: req.body.opentime,
                           closetime: req.body.closetime,
                           image: image_path
@@ -1297,6 +1301,7 @@ function updateSalonDetails(req, res) {
             name: req.body.name,
             salonaddress: req.body.salonaddress,
             contact: req.body.contact,
+            code: req.body.code,
             opentime: req.body.opentime,
             closetime: req.body.closetime
           };
