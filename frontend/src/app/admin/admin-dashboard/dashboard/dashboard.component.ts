@@ -39,6 +39,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.getRequests();
     this.getActiveSalonsCount();
     this.getActiveUsersCount();
+  }
+
+  ngOnInit() {
+    let dataToPass = {
+      pageSize: this.pageSize,
+      page: this.page
+    };
+    this.dataDefault = dataToPass;
     this.subscription = timer(0, 200000)
       .pipe(switchMap(() => this.adminServ.getSalonsRequest(this.dataDefault)))
       .subscribe(
@@ -47,9 +55,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           (this.limit = result["data"]["countNumber"])
         )
       );
-  }
-
-  ngOnInit() {
     //this.checkRequest();
     this.adminServ.setHeaderText("Salons Request");
   }
@@ -129,8 +134,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.getRequests();
           this.getActiveSalonsCount();
           this.getActiveUsersCount();
-        } else {
-          this.toastServ.error("Failed To Process", "", {
+        } else if (data["code"] === 400) {
+          this.toastServ.error("Failed", data["message"], {
             timeOut: 1000
           });
         }
