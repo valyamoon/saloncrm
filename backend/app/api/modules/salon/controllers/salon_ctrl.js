@@ -403,6 +403,8 @@ function getSalons(req, res) {
 
             let stime = startTiming.toString();
             let etime = endTiming.toString();
+            console.log("stime", stime);
+            console.log("etime", etime);
 
             var startTime = stime;
 
@@ -410,8 +412,9 @@ function getSalons(req, res) {
 
             var start_time = parseTime(startTime);
             var end_time = parseTime(endTime);
+            console.log("SETIME", start_time, end_time);
             var interval = parseInt(intervals);
-
+            console.log("INTERVAL", interval);
             var times_ara = calculate_time_slot(start_time, end_time, interval);
 
             let timeArray = [];
