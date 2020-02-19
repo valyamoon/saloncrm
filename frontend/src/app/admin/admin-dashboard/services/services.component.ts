@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ConfirmationComponent } from "../confirmation/confirmation.component";
 import { SimpleModalService } from "ngx-simple-modal";
 import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
+import { format } from "url";
 
 @Component({
   selector: "app-services",
@@ -199,6 +200,7 @@ export class ServicesComponent implements OnInit {
             progressAnimation: "decreasing"
           });
           this.isLoader = false;
+
           this.addServiceModal = false;
           this.saveServiceForm.reset();
           this.fetchAllServices();
