@@ -322,8 +322,14 @@ function getSalons(req, res) {
             slots.push({
               salon: c.name,
               _id: c._id,
-              optime: c.opentime,
-              cltime: c.closetime,
+               optime: moment
+                .utc(c.opentime)
+                .local()
+                .format(),
+              cltime: moment
+                .utc(c.closetime)
+                .local()
+                .format(),
               image: c.image,
               contact: c.contact,
               avgRatings: c.avgRatings,
