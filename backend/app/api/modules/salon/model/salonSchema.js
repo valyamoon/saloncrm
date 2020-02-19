@@ -23,6 +23,9 @@ var salonSchema = mongoose.Schema({
   contact: {
     type: String
   },
+  code: {
+    type: String
+  },
   salonaddress: {
     type: String
   },

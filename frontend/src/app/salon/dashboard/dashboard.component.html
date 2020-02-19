@@ -5,8 +5,12 @@
       <div class="col-lg-3">
         <div class="check-spa">
           <div class="edit-info">
-            <a [routerLink]="'edit-salon'" routerLinkActive="router-link-active">
-              <img src="../../../assets/images/edit.svg" /></a>
+            <a
+              [routerLink]="'edit-salon'"
+              routerLinkActive="router-link-active"
+            >
+              <img src="../../../assets/images/edit.svg"
+            /></a>
           </div>
 
           <div class="check-spa-image-outer">
@@ -24,7 +28,7 @@
                         </div> -->
             <div class="salon-info-inner">
               <img src="../../../assets/images/telephone.svg" />
-              <h5>{{ salonData?.contact }}</h5>
+              <h5>+{{ salonData?.code }} {{ salonData?.contact }}</h5>
             </div>
             <div class="salon-info-inner">
               <img src="../../../assets/images/address.svg" />
@@ -44,12 +48,18 @@
           </div> -->
           <div class="about-salon">
             <h2>
-              <a [routerLink]="'subscription'" routerLinkActive="router-link-active">
+              <a
+                [routerLink]="'subscription'"
+                routerLinkActive="router-link-active"
+              >
                 Subscription Details
               </a>
             </h2>
             <h2>
-              <a [routerLink]="'promocode'" routerLinkActive="router-link-active">
+              <a
+                [routerLink]="'promocode'"
+                routerLinkActive="router-link-active"
+              >
                 Manage Promocode
               </a>
             </h2>
