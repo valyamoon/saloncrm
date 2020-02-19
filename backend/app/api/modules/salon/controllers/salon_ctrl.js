@@ -318,8 +318,7 @@ function getSalons(req, res) {
           let slots = [];
           salonList.forEach(async function(c) {
             console.log("ee", c);
-            c.opentime = new Date(c.opentime);
-            c.closetime = new Date(c.closetime);
+           
             slots.push({
               salon: c.name,
               _id: c._id,
