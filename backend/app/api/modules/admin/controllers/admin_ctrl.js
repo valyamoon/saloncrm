@@ -2090,7 +2090,7 @@ function getAdminDetails(req, res) {
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
-              adminDetailsList
+              adminDetailsList[0]
             )
           );
         }

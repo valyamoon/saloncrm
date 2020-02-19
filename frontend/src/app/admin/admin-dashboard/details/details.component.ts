@@ -120,10 +120,11 @@ export class DetailsComponent implements OnInit {
     };
     this.adminServ.getAdminDetails(dataToPass).subscribe(
       (data: any) => {
+        console.log(data["data"].length);
         if (data["code"] === 200) {
-          this.adminDetails = data["data"][0];
+          this.adminDetails = data["data"];
 
-          if (data["data"].length > 0) {
+          if (this.adminDetails !== null) {
             this.isAddCompleted = false;
           } else {
             this.isAddCompleted = true;

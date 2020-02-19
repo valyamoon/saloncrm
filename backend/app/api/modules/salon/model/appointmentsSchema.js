@@ -28,6 +28,12 @@ var appointmentsSchema = mongoose.Schema(
     starttime: {
       type: String
     },
+    starttimedate: {
+      type: Date
+    },
+    endtimedate: {
+      type: Date
+    },
     endtime: {
       type: String
     },
