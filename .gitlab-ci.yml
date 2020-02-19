@@ -1,0 +1,26 @@
+image: 'node:latest'
+cache:
+  paths:
+    - backend/node_modules/
+stages:
+  - build
+  - deploy
+build-dev:
+  stage: build
+  tags:
+    - staging
+  script:
+    - cd backend
+    - npm install
+ 
+  only:
+    - staging
+deploy-dev:
+  tags:
+    - staging
+  only:
+    - staging
+  stage: deploy
+  script:
+    - cd backend
+    - pm2 restart app.js --name "MEAN-saloncrm"
