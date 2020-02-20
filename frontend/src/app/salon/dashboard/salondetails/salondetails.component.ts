@@ -50,6 +50,8 @@ export class SalondetailsComponent implements OnInit {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
       });
+      console.log("long", this.lng);
+      console.log("lat", this.lat);
     }
   }
 
