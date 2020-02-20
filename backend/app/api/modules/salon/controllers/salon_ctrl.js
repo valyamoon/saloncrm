@@ -528,15 +528,18 @@ function getSalons(req, res) {
           //console.log(salonList);
           let slots = [];
           salonList.forEach(async function(c) {
+            c.opentime = new Date(c.opentime).toLocaleString({
+              timeZone: c.timezonestring
+            });
+            c.closetime = new Date(c.closetime).toLocaleString({
+              timeZone: c.timezonestring
+            });
+
             slots.push({
               salon: c.name,
               _id: c._id,
-              optime: new Date(c.opentime).toLocaleString({
-                timeZone: c.timezonestring
-              }),
-              cltime: new Date(c.closetime).toLocaleString({
-                timeZone: c.timezonestring
-              }),
+              optime: moment(c.opentime, ["h:mm A"]).format(),
+              cltime: moment(c.closetime, ["h:mm A"]).format(),
               image: c.image,
               contact: c.contact,
               avgRatings: c.avgRatings,
@@ -578,7 +581,9 @@ function getSalons(req, res) {
             timeslots = [starttime];
 
             startTiming = moment(starttime).format("HH:mm");
+            console.log(startTiming);
             endTiming = moment(endtime).format("HH:mm");
+            console.log(endTiming);
 
             function parseTime(s) {
               var c = s.split(":");
