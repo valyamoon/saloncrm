@@ -53,9 +53,16 @@ export class SalondetailsComponent implements OnInit {
       console.log("long", this.lng);
       console.log("lat", this.lat);
     }
+
+    navigator.geolocation.getCurrentPosition(pos => {
+      console.log("POSITIONS", pos);
+    });
   }
 
   ngOnInit() {
+    navigator.geolocation.getCurrentPosition(pos => {
+      console.log("POSITIONS", pos);
+    });
     console.log(this.countriesData);
     this.salonEmail = sessionStorage.getItem("email");
     this.user_id = sessionStorage.getItem("userId");
