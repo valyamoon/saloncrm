@@ -531,10 +531,10 @@ function getSalons(req, res) {
             slots.push({
               salon: c.name,
               _id: c._id,
-              optime: new Date(c.opentime).toUTCString("en-US", {
+              optime: new Date(c.opentime).toLocaleString({
                 timeZone: c.timezonestring
               }),
-              cltime: new Date(c.closetime).toUTCString("en-US", {
+              cltime: new Date(c.closetime).toLocaleString({
                 timeZone: c.timezonestring
               }),
               image: c.image,
