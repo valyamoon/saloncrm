@@ -80,7 +80,7 @@ app.use("/api", require("./app/api/routes")(express));
 
 app.use("/", function(req, res) {
   // res.sendFile(path.join(__dirname, './dist/frontend', 'index.html'));
-  res.sendFile("./frontend/index.html");
+  res.sendfile("./frontend/index.html");
 });
 
 // start server
