@@ -24,6 +24,7 @@
     "fcm-notification": "^2.0.0",
     "file-upload": "0.0.0",
     "http-errors": "~1.6.3",
+    "https": "^1.0.0",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "mkdirp": "^0.5.1",
