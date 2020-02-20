@@ -177,6 +177,7 @@ function saveSalonDetails(req, res) {
                                   location: locations,
                                   contact: req.body.contact,
                                   code: req.body.code,
+                                  timezonestring: req.body.timezonestring,
                                   salonaddress: req.body.salonaddress,
                                   user_id: req.body.user_id,
                                   image: image_path,
@@ -258,6 +259,214 @@ function saveSalonDetails(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 
+// function getSalons(req, res) {
+//   async function getSalons() {
+//     try {
+//       var intervals;
+//       var endtime;
+//       var timeslots;
+//       var starttime;
+//       var startTiming;
+//       var endTiming;
+//       var salonListingNew = [];
+
+//       if (req.body && req.body.service_id) {
+//         let lat = +req.body.lat;
+//         let long = +req.body.long;
+//         let name = req.body.name;
+//         let service_id = mongoose.Types.ObjectId(req.body.service_id);
+//         let pageSize =
+//           +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
+//         let page = +req.body.page || +req.body.page ? req.body.page : +1;
+
+//         let sortParam;
+//         if (req.body.sort === "price" && req.body.sortOrder === "asc") {
+//           sortParam = {
+//             "servicesSelected.price": 1
+//           };
+//         } else if (req.body.sort === "price" && req.body.sortOrder === "dsc") {
+//           sortParam = {
+//             "servicesSelected.price": -1
+//           };
+//         } else if (
+//           req.body.sort === "distance" &&
+//           req.body.sortOrder === "asc"
+//         ) {
+//           sortParam = {
+//             "dist.calculated": 1
+//           };
+//         } else if (req.body.sort === "price" && req.body.sortOrder === "dsc") {
+//           sortParam = {
+//             "dist.calculated": -1
+//           };
+//         } else {
+//           sortParam = {
+//             "servicesSelected.price": 1
+//           };
+//         }
+
+//         let salonList = await commonQuery.fetch_Salon_list_Near(
+//           salons,
+//           long,
+//           lat,
+//           service_id,
+//           pageSize,
+//           page,
+//           name,
+//           sortParam
+//         );
+//         if (!salonList) {
+//         } else {
+//           let slots = [];
+//           salonList.forEach(async function(c) {
+//             console.log("ee", c);
+//             slots.push({
+//               salon: c.name,
+//               _id: c._id,
+//               optime: c.opentime,
+//               cltime: c.closetime,
+//               image: c.image,
+//               contact: c.contact,
+//               avgRatings: c.avgRatings,
+//               distance: c.distance,
+//               location: c.location,
+//               address: c.address,
+//               servicename: c.service["servicename"],
+//               services: c.service,
+//               duration: c.service["duration"]
+//             });
+//           });
+
+//           console.log("SLOTS", slots);
+
+//           slots.forEach(function(v) {
+//             let todaysDate = new Date();
+
+//             let comingDate = req.body.date;
+//             todaysDate = moment(todaysDate).format("DD:MM:YYYY");
+//             comingDate = moment(comingDate).format("DD:MM:YYYY");
+
+//             if (todaysDate === comingDate) {
+//               let currentTime = new Date();
+//               if (currentTime === v.cltime) {
+//                 times_ara = [];
+//               }
+//               //  console.log("CT", moment(currentTime).format("HH:mm"));
+//               starttime = currentTime;
+//             } else {
+//               starttime = v.optime;
+//               console.log("STARTTIME", starttime);
+//             }
+
+//             var difference = v.cltime - v.optime;
+//             var minutes = difference * 60;
+//             var slots = minutes / v.duration;
+
+//             intervals = v.duration;
+//             endtime = v.cltime;
+//             timeslots = [starttime];
+//             console.log("TIMESLOTS", timeslots);
+
+//             startTiming = moment(v.optime).format("HH:mm");
+
+//             console.log("STARTTIMING", startTiming);
+
+//             endTiming = moment(v.cltime).format("HH:mm");
+
+//             console.log("ENDTIMING", endTiming);
+
+//             function parseTime(s) {
+//               var c = s.split(":");
+//               return parseInt(c[0]) * 60 + parseInt(c[1]);
+//             }
+
+//             function convertHours(mins) {
+//               var hour = Math.floor(mins / 60);
+//               var mins = mins % 60;
+//               var converted = pad(hour, 2) + ":" + pad(mins, 2);
+//               return converted;
+//             }
+
+//             function pad(str, max) {
+//               str = str.toString();
+//               return str.length < max ? pad("0" + str, max) : str;
+//             }
+
+//             function calculate_time_slot(start_time, end_time, interval) {
+//               var i, formatted_time;
+//               var time_slots = new Array();
+//               for (var i = start_time; i <= end_time; i = i + interval) {
+//                 formatted_time = convertHours(i);
+//                 time_slots.push(formatted_time);
+//               }
+//               return time_slots;
+//             }
+
+//             let stime = startTiming.toString();
+//             let etime = endTiming.toString();
+//             console.log("stime", stime);
+//             console.log("etime", etime);
+
+//             var startTime = stime;
+
+//             var endTime = etime;
+
+//             var start_time = parseTime(startTime);
+//             var end_time = parseTime(endTime);
+//             console.log("SETIME", start_time, end_time);
+//             var interval = parseInt(intervals);
+//             console.log("INTERVAL", interval);
+//             var times_ara = calculate_time_slot(start_time, end_time, interval);
+
+//             let timeArray = [];
+
+//             times_ara.forEach(function(jj) {
+//               timeArray.push({ time: jj, status: false });
+//             });
+
+//             // /console.log("TIMEARRAY", timeArray);
+
+//             salonListingNew.push({
+//               starttime: v.optime,
+//               _id: v._id,
+//               closetime: v.cltime,
+//               name: v.salon,
+//               slots: timeArray,
+//               image: v.image,
+//               contact: v.contact,
+//               avgRatings: v.avgRatings,
+//               distance: v.distance,
+//               location: v.location,
+//               address: v.address,
+//               servicename: v.servicename,
+//               service: v.services
+//             });
+//           });
+//           salonListingNew.forEach(async function(c) {
+//             var TempUrl = imageUrl.imageBaseUrl;
+//             var url = TempUrl + c.image;
+//             c.image = url;
+//           });
+//           console.log(salonListingNew);
+//           return res.json(
+//             Response(
+//               constant.SUCCESS_CODE,
+//               constant.FETCHED_ALL_DATA,
+//               //salonList
+//               salonListingNew
+//             )
+//           );
+//         }
+//       }
+//     } catch (error) {
+//       return res.json(
+//         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+//       );
+//     }
+//   }
+
+//   getSalons().then(function() {});
+// }
 function getSalons(req, res) {
   async function getSalons() {
     try {
@@ -316,33 +525,18 @@ function getSalons(req, res) {
         );
         if (!salonList) {
         } else {
+          //console.log(salonList);
           let slots = [];
           salonList.forEach(async function(c) {
-            console.log("ee", c);
-
-            var ottime = convertUTCToLocalDate(new Date(c.opentime));
-            var cttime = convertUTCToLocalDate(new Date(c.closetime));
-
-            function convertUTCToLocalDate(date) {
-              var newDate = new Date(
-                date.getTime() + date.getTimezoneOffset() * 60 * 1000
-              );
-
-              var offset = date.getTimezoneOffset() / 60;
-              var hours = date.getHours();
-
-              newDate.setHours(hours - offset);
-
-              return newDate;
-            }
-
-            console.log("OTTTIME", ottime, cttime);
-
             slots.push({
               salon: c.name,
               _id: c._id,
-              optime: ottime,
-              cltime: cttime,
+              optime: new Date(c.opentime).toISOString("en-US", {
+                timeZone: c.timezonestring
+              }),
+              cltime: new Date(c.closetime).toISOString("en-US", {
+                timeZone: c.timezonestring
+              }),
               image: c.image,
               contact: c.contact,
               avgRatings: c.avgRatings,
@@ -355,7 +549,7 @@ function getSalons(req, res) {
             });
           });
 
-          console.log("SLOTS", slots);
+          console.log("SLOTSSSS", slots);
 
           slots.forEach(function(v) {
             let todaysDate = new Date();
@@ -373,7 +567,6 @@ function getSalons(req, res) {
               starttime = currentTime;
             } else {
               starttime = v.optime;
-              console.log("STARTTIME", starttime);
             }
 
             var difference = v.cltime - v.optime;
@@ -383,15 +576,9 @@ function getSalons(req, res) {
             intervals = v.duration;
             endtime = v.cltime;
             timeslots = [starttime];
-            console.log("TIMESLOTS", timeslots);
 
-            startTiming = moment(v.optime).format("HH:mm");
-
-            console.log("STARTTIMING", startTiming);
-
-            endTiming = moment(v.cltime).format("HH:mm");
-
-            console.log("ENDTIMING", endTiming);
+            startTiming = moment(starttime).format("HH:mm");
+            endTiming = moment(endtime).format("HH:mm");
 
             function parseTime(s) {
               var c = s.split(":");
@@ -422,8 +609,6 @@ function getSalons(req, res) {
 
             let stime = startTiming.toString();
             let etime = endTiming.toString();
-            console.log("stime", stime);
-            console.log("etime", etime);
 
             var startTime = stime;
 
@@ -431,18 +616,14 @@ function getSalons(req, res) {
 
             var start_time = parseTime(startTime);
             var end_time = parseTime(endTime);
-            console.log("SETIME", start_time, end_time);
             var interval = parseInt(intervals);
-            console.log("INTERVAL", interval);
+
             var times_ara = calculate_time_slot(start_time, end_time, interval);
 
             let timeArray = [];
-
             times_ara.forEach(function(jj) {
               timeArray.push({ time: jj, status: false });
             });
-
-            // /console.log("TIMEARRAY", timeArray);
 
             salonListingNew.push({
               starttime: v.optime,
@@ -460,12 +641,14 @@ function getSalons(req, res) {
               service: v.services
             });
           });
+
           salonListingNew.forEach(async function(c) {
             var TempUrl = imageUrl.imageBaseUrl;
             var url = TempUrl + c.image;
             c.image = url;
           });
           console.log(salonListingNew);
+
           return res.json(
             Response(
               constant.SUCCESS_CODE,

@@ -53,6 +53,10 @@ var salonSchema = mongoose.Schema({
     type: String,
     default: false
   },
+  timezonestring: {
+    type: String,
+    default: null
+  },
   isSubscribed: {
     type: Boolean,
     default: false
