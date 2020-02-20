@@ -1982,6 +1982,7 @@ commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
           closetime: 1,
           opentime: 1,
           location: 1,
+          timezonestring: 1,
           image: 1,
           avgRatings: { $avg: "$ratings.ratings" },
           distance: "$dist.calculated",

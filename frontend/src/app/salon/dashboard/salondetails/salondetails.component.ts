@@ -72,7 +72,8 @@ export class SalondetailsComponent implements OnInit {
       salonaddress: ["", Validators.required],
       image: null,
       opentime: ["", Validators.required],
-      closetime: ["", Validators.required]
+      closetime: ["", Validators.required],
+      timezonestring: [""]
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
@@ -129,6 +130,7 @@ export class SalondetailsComponent implements OnInit {
       lat: this.lat,
       long: this.lng,
       image: data.image,
+      timezonestring: Intl.DateTimeFormat().resolvedOptions().timeZone,
       user_id: this.user_id,
       opentime: data.opentime,
       closetime: data.closetime
@@ -142,6 +144,7 @@ export class SalondetailsComponent implements OnInit {
     postData.append("salonaddress", dataToPass.salonaddress);
     postData.append("opentime", dataToPass.opentime);
     postData.append("closetime", dataToPass.closetime);
+    postData.append("timezonestring", dataToPass.timezonestring);
     postData.append("contact", dataToPass.contact);
     postData.append("user_id", dataToPass.user_id);
     postData.append("email", this.salonEmail);
