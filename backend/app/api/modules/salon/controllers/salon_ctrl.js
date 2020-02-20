@@ -79,7 +79,8 @@ module.exports = {
   appointmentCompleted: appointmentCompleted,
   getUpcomingbookings: getUpcomingbookings,
   getSalonWeeklyDetails: getSalonWeeklyDetails,
-  validatePromocode: validatePromocode
+  validatePromocode: validatePromocode,
+  getChangeInBookingsData: getChangeInBookingsData
 };
 
 /**
@@ -382,9 +383,15 @@ function getSalons(req, res) {
             intervals = v.duration;
             endtime = v.cltime;
             timeslots = [starttime];
+            console.log("TIMESLOTS", timeslots);
 
             startTiming = moment(v.optime).format("HH:mm");
+
+            console.log("STARTTIMING", startTiming);
+
             endTiming = moment(v.cltime).format("HH:mm");
+
+            console.log("ENDTIMING", endTiming);
 
             function parseTime(s) {
               var c = s.split(":");
@@ -2294,6 +2301,29 @@ function getUpcomingbookings(req, res) {
   }
 
   getUpcomingbookings().then(function() {});
+}
+
+function getChangeInBookingsData(req, res) {
+  async function getChangeInBookingsData() {
+    try {
+      if (req.body && req.body.type === "upcoming") {
+        let condition = {
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+          isCompleted: false,
+          isActive: true
+        };
+        let pipeline = [
+          {
+            $match: condition
+          }
+        ];
+
+        let changeInData = appointments.watch(pipeline);
+        console.log("changeInData", changeInData);
+      }
+    } catch (error) {}
+  }
+  getChangeInBookingsData().then(function() {});
 }
 
 function getSalonWeeklyDetails(req, res) {
