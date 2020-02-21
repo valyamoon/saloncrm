@@ -55,9 +55,6 @@ export class DashboardComponent implements OnInit {
 
         if (response.code === 200) {
           this.salonData = response.data;
-
-          console.log("SALONDATA", this.salonData);
-
           this.commServ.setCustomer_id(response.data["customer_id"]);
           this.commServ.setSalon_id(response.data["_id"]);
           this.commServ.setStripeConnectedStatus(
@@ -77,22 +74,3 @@ export class DashboardComponent implements OnInit {
     );
   }
 }
-
-// import { Injectable } from "@angular/core";
-// import { HttpClient, HttpHeaders } from "@angular/common/http";
-// import { environment } from "../../../environments/environment";
-
-// const httpOptions = {
-//   headers: new HttpHeaders({
-//     "Content-Type": "application/json",
-//     Authorization: ""
-//   })
-// };
-// export class SalonService {
-//   baseUrl = environment.backendBaseUrl + "/api";
-
-//   constructor(private http: HttpClient) {}
-//   serviceList(){
-//     return  this.http.post(this.baseUrl + "/servicelist", httpOptions);
-//   }
-// }
