@@ -6,6 +6,10 @@ const utility = require("../../../../lib/utility.js");
 // const privateKey = require("./privatekey");
 // const FCM = new fcm(privateKey);
 const async = require("async");
+const Moment = require("moment");
+const MomentRange = require("moment-range");
+
+const Mmoment = MomentRange.extendMoment(Moment);
 
 var FCM = require("fcm-node");
 var serverKey =
@@ -260,214 +264,6 @@ function saveSalonDetails(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 
-// function getSalons(req, res) {
-//   async function getSalons() {
-//     try {
-//       var intervals;
-//       var endtime;
-//       var timeslots;
-//       var starttime;
-//       var startTiming;
-//       var endTiming;
-//       var salonListingNew = [];
-
-//       if (req.body && req.body.service_id) {
-//         let lat = +req.body.lat;
-//         let long = +req.body.long;
-//         let name = req.body.name;
-//         let service_id = mongoose.Types.ObjectId(req.body.service_id);
-//         let pageSize =
-//           +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
-//         let page = +req.body.page || +req.body.page ? req.body.page : +1;
-
-//         let sortParam;
-//         if (req.body.sort === "price" && req.body.sortOrder === "asc") {
-//           sortParam = {
-//             "servicesSelected.price": 1
-//           };
-//         } else if (req.body.sort === "price" && req.body.sortOrder === "dsc") {
-//           sortParam = {
-//             "servicesSelected.price": -1
-//           };
-//         } else if (
-//           req.body.sort === "distance" &&
-//           req.body.sortOrder === "asc"
-//         ) {
-//           sortParam = {
-//             "dist.calculated": 1
-//           };
-//         } else if (req.body.sort === "price" && req.body.sortOrder === "dsc") {
-//           sortParam = {
-//             "dist.calculated": -1
-//           };
-//         } else {
-//           sortParam = {
-//             "servicesSelected.price": 1
-//           };
-//         }
-
-//         let salonList = await commonQuery.fetch_Salon_list_Near(
-//           salons,
-//           long,
-//           lat,
-//           service_id,
-//           pageSize,
-//           page,
-//           name,
-//           sortParam
-//         );
-//         if (!salonList) {
-//         } else {
-//           let slots = [];
-//           salonList.forEach(async function(c) {
-//             console.log("ee", c);
-//             slots.push({
-//               salon: c.name,
-//               _id: c._id,
-//               optime: c.opentime,
-//               cltime: c.closetime,
-//               image: c.image,
-//               contact: c.contact,
-//               avgRatings: c.avgRatings,
-//               distance: c.distance,
-//               location: c.location,
-//               address: c.address,
-//               servicename: c.service["servicename"],
-//               services: c.service,
-//               duration: c.service["duration"]
-//             });
-//           });
-
-//           console.log("SLOTS", slots);
-
-//           slots.forEach(function(v) {
-//             let todaysDate = new Date();
-
-//             let comingDate = req.body.date;
-//             todaysDate = moment(todaysDate).format("DD:MM:YYYY");
-//             comingDate = moment(comingDate).format("DD:MM:YYYY");
-
-//             if (todaysDate === comingDate) {
-//               let currentTime = new Date();
-//               if (currentTime === v.cltime) {
-//                 times_ara = [];
-//               }
-//               //  console.log("CT", moment(currentTime).format("HH:mm"));
-//               starttime = currentTime;
-//             } else {
-//               starttime = v.optime;
-//               console.log("STARTTIME", starttime);
-//             }
-
-//             var difference = v.cltime - v.optime;
-//             var minutes = difference * 60;
-//             var slots = minutes / v.duration;
-
-//             intervals = v.duration;
-//             endtime = v.cltime;
-//             timeslots = [starttime];
-//             console.log("TIMESLOTS", timeslots);
-
-//             startTiming = moment(v.optime).format("HH:mm");
-
-//             console.log("STARTTIMING", startTiming);
-
-//             endTiming = moment(v.cltime).format("HH:mm");
-
-//             console.log("ENDTIMING", endTiming);
-
-//             function parseTime(s) {
-//               var c = s.split(":");
-//               return parseInt(c[0]) * 60 + parseInt(c[1]);
-//             }
-
-//             function convertHours(mins) {
-//               var hour = Math.floor(mins / 60);
-//               var mins = mins % 60;
-//               var converted = pad(hour, 2) + ":" + pad(mins, 2);
-//               return converted;
-//             }
-
-//             function pad(str, max) {
-//               str = str.toString();
-//               return str.length < max ? pad("0" + str, max) : str;
-//             }
-
-//             function calculate_time_slot(start_time, end_time, interval) {
-//               var i, formatted_time;
-//               var time_slots = new Array();
-//               for (var i = start_time; i <= end_time; i = i + interval) {
-//                 formatted_time = convertHours(i);
-//                 time_slots.push(formatted_time);
-//               }
-//               return time_slots;
-//             }
-
-//             let stime = startTiming.toString();
-//             let etime = endTiming.toString();
-//             console.log("stime", stime);
-//             console.log("etime", etime);
-
-//             var startTime = stime;
-
-//             var endTime = etime;
-
-//             var start_time = parseTime(startTime);
-//             var end_time = parseTime(endTime);
-//             console.log("SETIME", start_time, end_time);
-//             var interval = parseInt(intervals);
-//             console.log("INTERVAL", interval);
-//             var times_ara = calculate_time_slot(start_time, end_time, interval);
-
-//             let timeArray = [];
-
-//             times_ara.forEach(function(jj) {
-//               timeArray.push({ time: jj, status: false });
-//             });
-
-//             // /console.log("TIMEARRAY", timeArray);
-
-//             salonListingNew.push({
-//               starttime: v.optime,
-//               _id: v._id,
-//               closetime: v.cltime,
-//               name: v.salon,
-//               slots: timeArray,
-//               image: v.image,
-//               contact: v.contact,
-//               avgRatings: v.avgRatings,
-//               distance: v.distance,
-//               location: v.location,
-//               address: v.address,
-//               servicename: v.servicename,
-//               service: v.services
-//             });
-//           });
-//           salonListingNew.forEach(async function(c) {
-//             var TempUrl = imageUrl.imageBaseUrl;
-//             var url = TempUrl + c.image;
-//             c.image = url;
-//           });
-//           console.log(salonListingNew);
-//           return res.json(
-//             Response(
-//               constant.SUCCESS_CODE,
-//               constant.FETCHED_ALL_DATA,
-//               //salonList
-//               salonListingNew
-//             )
-//           );
-//         }
-//       }
-//     } catch (error) {
-//       return res.json(
-//         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-//       );
-//     }
-//   }
-
-//   getSalons().then(function() {});
-// }
 function getSalons(req, res) {
   async function getSalons() {
     try {
@@ -526,7 +322,13 @@ function getSalons(req, res) {
         );
         if (!salonList) {
         } else {
-          //console.log(salonList);
+          // let condition = { salon_id: mongoose.Types.ObjectId(c._id) };
+          // let findBookedSlots = await commonQuery.fetch_all(
+          //   appointments,
+          //   condition
+          // );
+          // console.log("bookedSlots", findBookedSlots);
+
           let slots = [];
           salonList.forEach(async function(c) {
             let ootime = new Date(c.opentime).toLocaleString({
@@ -561,22 +363,39 @@ function getSalons(req, res) {
             });
           });
 
-          console.log("SLOTSSSS", slots);
+          //  console.log("SLOTSSSS", slots);
 
-          slots.forEach(function(v) {
+          slots.forEach(async function(v) {
+            // let condition = { salon_id: mongoose.Types.ObjectId(v._id) };
+            // let findBookedSlots = await commonQuery.fetch_all(
+            //   appointments,
+            //   condition
+            // );
+            // console.log("bookedSlots", findBookedSlots);
+
             let todaysDate = new Date();
 
             let comingDate = req.body.date;
-            todaysDate = moment(todaysDate).format("DD:MM:YYYY");
-            comingDate = moment(comingDate).format("DD:MM:YYYY");
+            todaysDate = moment(todaysDate)
+              .tz(v.timezonestring)
+              .format("DD:MM:YYYY");
+            comingDate = moment(comingDate)
+              .tz(v.timezonestring)
+              .format("DD:MM:YYYY");
 
             if (todaysDate === comingDate) {
-              let currentTime = new Date();
+              let currentTime = new Date().toLocaleString("en-US", {
+                timeZone: v.timezonestring
+              });
+              console.log("currenttime", currentTime);
               if (currentTime === v.cltime) {
                 times_ara = [];
               }
               //  console.log("CT", moment(currentTime).format("HH:mm"));
-              starttime = currentTime;
+              starttime = new Date(currentTime).toLocaleString("en-US", {
+                timeZone: v.timezonestring
+              });
+              console.log("isstam", starttime);
             } else {
               starttime = v.optime;
             }
@@ -637,6 +456,7 @@ function getSalons(req, res) {
             var interval = parseInt(intervals);
 
             var times_ara = calculate_time_slot(start_time, end_time, interval);
+            // console.log("DATA IN V", v);
 
             let timeArray = [];
             times_ara.forEach(function(jj) {
@@ -653,6 +473,7 @@ function getSalons(req, res) {
               _id: v._id,
               closetime: v.cltime,
               name: v.salon,
+              timezonestring: v.timezonestring,
               slots: timeArray,
               image: v.image,
               contact: v.contact,
@@ -664,6 +485,7 @@ function getSalons(req, res) {
               service: v.services
             });
           });
+          fetchbookedSlots(salonListingNew);
 
           return res.json(
             Response(
@@ -683,6 +505,71 @@ function getSalons(req, res) {
   }
 
   getSalons().then(function() {});
+}
+
+async function fetchbookedSlots(data) {
+  return new Promise(async function(reject, resolve) {
+    data.forEach(async s => {
+      console.log("s0", s);
+
+      let date = new Date().toLocaleString("en-US", {
+        timeZone: s.timezonestring
+      });
+      let currentDate = new Date(date).toISOString();
+      //console.log("currentdate", moment(currentDate).format("DD:MM:YYYY"));
+
+      let condition = {
+        salon_id: mongoose.Types.ObjectId(s._id)
+      };
+      let bookedSlots = await commonQuery.fetch_all(appointments, condition);
+      // console.log("BookedSlots", bookedSlots);
+      bookedSlots.forEach(async u => {
+        // console.log(currentDate);
+        console.log("UU", u);
+        // console.log("hereitgoes", moment(u.date).format("DD:MM:YYYY"));
+        if (
+          moment(u.date).format("DD:MM:YYYY") ===
+          moment(currentDate).format("DD:MM:YYYY")
+        ) {
+          for (var i = 0; i < s.slots.length; i++) {
+            console.log(u.starttime);
+            console.log(u.endtime);
+            console.log("xx", s.slots[i].time);
+            console.log("xxxx", s.slots[1 + i].time);
+            console.log(
+              "RRRRRRRRRR",
+              new Date(s.slots[i].time).toLocaleString("en-US", {
+                timeZone: s.timezonestring
+              })
+            );
+
+            var range2 = Mmoment.range(
+              new Date("1970-01-01T" + s.slots[i].time + "Z"),
+
+              new Date("1970-01-01T" + s.slots[++i].time + "Z")
+            );
+            console.log("9999", range2);
+            var range = Mmoment.range(
+              new Date("1970-01-01T" + u.starttime + "Z").toLocaleString(),
+              new Date("1970-01-01T" + u.endtime + "Z")
+            );
+
+            console.log("OVERLAP", range.overlaps(range2));
+          }
+
+          // s.slots.forEach(function(xx, i) {
+          //   console.log("xx", xx.time);
+          //   console.log("xxsssss", xx[i + 1]);
+          //   console.log("i", i);
+
+          // });
+          console.log("matches", u);
+        } else {
+          console.log("galat logic");
+        }
+      });
+    });
+  });
 }
 
 /**
@@ -1802,7 +1689,7 @@ async function bookSlot(data) {
       let salon_connected_id;
       let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
       let connectedAccountId = await commonQuery.findoneData(salons, condition);
-      // console.log("CONNECTEDID", connectedAccountId);
+      console.log("CONNECTEDID", connectedAccountId);
       if (connectedAccountId) {
         salon_connected_id = connectedAccountId.connected_account_id;
         // console.log("connected_account_id", salon_connected_id);
