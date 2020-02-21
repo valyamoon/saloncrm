@@ -1,0 +1,99 @@
+.footer {
+    .footer-above {
+        background: #34374c;
+        opacity: 1;
+        text-align: center;
+        padding: 70px;
+        .footer-links {
+            ul {
+                display: flex;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                align-items: center;
+                justify-content: center;
+                margin-top: 30px;
+                margin-bottom: 30px;
+                li {
+                    margin-right: 40px;
+                    a {
+                        letter-spacing: 0;
+                        color: #fffefe;
+                        font-size: 13px;
+                        font-weight: 500;
+                    }
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+        .social-icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .icon-outer {
+                margin-right: 5px;
+                height: 40px;
+                width: 40px;
+                border: 1px solid #fff;
+                border-radius: 50%;
+                background: #fff;
+                text-align: center;
+                line-height: 40px;
+                font-size: 22px;
+                color: #34374c;
+            }
+        }
+    }
+    .footer-below {
+        background: #2c2e3e 0% 0% no-repeat padding-box;
+        opacity: 1;
+        padding: 30px 100px;
+        display: flex;
+        justify-content: space-between;
+        .reserved-sec {
+            text-align: left;
+            letter-spacing: 0.14px;
+            color: #fefeff;
+            opacity: 1;
+            font-size: 14px;
+            font-weight: 100;
+        }
+        .terms-privacy {
+            text-align: left;
+            letter-spacing: 0.14px;
+            color: #fefeff;
+            opacity: 1;
+            font-size: 14px;
+            font-weight: 100;
+            a {
+                color: #fff;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .footer {
+        .footer-above {
+            padding: 25px;
+            .footer-links {
+                ul {
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                    li {
+                        margin-right: 20px;
+                    }
+                }
+            }
+        }
+        .footer-below {
+            padding: 25px 10px;
+            display: block;
+            .reserved-sec {
+                margin-bottom: 5px;
+            }
+        }
+    }
+}

@@ -1,0 +1,173 @@
+.banner-section {
+    .booking-view {
+        .booking-view-left {
+            display: flex;
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            box-shadow: 0px 3px 6px #0000001A;
+            border-radius: 4px;
+            opacity: 1;
+            .booking-view-left-img {
+                flex: 1;
+            }
+            .booking-view-left-info {
+                flex: 1.5;
+                ul {
+                    padding: 0;
+                    margin: 0;
+                    list-style-type: none;
+                    li {
+                        display: flex;
+                        justify-content: space-between;
+                        border-bottom: 1px solid #f3f5f8;
+                        padding: 15px;
+                        padding-left: 30px;
+                        h4 {
+                            text-align: left;
+                            letter-spacing: 0;
+                            color: #8A8F9C;
+                            opacity: 1;
+                            font-size: 14px;
+                            font-weight: 500;
+                            margin: 0;
+                            display: inline-block;
+                        }
+                        span {
+                            text-align: left;
+                            letter-spacing: 0;
+                            color: #8A8F9C;
+                            opacity: 1;
+                            font-size: 14px;
+                            font-weight: 500;
+                        }
+                        i {
+                            color: #8A8F9C;
+                            font-size: 18px;
+                        }
+                        .reviews {
+                            i {
+                                color: #42B72A;
+                            }
+                            span {
+                                color: #42B72A;
+                            }
+                        }
+                    }
+                }
+                .working-days {
+                    padding: 30px;
+                    h5 {
+                        text-align: left;
+                        letter-spacing: 0;
+                        color: #262626;
+                        opacity: 1;
+                        font-size: 16px;
+                        font-weight: 500;
+                        margin-bottom: 15px;
+                    }
+                    ul {
+                        li {
+                            border-bottom: none;
+                            padding: 0;
+                            margin-bottom: 10px;
+                            .date-sec {
+                                display: flex;
+                                h5 {
+                                    text-align: left;
+                                    letter-spacing: 0;
+                                    color: #8A8F9C;
+                                    opacity: 1;
+                                    font-size: 14px;
+                                    font-weight: 500;
+                                    padding-left: 25px;
+                                }
+                            }
+                            .time-sec {
+                                text-align: left;
+                                letter-spacing: 0;
+                                opacity: 1;
+                                font-size: 14px;
+                            }
+                            .closed-sec {
+                                h5 {
+                                    color: #C82B5F;
+                                }
+                                i {
+                                    color: #C82B5F;
+                                }
+                            }
+                            .time-sec-closed {
+                                color: #C82B5F;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .our-services {
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            box-shadow: 0px 3px 6px #0000001A;
+            border-radius: 4px;
+            opacity: 1;
+            padding: 15px;
+            h5 {
+                text-align: left;
+                letter-spacing: 0;
+                color: #000000;
+                opacity: 1;
+                margin: 0;
+                font-size: 18px;
+                font-weight: 500;
+            }
+            .hair-sec {
+                h6 {
+                    text-align: left;
+                    letter-spacing: 0;
+                    color: #000000;
+                    opacity: 1;
+                    font-size: 16px;
+                    font-weight: 500;
+                }
+                .hair-sec-inner {
+                    display: flex;
+                    img {
+                        margin-right: 10px;
+                    }
+                    .hair-services {
+                        h6 {
+                            text-align: left;
+                            letter-spacing: 0;
+                            color: #000000;
+                            margin: 0;
+                            opacity: 1;
+                            font-size: 14px;
+                            margin-bottom: 3px;
+                        }
+                        .dollar-req {
+                            text-align: left;
+                            letter-spacing: 0;
+                            color: #000000;
+                            opacity: 1;
+                            font-size: 14px;
+                            span {
+                                text-align: left;
+                                text-decoration: line-through;
+                                letter-spacing: 0;
+                                color: #C2C2C2;
+                                opacity: 1;
+                                font-size: 14px;
+                                margin-left: 8px;
+                            }
+                        }
+                        .min-req {
+                            text-align: left;
+                            letter-spacing: 0;
+                            color: #9595A1;
+                            opacity: 1;
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
