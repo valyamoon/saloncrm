@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-
+import {} from "../app/user/user.module";
 const routes: Routes = [
   {
     path: "salon",

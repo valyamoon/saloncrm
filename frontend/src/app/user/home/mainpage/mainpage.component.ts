@@ -7,6 +7,13 @@ import { Component, OnInit } from "@angular/core";
 })
 export class MainpageComponent implements OnInit {
   constructor() {}
+  isModal: boolean = false;
 
   ngOnInit() {}
+  openServiceModal() {
+    this.isModal = true;
+  }
+  dismissModal() {
+    this.isModal = false;
+  }
 }

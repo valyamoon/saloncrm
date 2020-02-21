@@ -1,0 +1,208 @@
+.banner-section {
+    background: #F5F6F7;
+    .salon-list {
+        padding-top: 35px;
+        padding-left: 30px;
+        padding-right: 30px;
+        .salon-list-inner {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #d3d4d7;
+            padding-bottom: 25px;
+        }
+        h4 {
+            text-align: left;
+            letter-spacing: 0;
+            color: #000000;
+            opacity: 1;
+            font-size: 18px;
+            font-weight: 600;
+            padding-top: 45px;
+        }
+        .book-appointement-inner {
+            // margin-right: 25px;
+            input {
+                width: 316px;
+                height: 50px;
+                letter-spacing: 0;
+                color: #4D4D55;
+            }
+            label {
+                text-align: left;
+                letter-spacing: 0;
+                color: #262626;
+                opacity: 1;
+                font-size: 14px;
+                font-weight: 600;
+            }
+        }
+    }
+    .salon-info-outer {
+        .salon-list-info {
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            box-shadow: 0px 3px 12px #00000014;
+            border-radius: 10px;
+            opacity: 1;
+            min-height: 118px;
+            padding: 15px;
+            margin-bottom: 15px;
+            .salon-list-info-left {
+                display: flex;
+                .salon-img {
+                    background: #fff2f2;
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin-right: 10px;
+                    img {
+                        width: 70px;
+                    }
+                }
+                .salon-info {
+                    .location {
+                        span {
+                            text-align: left;
+                            letter-spacing: 0;
+                            color: #9595A1;
+                            opacity: 1;
+                            font-style: italic;
+                            font-size: 14px;
+                        }
+                    }
+                    img {
+                        width: 11px;
+                        margin-right: 8px;
+                    }
+                }
+                h5 {
+                    text-align: left;
+                    letter-spacing: 0;
+                    color: #000000;
+                    opacity: 1;
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+            }
+            .salon-list-info-right {
+                display: flex;
+                margin-bottom: 15px;
+                &:last-child() {
+                    margin-bottom: 0;
+                }
+                .time-slots {
+                    background: #FFFFFF 0% 0% no-repeat padding-box;
+                    border: 1px solid #D6D6D6;
+                    border-radius: 6px;
+                    opacity: 1;
+                    width: 85px;
+                    height: 34px;
+                    margin-right: 20px;
+                    a {
+                        text-align: center;
+                        letter-spacing: 0;
+                        color: #292929;
+                        opacity: 1;
+                        font-size: 14px;
+                        display: block;
+                        padding: 5px;
+                    }
+                }
+            }
+        }
+        .salon-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            margin-top: 18px;
+            h4 {
+                text-align: left;
+                letter-spacing: 0;
+                color: #000000;
+                opacity: 1;
+                font-size: 18px;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+        .bookapp-rights {
+            text-align: center;
+            letter-spacing: 0;
+            color: #9595A1;
+            opacity: 1;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .book-appointement-inner-sec {
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            .btn-submit-sec {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+@media(max-width: 1200px) {
+    .banner-section {
+        .salon-list {
+            .book-appointement-inner {
+                position: relative;
+                margin-right: 5px;
+                margin-left: 5px;
+                input {
+                    width: 100%;
+                }
+            }
+            h4 {
+                padding-right: 15px;
+            }
+        }
+    }
+}
+
+@media(max-width: 991px) {
+    .salon-info-outer {
+        .salon-list-info {
+            .salon-list-info-right {
+                flex-wrap: wrap;
+                .time-slots {
+                    margin-bottom: 10px;
+                }
+            }
+            .salon-list-info-left {
+                .salon-img {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 767px) {
+    .banner-section {
+        .salon-list {
+            padding-top: 0;
+            .salon-list-inner {
+                display: block;
+            }
+            .book-appointement-inner {
+                margin-bottom: 15px;
+            }
+        }
+        .salon-info-outer {
+            .salon-list-info {
+                .salon-list-info-left {
+                    display: block;
+                    .salon-img {
+                        text-align: center;
+                        margin-bottom: 15px;
+                    }
+                }
+                .salon-info {
+                    margin-bottom: 15px;
+                }
+            }
+        }
+    }
+}

@@ -9,4 +9,9 @@ export class HeaderComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+  toggleHeader() {
+    document
+      .getElementById("navbarSupportedContent")
+      .classList.toggle("expanded");
+  }
 }
