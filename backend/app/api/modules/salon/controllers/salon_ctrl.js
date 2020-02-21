@@ -12,7 +12,8 @@ var serverKey =
   "AAAAP9-1hEk:APA91bGeTlqXHIGH3ttGdruGj0icePvUSqWQ2H64s_zoP9bt8EhsOcqMKKszpGY8bMAGPxs_nq4ySmYUuBCacmLeplDsq5pNodO4GFXGsTNgXaAGTdu6hreogdM4rRbU8OP3s-QZ2rK7";
 var fcm = new FCM(serverKey);
 var ts = require("time-slots-generator");
-const moment = require("moment");
+const moment = require("moment-timezone");
+
 const jwt = require("jsonwebtoken");
 const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 //const stripe = require("stripe")("sk_test_KIPp24RuZLwG2pgVc8Hsd6lS00iSpeKk3X");
@@ -528,18 +529,26 @@ function getSalons(req, res) {
           //console.log(salonList);
           let slots = [];
           salonList.forEach(async function(c) {
-            c.opentime = new Date(c.opentime).toLocaleString({
+            let ootime = new Date(c.opentime).toLocaleString({
               timeZone: c.timezonestring
             });
-            c.closetime = new Date(c.closetime).toLocaleString({
+            let cctime = new Date(c.closetime).toLocaleString({
               timeZone: c.timezonestring
             });
 
+            console.log("opentime", ootime);
+            console.log("closetime", cctime);
+
             slots.push({
               salon: c.name,
+              timezonestring: c.timezonestring,
               _id: c._id,
-              optime: moment(c.opentime, ["h:mm A"]).format(),
-              cltime: moment(c.closetime, ["h:mm A"]).format(),
+              optime: moment(c.opentime, ["h:mm A"])
+                .tz(c.timezonestring)
+                .format(),
+              cltime: moment(c.closetime, ["h:mm A"])
+                .tz(c.timezonestring)
+                .format(),
               image: c.image,
               contact: c.contact,
               avgRatings: c.avgRatings,
@@ -580,9 +589,13 @@ function getSalons(req, res) {
             endtime = v.cltime;
             timeslots = [starttime];
 
-            startTiming = moment(starttime).format("HH:mm");
+            startTiming = moment(starttime)
+              .tz(v.timezonestring)
+              .format("HH:mm");
             console.log(startTiming);
-            endTiming = moment(endtime).format("HH:mm");
+            endTiming = moment(endtime)
+              .tz(v.timezonestring)
+              .format("HH:mm");
             console.log(endTiming);
 
             function parseTime(s) {

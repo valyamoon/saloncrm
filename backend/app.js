@@ -34,7 +34,7 @@ app.use(fileUpload());
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-//process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
+// process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local server
 process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
 //process.env.NODE_ENV = process.env.NODE_ENV || "prod"; //prod server (mdout.com)
@@ -86,7 +86,7 @@ app.use("/", function(req, res) {
 
 // start server
 var port = process.env.PORT || config.port;
-// app.listen(port).timeout = 1800000; //30 min
+//app.listen(port).timeout = 1800000; //30 min
 
 const httpsOptions = {
   key: fs.readFileSync(
