@@ -9,7 +9,8 @@ const emailtemplates = require("../api/modules/admin/model/email_template/emailt
 const config = require("../config/config").get(process.env.NODE_ENV || "local");
 
 module.exports = {
-  sendMail: sendMail
+  sendMail: sendMail,
+  sendMailTO: sendMailTO
 };
 
 var transporter = nodemailer.createTransport(
@@ -70,6 +71,7 @@ function sendMail(to, keyword, userData, callbackMail) {
           callbackMail(err, null);
           console.log("err", err);
         } else {
+          console.log("userData", userData);
           if (userData.adminEmail) {
             to = userData.adminEmail;
           } else {
