@@ -1935,7 +1935,8 @@ commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
           },
           spherical: true,
           distanceField: "dist.calculated",
-          distanceMultiplier: 0.00062137
+          distanceMultiplier: 0.00062137,
+          maxDistance: 32186
         }
       },
       {
