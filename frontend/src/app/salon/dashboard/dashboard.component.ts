@@ -56,6 +56,8 @@ export class DashboardComponent implements OnInit {
         if (response.code === 200) {
           this.salonData = response.data;
 
+          console.log("SALONDATA", this.salonData);
+
           this.commServ.setCustomer_id(response.data["customer_id"]);
           this.commServ.setSalon_id(response.data["_id"]);
           this.commServ.setStripeConnectedStatus(

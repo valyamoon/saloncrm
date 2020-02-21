@@ -643,6 +643,11 @@ function getSalons(req, res) {
               timeArray.push({ time: jj, status: false });
             });
 
+            var TempUrl = imageUrl.imageBaseUrl;
+            var url = TempUrl + v.image;
+            v.image = url;
+            // console.log("IMAGES", v.image);
+
             salonListingNew.push({
               starttime: v.optime,
               _id: v._id,
@@ -659,13 +664,6 @@ function getSalons(req, res) {
               service: v.services
             });
           });
-
-          salonListingNew.forEach(async function(c) {
-            var TempUrl = imageUrl.imageBaseUrl;
-            var url = TempUrl + c.image;
-            c.image = url;
-          });
-          console.log(salonListingNew);
 
           return res.json(
             Response(
@@ -1899,6 +1897,10 @@ async function getSalonByUser(req, res) {
     };
     let salonDetails = await commonQuery.fetch_one(salons, cond);
     if (salonDetails) {
+      console.log("salonDEtils", salonDetails);
+      var TempUrl = imageUrl.imageBaseUrl;
+      var url = TempUrl + salonDetails.image;
+      salonDetails.image = url;
       res.json(
         Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonDetails)
       );

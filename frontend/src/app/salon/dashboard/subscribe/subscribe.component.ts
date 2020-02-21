@@ -67,6 +67,19 @@ export class SubscribeComponent implements OnInit {
     });
   }
 
+  get cardnumber() {
+    return this.cardSave.get("cardnumber");
+  }
+  get expiry() {
+    return this.cardSave.get("expiry");
+  }
+  get cvv() {
+    return this.cardSave.get("cvv");
+  }
+  get name() {
+    return this.cardSave.get("name");
+  }
+
   buy(data) {
     this.plan_id = data["plan_id"];
 
@@ -95,17 +108,20 @@ export class SubscribeComponent implements OnInit {
           });
           this.router.navigate(["/salon/home/profile"]);
         } else if (data["code"] === 400) {
-          this.toastServ.error("Failed To Subscribe", "Error", {
+          this.loader = false;
+          this.toastServ.error("Failed To Subscribe", data["message"], {
             timeOut: 1000
           });
         } else {
+          this.loader = false;
           this.toastServ.error("Failed To Subscribe", data["message"], {
             timeOut: 1000
           });
         }
       },
       error => {
-        this.toastServ.error("Server -Error", error.error, {
+        this.loader = false;
+        this.toastServ.error("Server -Error", error.error["message"], {
           timeOut: 1000
         });
       }

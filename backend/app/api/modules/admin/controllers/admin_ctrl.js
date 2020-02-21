@@ -316,7 +316,7 @@ function suspendSalon(req, res) {
               message: messageTemplates.accountSuspended["message"]
             };
 
-            let sendEmailConfirmation = await mailer.sendMail(
+            let sendEmailConfirmation = await mailer.sendMailTO(
               deactivateLogin.email,
               messagetTemplate
             );

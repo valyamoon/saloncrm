@@ -24,6 +24,7 @@
       <div class="large">
         <label>Card Number</label>
         <input
+          required
           type="text"
           class="form-control"
           formControlName="cardnumber"
@@ -62,7 +63,11 @@
           placeholder="Name On Card"
         />
       </div>
-      <button (click)="pay(cardSave.value)" class="btn btn-primary btn-sign-in">
+      <button
+        [disabled]="cardSave.invalid"
+        (click)="pay(cardSave.value)"
+        class="btn btn-primary btn-sign-in"
+      >
         Pay
       </button>
     </form>
