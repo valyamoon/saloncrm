@@ -33,6 +33,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.component";
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.compone
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     MatProgressSpinnerModule,
-    SimpleModalModule.forRoot({ container: "modal-container" })
+    SimpleModalModule.forRoot({ container: "modal-container" }),
+    BsDatepickerModule.forRoot()
   ],
   providers: [
     {

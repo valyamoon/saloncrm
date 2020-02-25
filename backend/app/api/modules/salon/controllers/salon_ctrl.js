@@ -267,6 +267,7 @@ function saveSalonDetails(req, res) {
 function getSalons(req, res) {
   async function getSalons() {
     try {
+      console.log("req body===========", req.body);
       var intervals;
       var endtime;
       var timeslots;
@@ -355,6 +356,7 @@ function getSalons(req, res) {
               contact: c.contact,
               avgRatings: c.avgRatings,
               distance: c.distance,
+              date: req.body.date,
               location: c.location,
               address: c.address,
               servicename: c.service["servicename"],
@@ -470,6 +472,7 @@ function getSalons(req, res) {
 
             salonListingNew.push({
               starttime: v.optime,
+              date: v.date,
               _id: v._id,
               closetime: v.cltime,
               name: v.salon,
@@ -485,7 +488,9 @@ function getSalons(req, res) {
               service: v.services
             });
           });
-          fetchbookedSlots(salonListingNew);
+          fetchbookedSlots(salonListingNew).then(data => {
+            console.log("YAHA AAAYA", data);
+          });
 
           return res.json(
             Response(
@@ -509,63 +514,59 @@ function getSalons(req, res) {
 
 async function fetchbookedSlots(data) {
   return new Promise(async function(reject, resolve) {
+    var collectedAppointments = [];
+    var alreadyBookedSlots = [];
+
     data.forEach(async s => {
-      console.log("s0", s);
-
-      let date = new Date().toLocaleString("en-US", {
-        timeZone: s.timezonestring
-      });
-      let currentDate = new Date(date).toISOString();
-      //console.log("currentdate", moment(currentDate).format("DD:MM:YYYY"));
-
+      var updatedSlot = [];
+      var Cudate = moment(s.date)
+        .tz(s.timezonestring)
+        .format("DD:MM:YYYY");
+      console.log(Cudate);
       let condition = {
         salon_id: mongoose.Types.ObjectId(s._id)
       };
       let bookedSlots = await commonQuery.fetch_all(appointments, condition);
-      // console.log("BookedSlots", bookedSlots);
       bookedSlots.forEach(async u => {
-        // console.log(currentDate);
-        console.log("UU", u);
-        // console.log("hereitgoes", moment(u.date).format("DD:MM:YYYY"));
         if (
-          moment(u.date).format("DD:MM:YYYY") ===
-          moment(currentDate).format("DD:MM:YYYY")
+          Cudate ===
+          moment(u.date)
+            .tz(s.timezonestring)
+            .format("DD:MM:YYYY")
         ) {
-          for (var i = 0; i < s.slots.length; i++) {
-            console.log(u.starttime);
-            console.log(u.endtime);
-            console.log("xx", s.slots[i].time);
-            console.log("xxxx", s.slots[1 + i].time);
-            console.log(
-              "RRRRRRRRRR",
-              new Date(s.slots[i].time).toLocaleString("en-US", {
-                timeZone: s.timezonestring
-              })
-            );
+          collectedAppointments.push(u);
+          var range = Mmoment.range(
+            moment(u.starttime, "HH:mm").add(1, "days"),
+            moment(u.endtime, "HH:mm").add(1, "days")
+          );
+        }
 
-            var range2 = Mmoment.range(
-              new Date("1970-01-01T" + s.slots[i].time + "Z"),
+        for (var i = 0; i < s.slots.length; i++) {
+          var range2 = Mmoment.range(
+            moment(s.slots[i].time, "HH:mm").add(1, "days"),
+            moment(s.slots[++i].time, "HH:mm").add(1, "days")
+          );
+          --i;
 
-              new Date("1970-01-01T" + s.slots[++i].time + "Z")
-            );
-            console.log("9999", range2);
-            var range = Mmoment.range(
-              new Date("1970-01-01T" + u.starttime + "Z").toLocaleString(),
-              new Date("1970-01-01T" + u.endtime + "Z")
-            );
+          // range
+          //   .overlaps(range2)
+          //   .then(data => {
+          //     console.log("DATA", data);
+          //     alreadyBookedSlots.push(data);
+          //     resolve(alreadyBookedSlots);
+          //   })
+          //   .catch(error => {
+          //     console.log("ERROR", error);
+          //     reject(error);
+          //   });
 
-            console.log("OVERLAP", range.overlaps(range2));
+          if (range.overlaps(range2)) {
+            console.log("consolekartehai", range2);
+            alreadyBookedSlots.push(range2);
+            resolve(alreadyBookedSlots);
+          } else {
+            reject(range);
           }
-
-          // s.slots.forEach(function(xx, i) {
-          //   console.log("xx", xx.time);
-          //   console.log("xxsssss", xx[i + 1]);
-          //   console.log("i", i);
-
-          // });
-          console.log("matches", u);
-        } else {
-          console.log("galat logic");
         }
       });
     });
@@ -1568,7 +1569,7 @@ async function bookSlot(data) {
         duration: data.duration,
         starttime: starttime,
         user_id: data.user_id,
-        endtime: endTimeCalculated,
+        endtime: endTimeCalculated + "0",
         date: data.date,
         employee_id: empId,
         paymentType: data.paymentType,
@@ -1703,7 +1704,7 @@ async function bookSlot(data) {
         duration: data.duration,
         starttime: starttime,
         user_id: data.user_id,
-        endtime: endTimeCalculated,
+        endtime: endTimeCalculated + "0",
         date: data.date,
         connected_account_id: salon_connected_id,
         employee_id: empId,
