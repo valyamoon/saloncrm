@@ -2,6 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { MyInterceptor } from "./my-interceptor";
 import { AppRoutingModule } from "./app-routing.module";
+
 import { SimpleModalModule } from "ngx-simple-modal";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -13,15 +14,23 @@ import {
   MatDialogModule,
   MatSelectModule,
   MatOptionModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatAutocompleteModule,
+  MatInputModule
 } from "@angular/material";
+
+import {
+  SocialLoginModule,
+  AuthServiceConfig,
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from "ngx-angular-social-login";
 
 import { MatTabsModule } from "@angular/material/tabs";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 import { ToastrModule } from "ngx-toastr";
 import {} from "googlemaps";
-
 import { AgmCoreModule } from "@agm/core";
 import LatLng = google.maps.LatLng;
 import { LocationPickerModule } from "ng-location-picker";
@@ -33,7 +42,25 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.component";
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+import { StarRatingModule } from "angular-star-rating";
+// "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
+
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig([
+    {
+      id: FacebookLoginProvider.PROVIDER_ID,
+      provider: new FacebookLoginProvider("981768045519868")
+    },
+    {
+      id: GoogleLoginProvider.PROVIDER_ID,
+      provider: new GoogleLoginProvider(
+        "274336154697-b3nbfgq6nono41e9qhjf8n36hjjj6rda.apps.googleusercontent.com"
+      )
+    }
+  ]);
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -49,7 +76,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     AppRoutingModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
-      apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg"
+      apiKey: "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
+      libraries: ["geometry", "places"]
     }),
     FormsModule,
     ToastrModule.forRoot(),
@@ -69,13 +97,18 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     OwlNativeDateTimeModule,
     MatProgressSpinnerModule,
     SimpleModalModule.forRoot({ container: "modal-container" }),
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    StarRatingModule.forRoot(),
+    MatAutocompleteModule,
+    MatInputModule,
+    SocialLoginModule
   ],
   providers: [
     {
-      provide: HTTP_INTERCEPTORS,
+      provide: [HTTP_INTERCEPTORS, AuthServiceConfig],
       useClass: MyInterceptor,
-      multi: true
+      multi: true,
+      useFactory: getAuthServiceConfigs
     }
   ],
   bootstrap: [AppComponent]

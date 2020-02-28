@@ -14,612 +14,625 @@
 //     border: 1px solid lightgray;
 //   }
 // }
+.geoLoc {
+  width: 100%;
+}
 .banner-section {
-    background-image: url("../../../../assets/images/bg.png");
-    background-repeat: no-repeat;
-    min-height: 670px;
-    background-size: cover;
-    margin-top: 70px;
-    // display: flex;
-    // justify-content: flex-end;
-    .book-appointement {
-        background: #f5f6f7 0% 0% no-repeat padding-box;
-        box-shadow: 0px 1px 10px #00000029;
+  background-image: url('../../../../assets/images/bg.png');
+  background-repeat: no-repeat;
+  min-height: 670px;
+  background-size: cover;
+  margin-top: 70px;
+  // display: flex;
+  // justify-content: flex-end;
+  .book-appointement {
+    background: #f5f6f7 0% 0% no-repeat padding-box;
+    box-shadow: 0px 1px 10px #00000029;
+    opacity: 1;
+    min-height: 451px;
+    width: 541px;
+    padding: 25px;
+    margin-top: 120px;
+    margin-left: -30px;
+    h2 {
+      text-align: left;
+      letter-spacing: 0;
+      color: #323333;
+      opacity: 1;
+      font-size: 46px;
+      font-weight: 400;
+      padding-bottom: 20px;
+      padding-top: 5px;
+    }
+    .book-appointement-inner {
+      position: relative;
+      input {
+        background: #ffffff 0% 0% no-repeat padding-box;
+        border-radius: 25px;
+        // opacity: 1;
+        height: 50px;
+        border: none;
+        padding-left: 50px;
+        text-align: left;
+        letter-spacing: 0;
+        color: #9595a1;
         opacity: 1;
-        min-height: 451px;
-        width: 541px;
-        padding: 25px;
-        margin-top: 120px;
-        margin-left: -30px;
-        h2 {
-            text-align: left;
-            letter-spacing: 0;
-            color: #323333;
-            opacity: 1;
-            font-size: 46px;
-            font-weight: 400;
-            padding-bottom: 20px;
-            padding-top: 5px;
+        font-size: 16px;
+        font-weight: 100;
+        padding-left: 60px;
+      }
+      img {
+        position: absolute;
+        left: 18px;
+        top: 14px;
+      }
+    }
+    .btn-submit {
+      margin-top: 40px;
+      button {
+        background: transparent linear-gradient(93deg, #cc2b5e 0%, #753a88 100%)
+          0% 0% no-repeat padding-box;
+        box-shadow: 0px 3px 12px #00000029;
+        border-radius: 25px;
+        opacity: 1;
+        height: 50px;
+        border: none;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        letter-spacing: 1.4px;
+        color: #ffffff;
+        opacity: 1;
+      }
+    }
+    label {
+      text-align: left;
+      letter-spacing: 0;
+      color: #262626;
+      opacity: 1;
+      font-size: 14px;
+      font-weight: 600;
+      padding-left: 15px;
+    }
+  }
+}
+
+.btn .btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.get-stylish-look {
+  padding: 40px;
+  text-align: center;
+  h2 {
+    text-align: center;
+    letter-spacing: 3.6px;
+    color: #323333;
+    opacity: 1;
+    font-size: 45px;
+    font-weight: 400;
+  }
+  .style-look-details {
+    text-align: center;
+    letter-spacing: 4.2px;
+    color: #323333;
+    opacity: 1;
+    font-size: 14px;
+  }
+}
+
+.about-us {
+  background-image: url('../../../../assets/images/photo-of-woman-holding-pink-flower-2144413.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 500px;
+  margin-top: -25px;
+  z-index: 0;
+  .about-us-inner {
+    background: #763987 0% 0% no-repeat padding-box;
+    opacity: 0.9;
+    min-height: 500px;
+    padding: 90px 0 0;
+    h2 {
+      text-align: left;
+      letter-spacing: 2.88px;
+      color: #ffffff;
+      opacity: 1;
+      font-size: 36px;
+      font-weight: 100;
+      padding-bottom: 15px;
+    }
+    p {
+      text-align: left;
+      letter-spacing: 1.4px;
+      color: #ffffff;
+      opacity: 1;
+      font-size: 14px;
+      font-weight: 100;
+      max-width: 446px;
+      margin: 0;
+    }
+    button {
+      box-shadow: 0px 3px 12px #00000029;
+      border: 1px solid #ffffff;
+      border-radius: 25px;
+      background: none;
+      width: 148px;
+      height: 50px;
+      text-align: center;
+      letter-spacing: 1.4px;
+      color: #ffffff;
+      opacity: 1;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 60px;
+    }
+    .about-us-img {
+      margin-top: 50px;
+      margin-right: -65px;
+    }
+  }
+}
+
+.btn-book-now {
+  position: relative;
+  width: 189px;
+  z-index: 999;
+  display: block;
+  margin: 0 auto;
+  button {
+    background: transparent linear-gradient(99deg, #cc2b5e 0%, #753a88 100%) 0%
+      0% no-repeat padding-box;
+    box-shadow: 0px 3px 12px #00000029;
+    border-radius: 25px;
+    opacity: 1;
+    // width: 189px;
+    height: 50px;
+    border: none;
+    text-align: center;
+    letter-spacing: 1.4px;
+    color: #ffffff;
+    opacity: 1;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 25px;
+    padding-right: 50px;
+  }
+  img {
+    position: absolute;
+    right: 50px;
+    top: 11px;
+    width: 25px;
+  }
+}
+
+.services-section {
+  padding: 40px;
+  .services-section-outer {
+    display: flex;
+    justify-content: center;
+    // max-width: 830px;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    .services-outer {
+      // .services-inner {
+      //     background: #ffffff 0% 0% no-repeat padding-box;
+      //     border: 1px solid #ff7d7d;
+      //     border-radius: 10px;
+      //     opacity: 1;
+      //     width: 100px;
+      //     height: 100px;
+      //     display: flex;
+      //     justify-content: center;
+      //     align-items: center;
+      //     margin-right: 40px;
+      //     &:hover {
+      //         background: #763987;
+      //         border: 1px solid #763987;
+      //         .b {
+      //             fill: #fff !important;
+      //         }
+      //     }
+      //     &:last-child {
+      //         margin-right: 0;
+      //     }
+      // }
+      .services-inner {
+        background: #ffffff 0% 0% no-repeat padding-box;
+        border: 1px solid #ff7d7d;
+        border-radius: 10px;
+        opacity: 1;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 50px;
+        transition: 0.6s;
+        &:hover {
+          background: #763987;
+          border: 1px solid #763987;
+          .a {
+            opacity: 1 !important;
+          }
+          .b {
+            fill: #fff;
+          }
         }
-        .book-appointement-inner {
-            position: relative;
-            input {
-                background: #ffffff 0% 0% no-repeat padding-box;
-                border-radius: 25px;
-                // opacity: 1;
-                height: 50px;
-                border: none;
-                padding-left: 50px;
-                text-align: left;
-                letter-spacing: 0;
-                color: #9595a1;
-                opacity: 1;
-                font-size: 16px;
-                font-weight: 100;
-                padding-left: 60px;
-            }
-            img {
-                position: absolute;
-                left: 18px;
-                top: 14px;
-            }
+        .a {
+          opacity: 0.4;
         }
-        .btn-submit {
-            margin-top: 40px;
-            button {
-                background: transparent linear-gradient(93deg, #cc2b5e 0%, #753a88 100%) 0% 0% no-repeat padding-box;
-                box-shadow: 0px 3px 12px #00000029;
-                border-radius: 25px;
-                opacity: 1;
-                height: 50px;
-                border: none;
-                width: 100%;
-                font-size: 14px;
-                font-weight: 600;
-                text-align: center;
-                letter-spacing: 1.4px;
-                color: #ffffff;
-                opacity: 1;
-            }
+        .b {
+          fill: #ff7d7d;
         }
-        label {
+      }
+      h5 {
+        text-align: center;
+        letter-spacing: 0;
+        color: #000000;
+        opacity: 1;
+        font-size: 18px;
+        font-weight: 100;
+        width: 100px;
+        padding-top: 15px;
+      }
+    }
+  }
+  h2 {
+    text-align: center;
+    letter-spacing: 2.88px;
+    color: #282c37;
+    opacity: 1;
+    font-size: 36px;
+    font-weight: 100;
+    max-width: 455px;
+    margin: 0 auto;
+    display: block;
+    padding-bottom: 40px;
+    padding-top: 25px;
+    img {
+      margin-top: -10px;
+    }
+  }
+}
+
+.app-info-section {
+  background-image: url('../../../../assets/images/bg-app-info.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: rgba(118, 57, 135, 1);
+  .app-info-inner {
+    // background: #763987 0% 0% no-repeat padding-box;
+    // opacity: 0.8;
+    padding: 70px 0;
+    .app-info {
+      margin-top: 190px;
+      margin-left: 70px;
+      h5 {
+        font-size: 18px;
+        text-align: left;
+        letter-spacing: 1.44px;
+        color: #ffffff;
+        font-weight: 100;
+      }
+      h4 {
+        text-align: left;
+        letter-spacing: 2.88px;
+        color: aliceblue;
+        font-size: 36px;
+        font-weight: 600;
+        padding-bottom: 30px;
+      }
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  .modal-section {
+    // border: 1px solid lightgray;
+    padding: 50px 30px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 1px 10px #00000029;
+    opacity: 1;
+    width: 541px;
+    min-height: 550px;
+    /* Customize the label (the container) */
+    .container {
+      display: block;
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size: 22px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    /* Hide the browser's default radio button */
+    .container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+    /* Create a custom radio button */
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 20px;
+      width: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      border: 1px solid #cc2b5e;
+    }
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+      background-color: #fff;
+      // border: 1px solid #bc2e65;
+    }
+    /* When the radio button is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+      background: transparent linear-gradient(180deg, #cc2b5e 0%, #753a88 100%)
+        0% 0% no-repeat padding-box;
+    }
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+      content: '';
+      position: absolute;
+      display: none;
+    }
+    /* Show the indicator (dot/circle) when checked */
+    .container input:checked ~ .checkmark:after {
+      display: block;
+    }
+    /* Style the indicator (dot/circle) */
+    .container .checkmark:after {
+      top: 4px;
+      left: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: white;
+    }
+    h4 {
+      text-align: left;
+      letter-spacing: 0;
+      color: #763987;
+      opacity: 1;
+      font-size: 21px;
+      font-weight: 600;
+      padding-bottom: 10px;
+    }
+    .hair-section {
+      margin-left: 20px;
+      margin-right: 20px;
+      margin-top: 35px;
+      h5 {
+        text-align: left;
+        letter-spacing: 0;
+        color: #262626;
+        opacity: 1;
+        font-size: 14px;
+        font-weight: 600;
+        // margin-top: 35px;
+        margin-bottom: 20px;
+      }
+      .hair-section-outer {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        .hair-section-inner {
+          label {
             text-align: left;
             letter-spacing: 0;
             color: #262626;
             opacity: 1;
             font-size: 14px;
             font-weight: 600;
-            padding-left: 15px;
+            width: 165px;
+          }
         }
+      }
     }
-}
-
-.get-stylish-look {
-    padding: 40px;
-    text-align: center;
-    h2 {
-        text-align: center;
-        letter-spacing: 3.6px;
-        color: #323333;
-        opacity: 1;
-        font-size: 45px;
-        font-weight: 400;
+    .massage-section {
+      margin-top: 20px;
     }
-    .style-look-details {
-        text-align: center;
-        letter-spacing: 4.2px;
-        color: #323333;
-        opacity: 1;
-        font-size: 14px;
-    }
-}
-
-.about-us {
-    background-image: url("../../../../assets/images/photo-of-woman-holding-pink-flower-2144413.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-height: 500px;
-    margin-top: -25px;
-    z-index: 0;
-    .about-us-inner {
-        background: #763987 0% 0% no-repeat padding-box;
-        opacity: 0.9;
-        min-height: 500px;
-        padding: 90px 0 0;
-        h2 {
-            text-align: left;
-            letter-spacing: 2.88px;
-            color: #ffffff;
-            opacity: 1;
-            font-size: 36px;
-            font-weight: 100;
-            padding-bottom: 15px;
-        }
-        p {
-            text-align: left;
-            letter-spacing: 1.4px;
-            color: #ffffff;
-            opacity: 1;
-            font-size: 14px;
-            font-weight: 100;
-            max-width: 446px;
-            margin: 0;
-        }
-        button {
-            box-shadow: 0px 3px 12px #00000029;
-            border: 1px solid #ffffff;
-            border-radius: 25px;
-            background: none;
-            width: 148px;
-            height: 50px;
-            text-align: center;
-            letter-spacing: 1.4px;
-            color: #ffffff;
-            opacity: 1;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 60px;
-        }
-        .about-us-img {
-            margin-top: 50px;
-            margin-right: -65px;
-        }
-    }
-}
-
-.btn-book-now {
-    position: relative;
-    width: 189px;
-    z-index: 999;
-    display: block;
-    margin: 0 auto;
-    button {
-        background: transparent linear-gradient(99deg, #cc2b5e 0%, #753a88 100%) 0% 0% no-repeat padding-box;
+    .btn-category-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      button {
+        background: #282c37 0% 0% no-repeat padding-box;
         box-shadow: 0px 3px 12px #00000029;
         border-radius: 25px;
-        opacity: 1;
-        // width: 189px;
-        height: 50px;
-        border: none;
         text-align: center;
         letter-spacing: 1.4px;
         color: #ffffff;
         opacity: 1;
         font-size: 14px;
-        font-weight: 500;
-        padding: 0 25px;
-        padding-right: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        min-width: 161px;
+        height: 50px;
+      }
+      .btn-done {
+        background: transparent
+          linear-gradient(100deg, #cc2b5e 0%, #753a88 100%) 0% 0% no-repeat
+          padding-box;
+        margin-left: 20px;
+      }
     }
-    img {
-        position: absolute;
-        right: 50px;
-        top: 11px;
-        width: 25px;
-    }
-}
-
-.services-section {
-    padding: 40px;
-    .services-section-outer {
-        display: flex;
-        justify-content: center;
-        // max-width: 830px;
-        align-items: center;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-        .services-outer {
-            // .services-inner {
-            //     background: #ffffff 0% 0% no-repeat padding-box;
-            //     border: 1px solid #ff7d7d;
-            //     border-radius: 10px;
-            //     opacity: 1;
-            //     width: 100px;
-            //     height: 100px;
-            //     display: flex;
-            //     justify-content: center;
-            //     align-items: center;
-            //     margin-right: 40px;
-            //     &:hover {
-            //         background: #763987;
-            //         border: 1px solid #763987;
-            //         .b {
-            //             fill: #fff !important;
-            //         }
-            //     }
-            //     &:last-child {
-            //         margin-right: 0;
-            //     }
-            // }
-            .services-inner {
-                background: #ffffff 0% 0% no-repeat padding-box;
-                border: 1px solid #ff7d7d;
-                border-radius: 10px;
-                opacity: 1;
-                width: 100px;
-                height: 100px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-right: 50px;
-                transition: 0.6s;
-                &:hover {
-                    background: #763987;
-                    border: 1px solid #763987;
-                    .a {
-                        opacity: 1 !important;
-                    }
-                    .b {
-                        fill: #fff;
-                    }
-                }
-                .a {
-                    opacity: 0.4;
-                }
-                .b {
-                    fill: #ff7d7d;
-                }
-            }
-            h5 {
-                text-align: center;
-                letter-spacing: 0;
-                color: #000000;
-                opacity: 1;
-                font-size: 18px;
-                font-weight: 100;
-                width: 100px;
-                padding-top: 15px;
-            }
-        }
-    }
-    h2 {
-        text-align: center;
-        letter-spacing: 2.88px;
-        color: #282c37;
-        opacity: 1;
-        font-size: 36px;
-        font-weight: 100;
-        max-width: 455px;
-        margin: 0 auto;
-        display: block;
-        padding-bottom: 40px;
-        padding-top: 25px;
-        img {
-            margin-top: -10px;
-        }
-    }
-}
-
-.app-info-section {
-    background-image: url("../../../../assets/images/bg-app-info.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: rgba(118, 57, 135, 1);
-    .app-info-inner {
-        // background: #763987 0% 0% no-repeat padding-box;
-        // opacity: 0.8;
-        padding: 70px 0;
-        .app-info {
-            margin-top: 190px;
-            margin-left: 70px;
-            h5 {
-                font-size: 18px;
-                text-align: left;
-                letter-spacing: 1.44px;
-                color: #ffffff;
-                font-weight: 100;
-            }
-            h4 {
-                text-align: left;
-                letter-spacing: 2.88px;
-                color: aliceblue;
-                font-size: 36px;
-                font-weight: 600;
-                padding-bottom: 30px;
-            }
-        }
-    }
-}
-
-.modal-overlay {
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    .modal-section {
-        // border: 1px solid lightgray;
-        padding: 50px 30px;
-        background: #ffffff 0% 0% no-repeat padding-box;
-        box-shadow: 0px 1px 10px #00000029;
-        opacity: 1;
-        width: 541px;
-        min-height: 550px;
-        /* Customize the label (the container) */
-        .container {
-            display: block;
-            position: relative;
-            padding-left: 35px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            font-size: 22px;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        /* Hide the browser's default radio button */
-        .container input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-        }
-        /* Create a custom radio button */
-        .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 20px;
-            width: 20px;
-            background-color: #fff;
-            border-radius: 50%;
-            border: 1px solid #cc2b5e;
-        }
-        /* On mouse-over, add a grey background color */
-        .container:hover input~.checkmark {
-            background-color: #fff;
-            // border: 1px solid #bc2e65;
-        }
-        /* When the radio button is checked, add a blue background */
-        .container input:checked~.checkmark {
-            background: transparent linear-gradient(180deg, #cc2b5e 0%, #753a88 100%) 0% 0% no-repeat padding-box;
-        }
-        /* Create the indicator (the dot/circle - hidden when not checked) */
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-        /* Show the indicator (dot/circle) when checked */
-        .container input:checked~.checkmark:after {
-            display: block;
-        }
-        /* Style the indicator (dot/circle) */
-        .container .checkmark:after {
-            top: 4px;
-            left: 4px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: white;
-        }
-        h4 {
-            text-align: left;
-            letter-spacing: 0;
-            color: #763987;
-            opacity: 1;
-            font-size: 21px;
-            font-weight: 600;
-            padding-bottom: 10px;
-        }
-        .hair-section {
-            margin-left: 20px;
-            margin-right: 20px;
-            margin-top: 35px;
-            h5 {
-                text-align: left;
-                letter-spacing: 0;
-                color: #262626;
-                opacity: 1;
-                font-size: 14px;
-                font-weight: 600;
-                // margin-top: 35px;
-                margin-bottom: 20px;
-            }
-            .hair-section-outer {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 5px;
-                .hair-section-inner {
-                    label {
-                        text-align: left;
-                        letter-spacing: 0;
-                        color: #262626;
-                        opacity: 1;
-                        font-size: 14px;
-                        font-weight: 600;
-                        width: 165px;
-                    }
-                }
-            }
-        }
-        .massage-section {
-            margin-top: 20px;
-        }
-        .btn-category-section {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-            button {
-                background: #282c37 0% 0% no-repeat padding-box;
-                box-shadow: 0px 3px 12px #00000029;
-                border-radius: 25px;
-                text-align: center;
-                letter-spacing: 1.4px;
-                color: #ffffff;
-                opacity: 1;
-                font-size: 14px;
-                font-weight: 600;
-                text-transform: uppercase;
-                min-width: 161px;
-                height: 50px;
-            }
-            .btn-done {
-                background: transparent linear-gradient(100deg, #cc2b5e 0%, #753a88 100%) 0% 0% no-repeat padding-box;
-                margin-left: 20px;
-            }
-        }
-    }
+  }
 }
 
 @media (max-width: 1200px) {
-    .banner-section {
-        .book-appointement {
-            width: 500px;
-        }
+  .banner-section {
+    .book-appointement {
+      width: 500px;
     }
-    .about-us {
-        .about-us-inner {
-            .about-us-img {
-                margin-right: -35px;
-            }
-        }
+  }
+  .about-us {
+    .about-us-inner {
+      .about-us-img {
+        margin-right: -35px;
+      }
     }
+  }
 }
 
 @media (max-width: 991px) {
-    .banner-section {
-        margin-top: 55px;
-        .book-appointement {
-            width: 380px;
-            margin-left: -50px;
-            h2 {
-                font-size: 33px;
-            }
-        }
+  .banner-section {
+    margin-top: 55px;
+    .book-appointement {
+      width: 380px;
+      margin-left: -50px;
+      h2 {
+        font-size: 33px;
+      }
     }
-    .about-us {
-        .about-us-inner {
-            button {
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
-        }
+  }
+  .about-us {
+    .about-us-inner {
+      button {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
     }
+  }
 }
 
 @media (max-width: 767px) {
-    .banner-section {
-        min-height: 560px;
-        // background-size: cover;
-        margin-top: 60px;
-        .book-appointement {
-            margin-top: 50px;
-            margin-left: 0;
-            padding: 15px;
-            width: 100%;
-            h2 {
-                font-size: 24px;
-                padding-bottom: 0;
-            }
-            .btn-submit {
-                margin-top: 15px;
-                text-align: center;
-                button {
-                    font-size: 12px;
-                    width: 165px;
-                    height: 40px;
-                }
-            }
+  .banner-section {
+    min-height: 560px;
+    // background-size: cover;
+    margin-top: 60px;
+    .book-appointement {
+      margin-top: 50px;
+      margin-left: 0;
+      padding: 15px;
+      width: 100%;
+      h2 {
+        font-size: 24px;
+        padding-bottom: 0;
+      }
+      .btn-submit {
+        margin-top: 15px;
+        text-align: center;
+        button {
+          font-size: 12px;
+          width: 165px;
+          height: 40px;
         }
+      }
     }
-    .get-stylish-look {
-        padding: 25px;
-        h2 {
-            font-size: 21px;
-        }
+  }
+  .get-stylish-look {
+    padding: 25px;
+    h2 {
+      font-size: 21px;
     }
-    .about-us {
-        .about-us-inner {
-            .about-us-img {
-                margin-top: 0;
-                margin-right: 0;
-            }
-            button {
-                margin-top: 15px;
-                margin-bottom: 15px;
-                font-size: 12px;
-                width: 125px;
-                height: 40px;
-            }
-        }
+  }
+  .about-us {
+    .about-us-inner {
+      .about-us-img {
+        margin-top: 0;
+        margin-right: 0;
+      }
+      button {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-size: 12px;
+        width: 125px;
+        height: 40px;
+      }
     }
-    .app-info-section {
-        .app-info-inner {
-            padding: 25px 0;
-            .app-info {
-                margin-top: 30px;
-                margin-left: 0;
-                text-align: center;
-                h4 {
-                    font-size: 21px;
-                    // font-weight: 600;
-                    padding-bottom: 0;
-                    text-align: center;
-                }
-                h5 {
-                    text-align: center;
-                }
-            }
+  }
+  .app-info-section {
+    .app-info-inner {
+      padding: 25px 0;
+      .app-info {
+        margin-top: 30px;
+        margin-left: 0;
+        text-align: center;
+        h4 {
+          font-size: 21px;
+          // font-weight: 600;
+          padding-bottom: 0;
+          text-align: center;
         }
+        h5 {
+          text-align: center;
+        }
+      }
     }
-    .services-section {
-        padding: 25px;
-        h2 {
-            font-size: 21px;
-            max-width: 100%;
-            padding-bottom: 20px;
-            padding-top: 25px;
-            width: 100%;
-            img {
-                margin-top: 0;
-                width: 15px;
-            }
-        }
-        .services-section-outer {
-            .services-outer {
-                margin-bottom: 15px;
-                .services-inner {
-                    margin-right: 10px;
-                }
-                h5 {
-                    padding-top: 5px;
-                }
-            }
-        }
+  }
+  .services-section {
+    padding: 25px;
+    h2 {
+      font-size: 21px;
+      max-width: 100%;
+      padding-bottom: 20px;
+      padding-top: 25px;
+      width: 100%;
+      img {
+        margin-top: 0;
+        width: 15px;
+      }
     }
-    .modal-overlay {
-        .modal-section {
-            width: 100%;
-            padding: 10px;
-            .btn-category-section {
-                // display: block;
-                button {
-                    min-width: 130px;
-                }
-                .btn-done {
-                    margin-left: 5px;
-                    margin-top: 0;
-                }
-            }
-            .hair-section {
-                .hair-section-outer {
-                    .hair-section-inner {
-                        label {
-                            padding-left: 25px;
-                            font-size: 13px;
-                        }
-                    }
-                }
-            }
+    .services-section-outer {
+      .services-outer {
+        margin-bottom: 15px;
+        .services-inner {
+          margin-right: 10px;
         }
+        h5 {
+          padding-top: 5px;
+        }
+      }
     }
+  }
+  .modal-overlay {
+    .modal-section {
+      width: 100%;
+      padding: 10px;
+      .btn-category-section {
+        // display: block;
+        button {
+          min-width: 130px;
+        }
+        .btn-done {
+          margin-left: 5px;
+          margin-top: 0;
+        }
+      }
+      .hair-section {
+        .hair-section-outer {
+          .hair-section-inner {
+            label {
+              padding-left: 25px;
+              font-size: 13px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 // .services-inner {

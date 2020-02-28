@@ -7,7 +7,7 @@
         <div class="col-md-4 offset-md-6">
           <div class="book-appointement">
             <h2>Book An Appointment</h2>
-            <form>
+            <form [formGroup]="searchSalonForm">
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
@@ -38,8 +38,11 @@
                         [minDate]="minDate"
                         [maxDate]="maxDate"
                         #dp="bsDatepicker"
+                        [bsConfig]="dpConfig"
                         bsDatepicker
-                        [(bsValue)]="myDateValue"
+                        [(ngModel)]="myDateValue"
+                        [ngModelOptions]="{ standalone: true }"
+                        (ngModelChange)="onDateChange($event)"
                       />
                       <img src="../../../../assets/images/calendar.svg" />
                     </div>
@@ -49,19 +52,32 @@
                   <div class="form-group">
                     <label>Location</label>
                     <div class="book-appointement-inner">
-                      <input
+                      <!-- <input
                         type="text"
                         class="form-control"
                         placeholder="Near Me"
                         id=""
-                      />
+                      /> -->
+                      <app-googlesearch
+                        class="geoLoc"
+                        (setAddress)="getAddress($event)"
+                        adressType="geocode"
+                      ></app-googlesearch>
                       <img src="../../../../assets/images/location-pin.svg" />
                     </div>
                   </div>
                 </div>
               </div>
+              <span *ngIf="errorMsg !== null">{{ errorMsg }}</span>
               <div class="btn-submit">
-                <button type="submit" class="btn btn-primary">SEARCH</button>
+                <button
+                  type="submit"
+                  [disabled]="searchSalonForm.invalid"
+                  (click)="searchSalons(searchSalonForm.value)"
+                  class="btn btn-primary"
+                >
+                  SEARCH
+                </button>
               </div>
             </form>
           </div>
