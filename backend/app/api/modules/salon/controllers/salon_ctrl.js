@@ -358,6 +358,7 @@ function getSalons(req, res) {
               contact: c.contact,
               avgRatings: c.avgRatings,
               distance: c.distance,
+              code: c.code,
               date: req.body.date,
               location: c.location,
               address: c.address,
@@ -475,6 +476,7 @@ function getSalons(req, res) {
               starttime: v.optime,
               date: v.date,
               _id: v._id,
+              code: v.code,
               closetime: v.cltime,
               name: v.salon,
               timezonestring: v.timezonestring,
@@ -649,7 +651,7 @@ async function fetchbookedSlots(data) {
           s.slots.forEach(function(i, index) {
             tempSlots.push(i.time);
           });
-          console.log("tempSlots", tempSlots);
+          // console.log("tempSlots", tempSlots);
           for (var i = 0; i < tempSlots.length; i++) {
             range2Array.push({ start: tempSlots[i], end: tempSlots[++i] });
 
@@ -686,7 +688,7 @@ async function fetchbookedSlots(data) {
                       "YYYY-MM-DD HH:mm "
                     )
                   );
-                  console.log("r1", range1);
+                  //console.log("r1", range1);
                   range1Array.push(range1);
                 }
                 // console.log("range1Array=======", range1Array);
@@ -699,7 +701,7 @@ async function fetchbookedSlots(data) {
           }
           resolve(bookedSlotsArrayToSend);
         } catch (error) {
-          console.log("outer", error);
+          // console.log("outer", error);
         }
 
         for (var j = 0; j < range2Array.length; j++) {
@@ -710,16 +712,16 @@ async function fetchbookedSlots(data) {
             ),
             moment(newDate.toString() + range2Array[j].end, "YYYY-MM-DD HH:mm ")
           );
-          console.log("r2", range2);
+          // console.log("r2", range2);
           tempRange2Array.push(range2);
         }
         // console.log("tempRange2Array====", tempRange2Array);
-        console.log("kilo", tempRange2Array, range1Array);
+        // console.log("kilo", tempRange2Array, range1Array);
 
         for (var i = 0; i < tempRange2Array.length; i++) {
           for (var j = 0; j < range1Array.length; j++) {
             if (tempRange2Array[i].overlaps(range1Array[j])) {
-              console.log(tempRange2Array[i]);
+              //console.log(tempRange2Array[i]);
               bookedSlotsArrayToSend.push(tempRange2Array[i]);
             } else {
               console.log(false);

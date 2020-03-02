@@ -32,7 +32,7 @@
       <div class="row">
         <!-- starthere -->
         <div class="col-md-12" *ngFor="let item of salonListingData">
-          <div class="salon-list-info">
+          <div class="salon-list-info" (click)="showSalonDetails(item)">
             <div class="row">
               <div class="col-md-4">
                 <div class="salon-list-info-left">

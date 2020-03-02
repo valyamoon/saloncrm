@@ -9,25 +9,6 @@
             <h2>Book An Appointment</h2>
             <form [formGroup]="searchSalonForm">
               <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Category</label>
-                    <div
-                      class="book-appointement-inner"
-                      (click)="openServiceModal()"
-                    >
-                      <input
-                        type="text"
-                        class="form-control"
-                        [(ngModel)]="serviceName"
-                        [ngModelOptions]="{ standalone: true }"
-                        placeholder="Salon, Service, etc"
-                        id=""
-                      />
-                      <img src="../../../../assets/images/category.svg" />
-                    </div>
-                  </div>
-                </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Date</label>
@@ -38,7 +19,6 @@
                         [minDate]="minDate"
                         [maxDate]="maxDate"
                         #dp="bsDatepicker"
-                        [bsConfig]="dpConfig"
                         bsDatepicker
                         [(ngModel)]="myDateValue"
                         [ngModelOptions]="{ standalone: true }"
@@ -64,6 +44,25 @@
                         adressType="geocode"
                       ></app-googlesearch>
                       <img src="../../../../assets/images/location-pin.svg" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Category</label>
+                    <div
+                      class="book-appointement-inner"
+                      (click)="openServiceModal()"
+                    >
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="serviceName"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Salon, Service, etc"
+                        id=""
+                      />
+                      <img src="../../../../assets/images/category.svg" />
                     </div>
                   </div>
                 </div>

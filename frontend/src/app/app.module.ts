@@ -43,7 +43,7 @@ import { RouterModule } from "@angular/router";
 import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.component";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
-import { StarRatingModule } from "angular-star-rating";
+
 // "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
 
 export function getAuthServiceConfigs() {
@@ -98,7 +98,6 @@ export function getAuthServiceConfigs() {
     MatProgressSpinnerModule,
     SimpleModalModule.forRoot({ container: "modal-container" }),
     BsDatepickerModule.forRoot(),
-    StarRatingModule.forRoot(),
     MatAutocompleteModule,
     MatInputModule,
     SocialLoginModule

@@ -78,4 +78,13 @@ export class UsercommonserviceService {
   getReviewRatings(data) {
     return this.http.post(this.baseUrl + "/reviewsratings", data);
   }
+  getSalonCategories(data) {
+    return this.http.post(this.baseUrl + "/saloncategories", data);
+  }
+  getSalonDetails(data) {
+    return this.http.post(this.baseUrl + "/salon", data);
+  }
+  getSalonWeekDays(data) {
+    return this.http.post(this.baseUrl + "/salon-days", data);
+  }
 }

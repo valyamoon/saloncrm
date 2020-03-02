@@ -10,36 +10,58 @@
   </div>
 </div> -->
 <header class="header">
-    <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="#">
-            <img src="../../../assets/images/logo.svg" />
-        </a>
-        <button class="navbar-toggler" type="button" (click)="toggleHeader()" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">
+      <img src="../../../assets/images/logo.svg" />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="toggleHeader()"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <!-- <span class="navbar-toggler-icon"></span> -->
       <i class="fa fa-bars" aria-hidden="true"></i>
     </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto"></ul>
-            <form class="form-inline my-2 my-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ABOUT</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">DOWNLOAD</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Faq</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Terms and conditions</a>
-                </li>
-                <li class="nav-item">
-                    <button type="submit" class="btn btn-primary">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto"></ul>
+      <form class="form-inline my-2 my-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#">ABOUT</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">DOWNLOAD</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Faq</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Terms and conditions</a>
+        </li>
+        <li class="nav-item">
+          <button
+            *ngIf="!isUserLoggedIn"
+            type="submit"
+            (click)="goToLogin()"
+            class="btn btn-primary"
+          >
             LOGIN / REGISTER
           </button>
-                </li>
-            </form>
-        </div>
-    </nav>
+          <div *ngIf="isUserLoggedIn" class="userDetail">
+            {{ userName }}
+            <div class="logout">
+              <i class="material-icons" (click)="logout()" title="Logout">
+                exit_to_app
+              </i>
+            </div>
+          </div>
+        </li>
+      </form>
+    </div>
+  </nav>
 </header>

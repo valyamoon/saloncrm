@@ -105,10 +105,16 @@ export class MainpageComponent implements OnInit {
   }
   getAddress(place: Object) {
     var address = place;
+    //console.log(address);
     this.lat = place["geometry"].location.lat();
     this.long = place["geometry"].location.lng();
+
     this.searchSalonForm.get("lat").setValue(this.lat);
+
+    this.searchSalonForm.updateValueAndValidity();
+
     this.searchSalonForm.get("long").setValue(this.long);
+
     this.searchSalonForm.updateValueAndValidity();
   }
 }

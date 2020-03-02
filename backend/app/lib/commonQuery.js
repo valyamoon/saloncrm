@@ -1996,7 +1996,7 @@ commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
     }
     postQuery
       .then(result => {
-        // console.log("999999999999999999999", result);
+        //  console.log("999999999999999999999", result);
 
         resolve(result);
       })

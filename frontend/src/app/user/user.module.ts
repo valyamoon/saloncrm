@@ -1,4 +1,8 @@
-import { NgModule } from "@angular/core";
+import {
+  NgModule,
+  NO_ERRORS_SCHEMA,
+  CUSTOM_ELEMENTS_SCHEMA
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {} from "googlemaps";
 
@@ -78,7 +82,6 @@ export function getAuthServiceConfigs() {
     MatNativeDateModule,
     DatepickerModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    StarRatingModule.forRoot(),
     MatOptionModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -86,11 +89,13 @@ export function getAuthServiceConfigs() {
     MatInputModule,
     NgxMaskModule.forRoot(),
     Ng2SearchPipeModule,
-    SocialLoginModule
+    SocialLoginModule,
+    StarRatingModule
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [
     {
-      provide: AuthServiceConfig,
+      provide: [AuthServiceConfig],
       useFactory: getAuthServiceConfigs
     }
   ]

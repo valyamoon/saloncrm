@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { UsercommonserviceService } from "../usercommonservice.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-salon-list",
@@ -22,12 +23,18 @@ export class SalonListComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private userCommnServ: UsercommonserviceService
+    private userCommnServ: UsercommonserviceService,
+    private toastServ: ToastrService
   ) {}
 
   ngOnInit() {
     this.userPrefrence = JSON.parse(sessionStorage.getItem("userprefrence"));
-    this.getSalonsList(this.userPrefrence);
+
+    if (!this.userPrefrence) {
+      this.router.navigate(["/home"]);
+    } else {
+      this.getSalonsList(this.userPrefrence);
+    }
 
     // this.userCommnServ.getUserPrefrence().subscribe((data: any) => {
     //   this.userPrefrence = data;
@@ -38,22 +45,38 @@ export class SalonListComponent implements OnInit {
 
   getSalonsList(data) {
     let dataToPass = {
-      service_id: data.service_id,
+      service_id: data.service_id ? data.service_id : "",
       date: data.date,
       lat: data.lat,
       long: data.long,
       pageSize: this.pageSize,
       page: this.page
     };
-    this.userCommnServ.getSalonsList(dataToPass).subscribe(data => {
-      if (data["code"] === 200) {
-        this.salonListingData = data["data"];
-        console.log("asdffff", this.salonListingData);
+    this.userCommnServ.getSalonsList(dataToPass).subscribe(
+      data => {
+        if (data["code"] === 200) {
+          this.salonListingData = data["data"];
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
+            timeOut: 1000
+          });
+        }
+      },
+      error => {
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 1000
+        });
       }
-    });
+    );
   }
 
   goToFilter() {
     this.router.navigate(["/home"]);
+  }
+
+  showSalonDetails(data) {
+    console.log("salonDAta", data);
+    sessionStorage.setItem("salonDetails", JSON.stringify(data));
+    this.router.navigate(["/detail"]);
   }
 }
