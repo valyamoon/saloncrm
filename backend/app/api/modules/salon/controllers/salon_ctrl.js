@@ -267,7 +267,7 @@ function saveSalonDetails(req, res) {
 function getSalons(req, res) {
   async function getSalons() {
     try {
-      // console.log("req body===========", req.body);
+      console.log("req body===========", req.body);
       var intervals;
       var timeArray = [];
       var bookedSlotsArray = [];
@@ -323,7 +323,11 @@ function getSalons(req, res) {
           name,
           sortParam
         );
-        if (!salonList) {
+        console.log(salonList);
+        if (!salonList.length) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.DATA_NOT_FOUND, salonList)
+          );
         } else {
           // let condition = { salon_id: mongoose.Types.ObjectId(c._id) };
           // let findBookedSlots = await commonQuery.fetch_all(
@@ -515,6 +519,9 @@ function getSalons(req, res) {
               console.log("new", timeArray);
               salonListingNew.slots = timeArray;
               console.log("now", salonListingNew.slots);
+
+              console.log("WAA", salonListingNew);
+
               return res.json(
                 Response(
                   constant.SUCCESS_CODE,

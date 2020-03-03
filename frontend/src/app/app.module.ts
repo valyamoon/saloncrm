@@ -76,7 +76,7 @@ export function getAuthServiceConfigs() {
     AppRoutingModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
-      apiKey: "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
+      apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg",
       libraries: ["geometry", "places"]
     }),
     FormsModule,
@@ -104,10 +104,9 @@ export function getAuthServiceConfigs() {
   ],
   providers: [
     {
-      provide: [HTTP_INTERCEPTORS, AuthServiceConfig],
+      provide: HTTP_INTERCEPTORS,
       useClass: MyInterceptor,
-      multi: true,
-      useFactory: getAuthServiceConfigs
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

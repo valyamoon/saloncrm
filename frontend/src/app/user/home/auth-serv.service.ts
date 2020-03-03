@@ -17,8 +17,6 @@ export class AuthServService {
   }
   logout() {
     localStorage.removeItem("LoggedInUser");
-    sessionStorage.clear();
     localStorage.clear();
-    this.myRoute.navigate(["/home"]);
   }
 }

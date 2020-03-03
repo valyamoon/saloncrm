@@ -260,7 +260,6 @@ export class UserloginComponent implements OnInit {
     }
 
     this.socialAuthService.signIn(socialPlatformProvider).then(userData => {
-      console.log("s", userData);
       if (userData) {
         var fullName: any;
         fullName = userData["name"];

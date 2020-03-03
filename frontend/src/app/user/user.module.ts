@@ -7,8 +7,7 @@ import { CommonModule } from "@angular/common";
 import {} from "googlemaps";
 
 import { Ng2SearchPipeModule } from "ng2-search-filter";
-
-import { StarRatingModule } from "angular-star-rating";
+import { MatTabsModule } from "@angular/material/tabs";
 
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { DatepickerModule, BsDatepickerModule } from "ngx-bootstrap/datepicker";
@@ -37,10 +36,13 @@ import {
   MatOptionModule,
   MatSelectModule,
   MatAutocompleteModule,
-  MatInputModule
+  MatInputModule,
+  MatCardModule
 } from "@angular/material";
 import { GooglesearchComponent } from "./home/mainpage/googlesearch/googlesearch.component";
 import { NgxMaskModule } from "ngx-mask";
+import { StarratingComponent } from "./home/starrating/starrating.component";
+import { BookingsComponent } from "./home/bookings/bookings.component";
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
@@ -67,7 +69,9 @@ export function getAuthServiceConfigs() {
     UserloginComponent,
     SalonListComponent,
     SalonDetailComponent,
-    GooglesearchComponent
+    GooglesearchComponent,
+    StarratingComponent,
+    BookingsComponent
   ],
   imports: [
     CommonModule,
@@ -90,14 +94,8 @@ export function getAuthServiceConfigs() {
     NgxMaskModule.forRoot(),
     Ng2SearchPipeModule,
     SocialLoginModule,
-    StarRatingModule
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-  providers: [
-    {
-      provide: [AuthServiceConfig],
-      useFactory: getAuthServiceConfigs
-    }
+    MatTabsModule,
+    MatCardModule
   ]
 })
 export class UserModule {}

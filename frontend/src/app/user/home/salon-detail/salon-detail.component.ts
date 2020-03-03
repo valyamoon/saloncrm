@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-salon-detail",
@@ -21,7 +22,8 @@ export class SalonDetailComponent implements OnInit {
 
   constructor(
     private userServ: UsercommonserviceService,
-    private toastServ: ToastrService
+    private toastServ: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit() {
