@@ -6,6 +6,7 @@ const utility = require("../../../../lib/utility.js");
 // const privateKey = require("./privatekey");
 // const FCM = new fcm(privateKey);
 const async = require("async");
+const cron = require("node-cron");
 const Moment = require("moment");
 const MomentRange = require("moment-range");
 
@@ -85,7 +86,8 @@ module.exports = {
   getUpcomingbookings: getUpcomingbookings,
   getSalonWeeklyDetails: getSalonWeeklyDetails,
   validatePromocode: validatePromocode,
-  getChangeInBookingsData: getChangeInBookingsData
+  getChangeInBookingsData: getChangeInBookingsData,
+  autoCompleteBookings: autoCompleteBookings
 };
 
 /**
@@ -2667,3 +2669,38 @@ function validatePromocode(req, res) {
   }
   validatePromocode().then(function() {});
 }
+
+function autoCompleteBookings() {
+  async function autoCompleteBookings() {
+    try {
+      console.log("its running");
+      var todaysDate = moment()
+        .utc()
+        .format("YYYY-MM-DDTHH:mm:00.000[Z]");
+      let condition = {
+        isCompleted: false,
+        isActive: true,
+        date: { $gte: todaysDate }
+      };
+
+      let dataToUpdate = {
+        isCompleted: true,
+        isActive: false
+      };
+
+      let updatedData = await commonQuery.updateAllDocument(
+        appointments,
+        condition,
+        dataToUpdate
+      );
+
+      console.log(updatedData);
+
+      res.send(findBookings);
+    } catch (error) {}
+  }
+  autoCompleteBookings().then(function() {});
+}
+cron.schedule("* * * * *", function() {
+  autoCompleteBookings();
+});

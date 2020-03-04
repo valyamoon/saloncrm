@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { UsercommonserviceService } from "../usercommonservice.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-bookings",
@@ -10,7 +11,10 @@ export class BookingsComponent implements OnInit {
   userID: any;
   bookingListData: any;
   selectedTab: any = "upcoming";
-  constructor(private userServ: UsercommonserviceService) {}
+  constructor(
+    private userServ: UsercommonserviceService,
+    private toastServ: ToastrService
+  ) {}
 
   ngOnInit() {
     this.userID = sessionStorage.getItem("userID");
@@ -23,9 +27,23 @@ export class BookingsComponent implements OnInit {
       user_id: this.userID,
       type: data
     };
-    this.userServ.getUserBookings(dataToPass).subscribe((data: any) => {
-      console.log(data);
-    });
+    this.userServ.getUserBookings(dataToPass).subscribe(
+      (data: any) => {
+        if (data["code"] === 200) {
+          this.bookingListData = data["data"];
+          console.log(this.bookingListData);
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
+            timeOut: 100
+          });
+        }
+      },
+      error => {
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 100
+        });
+      }
+    );
   }
   tabChanged(event) {
     console.log(event.index);
