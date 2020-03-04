@@ -9,6 +9,11 @@ import { BehaviorSubject, Observable } from "rxjs";
 // import { Observable } from 'rxjs';
 // import 'rxjs/add/operator/catch';
 // import 'rxjs/add/observable/throw';
+const httpOptionss = {
+  headers: {
+    skip: "true"
+  }
+};
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -37,7 +42,11 @@ export class UsercommonserviceService {
     let dataToPass = {
       type: "categories"
     };
-    return this.http.post(this.baseUrl + "/categories", dataToPass);
+    return this.http.post(
+      this.baseUrl + "/categories",
+      dataToPass,
+      httpOptionss
+    );
   }
   getSalonsList(data) {
     return this.http.post(this.baseUrl + "/searchsalon", data);
