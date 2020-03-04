@@ -2,20 +2,23 @@
   <app-header></app-header>
   <section class="banner-section">
     <div class="container">
-      <mat-tab-group  (selectedTabChange)="tabChanged($event)">
+      <mat-tab-group (selectedTabChange)="tabChanged($event)">
         <mat-tab label="Upcoming">
           <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div
+              class="col-lg-4 col-md-4 col-sm-12 col-xs-12"
+              *ngFor="let item of bookingListData"
+            >
               <mat-card>
                 <div class="booking-grids">
                   <div class="upperSec">
                     <div class="imgArea">
-                      <img src="../../../../assets/images/salon.png" alt="" />
+                      <img src="item.image" alt="" />
                     </div>
                     <div class="detailArea">
-                      <div class="date">Today</div>
+                      <div class="date">{{ item.date | date }}</div>
                       <div class="salonName">
-                        ABC SALON
+                        {{ item.name }}
                       </div>
                       <div class="rating-sec">
                         <app-starrating></app-starrating>
@@ -25,7 +28,7 @@
                           src="../../../../assets/images/location-pin.svg"
                           alt=""
                         />
-                        <span> Salon Address</span>
+                        <span> {{ item.address }}</span>
                       </div>
                       <div class="lowerSec">
                         <div class="calendar">
@@ -33,57 +36,16 @@
                             src="../../../../assets/images/calendar.svg"
                             alt=""
                           />
-                          <span> 13 Feb 2020</span>
+                          <span>
+                            {{ item.date | date: "mediumDate" }}
+                          </span>
                         </div>
                         <div class="time">
                           <img
                             src="../../../../assets/images/clock-circular-outline.svg"
                             alt=""
                           />
-                          <span> 8:30 PM</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </mat-card>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              <mat-card>
-                <div class="booking-grids">
-                  <div class="upperSec">
-                    <div class="imgArea">
-                      <img src="../../../../assets/images/salon.png" alt="" />
-                    </div>
-                    <div class="detailArea">
-                      <div class="date">Today</div>
-                      <div class="salonName">
-                        ABC SALON
-                      </div>
-                      <div class="rating-sec">
-                        <app-starrating></app-starrating>
-                      </div>
-                      <div class="locaSec">
-                        <img
-                          src="../../../../assets/images/location-pin.svg"
-                          alt=""
-                        />
-                        <span> Salon Address</span>
-                      </div>
-                      <div class="lowerSec">
-                        <div class="calendar">
-                          <img
-                            src="../../../../assets/images/calendar.svg"
-                            alt=""
-                          />
-                          <span> 13 Feb 2020</span>
-                        </div>
-                        <div class="time">
-                          <img
-                            src="../../../../assets/images/clock-circular-outline.svg"
-                            alt=""
-                          />
-                          <span> 8:30 PM</span>
+                          <span>{{ item.starttime }}</span>
                         </div>
                       </div>
                     </div>
@@ -95,17 +57,20 @@
         </mat-tab>
         <mat-tab label="Completed">
           <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div
+              class="col-lg-4 col-md-4 col-sm-12 col-xs-12"
+              *ngFor="let item of bookingListData"
+            >
               <mat-card>
                 <div class="booking-grids">
                   <div class="upperSec">
                     <div class="imgArea">
-                      <img src="../../../../assets/images/salon.png" alt="" />
+                      <img src="item.image" alt="" />
                     </div>
                     <div class="detailArea">
-                      <div class="date">Today</div>
+                      <div class="date">{{ item.date | date }}</div>
                       <div class="salonName">
-                        ABC SALON
+                        {{ item.name }}
                       </div>
                       <div class="rating-sec">
                         <app-starrating></app-starrating>
@@ -115,7 +80,7 @@
                           src="../../../../assets/images/location-pin.svg"
                           alt=""
                         />
-                        <span> Salon Address</span>
+                        <span> {{ item.address }}</span>
                       </div>
                       <div class="lowerSec">
                         <div class="calendar">
@@ -123,57 +88,16 @@
                             src="../../../../assets/images/calendar.svg"
                             alt=""
                           />
-                          <span> 13 Feb 2020</span>
+                          <span>
+                            {{ item.date | date: "mediumDate" }}
+                          </span>
                         </div>
                         <div class="time">
                           <img
                             src="../../../../assets/images/clock-circular-outline.svg"
                             alt=""
                           />
-                          <span> 8:30 PM</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </mat-card>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              <mat-card>
-                <div class="booking-grids">
-                  <div class="upperSec">
-                    <div class="imgArea">
-                      <img src="../../../../assets/images/salon.png" alt="" />
-                    </div>
-                    <div class="detailArea">
-                      <div class="date">Today</div>
-                      <div class="salonName">
-                        ABC SALON
-                      </div>
-                      <div class="rating-sec">
-                        <app-starrating></app-starrating>
-                      </div>
-                      <div class="locaSec">
-                        <img
-                          src="../../../../assets/images/location-pin.svg"
-                          alt=""
-                        />
-                        <span> Salon Address</span>
-                      </div>
-                      <div class="lowerSec">
-                        <div class="calendar">
-                          <img
-                            src="../../../../assets/images/calendar.svg"
-                            alt=""
-                          />
-                          <span> 13 Feb 2020</span>
-                        </div>
-                        <div class="time">
-                          <img
-                            src="../../../../assets/images/clock-circular-outline.svg"
-                            alt=""
-                          />
-                          <span> 8:30 PM</span>
+                          <span>{{ item.starttime }}</span>
                         </div>
                       </div>
                     </div>

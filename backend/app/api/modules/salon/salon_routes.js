@@ -38,6 +38,7 @@ module.exports = function(router) {
   router.post("/validate-promocode", salon.validatePromocode);
   router.post("/updatesalonservices", salon.updateSalonServices);
   router.post("/get-notification", salon.getChangeInBookingsData);
+  router.post("/auto-complete", salon.autoCompleteBookings);
 
   // router.get('/listUser', middlewares, user.getUserList);
   return router;
