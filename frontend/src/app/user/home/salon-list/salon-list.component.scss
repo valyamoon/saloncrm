@@ -1,208 +1,337 @@
 .banner-section {
-    background: #F5F6F7;
+  background: #f5f6f7;
+  margin-top: 5em;
+  .salon-list {
+    padding-top: 35px;
+    padding-left: 30px;
+    padding-right: 30px;
+    .salon-list-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #d3d4d7;
+      padding-bottom: 25px;
+      padding-right: 3em;
+
+      padding-left: 4em;
+    }
+    h4 {
+      text-align: left;
+      letter-spacing: 0;
+      color: #000000;
+      opacity: 1;
+      font-size: 18px;
+      margin: 0;
+      font-weight: 600;
+    }
+    .book-appointement-inner {
+      // margin-right: 25px;
+      input {
+        width: 316px;
+        height: 50px;
+        letter-spacing: 0;
+        color: #4d4d55;
+      }
+      label {
+        text-align: left;
+        letter-spacing: 0;
+        color: #262626;
+        opacity: 1;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+  }
+  .salon-info-outer {
+    .salon-list-info {
+      background: #ffffff 0% 0% no-repeat padding-box;
+      box-shadow: 0px 3px 12px #00000014;
+      border-radius: 10px;
+      opacity: 1;
+      min-height: 118px;
+      padding: 15px;
+      margin-bottom: 15px;
+      .salon-list-info-left {
+        display: flex;
+        .salon-img {
+          background: #fff2f2;
+          border-radius: 10px;
+          padding: 10px;
+          margin-right: 10px;
+          img {
+            width: 70px;
+          }
+        }
+        .salon-info {
+          .location {
+            padding-bottom: 10px;
+            padding-top: 10px;
+            span {
+              text-align: left;
+              letter-spacing: 0;
+              color: #9595a1;
+              opacity: 1;
+              font-style: italic;
+              font-size: 14px;
+            }
+          }
+          img {
+            width: 11px;
+            margin-right: 8px;
+          }
+        }
+        h5 {
+          text-align: left;
+          letter-spacing: 0;
+          color: #000000;
+          opacity: 1;
+          font-size: 16px;
+          font-weight: 600;
+        }
+      }
+      .salon-list-info-right {
+        display: flex;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        &:last-child() {
+          margin-bottom: 0;
+        }
+        .time-slots {
+          background: #ffffff 0% 0% no-repeat padding-box;
+          border: 1px solid #d6d6d6;
+          border-radius: 6px;
+          opacity: 1;
+          width: 85px;
+          height: 34px;
+          margin: 5px;
+          a {
+            text-align: center;
+            letter-spacing: 0;
+            color: #292929;
+            opacity: 1;
+            font-size: 14px;
+            display: block;
+            padding: 5px;
+          }
+        }
+      }
+    }
+    .salon-filter {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      margin-top: 18px;
+      h4 {
+        text-align: left;
+        letter-spacing: 0;
+        color: #000000;
+        opacity: 1;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+    }
+    .bookapp-rights {
+      text-align: center;
+      letter-spacing: 0;
+      color: #9595a1;
+      opacity: 1;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+    .book-appointement-inner-sec {
+      text-align: center;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      .btn-submit-sec {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .banner-section {
     .salon-list {
-        padding-top: 35px;
-        padding-left: 30px;
-        padding-right: 30px;
-        .salon-list-inner {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #d3d4d7;
-            padding-bottom: 25px;
+      .book-appointement-inner {
+        position: relative;
+        margin-right: 5px;
+        margin-left: 5px;
+        input {
+          width: 100%;
         }
-        h4 {
-            text-align: left;
-            letter-spacing: 0;
-            color: #000000;
-            opacity: 1;
-            font-size: 18px;
-            font-weight: 600;
-            padding-top: 45px;
+      }
+      h4 {
+        padding-right: 15px;
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .salon-info-outer {
+    .salon-list-info {
+      .salon-list-info-right {
+        flex-wrap: wrap;
+        .time-slots {
+          margin-bottom: 10px;
         }
-        .book-appointement-inner {
-            // margin-right: 25px;
-            input {
-                width: 316px;
-                height: 50px;
-                letter-spacing: 0;
-                color: #4D4D55;
-            }
-            label {
-                text-align: left;
-                letter-spacing: 0;
-                color: #262626;
-                opacity: 1;
-                font-size: 14px;
-                font-weight: 600;
-            }
+      }
+      .salon-list-info-left {
+        .salon-img {
+          display: flex;
+          align-items: center;
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .banner-section {
+    .salon-list {
+      padding-top: 0;
+      .salon-list-inner {
+        display: block;
+      }
+      .book-appointement-inner {
+        margin-bottom: 15px;
+      }
     }
     .salon-info-outer {
-        .salon-list-info {
-            background: #FFFFFF 0% 0% no-repeat padding-box;
-            box-shadow: 0px 3px 12px #00000014;
-            border-radius: 10px;
-            opacity: 1;
-            min-height: 118px;
-            padding: 15px;
-            margin-bottom: 15px;
-            .salon-list-info-left {
-                display: flex;
-                .salon-img {
-                    background: #fff2f2;
-                    border-radius: 10px;
-                    padding: 10px;
-                    margin-right: 10px;
-                    img {
-                        width: 70px;
-                    }
-                }
-                .salon-info {
-                    .location {
-                        span {
-                            text-align: left;
-                            letter-spacing: 0;
-                            color: #9595A1;
-                            opacity: 1;
-                            font-style: italic;
-                            font-size: 14px;
-                        }
-                    }
-                    img {
-                        width: 11px;
-                        margin-right: 8px;
-                    }
-                }
-                h5 {
-                    text-align: left;
-                    letter-spacing: 0;
-                    color: #000000;
-                    opacity: 1;
-                    font-size: 16px;
-                    font-weight: 600;
-                }
-            }
-            .salon-list-info-right {
-                display: flex;
-                margin-bottom: 15px;
-                &:last-child() {
-                    margin-bottom: 0;
-                }
-                .time-slots {
-                    background: #FFFFFF 0% 0% no-repeat padding-box;
-                    border: 1px solid #D6D6D6;
-                    border-radius: 6px;
-                    opacity: 1;
-                    width: 85px;
-                    height: 34px;
-                    margin-right: 20px;
-                    a {
-                        text-align: center;
-                        letter-spacing: 0;
-                        color: #292929;
-                        opacity: 1;
-                        font-size: 14px;
-                        display: block;
-                        padding: 5px;
-                    }
-                }
-            }
-        }
-        .salon-filter {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            margin-top: 18px;
-            h4 {
-                text-align: left;
-                letter-spacing: 0;
-                color: #000000;
-                opacity: 1;
-                font-size: 18px;
-                font-weight: 600;
-                margin: 0;
-            }
-        }
-        .bookapp-rights {
+      .salon-list-info {
+        .salon-list-info-left {
+          display: block;
+          .salon-img {
             text-align: center;
-            letter-spacing: 0;
-            color: #9595A1;
-            opacity: 1;
-            font-size: 15px;
             margin-bottom: 15px;
+          }
         }
-        .book-appointement-inner-sec {
-            text-align: center;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            .btn-submit-sec {
-                margin-top: 0;
-            }
+        .salon-info {
+          margin-bottom: 15px;
         }
+      }
     }
+  }
 }
 
-@media(max-width: 1200px) {
-    .banner-section {
-        .salon-list {
-            .book-appointement-inner {
-                position: relative;
-                margin-right: 5px;
-                margin-left: 5px;
-                input {
-                    width: 100%;
-                }
-            }
-            h4 {
-                padding-right: 15px;
-            }
-        }
-    }
+.filled.color2 {
+  color: orange;
+}
+.regBtn {
+  background: transparent linear-gradient(99deg, #cc2b5e 0%, #753a88 100%) 0% 0%
+    no-repeat padding-box;
+  box-shadow: 0px 3px 12px #00000012;
+  border-radius: 25px;
+  padding: 8px;
+  border-color: unset;
+  text-align: center;
+  letter-spacing: 1.4px;
+  color: #ffffff;
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 500;
+  width: 130px;
+  margin-left: 15px;
 }
 
-@media(max-width: 991px) {
-    .salon-info-outer {
-        .salon-list-info {
-            .salon-list-info-right {
-                flex-wrap: wrap;
-                .time-slots {
-                    margin-bottom: 10px;
-                }
-            }
-            .salon-list-info-left {
-                .salon-img {
-                    display: flex;
-                    align-items: center;
-                }
-            }
-        }
+.slotBox {
+  cursor: pointer;
+}
+.noRecordsDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  span {
+    padding: 1em;
+    border: 1px solid purple;
+    border-radius: 10px;
+    color: purple;
+    width: 25%;
+    text-align: center;
+  }
+}
+.detailBtn {
+  background: transparent linear-gradient(99deg, #cc2b5e 0%, #753a88 100%) 0% 0%
+    no-repeat padding-box;
+  box-shadow: 0px 3px 12px #00000012;
+  padding: 5px;
+  border-color: unset;
+  text-align: center;
+  letter-spacing: 1.4px;
+  color: #ffffff;
+  opacity: 1;
+  font-size: 14px;
+  font-weight: 500;
+  width: auto;
+}
+.searchInput {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.filterPref {
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+.FilterOverlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .mainSect {
+    padding: 1em;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    margin: 15px;
+    .price {
     }
+    .distance {
+    }
+  }
+}
+.sortBY {
+  font-weight: 700;
+}
+.price:hover {
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  background-image: url('../../../../assets/images/Group\ 8210.svg');
+}
+.price {
+  background-image: url('../../../../assets/images/Group\ 8220.svg');
+  height: 100px;
+  cursor: pointer;
+  width: 100px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
-@media(max-width: 767px) {
-    .banner-section {
-        .salon-list {
-            padding-top: 0;
-            .salon-list-inner {
-                display: block;
-            }
-            .book-appointement-inner {
-                margin-bottom: 15px;
-            }
-        }
-        .salon-info-outer {
-            .salon-list-info {
-                .salon-list-info-left {
-                    display: block;
-                    .salon-img {
-                        text-align: center;
-                        margin-bottom: 15px;
-                    }
-                }
-                .salon-info {
-                    margin-bottom: 15px;
-                }
-            }
-        }
-    }
+.distance:hover {
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  background-image: url('../../../../assets/images/Group\ 8221.svg');
+}
+.distance {
+  cursor: pointer;
+  background-image: url('../../../../assets/images/Group\ 8211.svg');
+  height: 100px;
+  width: 100px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }

@@ -1,486 +1,107 @@
 <app-header></app-header>
 <section class="banner-section">
-    <div class="salon-list">
-        <div class="salon-list-inner">
-            <h4>Filters</h4>
-            <div class="book-appointement-inner">
-                <label>Category</label>
-                <input type="text" class="form-control" placeholder="Hair Cut" id="" />
-                <img src="../../../../assets/images/category.svg" />
-            </div>
-            <div class="book-appointement-inner">
-                <label>Date</label>
-                <input type="text" class="form-control" placeholder="Hair Cut" id="" />
-                <img src="../../../../assets/images/calendar.svg" />
-            </div>
-            <div class="book-appointement-inner">
-                <label>Location</label>
-                <input type="text" class="form-control" placeholder="Hair Cut" id="" />
-                <img src="../../../../assets/images/location-pin.svg" />
-            </div>
-            <div class="book-appointement-inner">
-                <button class="btn btn-primary btn-submit-sec" type="submit"> LOGIN / REGISTER </button>
-            </div>
-        </div>
+  <div class="salon-list">
+    <div class="salon-list-inner">
+      <div class="filterPref">
+        <h4>Filters</h4>
+        <button (click)="goToFilter()" class="btn btn-primary regBtn">
+          RESET FILTER
+        </button>
+      </div>
+      <input
+        type="text"
+        class="form-control searchInput"
+        placeholder="Search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="clearFilter()"
+      />
     </div>
-    <div class="salon-info-outer">
+  </div>
+  <div class="salon-info-outer">
+    <div class="container">
+      <div class="salon-filter">
+        <h4>Salons</h4>
+        <img
+          src="../../../../assets/images/Hamburger.svg"
+          (click)="openFilterModal()"
+        />
+      </div>
 
-        <div class="container">
-            <div class="salon-filter">
-                <h4>Saloons</h4>
-                <img src="../../../../assets/images/Hamburger.svg">
-            </div>
+      <div class="row">
+        <div class="noRecordsDiv" *ngIf="showNoRecords">
+          <span>No Salons Found</span>
+        </div>
+        <!-- starthere -->
+        <div class="col-md-12" *ngFor="let item of salonListingData">
+          <div class="salon-list-info">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="salon-list-info">
+              <div class="col-md-4">
+                <div class="salon-list-info-left">
+                  <div class="salon-img">
+                    <img src="{{ item.image }}" />
+                  </div>
 
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="salon-list-info-left">
-
-                                    <div class="salon-img">
-                                        <img src="../../../../assets/images/surface1.svg">
-                                    </div>
-
-                                    <div class="salon-info">
-                                        <h5>Beauty and Spa</h5>
-                                        <div class="rating-sec">
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star inactive-star " aria-hidden="true"></i>
-                                        </div>
-                                        <div class="location">
-                                            <img src="../../../../assets/images/location-pin.svg">
-                                            <span>#324, Thameson Street</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="salon-list-info-right">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                                <div class="salon-list-info-right mb-0">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
+                  <div class="salon-info">
+                    <h5>{{ item.name }}</h5>
+                    <div class="rating-sec">
+                      <app-starrating></app-starrating>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="salon-list-info">
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="salon-list-info-left">
-
-                                    <div class="salon-img">
-                                        <img src="../../../../assets/images/surface1.svg">
-                                    </div>
-
-                                    <div class="salon-info">
-                                        <h5>Beauty and Spa</h5>
-                                        <div class="rating-sec">
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star inactive-star " aria-hidden="true"></i>
-                                        </div>
-                                        <div class="location">
-                                            <img src="../../../../assets/images/location-pin.svg">
-                                            <span>#324, Thameson Street</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="salon-list-info-right">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                                <div class="salon-list-info-right">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
+                    <div class="location">
+                      <img src="../../../../assets/images/location-pin.svg" />
+                      <span>{{ item.address }}</span>
                     </div>
+                    <button
+                      (click)="showSalonDetails(item)"
+                      class="btn btn-primary detailBtn"
+                    >
+                      Detail
+                    </button>
+                  </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="salon-list-info">
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="salon-list-info-left">
-
-                                    <div class="salon-img">
-                                        <img src="../../../../assets/images/surface1.svg">
-                                    </div>
-
-                                    <div class="salon-info">
-                                        <h5>Beauty and Spa</h5>
-                                        <div class="rating-sec">
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star inactive-star " aria-hidden="true"></i>
-                                        </div>
-                                        <div class="location">
-                                            <img src="../../../../assets/images/location-pin.svg">
-                                            <span>#324, Thameson Street</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="salon-list-info-right">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                                <div class="salon-list-info-right">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
+              </div>
+              <div class="col-md-8">
+                <div class="salon-list-info-right">
+                  <div *ngFor="let slot of item.slots">
+                    <div class="time-slots" *ngIf="!slot.status">
+                      <a
+                        class="slotBox"
+                        title="Pick Slot"
+                        (click)="bookSlot(slot.time, item.service)"
+                      >
+                        {{ slot.time }}
+                      </a>
                     </div>
+                  </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="salon-list-info">
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="salon-list-info-left">
-
-                                    <div class="salon-img">
-                                        <img src="../../../../assets/images/surface1.svg">
-                                    </div>
-
-                                    <div class="salon-info">
-                                        <h5>Beauty and Spa</h5>
-                                        <div class="rating-sec">
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                            <i class="fa fa-star inactive-star " aria-hidden="true"></i>
-                                        </div>
-                                        <div class="location">
-                                            <img src="../../../../assets/images/location-pin.svg">
-                                            <span>#324, Thameson Street</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="salon-list-info-right">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                                <div class="salon-list-info-right">
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-                                    <div class="time-slots">
-                                        <a href="">
-                8:30 am
-                                            </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="book-appointement-inner book-appointement-inner-sec">
-            <button class="btn btn-primary btn-submit-sec" type="submit"> SHOW MORE </button>
-        </div>
-        <div class="bookapp-rights">2020, Bookapp. All rights reserved</div>
+      </div>
     </div>
-
-
-
+    <div class="book-appointement-inner book-appointement-inner-sec">
+      <button
+        class="btn btn-primary btn-submit-sec"
+        type="submit"
+        *ngIf="!showNoRecords"
+      >
+        SHOW MORE
+      </button>
+    </div>
+    <div class="bookapp-rights">2020, Bookapp. All rights reserved</div>
+  </div>
 </section>
+
+<div class="FilterOverlay" *ngIf="isShowFilterPopUp">
+  <div class="mainSect col-lg-3 col-md-6 col-sm-12">
+    <label class="sortBY">Sort By</label>
+    <div class="price" (click)="sortByPrice()" title="Sort by price"></div>
+    <div
+      class="distance"
+      (click)="sortByDistance()"
+      title="Sort by distance"
+    ></div>
+  </div>
+</div>
 
 <app-footer></app-footer>

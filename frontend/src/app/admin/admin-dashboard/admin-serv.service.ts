@@ -31,17 +31,6 @@ export class AdminServService {
   // Initialize with emtpy string
   private headerResponse = new BehaviorSubject<boolean>(true);
 
-  // private dialogResponse = new BehaviorSubject<boolean>();
-
-  // setDialogResponse(data: boolean) {
-  //   // Fire the update event with the new data
-  //   this.dialogResponse.next(data);
-  // }
-
-  // getDialogResponse(): Observable<boolean> {
-  //   return this.dialogResponse.asObservable();
-  // }
-
   setHeaderResponse(data: boolean) {
     // Fire the update event with the new data
     this.headerResponse.next(data);

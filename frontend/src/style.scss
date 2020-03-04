@@ -1,0 +1,15 @@
+@import '../node_modules/angular-star-rating/src/star-rating.css';
+
+.wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  .mainSection {
+    flex-grow: 1;
+  }
+}

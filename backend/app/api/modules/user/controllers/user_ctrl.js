@@ -2,7 +2,8 @@
 
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
-const authy = require("authy")("Y23QOjmAiKdXpEU1MEVAp1g99X77QqFp");
+// const authy = require("authy")("Y23QOjmAiKdXpEU1MEVAp1g99X77QqFp");
+const authy = require("authy")("8MoNt8nsgLs3IUN0qO3ikuLnl3Pq4ZXn");
 
 const jwt = require("jsonwebtoken");
 
@@ -75,6 +76,7 @@ function requestVerification(req, res) {
           },
           function(err, result) {
             if (err) {
+              console.log(err);
               //res.json({ message: err["message"], code: 400, data: null });
               res.json(
                 Response(constant.ERROR_CODE, constant.FAILED_TO_SEND_OTP, null)

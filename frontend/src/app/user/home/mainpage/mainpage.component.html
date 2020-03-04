@@ -1,95 +1,159 @@
 <div class="homepage">
-    <app-header></app-header>
+  <app-header></app-header>
 
-    <section class="banner-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 offset-md-6">
-                    <div class="book-appointement">
-                        <h2>Book An Appointment</h2>
-                        <form>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Category</label>
-                                        <div class="book-appointement-inner" (click)="openServiceModal()">
-                                            <input type="text" class="form-control" placeholder="Salon, Service, etc" id="" />
-                                            <img src="../../../../assets/images/category.svg" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Date</label>
-                                        <div class="book-appointement-inner">
-                                            <input type="text" class="form-control" placeholder="Date" id="" />
-                                            <img src="../../../../assets/images/calendar.svg" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Location</label>
-                                        <div class="book-appointement-inner">
-                                            <input type="text" class="form-control" placeholder="Near Me" id="" />
-                                            <img src="../../../../assets/images/location-pin.svg" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="btn-submit">
-                                <button type="submit" class="btn btn-primary">SEARCH</button>
-                            </div>
-                        </form>
+  <section class="banner-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 offset-md-6">
+          <div class="book-appointement">
+            <h2>Book An Appointment</h2>
+            <form [formGroup]="searchSalonForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Date</label>
+                    <div class="book-appointement-inner">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [minDate]="minDate"
+                        [maxDate]="maxDate"
+                        #dp="bsDatepicker"
+                        bsDatepicker
+                        [(ngModel)]="myDateValue"
+                        [ngModelOptions]="{ standalone: true }"
+                        (ngModelChange)="onDateChange($event)"
+                      />
+                      <img src="../../../../assets/images/calendar.svg" />
                     </div>
+                  </div>
                 </div>
-            </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="locationLabel"
+                      >Location
+                      <div class="locationArea" >
+                        <img
+                        (click)="getCurrentLocation()"
+                          class="location"
+                          src="../../../../assets/images/current-location.png"
+                          title="use current location"
+                        />
+                      </div>
+                    </label>
+                    <div class="book-appointement-inner">
+                      <!-- <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Near Me"
+                        id=""
+                      /> -->
+
+                      <app-googlesearch
+                        class="geoLoc"
+                        (setAddress)="getAddress($event)"
+                        adressType="geocode"
+                      ></app-googlesearch>
+                      <img src="../../../../assets/images/location-pin.svg" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Category</label>
+                    <div
+                      class="book-appointement-inner"
+                      (click)="openServiceModal()"
+                    >
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="serviceName"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Salon, Service, etc"
+                        id=""
+                      />
+                      <img src="../../../../assets/images/category.svg" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span *ngIf="errorMsg !== null">{{ errorMsg }}</span>
+              <div class="btn-submit">
+                <button
+                  type="submit"
+                  [disabled]="searchSalonForm.invalid"
+                  (click)="searchSalons(searchSalonForm.value)"
+                  class="btn btn-primary"
+                >
+                  SEARCH
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-    </section>
-    <section class="get-stylish-look">
-        <h2>GET A STYLISH LOOK</h2>
-        <div class="style-look-details">
-            LOREM IPSUM DOLOR SIT AMET
-        </div>
-    </section>
-    <div class="btn-book-now">
-        <button class="btn btn-primary" type="submit">BOOK NOW</button>
-        <img src="../../../../assets/images/hairdresser-chair.svg" />
+      </div>
     </div>
-    <section class="about-us">
-        <div class="about-us-inner">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="about-us-img">
-                            <img src="../../../../assets/images/about-us.png" />
-                        </div>
-                    </div>
-                    <div class="col-md-7">
-                        <h2>ABOUT US</h2>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                            nisi ut aliquip ex ea commodo consequat. eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </p>
-
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                        </p>
-                        <button class="btn btn-primary" type="submit">KNOW MORE</button>
-                    </div>
-                </div>
+  </section>
+  <section class="get-stylish-look">
+    <h2>GET A STYLISH LOOK</h2>
+    <div class="style-look-details">
+      LOREM IPSUM DOLOR SIT AMET
+    </div>
+  </section>
+  <div class="btn-book-now">
+    <button class="btn btn-primary" type="submit">BOOK NOW</button>
+    <img src="../../../../assets/images/hairdresser-chair.svg" />
+  </div>
+  <section class="about-us">
+    <div class="about-us-inner">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-5">
+            <div class="about-us-img">
+              <img src="../../../../assets/images/about-us.png" />
             </div>
-        </div>
-    </section>
+          </div>
+          <div class="col-md-7">
+            <h2>ABOUT US</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. eiusmod tempor incididunt
+              ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+              nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat.
+            </p>
 
-    <section class="services-section">
-        <h2>
-            WHAT TYPE OF SERVICE ARE YOU LOOKING FOR<img src="../../../../assets/images/question.svg" />
-        </h2>
-        <div class="services-section-outer">
-            <div class="services-outer">
-                <div class="services-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40.243" height="49.127" viewBox="0 0 40.243 49.127">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et
+            </p>
+            <button class="btn btn-primary" type="submit">KNOW MORE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services-section">
+    <h2>
+      WHAT TYPE OF SERVICE ARE YOU LOOKING FOR<img
+        src="../../../../assets/images/question.svg"
+      />
+    </h2>
+    <div class="services-section-outer">
+      <div class="services-outer">
+        <div class="services-inner">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40.243"
+            height="49.127"
+            viewBox="0 0 40.243 49.127"
+          >
             <defs>
               <!-- <style>
                 .a {
@@ -113,12 +177,17 @@
               />
             </g>
           </svg>
-                </div>
-                <h5>Hair</h5>
-            </div>
-            <div class="services-outer">
-                <div class="services-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="55.929" height="35.299" viewBox="0 0 55.929 35.299">
+        </div>
+        <h5>Hair</h5>
+      </div>
+      <div class="services-outer">
+        <div class="services-inner">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="55.929"
+            height="35.299"
+            viewBox="0 0 55.929 35.299"
+          >
             <defs>
               <style>
                 .a {
@@ -144,12 +213,17 @@
               </g>
             </g>
           </svg>
-                </div>
-                <h5>Threading</h5>
-            </div>
-            <div class="services-outer">
-                <div class="services-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="37.798" height="53.052" viewBox="0 0 37.798 53.052">
+        </div>
+        <h5>Threading</h5>
+      </div>
+      <div class="services-outer">
+        <div class="services-inner">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="37.798"
+            height="53.052"
+            viewBox="0 0 37.798 53.052"
+          >
             <defs>
               <style>
                 .a {
@@ -198,12 +272,17 @@
               />
             </g>
           </svg>
-                </div>
-                <h5>Facial</h5>
-            </div>
-            <div class="services-outer">
-                <div class="services-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50.641" height="54.13" viewBox="0 0 50.641 54.13">
+        </div>
+        <h5>Facial</h5>
+      </div>
+      <div class="services-outer">
+        <div class="services-inner">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="50.641"
+            height="54.13"
+            viewBox="0 0 50.641 54.13"
+          >
             <defs>
               <style>
                 .a {
@@ -262,12 +341,17 @@
               />
             </g>
           </svg>
-                </div>
-                <h5>Spa</h5>
-            </div>
-            <div class="services-outer">
-                <div class="services-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="47.321" height="47.854" viewBox="0 0 47.321 47.854">
+        </div>
+        <h5>Spa</h5>
+      </div>
+      <div class="services-outer">
+        <div class="services-inner">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="47.321"
+            height="47.854"
+            viewBox="0 0 47.321 47.854"
+          >
             <defs>
               <style>
                 .a {
@@ -305,12 +389,17 @@
               </g>
             </g>
           </svg>
-                </div>
-                <h5>Pedicure</h5>
-            </div>
-            <div class="services-outer">
-                <div class="services-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="44.796" height="45.516" viewBox="0 0 44.796 45.516">
+        </div>
+        <h5>Pedicure</h5>
+      </div>
+      <div class="services-outer">
+        <div class="services-inner">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="44.796"
+            height="45.516"
+            viewBox="0 0 44.796 45.516"
+          >
             <defs>
               <style>
                 .a {
@@ -339,128 +428,78 @@
               />
             </g>
           </svg>
-                </div>
-                <h5>Waxing</h5>
-            </div>
         </div>
-    </section>
-    <section class="app-info-section">
-        <div class="app-info-inner">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 offset-md-2">
-                        <div class="app-info-img">
-                            <img src="../../../../assets/images/app-info.png" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="app-info">
-                            <h5>THE APP IS NOW</h5>
-                            <h4>AVAILABLE ON</h4>
-                            <img src="../../../../assets/images/Appstore.png" />
-                        </div>
-                    </div>
-                </div>
+        <h5>Waxing</h5>
+      </div>
+    </div>
+  </section>
+  <section class="app-info-section">
+    <div class="app-info-inner">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 offset-md-2">
+            <div class="app-info-img">
+              <img src="../../../../assets/images/app-info.png" />
             </div>
+          </div>
+          <div class="col-md-6">
+            <div class="app-info">
+              <h5>THE APP IS NOW</h5>
+              <h4>AVAILABLE ON</h4>
+              <img src="../../../../assets/images/Appstore.png" />
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <app-footer></app-footer>
+  <app-footer></app-footer>
 </div>
 
 <div class="modal-overlay" *ngIf="isModal">
-    <div class="modal-section">
-        <h4>Services</h4>
-        <div class="book-appointement-inner">
-            <input class="form-control" id="" placeholder="" type="text" />
-            <!-- <img src="../../../../assets/images/category.svg" /> -->
-        </div>
-
-        <div class="hair-section">
-            <h5>HAIR</h5>
-            <div class="hair-section-outer">
-                <div class="hair-section-inner">
-                    <label class="container">Hair Color
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-                <div class="hair-section-inner">
-                    <label class="container">Hair Spa
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-            </div>
-            <div class="hair-section-outer">
-                <div class="hair-section-inner">
-                    <label class="container">Hair Cut
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-                <div class="hair-section-inner">
-                    <label class="container">Hair Styling
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-            </div>
-            <div class="hair-section-outer">
-                <div class="hair-section-inner">
-                    <label class="container">Hair straightening
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-                <div class="hair-section-inner">
-                    <label class="container">Hair Wash
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-            </div>
-        </div>
-        <div class="hair-section massage-section">
-            <h5>Massage</h5>
-            <div class="hair-section-outer">
-                <div class="hair-section-inner">
-                    <label class="container">Head Massage
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-                <div class="hair-section-inner">
-                    <label class="container">Body Massage
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-            </div>
-            <div class="hair-section-outer">
-                <!-- <div class="hair-section-inner">
-                    <label class="container">Hair Cut
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div> -->
-                <div class="hair-section-inner">
-                    <label class="container">Oil Massage
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-                <div class="hair-section-inner">
-                    <label class="container">Face Massage
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-                </div>
-            </div>
-        </div>
-        <div class="btn-category-section">
-            <button class="btn" (click)="dismissModal()">CANCEL</button>
-            <button class="btn btn-done">DONE</button>
-        </div>
+  <div class="modal-section">
+    <h4>Services</h4>
+    <div class="book-appointement-inner">
+      <input
+        class="form-control"
+        id=""
+        placeholder=""
+        type="text"
+        [(ngModel)]="searchTerm"
+      />
+      <!-- <img src="../../../../assets/images/category.svg" /> -->
     </div>
+    <form [formGroup]="categoriesForm">
+      <div
+        class="hair-section"
+        *ngFor="let item of categoriesList | filter: searchTerm"
+      >
+        <h5>{{ item.catname }}</h5>
+        <div class="hair-section-outer">
+          <div class="hair-section-inner">
+            <label *ngFor="let elem of item.services">
+              <input
+                formControlName="service"
+                type="radio"
+                name="service"
+                [value]="elem"
+              />
+              {{ elem.name }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="btn-category-section">
+        <button class="btn" (click)="dismissModal()">CANCEL</button>
+        <button
+          class="btn btn-done"
+          [disabled]="categoriesForm.invalid"
+          (click)="selectedService(categoriesForm.value)"
+        >
+          DONE
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

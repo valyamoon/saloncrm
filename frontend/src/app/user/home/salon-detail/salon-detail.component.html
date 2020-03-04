@@ -1,147 +1,97 @@
 <app-header></app-header>
 <section class="banner-section">
-    <div class="booking-view">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-
-                    <div class="">
-                        <h4>Johnson B. Saloon</h4>
-                        <div class="rating-sec">
-                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                            <i class="fa fa-star active-star " aria-hidden="true"></i>
-                            <i class="fa fa-star inactive-star " aria-hidden="true"></i>
-                        </div>
-                    </div>
-                    <div class="booking-view-left">
-
-                        <div class="booking-view-left-img">
-                            <img src="../../../../assets/images/booking.png">
-                        </div>
-
-
-                        <div class="booking-view-left-info">
-                            <ul>
-                                <li>
-                                    <h4>Direction</h4>
-                                    <div class="">
-                                        <i class="fa fa-phone" aria-hidden="true"></i>
-                                        <span>+91 01234567891</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="share">
-                                        <img src="../../../../assets/images/share.svg">
-                                        <!-- <img src="../../../../assets/images/pin.svg"> -->
-                                        <h4>Share</h4>
-                                    </div>
-
-                                    <div class="reviews">
-                                        <i class="fa fa-star active-star " aria-hidden="true"></i>
-                                        <span>Reviews</span>
-                                    </div>
-                                </li>
-
-                            </ul>
-                            <div class="working-days">
-                                <h5>Working Days</h5>
-                                <ul>
-                                    <li>
-                                        <div class="date-sec">
-                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                            <h5>Monday</h5>
-                                        </div>
-                                        <div class="time-sec">
-                                            9:30 AM to 8:30 PM
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="date-sec">
-                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                            <h5>Tuesday</h5>
-                                        </div>
-                                        <div class="time-sec">
-                                            9:30 AM to 8:30 PM
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="date-sec">
-                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                            <h5>Wednesday</h5>
-                                        </div>
-                                        <div class="time-sec">
-                                            9:30 AM to 8:30 PM
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="date-sec">
-                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                            <h5>Thursday</h5>
-                                        </div>
-                                        <div class="time-sec">
-                                            9:30 AM to 8:30 PM
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="date-sec">
-                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                            <h5>Friday</h5>
-                                        </div>
-                                        <div class="time-sec">
-                                            9:30 AM to 8:30 PM
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="date-sec">
-                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                            <h5>Saturday</h5>
-                                        </div>
-                                        <div class="time-sec">
-                                            9:30 AM to 8:30 PM
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="date-sec closed-sec">
-                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                            <h5>Sunday</h5>
-                                        </div>
-                                        <div class="time-sec time-sec-closed">
-                                            Closed
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="our-services">
-                        <h5>Our Services</h5>
-                        <div class="hair-sec">
-                            <h6>Hair</h6>
-                            <div class="hair-sec-inner">
-                                <img src="../../../../assets/images/hair.png">
-                                <div class="hair-services">
-                                    <h6>Hair Dye</h6>
-                                    <div class="dollar-req">$10<span>$65</span></div>
-                                    <div class="min-req">
-                                        27 mins
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="booking-view">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="">
+            <h4>{{ salonData.name }}</h4>
+            <div class="rating-sec rating-detail">
+              <!-- <i class="fa fa-star active-star " aria-hidden="true"></i>
+              <i class="fa fa-star active-star " aria-hidden="true"></i>
+              <i class="fa fa-star active-star " aria-hidden="true"></i>
+              <i class="fa fa-star active-star " aria-hidden="true"></i>
+              <i class="fa fa-star inactive-star " aria-hidden="true"></i> -->
+              <!-- <star-rating-comp
+                [starType]="'svg'"
+                [readOnly]="true"
+                [rating]="salonData.avgRatings"
+              ></star-rating-comp> -->
             </div>
+          </div>
+          <div class="booking-view-left">
+            <div class="booking-view-left-img">
+              <img src="{{ salonData.image }}" />
+            </div>
+
+            <div class="booking-view-left-info">
+              <ul>
+                <li>
+                  <h4 class="find" (click)="findDirection()">Direction</h4>
+                  <div class="">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <span>+{{ salonData.code }} {{ salonData.contact }}</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="share">
+                    <img src="../../../../assets/images/share.svg" />
+                    <!-- <img src="../../../../assets/images/pin.svg"> -->
+                    <h4>Share</h4>
+                  </div>
+
+                  <div class="reviews">
+                    <i class="fa fa-star active-star " aria-hidden="true"></i>
+                    <span>Reviews</span>
+                  </div>
+                </li>
+              </ul>
+              <div class="working-days">
+                <h5>Working Days</h5>
+                <ul *ngFor="let item of salonAvailalbilityData">
+                  <li>
+                    <div class="date-sec ">
+                      <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                      <h5>{{ item._id }}</h5>
+                    </div>
+                    <div class="time-sec" *ngIf="item.status">
+                      <span> Open</span>
+                    </div>
+                    <div class="time-sec close-sec" *ngIf="!item.status">
+                      <span style="color:purple;"> Closed</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="col-md-4">
+          <div class="our-services">
+            <h5>Our Services</h5>
+            <div class="hair-sec" *ngFor="let item of salonCategoriesData">
+              <h6 class="categoryName">{{ item.name }}</h6>
+              <div class="hair-sec-inner">
+                <div
+                  class="hair-services"
+                  *ngFor="let service of item.services"
+                >
+                  <div>
+                    <img src="../../../../assets/images/Group 8177.svg" />
+                  </div>
+                  <div>
+                    <h6>{{ service.servicename }}</h6>
+                    <div class="dollar-req">{{ service.price }}</div>
+                    <div class="min-req">{{ service.duration }} mins</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-
-
+  </div>
 </section>
 
 <app-footer></app-footer>

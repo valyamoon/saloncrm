@@ -1,66 +1,162 @@
 <div class="user-login-section">
-    <div class="login-section-inner">
-        <div class="login-left">
-            <div class="login-left-info">
-                <img src="../../../../assets/images/logo.svg" />
-                <h2>Welcome!</h2>
-                <div class="sign-in">Sign in to manage your listings and booking</div>
-            </div>
-            <div class="form-sec">
-                <form>
-                    <div class="max-width-sec">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="InputEmail">Mobile Number</label>
+  <div class="login-section-inner">
+    <div class="login-left">
+      <div class="login-left-info">
+        <img src="../../../../assets/images/logo.svg" />
+        <h2>Welcome!</h2>
+        <div class="sign-in">Sign in to manage your listings and booking</div>
+      </div>
+      <div class="form-sec">
+        <form [formGroup]="loginForm" id="mobileNoForm" *ngIf="!isOtpShow">
+          <div class="max-width-sec">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="InputEmail">Mobile Number</label>
 
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">+91</span>
-                                        </div>
-                                        <input type="text" class="form-control" placeholder="Mobile Number">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-primary btn-get-otp">
-                                    GET OTP
-                    </button>
-                            </div>
-                            <div class="col-md-12">
-                                <h5>or Login using social media</h5>
-                                <div class="social-info">
-                                    <a href="">
-                                        <i aria-hidden="true" class="fa fa-facebook fb-icon"></i>
-                                    </a>
-                                    <a href="">
-                                        <i aria-hidden="true" class="fa fa-google-plus google-icon"></i>
-                                    </a>
-
-
-
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-primary btn-get-otp btn-sign-apple">
-                                    <img src="../../../../assets/images/company (2).svg">
-                                    Sign in with Apple
-                    </button>
-                            </div>
-
-                        </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <input
+                        type=" text"
+                        class="form-control"
+                        placeholder="Search Country And Country Code"
+                        [(ngModel)]="searchterm"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <mat-form-field>
+                        <!-- <mat-label>Select Country Code</mat-label> -->
+                        <mat-select formControlName="code">
+                          <mat-option
+                            *ngFor="
+                              let item of countrycodes | filter: searchterm
+                            "
+                            [value]="item.code"
+                          >
+                            +{{ item.code }} {{ item.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Mobile Number"
+                        formControlName="phone"
+                      />
                     </div>
+                  </div>
+                </div>
+              </div>
 
-                </form>
-                <a href="" class="terms-privacy">Terms & Privacy Policy</a>
+              <div class="col-md-12">
+                <button
+                  type="submit"
+                  [disabled]="loginForm.invalid"
+                  (click)="getOtp(loginForm.value)"
+                  class="btn btn-primary btn-get-otp"
+                >
+                  GET OTP
+                </button>
+              </div>
             </div>
+          </div>
+        </form>
 
+        <form [formGroup]="otpVerificationForm" *ngIf="isOtpShow" id="otpForm">
+          <div class="fields input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="token"
+              placeholder="Enter Otp"
+              mask="0 0 0 0"
+            />
+          </div>
+          <div class="fields">
+            <button
+              class="btn btn-primary btn-get-otp"
+              (click)="getOtpOnCall()"
+            >
+              GET OTP ON CALL
+            </button>
+          </div>
+          <div class="fields">
+            <button
+              class="btn btn-primary btn-get-otp"
+              (click)="completeOtpVerification(otpVerificationForm.value)"
+            >
+              SUBMIT OTP
+            </button>
+          </div>
+        </form>
 
+        <form [formGroup]="registerUserForm" *ngIf="showRegisterForm">
+          <div class="formfields">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="First Name"
+              formControlName="firstName"
+            />
+          </div>
+          <div class="formfields">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Last Name"
+              formControlName="lastName"
+            />
+          </div>
+          <!-- <div class="formfields">
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Mobile Number"
+              formControlName="phone"
+            />
+          </div> -->
+          <div class="formfields">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Email"
+              formControlName="email"
+            />
+          </div>
+          <div class="formfields">
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Mobile Number"
+              formControlName="phone"
+            />
+          </div>
+          <div class="formfields">
+            <button
+              class="btn btn-primary btn-get-otp"
+              [disabled]="registerUserForm.invalid"
+              (click)="registerUser(registerUserForm.value)"
+            >
+              REGISTER
+            </button>
+          </div>
+        </form>
+
+        <div class="col-md-12">
+          <h5>or Login using social media</h5>
+          <div class="social-info">
+            <a class="socilaLogin" (click)="socialSignIn('facebook')">
+              <i aria-hidden="true" class="fa fa-facebook fb-icon"></i>
+            </a>
+            <a class="socilaLogin" (click)="socialSignIn('google')">
+              <i aria-hidden="true" class="fa fa-google-plus google-icon"></i>
+            </a>
+          </div>
         </div>
-        <div class="login-right">
-            <img src="../../../../assets/images/user-login-bg.png" />
-        </div>
+        <a href="" class="terms-privacy">Terms & Privacy Policy</a>
+      </div>
     </div>
+    <div class="login-right">
+      <img src="../../../../assets/images/user-login-bg.png" />
+    </div>
+  </div>
 </div>

@@ -1,5 +1,7 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~ng-pick-datetime/assets/style/picker.min.css';
+/* @import '~angular-star-rating/assets/scss/star-rating.scss'; */
+/* frontend/node_modules/angular-star-rating/assets/scss/star-rating.scss */
 
 * / body {
   font-family: 'Roboto', sans-serif;
@@ -2461,4 +2463,8 @@ body .form-control {
 }
 .subscriptionWrapper {
   color: #454f60;
+}
+.mat-tab-body-content {
+  margin: 30px 0;
+  padding: 20px;
 }
