@@ -156,6 +156,13 @@ export class SalonListComponent implements OnInit {
   }
   bookSlot(starttime, serviceData) {
     console.log(starttime, serviceData);
+    let dataToPass = {
+      stime: starttime,
+      data: serviceData
+    };
+    sessionStorage.setItem("bookingData", JSON.stringify(dataToPass));
+
+    this.router.navigate(["/checkout"]);
   }
   clearFilter() {
     let dataToPass = {

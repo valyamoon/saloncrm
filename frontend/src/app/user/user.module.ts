@@ -47,6 +47,7 @@ import { AboutComponent } from "./home/about/about.component";
 import { DownloadComponent } from "./home/download/download.component";
 import { TermsandconditionComponent } from "./home/termsandcondition/termsandcondition.component";
 import { FaqComponent } from "./home/faq/faq.component";
+import { CheckoutComponent } from './home/checkout/checkout.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
@@ -79,7 +80,8 @@ export function getAuthServiceConfigs() {
     AboutComponent,
     DownloadComponent,
     TermsandconditionComponent,
-    FaqComponent
+    FaqComponent,
+    CheckoutComponent
   ],
   imports: [
     CommonModule,
