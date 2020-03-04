@@ -12,7 +12,7 @@ mongoose.connect(config.db.url, {
   user: config.db.user,
   pass: config.db.password,
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: false
 }); //SDN Local server
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection failed"));
