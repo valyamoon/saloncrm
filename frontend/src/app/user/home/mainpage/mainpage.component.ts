@@ -117,4 +117,18 @@ export class MainpageComponent implements OnInit {
 
     this.searchSalonForm.updateValueAndValidity();
   }
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition(data => {
+      console.log(data);
+      this.lat = data["coords"].latitude;
+      this.long = data["coords"].longitude;
+      this.searchSalonForm.get("lat").setValue(this.lat);
+
+      this.searchSalonForm.updateValueAndValidity();
+
+      this.searchSalonForm.get("long").setValue(this.long);
+
+      this.searchSalonForm.updateValueAndValidity();
+    });
+  }
 }

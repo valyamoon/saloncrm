@@ -7,6 +7,10 @@ import { UserloginComponent } from "./home/userlogin/userlogin.component";
 import { SalonListComponent } from "./home/salon-list/salon-list.component";
 import { SalonDetailComponent } from "./home/salon-detail/salon-detail.component";
 import { BookingsComponent } from "./home/bookings/bookings.component";
+import { AboutComponent } from "./home/about/about.component";
+import { DownloadComponent } from "./home/download/download.component";
+import { TermsandconditionComponent } from "./home/termsandcondition/termsandcondition.component";
+import { FaqComponent } from "./home/faq/faq.component";
 
 const routes: Routes = [
   {
@@ -18,6 +22,10 @@ const routes: Routes = [
       { path: "list", component: SalonListComponent },
       { path: "detail", component: SalonDetailComponent },
       { path: "booking", component: BookingsComponent },
+      { path: "about", component: AboutComponent },
+      { path: "download", component: DownloadComponent },
+      { path: "termsandcondition", component: TermsandconditionComponent },
+      { path: "faq", component: FaqComponent },
       { path: "", redirectTo: "home", pathMatch: "full" }
     ]
   }

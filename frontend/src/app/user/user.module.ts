@@ -43,6 +43,10 @@ import { GooglesearchComponent } from "./home/mainpage/googlesearch/googlesearch
 import { NgxMaskModule } from "ngx-mask";
 import { StarratingComponent } from "./home/starrating/starrating.component";
 import { BookingsComponent } from "./home/bookings/bookings.component";
+import { AboutComponent } from "./home/about/about.component";
+import { DownloadComponent } from "./home/download/download.component";
+import { TermsandconditionComponent } from "./home/termsandcondition/termsandcondition.component";
+import { FaqComponent } from "./home/faq/faq.component";
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
@@ -71,7 +75,11 @@ export function getAuthServiceConfigs() {
     SalonDetailComponent,
     GooglesearchComponent,
     StarratingComponent,
-    BookingsComponent
+    BookingsComponent,
+    AboutComponent,
+    DownloadComponent,
+    TermsandconditionComponent,
+    FaqComponent
   ],
   imports: [
     CommonModule,
@@ -96,6 +104,13 @@ export function getAuthServiceConfigs() {
     SocialLoginModule,
     MatTabsModule,
     MatCardModule
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+  providers: [
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs
+    }
   ]
 })
 export class UserModule {}

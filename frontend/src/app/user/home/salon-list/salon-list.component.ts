@@ -52,8 +52,16 @@ export class SalonListComponent implements OnInit {
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
       data => {
+        console.log("After", data);
+
         if (data["code"] === 200) {
           this.salonListingData = data["data"];
+
+          if (data["data"].length === 0) {
+            this.showNoRecords = true;
+          } else if (data["data"].length > 0) {
+            this.showNoRecords = false;
+          }
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000
@@ -146,8 +154,8 @@ export class SalonListComponent implements OnInit {
     sessionStorage.setItem("salonDetails", JSON.stringify(data));
     this.router.navigate(["/detail"]);
   }
-  bookSlot(data) {
-    console.log(data);
+  bookSlot(starttime, serviceData) {
+    console.log(starttime, serviceData);
   }
   clearFilter() {
     let dataToPass = {

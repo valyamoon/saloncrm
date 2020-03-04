@@ -30,7 +30,17 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>Location</label>
+                    <label class="locationLabel"
+                      >Location
+                      <div class="locationArea" >
+                        <img
+                        (click)="getCurrentLocation()"
+                          class="location"
+                          src="../../../../assets/images/current-location.png"
+                          title="use current location"
+                        />
+                      </div>
+                    </label>
                     <div class="book-appointement-inner">
                       <!-- <input
                         type="text"
@@ -38,6 +48,7 @@
                         placeholder="Near Me"
                         id=""
                       /> -->
+
                       <app-googlesearch
                         class="geoLoc"
                         (setAddress)="getAddress($event)"
@@ -47,6 +58,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Category</label>
