@@ -226,4 +226,5 @@ export class CheckoutComponent implements OnInit {
   goToBookings() {
     this.router.navigate(["/booking"]);
   }
+  modelChanged(event) {}
 }
