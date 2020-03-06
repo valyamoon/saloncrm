@@ -5,17 +5,27 @@
       <div class="col-lg-8 col-md-8 col-sm-6">
         <div class="header">
           <img src="../../../../assets/images/right-arrow(3).svg" alt="" />
-          <span>Salon Name</span>
+          <span>{{ salonData.name }}</span>
         </div>
         <div class="mainContent row">
           <div class="subsection col-lg-6 col-md-6 col-sm-12">
             <div class="payWith">
-              <input type="checkbox" />
-              <div>
-                <img src="../../../../assets/images/cash.svg" alt="" />
-                <span class="payText">Pay with Cash</span>
-              </div>
+              <input
+                type="radio"
+                name="paywith"
+                value="card"
+                id="card"
+                (click)="checkPaymentMode($event)"
+                [disabled]="!isLoggedInCheck"
+              />
+              <label class="paywithlabel" for="card">
+                <div>
+                  <img src="../../../../assets/images/pay.svg" alt="" />
+                  <span class="payText">Pay with Card</span>
+                </div>
+              </label>
             </div>
+
             <div class="cardDetailsSection">
               <div class="cardSection">
                 <img
@@ -48,27 +58,38 @@
                   Type your card details
                 </strong>
                 <div class="detBox">
-                  <input
-                    type="text"
-                    class="inpNum"
-                    placeholder="XXXX XXXX XXXX XXXX"
-                    mask="0000 0000 0000 0000"
-                    [(ngModel)]="cardNum"
-                  />
-                  <input
-                    type="text"
-                    class="inpExp"
-                    placeholder="MM/YYYY"
-                    mask="00/0000"
-                    [(ngModel)]="expDate"
-                  />
-                  <input
-                    class="inpCvv"
-                    type="password"
-                    placeholder="CVC"
-                    mask="000"
-                    [(ngModel)]="cvc"
-                  />
+                  <form [formGroup]="cardForm">
+                    <input
+                      (ngModelChange)="modelChanged($event)"
+                      type="text"
+                      class="inpNum"
+                      placeholder="XXXX XXXX XXXX XXXX"
+                      mask="0000 0000 0000 0000"
+                      [(ngModel)]="cardNum"
+                      [disabled]="isCardDetailsRequired"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <input
+                      (ngModelChange)="modelChanged($event)"
+                      type="text"
+                      class="inpExp"
+                      placeholder="MM/YYYY"
+                      mask="00/0000"
+                      [(ngModel)]="expDate"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="isCardDetailsRequired"
+                    />
+                    <input
+                      class="inpCvv"
+                      (ngModelChange)="modelChanged($event)"
+                      type="password"
+                      placeholder="CVC"
+                      mask="000"
+                      [(ngModel)]="cvc"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="isCardDetailsRequired"
+                    />
+                  </form>
                 </div>
               </div>
               <div class="markcard">
@@ -79,12 +100,22 @@
           </div>
           <div class="subSection cardDet col-lg-6 col-md-6 col-sm-12">
             <div class="payWith">
-              <input type="checkbox" />
-              <div>
-                <img src="../../../../assets/images/pay.svg" alt="" />
-                <span class="payText">Pay with Card</span>
-              </div>
+              <input
+                type="radio"
+                name="paywith"
+                value="cash"
+                id="cash"
+                (click)="checkPaymentMode($event)"
+                [disabled]="!isLoggedInCheck"
+              />
+              <label class="paywithlabel" for="cash">
+                <div>
+                  <img src="../../../../assets/images/cash.svg" alt="" />
+                  <span class="payText">Pay with Cash</span>
+                </div>
+              </label>
             </div>
+
             <div class="cardDetailInput">
               <div class="text-center">
                 <strong>Select from previously added cards</strong>
@@ -111,8 +142,13 @@
           </div>
         </div>
         <div class="checkoutBtnArea">
-          <button class="btn btn-primary btnPay">
-            <span>$60</span>
+          <button
+            (click)="makeUserPayment()"
+            class="btn btn-primary btnPay"
+            [disabled]="enableMakePaymentButton && !cardNum && !expDate && !cvc"
+            *ngIf="isLoggedInCheck"
+          >
+            <span>{{ totalPrice | currency: "USD" }}</span>
             <span
               >Make Payment
               <img
@@ -120,6 +156,17 @@
                 alt=""
               />
             </span>
+          </button>
+          <button
+            class="btn btn-primary btnPay"
+            (click)="goToLogin()"
+            *ngIf="!isLoggedInCheck"
+          >
+            Login
+            <img
+              src="../../../../assets/images/right-arrow(3) (1).svg"
+              alt=""
+            />
           </button>
         </div>
       </div>
@@ -153,13 +200,13 @@
               <label>Actual Price</label>
               <span> {{ checkoutData.price | currency: "USD" }}</span>
             </div>
-            <div class="amountData">
-              <label>Offer Price</label>
+            <div class="amountData" *ngIf="isPromocodeApplied">
+              <label>Promocode Offer</label>
               <span>$5</span>
             </div>
             <div class="amountData subtotal">
-              <label>Subtotal</label>
-              <span>$75</span>
+              <label>Total</label>
+              <span>{{ totalPrice | currency: "USD" }}</span>
             </div>
             <div class="amountData wallet">
               <div>
@@ -175,7 +222,9 @@
               </div>
             </div>
             <div class="promocodeArea">
-              <button class="promBtn">Add Promocode</button>
+              <button class="promBtn" (click)="getPromocodeList()">
+                Add Promocode
+              </button>
             </div>
             <div class="cancellingArea">
               <p>
@@ -190,5 +239,52 @@
       </div>
     </div>
   </div>
+
+  <div class="promocodeOverlay" *ngIf="isShowPromocode">
+    <div class="mainSection col-lg-3 col-md-3 col-sm-12">
+      <h3>Promocodes</h3>
+      <div class="promocodes" *ngFor="let item of promocodesList">
+        <div class="promocode">
+          <span class="promotext"
+            ><label for="{{ item.name }}">{{ item.name }}</label>
+            <span class="terms">{{ item.description }}</span>
+            <span class="termsC">
+              *T&C
+              <span class="termandcondition"
+                ><p>{{ item.termsAndCondition }}</p></span
+              >
+            </span>
+          </span>
+
+          <input
+            type="radio"
+            name="item.name"
+            value="item"
+            id="{{ item.name }}"
+            (click)="validatePromocode(item, $event)"
+          />
+        </div>
+      </div>
+      <div class="noPromocode" *ngIf="noPromocode">
+        <h5>No Promocodes Available</h5>
+      </div>
+      <button class="btn btn-primary btn-sign-in" (click)="dismissModal()">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <div class="promocodeOverlay" *ngIf="isBookingCompleted">
+    <div class="mainSection col-lg-3 col-md-3 col-sm-12">
+      <div><img src="../../../../assets/images/Asset 1.svg" alt="" /></div>
+      <div class="paymentSuccess">Payment and Booking Successful</div>
+      <div>
+        <button class="btn btn-primary btn-sign-in" (click)="goToBookings()">
+          See Bookings
+        </button>
+      </div>
+    </div>
+  </div>
+
   <app-footer></app-footer>
 </div>
