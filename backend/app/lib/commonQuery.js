@@ -1466,7 +1466,7 @@ commonQuery.getSalonOnPrice = function getSalonOnPrice() {
 };
 commonQuery.ensureIndex = function ensureIndex(model) {
   return new Promise(function(resolve, reject) {
-    model.createIndex({ location: "2dsphere" }).exec(function(err, userData) {
+    model.createIndexes({ location: "2dsphere" }).exec(function(err, userData) {
       //console.log("userData", userData);
       if (err) {
         console.log("errrrrrr", err);

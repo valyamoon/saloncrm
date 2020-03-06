@@ -96,4 +96,7 @@ export class UsercommonserviceService {
   getSalonWeekDays(data) {
     return this.http.post(this.baseUrl + "/salon-days", data);
   }
+  getPromocodes(data) {
+    return this.http.post(this.baseUrl + "/promocodes", data);
+  }
 }

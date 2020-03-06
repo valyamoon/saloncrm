@@ -10,6 +10,7 @@ import {
   GoogleLoginProvider
 } from "ngx-angular-social-login";
 import { Router } from "@angular/router";
+import { AllservService } from "../../../allserv.service";
 @Component({
   selector: "app-userlogin",
   templateUrl: "./userlogin.component.html",
@@ -22,6 +23,7 @@ export class UserloginComponent implements OnInit {
   searchterm: any;
   firstName: any;
   LastName: any;
+  previousRoute: any = "/home";
   EmailID: any;
   loggedInVia: any;
   code: any;
@@ -36,10 +38,14 @@ export class UserloginComponent implements OnInit {
     private toastServ: ToastrService,
     private socialAuthService: AuthService,
     private authServ: AuthServService,
-    private router: Router
+    private router: Router,
+    private allServ: AllservService
   ) {}
 
   ngOnInit() {
+    this.allServ.getPrevRoute().subscribe((data: any) => {
+      this.previousRoute = data;
+    });
     this.countrycodes = countries;
 
     this.loginForm = this.fb.group({
@@ -73,13 +79,15 @@ export class UserloginComponent implements OnInit {
           if (data["code"] === 200) {
             if (data["data"]["isalreadyexist"] === true) {
               this.authServ.sendToken(data["data"]["token"]);
+              console.log(data);
 
               sessionStorage.setItem("userID", data["data"]["user"]["_id"]);
               sessionStorage.setItem(
                 "username",
                 data["data"]["user"]["firstName"]
               );
-              this.router.navigate(["/home"]);
+
+              this.router.navigate([this.previousRoute]);
             } else if (data["data"]["isalreadyexist"] === false) {
               this.registerUserForm
                 .get("phone")
@@ -122,11 +130,12 @@ export class UserloginComponent implements OnInit {
               this.authServ.sendToken(data["data"]["token"]);
 
               sessionStorage.setItem("userID", data["data"]["user"]["_id"]);
+              sessionStorage.setItem("emailID", data["data"]["user"]["email"]);
               sessionStorage.setItem(
                 "username",
                 data["data"]["user"]["firstName"]
               );
-              this.router.navigate(["/home"]);
+              this.router.navigate([this.previousRoute]);
             } else if (data["data"]["isalreadyexist"] === false) {
               this.registerUserForm
                 .get("phone")
