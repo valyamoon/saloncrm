@@ -20,5 +20,6 @@ module.exports = function(router) {
   router.post("/cancel-booking", user.cancelBooking);
   router.post("/users-booking", user.getBookingList);
   router.post("/users-wallet", user.getWalletAmount);
+  router.post("/get-stripe-token", user.getStripeToken);
   return router;
 };
