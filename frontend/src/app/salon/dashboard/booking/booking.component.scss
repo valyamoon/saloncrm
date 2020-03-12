@@ -401,9 +401,10 @@ table {
 .bts {
   margin: 0 !important;
 }
-
+.mat-tab-group {
+  padding-top: 2.3em;
+}
 .m-t-40 {
-  margin-top: 40px;
 }
 @media (max-width: 1200px) {
   .create-availabillity .table tbody tr td {

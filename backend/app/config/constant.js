@@ -80,5 +80,11 @@ module.exports = {
   UPDATE_SUCCESS: "Updated Successfully",
   FAILED_TO_UPDATE: "Failed to update",
   PROMOCODE_APPLIED: "Promocode Applied Successfully",
-  PROMOCODE_USED_ALREADY: "Promocode already used by this user"
+  PROMOCODE_USED_ALREADY: "Promocode already used by this user",
+  VALID_CARD: "Card is Valid",
+  INVALID_CARD: "Card is Invalid",
+  PAYMENT_INITIATED:
+    "Payment is intiated, you will get amount withing 7-8 working days",
+  FAILED_To_INITIATE: "Failed to initial payment",
+  PAYMENT_TRANSFER_SUCCESS: "Transfer initiated"
 };

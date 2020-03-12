@@ -52,7 +52,8 @@ module.exports = {
   addWalletAmount: addWalletAmount,
   minusWalletAmount: minusWalletAmount,
   getBookingList: getBookingList,
-  getWalletAmount: getWalletAmount
+  getWalletAmount: getWalletAmount,
+  getStripeToken: getStripeToken
 };
 
 // /* Function is use to Request Otp
@@ -1273,4 +1274,41 @@ function getBookingList(req, res) {
   }
 
   getBookingList().then(function() {});
+}
+function getStripeToken(req, res) {
+  async function getStripeToken() {
+    try {
+      if (req.body.cardNum && req.body) {
+        stripe.tokens.create(
+          {
+            card: {
+              number: req.body.cardNum,
+              exp_month: req.body.month,
+              exp_year: req.body.year,
+              cvc: req.body.cvc
+            }
+          },
+          function(err, token) {
+            if (err) {
+              console.log(err);
+              res.json(
+                Response(constant.ERROR_CODE, constant.INVALID_CARD, err)
+              );
+            } else {
+              console.log(token);
+              res.json(
+                Response(constant.SUCCESS_CODE, constant.VALID_CARD, token)
+              );
+            }
+          }
+        );
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getStripeToken().then(function() {});
 }

@@ -21,7 +21,9 @@
                         {{ item.name }}
                       </div>
                       <div class="rating-sec">
-                        <app-starrating></app-starrating>
+                        <app-starrating
+                          [ratings]="item.avgRatings"
+                        ></app-starrating>
                       </div>
                       <div class="locaSec">
                         <img

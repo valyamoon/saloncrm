@@ -1,10 +1,16 @@
-<div>
-  <i
-    [ngClass]="[isFavorite ? 'fa fa-star' : 'fa fa-star rated ']"
-    aria-hidden="true"
-  ></i>
-  <i class="fa fa-star" aria-hidden="true"></i>
-  <i class="fa fa-star" aria-hidden="true"></i>
-  <i class="fa fa-star" aria-hidden="true"></i>
-  <i class="fa fa-star" aria-hidden="true"></i>
+<div class="starWrapper">
+  <div class="outer">
+    <i class="fa fa-star-o" aria-hidden="true"></i>
+    <i class="fa fa-star-o" aria-hidden="true"></i>
+    <i class="fa fa-star-o" aria-hidden="true"></i>
+    <i class="fa fa-star-o" aria-hidden="true"></i>
+    <i class="fa fa-star-o" aria-hidden="true"></i>
+  </div>
+  <div class="inner" id="innerStar">
+    <i
+      class="fa fa-star rated"
+      aria-hidden="true"
+      *ngFor="let item of tempArray"
+    ></i>
+  </div>
 </div>

@@ -7,6 +7,7 @@ const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
+const cron = require("node-cron");
 const mailer = require("../../../../lib/mailer");
 
 const subscriptionplans = require("../model/subscriptionPlan");
@@ -134,6 +135,7 @@ function getSalonsRequestList(req, res) {
           isDeleted: false,
           isDeclined: false
         };
+        console.log("Hiii");
 
         let count = await commonQuery.findCount(salons, condition);
 
@@ -2103,3 +2105,5 @@ function getAdminDetails(req, res) {
   }
   getAdminDetails().then(function() {});
 }
+
+cron.schedule("* * * * * *", function() {});

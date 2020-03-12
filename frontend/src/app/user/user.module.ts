@@ -30,6 +30,7 @@ import {
   FacebookLoginProvider
 } from "ngx-angular-social-login";
 
+import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import {
   MatFormFieldModule,
   MatNativeDateModule,
@@ -47,7 +48,7 @@ import { AboutComponent } from "./home/about/about.component";
 import { DownloadComponent } from "./home/download/download.component";
 import { TermsandconditionComponent } from "./home/termsandcondition/termsandcondition.component";
 import { FaqComponent } from "./home/faq/faq.component";
-import { CheckoutComponent } from './home/checkout/checkout.component';
+import { CheckoutComponent } from "./home/checkout/checkout.component";
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
@@ -105,7 +106,8 @@ export function getAuthServiceConfigs() {
     Ng2SearchPipeModule,
     SocialLoginModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    AutocompleteLibModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [

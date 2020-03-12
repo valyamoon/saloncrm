@@ -58,3 +58,11 @@
     }
   }
 }
+.searchBlock {
+  width: 60%;
+  border: 1px solid lightgray;
+  border-radius: 25px;
+  .input {
+    padding: 5px;
+  }
+}

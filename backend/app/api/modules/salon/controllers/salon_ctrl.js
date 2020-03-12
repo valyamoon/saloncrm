@@ -10,6 +10,8 @@ const cron = require("node-cron");
 const Moment = require("moment");
 const MomentRange = require("moment-range");
 
+const completedbookings = require("../model/completedbookingsSchema");
+
 const Mmoment = MomentRange.extendMoment(Moment);
 
 var FCM = require("fcm-node");
@@ -87,7 +89,8 @@ module.exports = {
   getSalonWeeklyDetails: getSalonWeeklyDetails,
   validatePromocode: validatePromocode,
   getChangeInBookingsData: getChangeInBookingsData,
-  autoCompleteBookings: autoCompleteBookings
+  autoCompleteBookings: autoCompleteBookings,
+  getCompletedBookingTransaction: getCompletedBookingTransaction
 };
 
 /**
@@ -1521,6 +1524,13 @@ function updateSalonDetails(req, res) {
   async function updateSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
+        let coordinates = [req.body.long, req.body.lat];
+
+        let locations = {
+          type: "Point",
+          coordinates: coordinates
+        };
+
         if (req.files) {
           mkdirp(constant.PROFILEIMAGE, async function(err) {
             let timeStamp = Date.now();
@@ -1565,7 +1575,8 @@ function updateSalonDetails(req, res) {
                           code: req.body.code,
                           opentime: req.body.opentime,
                           closetime: req.body.closetime,
-                          image: image_path
+                          image: image_path,
+                          location: locations
                         };
 
                         let updateSalon = await commonQuery.updateOneDocument(
@@ -1605,7 +1616,8 @@ function updateSalonDetails(req, res) {
             contact: req.body.contact,
             code: req.body.code,
             opentime: req.body.opentime,
-            closetime: req.body.closetime
+            closetime: req.body.closetime,
+            location: locations
           };
 
           let updateSalon = await commonQuery.updateOneDocument(
@@ -2425,7 +2437,7 @@ function appointmentCompleted(req, res) {
         );
         if (!findBooking) {
         } else {
-          //   console.log("Booking", findBooking);
+          console.log("Booking", findBooking);
 
           let condition = {
             _id: mongoose.Types.ObjectId(findBooking["salon_id"])
@@ -2435,38 +2447,41 @@ function appointmentCompleted(req, res) {
             condition
           );
 
-          // console.log(findConnectedId.connected_account_id);
+          console.log(findConnectedId.connected_account_id);
           if (findConnectedId) {
-            // stripe.paymentIntents
-            //   .create({
-            //     payment_method_types: ["card"],
-            //     amount: findBooking.totalamount,
-            //     currency: "USD",
-            //     transfer_data: {
-            //       destination: findConnectedId.connected_account_id
-            //     }
-            //   })
-            //   .then(async function(paymentIntent) {
-            //     // asynchronously called
-            //     console.log("PAYMENT INTENT", paymentIntent);
-            //     if (paymentIntent) {
-            //     }
-            //   });
-            stripe.transfers.create(
-              {
-                amount: findBooking.totalamount,
-                currency: "USD",
-                destination: findConnectedId.connected_account_id
-              },
-              function(err, transfer) {
-                // asynchronously called
-                if (err) {
-                  //  console.log("error", err);
-                } else {
-                  // console.log("TRANSFER", transfer);
-                }
-              }
+            let cDate = findBooking["date"];
+
+            let afterDate = new Date();
+
+            afterDate.setUTCDate(cDate.getDate() + 8);
+
+            let completedBookingSave = new completedbookings({
+              salon_id: findBooking["salon_id"],
+              user_id: findBooking["user_id"],
+              total_amount: findBooking["totalamount"],
+              connected_account_id: findConnectedId.connected_account_id,
+              onDate: findBooking["date"],
+              booking_id: findBooking["_id"],
+              transferDate: afterDate
+            });
+
+            let schedulePaymentTransfer = await commonQuery.InsertIntoCollection(
+              completedbookings,
+              completedBookingSave
             );
+            if (schedulePaymentTransfer) {
+              res.json(
+                Response(
+                  constant.SUCCESS_CODE,
+                  constant.PAYMENT_INITIATED,
+                  schedulePaymentTransfer
+                )
+              );
+            } else {
+              res.json(
+                Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+              );
+            }
           }
         }
       }
@@ -2684,16 +2699,58 @@ function validatePromocode(req, res) {
   validatePromocode().then(function() {});
 }
 
+function getCompletedBookingTransaction(req, res) {
+  console.log(req.body);
+  async function getCompletedBookingTransaction() {
+    try {
+      let condition = {
+        salon_id: req.body.salon_id
+      };
+
+      let findTotalCount = await commonQuery.findCount(
+        completedbookings,
+        condition
+      );
+
+      let findBookingsPayment = await commonQuery.fetch_all(
+        completedbookings,
+        condition
+      );
+
+      if (!findBookingsPayment) {
+        res.json(
+          Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+        );
+      } else {
+        let dataToPass = {
+          data: findBookingsPayment,
+          count: findTotalCount
+        };
+        res.json(
+          Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, dataToPass)
+        );
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getCompletedBookingTransaction().then(function() {});
+}
+
 function autoCompleteBookings() {
+  console.log("running");
   async function autoCompleteBookings() {
     try {
       var todaysDate = moment()
         .utc()
         .format("YYYY-MM-DDTHH:mm:00.000[Z]");
+      console.log(todaysDate);
       let condition = {
         isCompleted: false,
         isActive: true,
-        date: { $eq: todaysDate }
+        date: { $lt: todaysDate, $eq: todaysDate }
       };
 
       let dataToUpdate = {
@@ -2707,6 +2764,7 @@ function autoCompleteBookings() {
         dataToUpdate
       );
 
+      console.log(updatedData);
       res.send(updatedData);
     } catch (error) {}
   }
@@ -2714,4 +2772,49 @@ function autoCompleteBookings() {
 }
 cron.schedule("* * * * *", function() {
   autoCompleteBookings();
+});
+
+cron.schedule("* * * * * *", async function() {
+  let todaysDate = new Date().toISOString();
+
+  let findAllCompletedBookings = await commonQuery.fetch_all(completedbookings);
+
+  for (var i = 0; i < findAllCompletedBookings.length; i++) {
+    if (findAllCompletedBookings[i]["transferDate"] === todaysDate) {
+      stripe.transfers.create(
+        {
+          amount: findAllCompletedBookings[i].totalamount,
+          currency: "USD",
+          destination: findAllCompletedBookings[i].connected_account_id
+        },
+        async function(err, transfer) {
+          // asynchronously called
+          if (err) {
+            console.log("error", err);
+          } else {
+            let conditionToUpdate = {
+              isTransferred: true
+            };
+            let condition = { _id: findAllCompletedBookings[i]["_id"] };
+
+            let updateStatusOfTransfer = await commonQuery.updateOneDocument(
+              completedbookings,
+              condition,
+              conditionToUpdate
+            );
+
+            if (updateStatusOfTransfer) {
+              res.json(
+                Response(
+                  constant.SUCCESS_CODE,
+                  constant.PAYMENT_TRANSFER_SUCCESS,
+                  updateStatusOfTransfer
+                )
+              );
+            }
+          }
+        }
+      );
+    }
+  }
 });

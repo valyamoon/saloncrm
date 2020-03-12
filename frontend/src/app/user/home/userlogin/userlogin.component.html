@@ -24,9 +24,9 @@
                         [ngModelOptions]="{ standalone: true }"
                       />
                       <mat-form-field>
-                        <!-- <mat-label>Select Country Code</mat-label> -->
-                        <mat-select formControlName="code">
+                        <mat-select #mySelect formControlName="code">
                           <mat-option
+                            (focus)="onFocus()"
                             *ngFor="
                               let item of countrycodes | filter: searchterm
                             "

@@ -99,4 +99,7 @@ export class UsercommonserviceService {
   getPromocodes(data) {
     return this.http.post(this.baseUrl + "/promocodes", data);
   }
+  getStripeToken(data) {
+    return this.http.post(this.baseUrl + "/get-stripe-token", data);
+  }
 }

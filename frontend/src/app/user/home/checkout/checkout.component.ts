@@ -13,6 +13,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 export class CheckoutComponent implements OnInit {
   cardForm: FormGroup;
   isBookingCompleted: any;
+  userEmailID: any;
   expDate: any;
   checkoutData: any;
   isShowPromocode: boolean;
@@ -27,13 +28,18 @@ export class CheckoutComponent implements OnInit {
   isPromocodeApplied: boolean;
   promocodesList: any;
   onDate: any;
+  stripeToken: any;
+  stripeEmail: any;
   userID: any;
   promocodeDetails: any;
   isLoggedInCheck: any;
   promocodeAppliedText: any;
   cardNum: any;
   cvc: any;
+  expiryPattern: any = "^(0[1-9]|1[0-2])/?([0-9]{4}|[0-9]{2})$";
   noPromocode: boolean;
+  month: any;
+  year: any;
   constructor(
     private router: Router,
     private allserv: AllservService,
@@ -43,10 +49,22 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.userEmailID = sessionStorage.getItem("emailID");
     this.cardForm = this.fb.group({
       cardNum: ["", Validators.required],
-      expDate: ["", Validators.required],
-      cvc: ["", Validators.required]
+      expDate: [
+        "",
+        Validators.required,
+        Validators.pattern(this.expiryPattern)
+      ],
+      cvc: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(4),
+          Validators.minLength(3)
+        ])
+      ]
     });
 
     this.salonData = JSON.parse(sessionStorage.getItem("bookingData"))["data"];
@@ -182,7 +200,7 @@ export class CheckoutComponent implements OnInit {
     } else {
       promocodeID = null;
     }
-    let dataToPass = {};
+    var dataToPass = {};
 
     if (this.paymentMode === "cash") {
       dataToPass = {
@@ -197,31 +215,91 @@ export class CheckoutComponent implements OnInit {
         deviceToken: null,
         duration: this.checkoutData["duration"]
       };
-    } else if (this.paymentMode === "card") {
-      dataToPass = {};
-    }
+      this.userServ.payForService(dataToPass).subscribe(
+        (data: any) => {
+          console.log("Afterpayment", data);
+          if (data["code"] === 200) {
+            this.isBookingCompleted = true;
 
-    this.userServ.payForService(dataToPass).subscribe(
-      (data: any) => {
-        if (data["code"] === 200) {
-          this.isBookingCompleted = true;
-
-          sessionStorage.removeItem("userprefrence");
-          sessionStorage.removeItem("bookingData");
-          this.router.navigate(["/home"]);
-        } else if (data["code"] === 400) {
-          this.isBookingCompleted = false;
-          this.toastServ.error(data["message"], "", {
+            sessionStorage.removeItem("userprefrence");
+            sessionStorage.removeItem("bookingData");
+            setTimeout(() => this.router.navigate(["/home"]), 2500);
+            // this.router.navigate(["/home"]);
+          } else if (data["code"] === 400) {
+            this.isBookingCompleted = false;
+            this.toastServ.error(data["message"], "", {
+              timeOut: 1000
+            });
+          }
+        },
+        error => {
+          this.toastServ.error(error.error["message"], "", {
             timeOut: 1000
           });
         }
-      },
-      error => {
-        this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
-        });
-      }
-    );
+      );
+    } else if (this.paymentMode === "card") {
+      this.month = this.expDate.slice(0, 2);
+      this.year = this.expDate.slice(2);
+
+      let cardData = {
+        cardNum: this.cardNum,
+        month: this.month,
+        cvc: this.cvc,
+        year: this.year
+      };
+
+      this.userServ.getStripeToken(cardData).subscribe((data: any) => {
+        if (data["code"] === 200) {
+          console.log(data["data"]);
+          this.stripeToken = data["data"]["id"];
+          this.stripeEmail = this.userEmailID;
+
+          dataToPass = {
+            payType: this.paymentMode,
+            totalAmt: this.totalPrice,
+            salon_id: this.salonData["_id"],
+            user_id: this.userID,
+            date: this.onDate,
+            time: this.startTime,
+            service_id: this.checkoutData["_id"],
+            promocode_id: promocodeID,
+            deviceToken: null,
+            duration: this.checkoutData["duration"],
+            stripeToken: this.stripeToken,
+            stripeEmail: this.stripeEmail
+          };
+
+          this.userServ.payForService(dataToPass).subscribe(
+            (data: any) => {
+              console.log("Afterpayment", data);
+              if (data["code"] === 200) {
+                this.isBookingCompleted = true;
+
+                sessionStorage.removeItem("userprefrence");
+                sessionStorage.removeItem("bookingData");
+                setTimeout(() => this.router.navigate(["/home"]), 2500);
+                // this.router.navigate(["/home"]);
+              } else if (data["code"] === 400) {
+                this.isBookingCompleted = false;
+                this.toastServ.error(data["message"], "", {
+                  timeOut: 1000
+                });
+              }
+            },
+            error => {
+              this.toastServ.error(error.error["message"], "", {
+                timeOut: 1000
+              });
+            }
+          );
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["data"]["raw"]["message"], "", {
+            timeOut: 1000
+          });
+        }
+      });
+    }
   }
   goToBookings() {
     this.router.navigate(["/booking"]);

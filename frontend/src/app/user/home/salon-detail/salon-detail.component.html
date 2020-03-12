@@ -27,7 +27,7 @@
             <div class="booking-view-left-info">
               <ul>
                 <li>
-                  <h4 class="find" (click)="findDirection()">Direction</h4>
+                  <h4 class="find" title="Find direction on Google Maps" (click)="findDirection()">Direction</h4>
                   <div class="">
                     <i class="fa fa-phone" aria-hidden="true"></i>
                     <span>+{{ salonData.code }} {{ salonData.contact }}</span>
@@ -40,7 +40,7 @@
                     <h4>Share</h4>
                   </div>
 
-                  <div class="reviews">
+                  <div class="reviews" (click)="getReviewRatings()">
                     <i class="fa fa-star active-star " aria-hidden="true"></i>
                     <span>Reviews</span>
                   </div>
@@ -87,6 +87,35 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" *ngIf="isReviewShow">
+    <div class="main-section">
+      <div class="img">
+        <img
+          (click)="dismissModal()"
+          src="../../../../assets/images/close2.png"
+          alt=""
+          title="Close"
+          class="closeImage"
+        />
+      </div>
+
+      <div class="reviews" *ngFor="let item of salonStarRatings">
+        <div class="imgSec">
+          <img src="../../../../assets/images/user (1).png" alt="" />
+        </div>
+        <div class="commentSec">
+          <div class="userName">
+            <span>{{ item.firstName }}</span> <span>{{ item.lastName }}</span>
+          </div>
+          <div class="comment">{{ item.comments }}</div>
+          <div class="ratings">
+            <app-starrating [ratings]="item.ratings"></app-starrating>
           </div>
         </div>
       </div>

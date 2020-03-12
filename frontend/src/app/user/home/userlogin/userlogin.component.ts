@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { countries } from "../../../admin/country";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UsercommonserviceService } from "../usercommonservice.service";
@@ -17,9 +17,11 @@ import { AllservService } from "../../../allserv.service";
   styleUrls: ["./userlogin.component.scss"]
 })
 export class UserloginComponent implements OnInit {
-  countrycodes: any;
+  @ViewChild("mySelect", { static: false }) mySelect;
   phoneNumber: any;
   socialLoginID: any;
+  countrycodes: any;
+
   searchterm: any;
   firstName: any;
   LastName: any;
@@ -31,6 +33,7 @@ export class UserloginComponent implements OnInit {
   registerUserForm: FormGroup;
   otpVerificationForm: FormGroup;
   isOtpShow: boolean = false;
+
   showRegisterForm: boolean;
   constructor(
     private fb: FormBuilder,
@@ -43,10 +46,11 @@ export class UserloginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.countrycodes = countries;
+
     this.allServ.getPrevRoute().subscribe((data: any) => {
       this.previousRoute = data;
     });
-    this.countrycodes = countries;
 
     this.loginForm = this.fb.group({
       code: ["", Validators.required],
@@ -62,6 +66,10 @@ export class UserloginComponent implements OnInit {
       email: ["", Validators.required],
       phone: ["", Validators.required]
     });
+  }
+
+  onFocus() {
+    this.mySelect.open();
   }
 
   completeOtpVerification(data) {
@@ -166,6 +174,22 @@ export class UserloginComponent implements OnInit {
         }
       );
     }
+  }
+
+  selectEvent(item) {
+    console.log("ieten", item);
+    // do something with selected item
+  }
+
+  onChangeSearch(search: string) {
+    console.log(search);
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
+  }
+
+  onFocused(e) {
+    console.log("e", e);
+    // do something
   }
 
   getOtpOnCall() {

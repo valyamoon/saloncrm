@@ -39,6 +39,7 @@ module.exports = function(router) {
   router.post("/updatesalonservices", salon.updateSalonServices);
   router.post("/get-notification", salon.getChangeInBookingsData);
   router.post("/auto-complete", salon.autoCompleteBookings);
+  router.post("/get-transactions", salon.getCompletedBookingTransaction);
 
   // router.get('/listUser', middlewares, user.getUserList);
   return router;

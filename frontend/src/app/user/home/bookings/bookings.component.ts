@@ -18,7 +18,7 @@ export class BookingsComponent implements OnInit {
 
   ngOnInit() {
     this.userID = sessionStorage.getItem("userID");
-    console.log(this.userID);
+
     this.getBookingList(this.selectedTab);
   }
 
@@ -31,7 +31,6 @@ export class BookingsComponent implements OnInit {
       (data: any) => {
         if (data["code"] === 200) {
           this.bookingListData = data["data"];
-          console.log(this.bookingListData);
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 100
@@ -46,7 +45,6 @@ export class BookingsComponent implements OnInit {
     );
   }
   tabChanged(event) {
-    console.log(event.index);
     if (event.index === 0) {
       this.selectedTab = "upcoming";
       this.getBookingList(this.selectedTab);

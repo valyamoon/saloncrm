@@ -15,6 +15,7 @@ export class BookingComponent implements OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   ascend: any = 1;
   type: any;
+  isLoader: boolean;
   dataSource: any;
   pageSize: any = 5;
   count: any = 5;
@@ -136,11 +137,13 @@ export class BookingComponent implements OnInit {
     this.getUpcomingBookingData(dataToPass);
   }
   getUpcomingBookingData(data) {
+    this.isLoader = true;
     //  console.log("IN", data);
     this.commServ.getAppointmentList(data).subscribe((data: any) => {
       //   console.log(data);
       this.dataSource = data["data"]["data"];
       this.dataSource.sort = this.sort;
+      this.isLoader = false;
       // console.log(this.dataSource);
       this.bookingCount = data["data"]["count"];
       // console.log(this.bookingCount);

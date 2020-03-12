@@ -76,6 +76,7 @@ export class AdminloginComponent implements OnInit {
           sessionStorage.setItem("userDetails", data["data"]["userInfo"].email);
 
           sessionStorage.setItem("userId", data["data"]["userInfo"]._id);
+          sessionStorage.setItem("isReload", JSON.stringify(true));
 
           this.authServ.sendToken(data.data.token);
 
