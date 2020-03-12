@@ -50,20 +50,14 @@ export class SalondetailsComponent implements OnInit {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
       });
-      console.log("long", this.lng);
-      console.log("lat", this.lat);
     }
 
-    navigator.geolocation.getCurrentPosition(pos => {
-      console.log("POSITIONS", pos);
-    });
+    navigator.geolocation.getCurrentPosition(pos => {});
   }
 
   ngOnInit() {
-    navigator.geolocation.getCurrentPosition(pos => {
-      console.log("POSITIONS", pos);
-    });
-    console.log(this.countriesData);
+    navigator.geolocation.getCurrentPosition(pos => {});
+
     this.salonEmail = sessionStorage.getItem("email");
     this.user_id = sessionStorage.getItem("userId");
     this.userid = this.user_id;
@@ -82,7 +76,9 @@ export class SalondetailsComponent implements OnInit {
       image: null,
       opentime: ["", Validators.required],
       closetime: ["", Validators.required],
-      timezonestring: [""]
+      timezonestring: [""],
+      lat: [""],
+      long: [""]
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
@@ -95,6 +91,19 @@ export class SalondetailsComponent implements OnInit {
     } else {
       this.showPendingApproval = false;
     }
+  }
+
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition(pos => {
+      this.lng = +pos.coords.longitude;
+      this.lat = +pos.coords.latitude;
+
+      if (this.lng && this.lat) {
+        this.toastrServ.success("Got your location", "", {
+          timeOut: 1000
+        });
+      }
+    });
   }
 
   chechIsApprovedStatus(data) {

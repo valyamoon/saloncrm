@@ -5,7 +5,7 @@ module.exports = function(router) {
   var middlewares = [utils.ensureAuthorized];
   console.log("two-------------");
   router.post("/add-categories", admin.addCategories);
-  router.post("/salonsrequest", middlewares, admin.getSalonsRequestList);
+  router.post("/salonsrequest", admin.getSalonsRequestList);
   router.post("/acceptrequest", admin.acceptSalonRequest);
   router.post("/suspendsalon", admin.suspendSalon);
   router.post("/categories", admin.getCategories);

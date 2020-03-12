@@ -50,6 +50,7 @@ export class EditsalonComponent implements OnInit {
     }
   }
   ngOnInit() {
+    sessionStorage.setItem("isReload", JSON.stringify(true));
     this.user_id = sessionStorage.getItem("userId");
     this.userid = this.user_id;
 
@@ -64,7 +65,9 @@ export class EditsalonComponent implements OnInit {
       salonaddress: ["", Validators.required],
       image: null,
       opentime: ["", Validators.required],
-      closetime: ["", Validators.required]
+      closetime: ["", Validators.required],
+      lat: [""],
+      long: [""]
     });
     //this.editSalonDetailsShow();
   }
@@ -131,6 +134,20 @@ export class EditsalonComponent implements OnInit {
     );
   }
 
+  getAddress(place: Object) {
+    var address = place;
+    //console.log(address);
+    this.lat = place["geometry"].location.lat();
+    this.lng = place["geometry"].location.lng();
+
+    this.submitSalonDetails.get("lat").setValue(this.lat);
+
+    this.submitSalonDetails.updateValueAndValidity();
+
+    this.submitSalonDetails.get("long").setValue(this.lng);
+
+    this.submitSalonDetails.updateValueAndValidity();
+  }
   // editSalonDetailsShow() {
   //   this.submitSalonDetails.get("name").setValue(this.salonDetailsData.name);
   //   this.submitSalonDetails
@@ -156,7 +173,9 @@ export class EditsalonComponent implements OnInit {
       code: data.code,
       image: data.image,
       opentime: data.opentime,
-      closetime: data.closetime
+      closetime: data.closetime,
+      lat: this.lat,
+      long: this.lng
     };
 
     const postData = new FormData();
@@ -168,6 +187,8 @@ export class EditsalonComponent implements OnInit {
     postData.append("contact", dataToPass.contact);
     postData.append("code", dataToPass.code);
     postData.append("salon_id", dataToPass.salon_id);
+    postData.append("lat", dataToPass.lat);
+    postData.append("long", dataToPass.long);
 
     var options = { content: postData };
 
@@ -182,6 +203,11 @@ export class EditsalonComponent implements OnInit {
               timeOut: 2000
             }
           );
+
+          if (JSON.parse(sessionStorage.getItem("isReload"))) {
+            window.location.reload();
+            sessionStorage.setItem("isReload", JSON.stringify(false));
+          }
         } else {
           this.showPendingApproval = false;
           this.toastrServ.error("Failed To Update Salon Details", "", {

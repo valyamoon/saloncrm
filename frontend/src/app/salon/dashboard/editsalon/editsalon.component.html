@@ -92,6 +92,16 @@
       </div>
 
       <div class="field">
+        <label class="label">Location:</label>
+        <app-google-searc
+          class="geoLoc searchBlock"
+          (setAddress)="getAddress($event)"
+          adressType="geocode"
+        >
+        </app-google-searc>
+      </div>
+
+      <div class="field">
         <label class="label">Contact:</label>
         <div class="phoneArea">
           <input

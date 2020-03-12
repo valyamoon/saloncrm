@@ -1,21 +1,28 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy
+} from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { MatPaginator } from "@angular/material/paginator";
 import { Subscription, timer, Observable } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { switchMap, windowTime } from "rxjs/operators";
 
 import { ToastrService } from "ngx-toastr";
 import { MatTableDataSource } from "@angular/material/table";
+import { Router, NavigationEnd } from "@angular/router";
 
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.scss"]
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit {
   SalonRequestList: any;
   displayedColumns = ["name", "salonaddress", "contact", "isactive", "action"];
-  page: any;
+  page: any = 1;
   limit: any = 0;
   count: any = 5;
   showSalonDetail: boolean;
@@ -32,30 +39,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private adminServ: AdminServService,
-    private toastServ: ToastrService
+    private toastServ: ToastrService,
+    private router: Router
   ) {}
 
-  ngAfterViewInit() {
-    this.getRequests();
-    this.getActiveSalonsCount();
-    this.getActiveUsersCount();
-  }
-
   ngOnInit() {
+    if (JSON.parse(sessionStorage.getItem("isReload")) === true) {
+      window.location.reload();
+      sessionStorage.setItem("isReload", JSON.stringify(false));
+    }
+
     let dataToPass = {
       pageSize: this.pageSize,
       page: this.page
     };
     this.dataDefault = dataToPass;
-    this.subscription = timer(0, 200000)
+
+    this.getActiveSalonsCount();
+    this.getActiveUsersCount();
+    this.subscription = timer(0, 10000)
       .pipe(switchMap(() => this.adminServ.getSalonsRequest(this.dataDefault)))
-      .subscribe(
-        result => (
-          (this.SalonRequestList = result["data"]["data"]),
-          (this.limit = result["data"]["countNumber"])
-        )
-      );
-    //this.checkRequest();
+      .subscribe(result => {
+        this.SalonRequestList = result["data"]["data"];
+        this.limit = result["data"]["countNumber"];
+      });
+
     this.adminServ.setHeaderText("Salons Request");
   }
 
@@ -68,15 +76,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    */
 
   getRequests() {
-    // console.log("I AM CALLED");
+    console.log("getreq0");
     let dataToPass = {
       pageSize: this.pageSize,
       page: this.page
     };
-    this.dataDefault = dataToPass;
     this.adminServ.getSalonsRequest(dataToPass).subscribe(
-      data => {
-        if (data["code"] == 200) {
+      (data: any) => {
+        if (data["code"] === 200) {
           this.SalonRequestList = data["data"]["data"];
           this.limit = data["data"]["countNumber"];
 
@@ -85,22 +92,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           } else {
             this.noRecordFound = false;
           }
-        } else {
-          this.toastServ.error("Failed To Fetch Salons Request", "", {
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
             timeOut: 1000
           });
         }
-
-        // console.log("COUNT", this.count, this.SalonRequestList);
       },
       error => {
-        this.toastServ.error(
-          "Failed To Fetch Salons Request",
-          error.error["message"],
-          {
-            timeOut: 1000
-          }
-        );
+        console.log(error);
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 1000
+        });
       }
     );
   }
@@ -141,6 +143,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       },
       error => {
+        console.log(error);
         this.toastServ.error(
           "Failed To Approve Salon",
           error.error["message"],
@@ -161,6 +164,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    */
 
   getActiveUsersCount() {
+    console.log("sssssssssss");
     let dataToPass = {
       type: "user"
     };
@@ -188,6 +192,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    */
 
   getActiveSalonsCount() {
+    console.log("comnign");
     let dataToPass = {
       type: "salon"
     };
@@ -243,13 +248,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    * @smartData Enterprises (I) Ltd
    */
   declineSalonRequest(data) {
-    //  console.log("ApproveFor", data);
     let dataToPass = {
       salon_id: data._id
     };
     this.adminServ.declineSalonRequest(dataToPass).subscribe(
       data => {
-        //   console.log("FFFF", data);
         if (data["code"] === 200) {
           this.toastServ.success("Salon Declined Successfully", "", {
             timeOut: 1000
@@ -257,8 +260,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.getRequests();
           this.getActiveSalonsCount();
           this.getActiveUsersCount();
-        } else {
-          this.toastServ.error("Failed To Decline", "", {
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
             timeOut: 1000
           });
         }

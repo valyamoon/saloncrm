@@ -1,0 +1,11 @@
+.input {
+  padding: 5px;
+  border-radius: 25px;
+  outline: none;
+  width: 100%;
+  padding-left: 20px;
+  border: 1px solid white;
+}
+app-googlesearch {
+  width: auto;
+}

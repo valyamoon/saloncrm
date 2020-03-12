@@ -11,6 +11,7 @@ import { Router } from "@angular/router";
 export class SalonDetailComponent implements OnInit {
   salonDetailsData: any;
   averageRatings: any;
+  salonStarRatings: any;
   salonAvailalbilityData: any;
   salonData: any;
   salonID: any;
@@ -19,6 +20,7 @@ export class SalonDetailComponent implements OnInit {
   salonlat: any;
   salonlong: any;
   salonCategoriesData: any;
+  isReviewShow: boolean = false;
 
   constructor(
     private userServ: UsercommonserviceService,
@@ -108,6 +110,35 @@ export class SalonDetailComponent implements OnInit {
         });
       }
     );
+  }
+
+  getReviewRatings() {
+    console.log(this.salonData);
+    let dataToPass = {
+      salon_id: this.salonID
+    };
+    this.userServ.getReviewRatings(dataToPass).subscribe(
+      (data: any) => {
+        this.isReviewShow = true;
+        if (data["code"] === 200) {
+          console.log(data);
+          this.salonStarRatings = data["data"];
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
+            timeOut: 1000
+          });
+        }
+      },
+      error => {
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 1000
+        });
+      }
+    );
+  }
+
+  dismissModal() {
+    this.isReviewShow = false;
   }
 
   getSalonWeeklyDays(data) {

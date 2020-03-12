@@ -30,6 +30,7 @@ import {
   FacebookLoginProvider
 } from "ngx-angular-social-login";
 
+import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import {
   MatFormFieldModule,
   MatNativeDateModule,
@@ -105,7 +106,8 @@ export function getAuthServiceConfigs() {
     Ng2SearchPipeModule,
     SocialLoginModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    AutocompleteLibModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [

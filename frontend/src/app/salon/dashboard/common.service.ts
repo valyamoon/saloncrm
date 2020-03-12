@@ -158,6 +158,10 @@ export class CommonService {
   updateSalonDetails(data) {
     return this.http.post(this.baseUrl + "/update-salon", data);
   }
+  getTransactionsList(data) {
+    console.log("dataaaa", data);
+    return this.http.post(this.baseUrl + "/get-transactions", data);
+  }
 
   getSalonDetailsData(data) {
     return this.http.post(this.baseUrl + "/get-salon", data);

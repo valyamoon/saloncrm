@@ -42,6 +42,8 @@ import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
 import { ConnectAccountComponent } from './dashboard/connect-account/connect-account.component';
 import { ConfirmationDialogComponent } from './dashboard/confirmation-dialog/confirmation-dialog.component'
 import { SimpleModalModule } from 'ngx-simple-modal';
+import { GoogleSearcComponent } from './dashboard/google-searc/google-searc.component';
+import { TransactionsComponent } from './dashboard/transactions/transactions.component';
 
 
 @NgModule({
@@ -63,7 +65,9 @@ import { SimpleModalModule } from 'ngx-simple-modal';
     SubscriptionComponent,
     PromcodeComponent,
     ConnectAccountComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    GoogleSearcComponent,
+    TransactionsComponent
   ],
   imports: [
     CommonModule,

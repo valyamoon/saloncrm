@@ -44,7 +44,9 @@
                   <div class="salon-info">
                     <h5>{{ item.name }}</h5>
                     <div class="rating-sec">
-                      <app-starrating></app-starrating>
+                      <app-starrating
+                        [ratings]="item.avgRatings"
+                      ></app-starrating>
                     </div>
                     <div class="location">
                       <img src="../../../../assets/images/location-pin.svg" />

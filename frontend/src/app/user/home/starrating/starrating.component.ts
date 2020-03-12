@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input, AfterViewInit } from "@angular/core";
+import { async } from "q";
 
 @Component({
   selector: "app-starrating",
@@ -7,7 +8,15 @@ import { Component, OnInit } from "@angular/core";
 })
 export class StarratingComponent implements OnInit {
   isFavorite: boolean = false;
+  totalRatings = 5;
+  tempArray: any = [];
+  tempArray1: any = [];
+  @Input() ratings;
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    for (var i = 0; i < this.ratings; i++) {
+      this.tempArray.push({});
+    }
+  }
 }

@@ -18,10 +18,10 @@ export class UserlistComponent implements OnInit {
   showUserDetails: boolean;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   displayedColumns = ["firstName", "lastName", "email", "phone", "action"];
-  page: any;
   limit: any = 0;
   count: any = 5;
   pageSize: any = 5;
+  page: any = 1;
   ActiveUsersCount: any;
   disabled: boolean = true;
   dataSource: any;
@@ -39,7 +39,9 @@ export class UserlistComponent implements OnInit {
   getActiveUsersList() {
     this.isLoader = true;
     let dataToPass = {
-      type: "user"
+      type: "user",
+      pageSize: this.count,
+      page: this.page
     };
     this.adminServ.getActiveUsersList(dataToPass).subscribe(
       data => {
@@ -122,7 +124,7 @@ export class UserlistComponent implements OnInit {
   }
 
   paginate(event) {
-    // console.log(event);
+    //  console.log(event);
     this.page = event.pageIndex + 1;
     this.count = event.pageSize;
     this.getActiveUsersList();

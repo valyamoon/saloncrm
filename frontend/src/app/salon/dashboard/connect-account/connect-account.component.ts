@@ -16,9 +16,10 @@ export class ConnectAccountComponent implements OnInit {
     private activatedRoutes: ActivatedRoute,
     private commServ: CommonService,
     private toastServ: ToastrService
-  ) { }
+  ) {}
 
   ngOnInit() {
+    sessionStorage.setItem("isReload", JSON.stringify(true));
     this.stripeCode = this.activatedRoutes.snapshot.queryParams["code"];
     if (this.stripeCode) {
       this.connectAccount();
@@ -28,7 +29,6 @@ export class ConnectAccountComponent implements OnInit {
 
   checkISStripeConnected() {
     this.commServ.getStripeConnectedStatus().subscribe((data: any) => {
-
       this.isStripeConnected = data;
     });
   }
@@ -50,12 +50,15 @@ export class ConnectAccountComponent implements OnInit {
 
         this.commServ.connectStripeAccount(dataToPass).subscribe(
           (data: any) => {
-
             if (data["code"] === 200) {
               this.toastServ.success(data["message"], "Success", {
                 timeOut: 1000
               });
               this.checkISStripeConnected();
+              if (JSON.parse(sessionStorage.getItem("isReload"))) {
+                window.location.reload();
+                sessionStorage.setItem("isReload", JSON.stringify(false));
+              }
             } else if (data["code"] === 400) {
               this.toastServ.error(data["message"], "Error", {
                 timeOut: 1000
