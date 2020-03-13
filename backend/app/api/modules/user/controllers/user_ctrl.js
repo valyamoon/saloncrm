@@ -1110,45 +1110,64 @@ function cancelBooking(req, res) {
 function addWalletAmount(dataToPass) {
   async function addWalletAmount() {
     try {
+      var initialAmount = 0;
       if (dataToPass) {
-        var amounts = 0;
-        let amount = amounts + dataToPass.amount;
+        let condition = { user_id: dataToPass.user_id };
 
-        let saveWalletAmount = new wallets({
-          amount: amount,
-          user_id: dataToPass.user_id
-        });
+        let checkWalletAmount = await commonQuery.fetch_all(wallets, condition);
 
-        let addWalletAmount = await commonQuery.InsertIntoCollection(
-          wallets,
-          saveWalletAmount
-        );
+        if (checkWalletAmount.length > 0) {
+          initialAmount =
+            checkWalletAmount[0].amount + parseInt(dataToPass["amount"]);
 
-        if (!addWalletAmount) {
-          res.json(
-            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          let condition = {
+            user_id: mongoose.Types.ObjectId(dataToPass["user_id"])
+          };
+
+          let updateData = {
+            amount: initialAmount
+          };
+
+          let updateAmount = await commonQuery.updateOneDocument(
+            wallets,
+            condition,
+            updateData
           );
+
+          if (updateAmount) {
+            console.log("Success");
+          } else {
+            console.log("Error");
+          }
         } else {
-          console.log(addWalletAmount);
-          // res.json(
-          //   Response(
-          //     constant.SUCCESS_CODE,
-          //     constant.ADDED_SUCCESS,
-          //     addWalletAmount
-          //   )
-          // );
+          initialAmount = initialAmount + parseInt(dataToPass["amount"]);
+
+          let saveWalletAmount = new wallets({
+            amount: initialAmount,
+            user_id: dataToPass.user_id
+          });
+
+          let addWalletAmount = await commonQuery.InsertIntoCollection(
+            wallets,
+            saveWalletAmount
+          );
+
+          if (!addWalletAmount) {
+            console.log("Error");
+          } else {
+            console.log("Success");
+          }
         }
       }
     } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
+      console.log(error);
     }
   }
   addWalletAmount().then(function() {});
 }
 
 function getWalletAmount(req, res) {
+  console.log("wwwwwwwwwwwwwwwww", req.body);
   async function getWalletAmount() {
     try {
       if (req.body.user_id && req.body) {
@@ -1188,7 +1207,7 @@ function minusWalletAmount(data) {
           condition
         );
         if (fetchWalletAmount) {
-          var updatedAmount = fetchWalletAmount - data.amount;
+          var updatedAmount = fetchWalletAmount - parseInt(data.amount);
           let updateCondition = { amount: updatedAmount };
           let updateWallet = await commonQuery.updateOneDocument(
             wallets,

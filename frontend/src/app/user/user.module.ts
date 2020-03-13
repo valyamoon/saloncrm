@@ -8,6 +8,7 @@ import {} from "googlemaps";
 
 import { Ng2SearchPipeModule } from "ng2-search-filter";
 import { MatTabsModule } from "@angular/material/tabs";
+import { NgxStarsModule } from "ngx-stars";
 
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { DatepickerModule, BsDatepickerModule } from "ngx-bootstrap/datepicker";
@@ -107,7 +108,8 @@ export function getAuthServiceConfigs() {
     SocialLoginModule,
     MatTabsModule,
     MatCardModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    NgxStarsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [

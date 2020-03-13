@@ -30,6 +30,7 @@ import { SubcriptionsListComponent } from "./admin-dashboard/subcriptions-list/s
 import { LoaderComponent } from "./admin-dashboard/loader/loader.component";
 import { DeleteDialogComponent } from "./admin-dashboard/delete-dialog/delete-dialog.component";
 import { DetailsComponent } from "./admin-dashboard/details/details.component";
+import { BookingDetailsComponent } from "./admin-dashboard/booking-details/booking-details.component";
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { DetailsComponent } from "./admin-dashboard/details/details.component";
     SubcriptionsListComponent,
     LoaderComponent,
     DeleteDialogComponent,
-    DetailsComponent
+    DetailsComponent,
+    BookingDetailsComponent
   ],
   imports: [
     CommonModule,
