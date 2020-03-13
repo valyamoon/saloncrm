@@ -27,7 +27,13 @@
             <div class="booking-view-left-info">
               <ul>
                 <li>
-                  <h4 class="find" title="Find direction on Google Maps" (click)="findDirection()">Direction</h4>
+                  <h4
+                    class="find"
+                    title="Find direction on Google Maps"
+                    (click)="findDirection()"
+                  >
+                    Direction
+                  </h4>
                   <div class="">
                     <i class="fa fa-phone" aria-hidden="true"></i>
                     <span>+{{ salonData.code }} {{ salonData.contact }}</span>
@@ -94,7 +100,7 @@
   </div>
 
   <div class="overlay" *ngIf="isReviewShow">
-    <div class="main-section">
+    <div class="main-section scrollbar" id="style-3">
       <div class="img">
         <img
           (click)="dismissModal()"

@@ -193,6 +193,12 @@ export class AdminServService {
   resetNewPassword(data) {
     return this.http.post(this.baseUrl + "/reset-password", data);
   }
+  getUpcomingBookings(data) {
+    return this.http.post(this.baseUrl + "/get-bookings-admin", data);
+  }
+  cancelBookings(data) {
+    return this.http.post(this.baseUrl + "/cancel-booking", data);
+  }
 
   // errorHandler(error:HttpErrorResponse){
   //   return Observable.throw(error.message|| "Server Error");

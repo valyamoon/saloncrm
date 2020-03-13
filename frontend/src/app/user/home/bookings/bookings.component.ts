@@ -10,6 +10,15 @@ import { ToastrService } from "ngx-toastr";
 export class BookingsComponent implements OnInit {
   userID: any;
   bookingListData: any;
+  adminDetails: any;
+  isDetailShow: boolean;
+  bookingDetails: any;
+  salonDetails: any;
+  isShowAddReview: boolean;
+  isAddReviewModal: boolean;
+  starRating: any = 1;
+  comment: any;
+
   selectedTab: any = "upcoming";
   constructor(
     private userServ: UsercommonserviceService,
@@ -20,6 +29,7 @@ export class BookingsComponent implements OnInit {
     this.userID = sessionStorage.getItem("userID");
 
     this.getBookingList(this.selectedTab);
+    this.getAdminDetail();
   }
 
   getBookingList(data) {
@@ -29,6 +39,7 @@ export class BookingsComponent implements OnInit {
     };
     this.userServ.getUserBookings(dataToPass).subscribe(
       (data: any) => {
+        console.log(data);
         if (data["code"] === 200) {
           this.bookingListData = data["data"];
         } else if (data["code"] === 400) {
@@ -47,10 +58,107 @@ export class BookingsComponent implements OnInit {
   tabChanged(event) {
     if (event.index === 0) {
       this.selectedTab = "upcoming";
+      this.isShowAddReview = false;
       this.getBookingList(this.selectedTab);
     } else if (event.index === 1) {
       this.selectedTab = "completed";
+      this.isShowAddReview = true;
       this.getBookingList(this.selectedTab);
     }
+  }
+  getBookingDetails(data) {
+    console.log(data);
+
+    this.bookingDetails = data;
+
+    let dataToPass = {
+      salon_id: this.bookingDetails["salon_id"]
+    };
+    this.userServ.getSalonDetails(dataToPass).subscribe(
+      (data: any) => {
+        if (data["code"] === 200) {
+          this.salonDetails = data["data"];
+          this.isDetailShow = true;
+          console.log(this.salonDetails);
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
+            timeOut: 100
+          });
+        }
+      },
+      error => {
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 100
+        });
+      }
+    );
+  }
+  dismissModal() {
+    this.isDetailShow = false;
+    this.isAddReviewModal = false;
+  }
+  getAdminDetail() {
+    let dataToPass = {
+      type: "admin"
+    };
+
+    this.userServ.getAdminDetails(dataToPass).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data["code"] === 200) {
+          this.adminDetails = data["data"];
+          console.log(this.adminDetails);
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
+            timeOut: 100
+          });
+        }
+      },
+      error => {
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 100
+        });
+      }
+    );
+  }
+
+  addReview() {
+    this.isAddReviewModal = true;
+  }
+  onRatingSet(event) {
+    console.log(event);
+    this.starRating = event;
+  }
+  submitStarRating() {
+    console.log(this.starRating, this.comment);
+
+    let dataToPass = {
+      ratings: this.starRating,
+      comments: this.comment,
+      user_id: this.userID,
+      salon_id: this.bookingDetails["salon_id"]
+    };
+    this.userServ.addReviewAndRatings(dataToPass).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data["code"] === 200) {
+          this.toastServ.success("Submitted Successfully", "", {
+            timeOut: 500
+          });
+          this.isAddReviewModal = false;
+          this.isDetailShow = false;
+          this.comment = "";
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
+            timeOut: 100
+          });
+        }
+      },
+      error => {
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 100
+        });
+      }
+    );
   }
 }

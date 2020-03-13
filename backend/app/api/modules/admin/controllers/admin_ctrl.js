@@ -11,7 +11,7 @@ const cron = require("node-cron");
 const mailer = require("../../../../lib/mailer");
 
 const subscriptionplans = require("../model/subscriptionPlan");
-
+const appointments = require("../../salon/model/appointmentsSchema");
 const constant = require("../../../../config/constant.js");
 const users = mongoose.model("users");
 const emailtemplate = require("../model/email_template/emailtemplateSchema");
@@ -71,7 +71,8 @@ module.exports = {
   updateSubscription: updateSubscription,
   addAdminDetails: addAdminDetails,
   updateAdminDetails: updateAdminDetails,
-  getAdminDetails: getAdminDetails
+  getAdminDetails: getAdminDetails,
+  getAllUpcomingBookings: getAllUpcomingBookings
 };
 
 /**
@@ -2106,4 +2107,54 @@ function getAdminDetails(req, res) {
   getAdminDetails().then(function() {});
 }
 
-cron.schedule("* * * * * *", function() {});
+function getAllUpcomingBookings(req, res) {
+  async function getAllUpcomingBookings() {
+    try {
+      let totalCount;
+      let pageSize =
+        +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
+      let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
+      if (req.body && req.body.type === "upcomings") {
+        let condition = { isActive: true, isCompleted: false };
+        let getBookings = await commonQuery.find_all_bookings(
+          appointments,
+          condition,
+          pageSize,
+          currentPage
+        );
+        if (!getBookings) {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        } else {
+          let totalCounts = await commonQuery.findCount(
+            appointments,
+            condition
+          );
+          if (totalCounts) {
+            totalCount = totalCounts;
+          }
+
+          let dataToPass = {
+            bookings: getBookings,
+            count: totalCount
+          };
+
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              dataToPass
+            )
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  getAllUpcomingBookings().then(function() {});
+}

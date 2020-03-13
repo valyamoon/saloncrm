@@ -40,6 +40,12 @@ export class CheckoutComponent implements OnInit {
   noPromocode: boolean;
   month: any;
   year: any;
+  walletAmount: any;
+  useWallet: boolean = false;
+  isUseWallet: boolean;
+  isPayable: boolean;
+  isWalletAmountUsed: boolean;
+  walletAmountUsed: any;
   constructor(
     private router: Router,
     private allserv: AllservService,
@@ -68,7 +74,7 @@ export class CheckoutComponent implements OnInit {
     });
 
     this.salonData = JSON.parse(sessionStorage.getItem("bookingData"))["data"];
-    console.log(this.salonData);
+
     this.userID = sessionStorage.getItem("userID");
     this.currentRoute = this.router.url;
     if (localStorage.getItem("LoggedInUser") !== null) {
@@ -81,16 +87,17 @@ export class CheckoutComponent implements OnInit {
       "data"
     ]["service"];
 
-    console.log("checkoutData", this.checkoutData);
     this.onDate = JSON.parse(sessionStorage.getItem("userprefrence"))["date"];
     this.startTime = JSON.parse(sessionStorage.getItem("bookingData"))["stime"];
     this.totalPrice = this.checkoutData["price"];
+    this.getWalletBalance();
   }
 
   checkPaymentMode(event) {
     this.paymentMode = event.target["defaultValue"];
     if (event.target["defaultValue"] === "cash") {
       this.isCardDetailsRequired = true;
+      this.useWallet = false;
       this.cardNum = "";
       this.expDate = "";
       this.cvc = "";
@@ -118,7 +125,6 @@ export class CheckoutComponent implements OnInit {
     };
     this.userServ.getPromocodes(dataToPass).subscribe(
       (data: any) => {
-        console.log(data);
         if (data["code"] === 200) {
           this.isShowPromocode = true;
           this.promocodesList = data["data"];
@@ -153,10 +159,7 @@ export class CheckoutComponent implements OnInit {
     this.userServ.checkPromoCodeValidity(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] === 200) {
-          console.log("data", data);
-
           this.promocodeDetails = result;
-          console.log("promocodeDetails", this.promocodeDetails);
 
           this.offerCodePrice = this.promocodeDetails["value"];
 
@@ -171,7 +174,6 @@ export class CheckoutComponent implements OnInit {
           if (this.isPromocodeApplied === true) {
             this.totalPrice = this.checkoutData["price"];
             this.totalPrice = this.totalPrice - this.offerCodePrice;
-            console.log(this.totalPrice);
           } else if (this.isPromocodeApplied === false) {
             this.totalPrice = this.checkoutData["price"];
           }
@@ -217,7 +219,6 @@ export class CheckoutComponent implements OnInit {
       };
       this.userServ.payForService(dataToPass).subscribe(
         (data: any) => {
-          console.log("Afterpayment", data);
           if (data["code"] === 200) {
             this.isBookingCompleted = true;
 
@@ -239,25 +240,141 @@ export class CheckoutComponent implements OnInit {
         }
       );
     } else if (this.paymentMode === "card") {
-      this.month = this.expDate.slice(0, 2);
-      this.year = this.expDate.slice(2);
+      if (this.isUseWallet === false) {
+        this.month = this.expDate.slice(0, 2);
+        this.year = this.expDate.slice(2);
 
-      let cardData = {
-        cardNum: this.cardNum,
-        month: this.month,
-        cvc: this.cvc,
-        year: this.year
-      };
+        let cardData = {
+          cardNum: this.cardNum,
+          month: this.month,
+          cvc: this.cvc,
+          year: this.year
+        };
 
-      this.userServ.getStripeToken(cardData).subscribe((data: any) => {
-        if (data["code"] === 200) {
-          console.log(data["data"]);
-          this.stripeToken = data["data"]["id"];
-          this.stripeEmail = this.userEmailID;
+        this.userServ.getStripeToken(cardData).subscribe((data: any) => {
+          if (data["code"] === 200) {
+            this.stripeToken = data["data"]["id"];
+            this.stripeEmail = this.userEmailID;
+
+            dataToPass = {
+              payType: this.paymentMode,
+              totalAmt: this.totalPrice,
+              salon_id: this.salonData["_id"],
+              user_id: this.userID,
+              date: this.onDate,
+              time: this.startTime,
+              service_id: this.checkoutData["_id"],
+              promocode_id: promocodeID,
+              deviceToken: null,
+              duration: this.checkoutData["duration"],
+              stripeToken: this.stripeToken,
+              stripeEmail: this.stripeEmail,
+              isWalletUsed: false,
+              walletAmountUsed: null
+            };
+
+            this.userServ.payForService(dataToPass).subscribe(
+              (data: any) => {
+                if (data["code"] === 200) {
+                  this.isBookingCompleted = true;
+
+                  sessionStorage.removeItem("userprefrence");
+                  sessionStorage.removeItem("bookingData");
+                  setTimeout(() => this.router.navigate(["/home"]), 2500);
+                  // this.router.navigate(["/home"]);
+                } else if (data["code"] === 400) {
+                  this.isBookingCompleted = false;
+                  this.toastServ.error(data["message"], "", {
+                    timeOut: 1000
+                  });
+                }
+              },
+              error => {
+                this.toastServ.error(error.error["message"], "", {
+                  timeOut: 1000
+                });
+              }
+            );
+          } else if (data["code"] === 400) {
+            this.toastServ.error(data["data"]["raw"]["message"], "", {
+              timeOut: 1000
+            });
+          }
+        });
+      } else if (this.isUseWallet === true) {
+        if (this.totalPrice > this.walletAmount) {
+          this.walletAmountUsed = this.walletAmount;
+          this.isWalletAmountUsed = true;
+
+          this.month = this.expDate.slice(0, 2);
+          this.year = this.expDate.slice(2);
+
+          let cardData = {
+            cardNum: this.cardNum,
+            month: this.month,
+            cvc: this.cvc,
+            year: this.year
+          };
+
+          this.userServ.getStripeToken(cardData).subscribe((data: any) => {
+            if (data["code"] === 200) {
+              this.stripeToken = data["data"]["id"];
+              this.stripeEmail = this.userEmailID;
+
+              dataToPass = {
+                payType: this.paymentMode,
+                totalAmt: this.totalPrice,
+                salon_id: this.salonData["_id"],
+                user_id: this.userID,
+                date: this.onDate,
+                time: this.startTime,
+                service_id: this.checkoutData["_id"],
+                promocode_id: promocodeID,
+                deviceToken: null,
+                duration: this.checkoutData["duration"],
+                stripeToken: this.stripeToken,
+                stripeEmail: this.stripeEmail,
+                isWalletUsed: this.isWalletAmountUsed,
+                walletAmountUsed: this.walletAmountUsed
+              };
+
+              this.userServ.payForService(dataToPass).subscribe(
+                (data: any) => {
+                  if (data["code"] === 200) {
+                    this.isBookingCompleted = true;
+
+                    sessionStorage.removeItem("userprefrence");
+                    sessionStorage.removeItem("bookingData");
+                    setTimeout(() => this.router.navigate(["/home"]), 2500);
+                    // this.router.navigate(["/home"]);
+                  } else if (data["code"] === 400) {
+                    this.isBookingCompleted = false;
+                    this.toastServ.error(data["message"], "", {
+                      timeOut: 1000
+                    });
+                  }
+                },
+                error => {
+                  this.toastServ.error(error.error["message"], "", {
+                    timeOut: 1000
+                  });
+                }
+              );
+            } else if (data["code"] === 400) {
+              this.toastServ.error(data["data"]["raw"]["message"], "", {
+                timeOut: 1000
+              });
+            }
+          });
+        } else if (this.totalPrice < this.walletAmount) {
+          this.walletAmountUsed = this.walletAmount - this.totalPrice;
+          this.isWalletAmountUsed = true;
+          this.month = this.expDate.slice(0, 2);
+          this.year = this.expDate.slice(2);
 
           dataToPass = {
             payType: this.paymentMode,
-            totalAmt: this.totalPrice,
+            totalAmt: this.walletAmountUsed,
             salon_id: this.salonData["_id"],
             user_id: this.userID,
             date: this.onDate,
@@ -267,12 +384,13 @@ export class CheckoutComponent implements OnInit {
             deviceToken: null,
             duration: this.checkoutData["duration"],
             stripeToken: this.stripeToken,
-            stripeEmail: this.stripeEmail
+            stripeEmail: this.stripeEmail,
+            isWalletUsed: true,
+            walletAmountUsed: this.walletAmountUsed
           };
 
           this.userServ.payForService(dataToPass).subscribe(
             (data: any) => {
-              console.log("Afterpayment", data);
               if (data["code"] === 200) {
                 this.isBookingCompleted = true;
 
@@ -293,16 +411,111 @@ export class CheckoutComponent implements OnInit {
               });
             }
           );
-        } else if (data["code"] === 400) {
-          this.toastServ.error(data["data"]["raw"]["message"], "", {
-            timeOut: 1000
-          });
+        } else if (this.totalPrice == this.walletAmount) {
+          this.walletAmountUsed = this.walletAmount;
+          this.isWalletAmountUsed = true;
+          this.month = this.expDate.slice(0, 2);
+          this.year = this.expDate.slice(2);
+
+          dataToPass = {
+            payType: this.paymentMode,
+            totalAmt: this.walletAmountUsed,
+            salon_id: this.salonData["_id"],
+            user_id: this.userID,
+            date: this.onDate,
+            time: this.startTime,
+            service_id: this.checkoutData["_id"],
+            promocode_id: promocodeID,
+            deviceToken: null,
+            duration: this.checkoutData["duration"],
+            stripeToken: this.stripeToken,
+            stripeEmail: this.stripeEmail,
+            isWalletUsed: true,
+            walletAmountUsed: this.walletAmountUsed
+          };
+
+          this.userServ.payForService(dataToPass).subscribe(
+            (data: any) => {
+              if (data["code"] === 200) {
+                this.isBookingCompleted = true;
+
+                sessionStorage.removeItem("userprefrence");
+                sessionStorage.removeItem("bookingData");
+                setTimeout(() => this.router.navigate(["/home"]), 2500);
+                // this.router.navigate(["/home"]);
+              } else if (data["code"] === 400) {
+                this.isBookingCompleted = false;
+                this.toastServ.error(data["message"], "", {
+                  timeOut: 1000
+                });
+              }
+            },
+            error => {
+              this.toastServ.error(error.error["message"], "", {
+                timeOut: 1000
+              });
+            }
+          );
         }
-      });
+      }
     }
   }
   goToBookings() {
     this.router.navigate(["/booking"]);
   }
   modelChanged(event) {}
+
+  getWalletBalance() {
+    let dataToPass = {
+      user_id: this.userID
+    };
+
+    this.userServ.getWalletAmount(dataToPass).subscribe(
+      (data: any) => {
+        if (data["code"] === 200) {
+          this.walletAmount = data["data"][0].amount;
+
+          if (this.walletAmount > 0) {
+            this.isPayable = true;
+          } else if (this.walletAmount <= 0) {
+            this.isPayable = false;
+          }
+        } else if (data["code"] === 400) {
+          this.toastServ.error(data["message"], "", {
+            timeOut: 1000
+          });
+        }
+      },
+      error => {
+        this.toastServ.error(error.error["message"], "", {
+          timeOut: 1000
+        });
+      }
+    );
+  }
+  checkIsWallet(data) {
+    if (data === false) {
+      this.isUseWallet = true;
+      if (this.isUseWallet === true) {
+        this.enableMakePaymentButton = false;
+        if (this.walletAmount > this.totalPrice) {
+          this.isCardDetailsRequired = true;
+        } else if (this.walletAmount <= this.totalPrice) {
+          this.isCardDetailsRequired = false;
+        }
+      }
+
+      console.log(this.isUseWallet);
+    } else if (data === true) {
+      this.isUseWallet = false;
+      if (this.isUseWallet === false) {
+        this.enableMakePaymentButton = false;
+        if (this.walletAmount > this.totalPrice) {
+          this.isCardDetailsRequired = false;
+        } else if (this.walletAmount <= this.totalPrice) {
+          this.isCardDetailsRequired = false;
+        }
+      }
+    }
+  }
 }

@@ -213,12 +213,20 @@
                 <img src="../../../../assets/images/wallet.svg" alt="" />
                 <strong class="walletString">Wallet Balance</strong>
               </div>
-              <span>$100</span>
+              <span>{{ walletAmount | currency: "USD" }}</span>
             </div>
             <div class="amountData">
               <div>
-                <input type="checkbox" />
-                <label class="uwbString">Use wallet balance</label>
+                <input
+                  [disabled]="isCardDetailsRequired && !isPayable"
+                  type="checkbox"
+                  [(ngModel)]="useWallet"
+                  (click)="checkIsWallet(useWallet)"
+                  id="isWallet"
+                />
+                <label class="uwbString" for="isWallet"
+                  >Use wallet balance</label
+                >
               </div>
             </div>
             <div class="promocodeArea">

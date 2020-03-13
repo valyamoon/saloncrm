@@ -102,4 +102,7 @@ export class UsercommonserviceService {
   getStripeToken(data) {
     return this.http.post(this.baseUrl + "/get-stripe-token", data);
   }
+  getWalletAmount(data) {
+    return this.http.post(this.baseUrl + "/users-wallet", data);
+  }
 }

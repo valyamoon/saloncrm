@@ -44,6 +44,7 @@ module.exports = function(router) {
   router.post("/admin-detail", admin.addAdminDetails);
   router.post("/update-admin", admin.updateAdminDetails);
   router.post("/get-admin-detail", admin.getAdminDetails);
+  router.post("/get-bookings-admin", admin.getAllUpcomingBookings);
 
   return router;
 };

@@ -6,11 +6,11 @@
         <mat-tab label="Upcoming">
           <div class="row">
             <div
-              class="col-lg-4 col-md-4 col-sm-12 col-xs-12"
+              class="col-lg-4 col-md-4 col-sm-12 col-xs-12 matcard"
               *ngFor="let item of bookingListData"
             >
               <mat-card>
-                <div class="booking-grids">
+                <div class="booking-grids" (click)="getBookingDetails(item)">
                   <div class="upperSec">
                     <div class="imgArea">
                       <img src="item.image" alt="" />
@@ -20,11 +20,11 @@
                       <div class="salonName">
                         {{ item.name }}
                       </div>
-                      <div class="rating-sec">
+                      <!-- <div class="rating-sec">
                         <app-starrating
                           [ratings]="item.avgRatings"
                         ></app-starrating>
-                      </div>
+                      </div> -->
                       <div class="locaSec">
                         <img
                           src="../../../../assets/images/location-pin.svg"
@@ -60,11 +60,11 @@
         <mat-tab label="Completed">
           <div class="row">
             <div
-              class="col-lg-4 col-md-4 col-sm-12 col-xs-12"
+              class="col-lg-4 col-md-4 col-sm-12 col-xs-12 matcard"
               *ngFor="let item of bookingListData"
             >
               <mat-card>
-                <div class="booking-grids">
+                <div class="booking-grids" (click)="getBookingDetails(item)">
                   <div class="upperSec">
                     <div class="imgArea">
                       <img src="item.image" alt="" />
@@ -74,9 +74,9 @@
                       <div class="salonName">
                         {{ item.name }}
                       </div>
-                      <div class="rating-sec">
+                      <!-- <div class="rating-sec">
                         <app-starrating></app-starrating>
-                      </div>
+                      </div> -->
                       <div class="locaSec">
                         <img
                           src="../../../../assets/images/location-pin.svg"
@@ -110,6 +110,107 @@
           </div>
         </mat-tab>
       </mat-tab-group>
+    </div>
+
+    <div class="overlay" *ngIf="isDetailShow">
+      <div class="main-section col-lg-4 col-md-4 col-sm -6">
+        <div class="closeBtn">
+          <img
+            src="../../../../assets/images/close2.png"
+            (click)="dismissModal()"
+            title="close"
+            alt=""
+            class="closeImg"
+          />
+        </div>
+        <div class="imgSection">
+          <img src="{{ salonDetails.image }}" class="image" alt="" />
+          <div class="salonName">
+            {{ bookingDetails.name }}
+          </div>
+          <div class="starRatingSec">
+            <app-starrating [ratings]="salonDetails.avgRatings">
+            </app-starrating>
+          </div>
+        </div>
+        <div class="detailSec">
+          <span class="serviceName">{{ bookingDetails.servicename }}</span>
+
+          <mat-card class="mat">
+            <div class="dates">
+              <span> {{ bookingDetails.date | date: "mediumDate" }} at </span>
+              <span>
+                {{ bookingDetails.starttime }}
+              </span>
+            </div>
+            <div class="fields">
+              <span class="labels">Total Amount Paid:</span>
+              <span>{{ bookingDetails.totalamount | currency: "USD" }}</span>
+            </div>
+            <div class="fields">
+              <span class="labels">Payment Mode:</span>
+              <span>{{ bookingDetails.paymentType }}</span>
+            </div>
+            <div class="fields">
+              <span class="labels">Order Id:</span>
+              <span>{{ bookingDetails.orderId }}</span>
+            </div>
+            <div class="bookingstatus">Booking Confirmed</div>
+          </mat-card>
+          <mat-card *ngIf="!isShowAddReview">
+            <div class="dates">Cancellation Policy</div>
+            <div>
+              <p>
+                If you are unable to keep the schedule appointment. please give
+                24 hr advance notice, to ensure that you will not be charged for
+                this appointment and your paid balance will be refunded to your
+                wallet.
+              </p>
+              <p>
+                To cancel the appointment please contact
+              </p>
+              <span class="dates"
+                >+ {{ adminDetails.code }} {{ adminDetails.phone }}</span
+              >
+            </div>
+          </mat-card>
+        </div>
+        <div class="addReview" *ngIf="isShowAddReview">
+          <button class="btn-primary btn-sign-in" (click)="addReview()">
+            Add Review
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="overlay" *ngIf="isAddReviewModal">
+      <div class="main-section col-lg-4 col-md-4 col-sm -6">
+        <div class="startRating">
+          <ngx-stars
+            [readonly]="false"
+            [size]="4"
+            [color]="'gold'"
+            [initialStars]="1"
+            (ratingOutput)="onRatingSet($event)"
+          ></ngx-stars>
+        </div>
+        <div class="comment">
+          <textarea
+            placeholder="Add your comment"
+            class="commentText"
+            rows="4"
+            cols="50"
+            [(ngModel)]="comment"
+          >
+          </textarea>
+        </div>
+        <button
+          [disabled]="!comment"
+          class="btn-primary btn-sign-in"
+          (click)="submitStarRating()"
+        >
+          Submit
+        </button>
+      </div>
     </div>
   </section>
   <app-footer></app-footer>

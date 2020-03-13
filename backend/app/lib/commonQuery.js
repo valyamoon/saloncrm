@@ -1294,6 +1294,79 @@ commonQuery.find_all_employee_paginate = function find_all_employee_paginate(
   });
 };
 
+commonQuery.find_all_bookings = function find_all_bookings(
+  model,
+  cond,
+  pageSize,
+  page
+) {
+  return new Promise(function(resolve, reject) {
+    let pageSizes = pageSize;
+    let currentPage = page;
+
+    if (cond) {
+      cond = cond;
+    } else {
+      cond = {};
+    }
+    let postQuery = model.aggregate([
+      { $match: cond },
+      {
+        $lookup: {
+          from: "salons",
+          localField: "salon_id",
+          foreignField: "_id",
+          as: "salons"
+        }
+      },
+      { $unwind: "$salons" },
+
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          _id: 1,
+          duration: 1,
+          paymentType: 1,
+          orderId: 1,
+          totalamount: 1,
+          date: 1,
+          starttime: 1,
+          endtime: 1,
+          connected_account_id: 1,
+          isActive: 1,
+          isCompleted: 1,
+          isCancelled: 1,
+          salonName: "$salons.name",
+          userName: "$user.firstName"
+        }
+      }
+    ]);
+
+    if (pageSizes && currentPage) {
+      postQuery.skip(pageSizes * (currentPage - 1)).limit(pageSizes);
+    }
+    postQuery
+      .then(result => {
+        // console.log(result);
+
+        // console.log("DATATOPASS", result);
+        resolve(result);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 commonQuery.findCount = function findCount(model, condition) {
   return new Promise(function(resolve, reject) {
     model.countDocuments(condition).exec(function(err, res) {
