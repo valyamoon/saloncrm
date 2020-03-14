@@ -272,7 +272,6 @@ function saveSalonDetails(req, res) {
 function getSalons(req, res) {
   async function getSalons() {
     try {
-      console.log("req body===========", req.body);
       var intervals;
       var timeArray = [];
       var bookedSlotsArray = [];
@@ -328,7 +327,7 @@ function getSalons(req, res) {
           name,
           sortParam
         );
-        console.log(salonList);
+
         if (!salonList.length) {
           res.json(
             Response(constant.SUCCESS_CODE, constant.DATA_NOT_FOUND, salonList)
@@ -342,9 +341,6 @@ function getSalons(req, res) {
             let cctime = new Date(c.closetime).toLocaleString({
               timeZone: c.timezonestring
             });
-
-            //console.log("opentime", ootime);
-            //console.log("closetime", cctime);
 
             slots.push({
               salon: c.name,
@@ -370,15 +366,12 @@ function getSalons(req, res) {
             });
           });
 
-          //  console.log("SLOTSSSS", slots);
-
           slots.forEach(async function(v) {
             // let condition = { salon_id: mongoose.Types.ObjectId(v._id) };
             // let findBookedSlots = await commonQuery.fetch_all(
             //   appointments,
             //   condition
             // );
-            // console.log("bookedSlots", findBookedSlots);
 
             let todaysDate = new Date();
 
@@ -394,15 +387,16 @@ function getSalons(req, res) {
               let currentTime = new Date().toLocaleString("en-US", {
                 timeZone: v.timezonestring
               });
-              // console.log("currenttime", currentTime);
+              console.log("currenttime", currentTime);
+
               if (currentTime === v.cltime) {
                 times_ara = [];
               }
-              //  console.log("CT", moment(currentTime).format("HH:mm"));
-              starttime = new Date(currentTime).toLocaleString("en-US", {
-                timeZone: v.timezonestring
-              });
-              //console.log("isstam", starttime);
+
+              starttime = moment(new Date(currentTime.toString())).format(
+                "YYYY-MM-DDTHH:mm:00.000[Z]"
+              );
+              console.log("isstam", starttime);
             } else {
               starttime = v.optime;
             }
@@ -418,11 +412,10 @@ function getSalons(req, res) {
             startTiming = moment(starttime)
               .tz(v.timezonestring)
               .format("HH:mm");
-            // console.log(startTiming);
+
             endTiming = moment(endtime)
               .tz(v.timezonestring)
               .format("HH:mm");
-            // console.log(endTiming);
 
             function parseTime(s) {
               var c = s.split(":");
@@ -463,7 +456,6 @@ function getSalons(req, res) {
             var interval = parseInt(intervals);
 
             var times_ara = calculate_time_slot(start_time, end_time, interval);
-            // console.log("DATA IN V", v);
 
             times_ara.forEach(function(jj) {
               timeArray.push({ time: jj, status: false });
@@ -472,7 +464,6 @@ function getSalons(req, res) {
             var TempUrl = imageUrl.imageBaseUrl;
             var url = TempUrl + v.image;
             v.image = url;
-            // console.log("IMAGES", v.image);
 
             salonListingNew.push({
               starttime: v.optime,
@@ -494,31 +485,24 @@ function getSalons(req, res) {
             });
           });
           fetchbookedSlots(salonListingNew)
-            .then(data => {
-              console.log("In", data);
-            })
+            .then(data => {})
             .catch(data => {
-              console.log("O", data);
               for (var k = 0; k < data.length; k++) {
                 bookedSlotsArray.push(data[k]["start"].format("HH:mm"));
                 bookedSlotsArray.push(data[k]["end"].format("HH:mm"));
               }
 
-              console.log("bookedslotsarray", bookedSlotsArray);
-
               for (var i = 0; i < timeArray.length; i++) {
                 for (var j = 0; j < bookedSlotsArray.length; j++) {
                   if (timeArray[i].time === bookedSlotsArray[j]) {
-                    console.log(timeArray[i]);
                     timeArray[i].status = true;
                   }
                 }
               }
-              console.log("new", timeArray);
-              salonListingNew.slots = timeArray;
-              console.log("now", salonListingNew.slots);
 
-              console.log("WAA", salonListingNew);
+              salonListingNew.slots = timeArray;
+
+              // console.log("WAA", salonListingNew);
 
               return res.json(
                 Response(
@@ -557,7 +541,7 @@ function getSalons(req, res) {
 //         var Cudate = moment(s.date)
 //           .tz(s.timezonestring)
 //           .format("DD:MM:YYYY");
-//         console.log(Cudate);
+//
 //         for (var i = 0; i < s.slots.length; i++) {
 //           range2 = Mmoment.range(
 //             moment(
@@ -571,7 +555,7 @@ function getSalons(req, res) {
 //           );
 //           --i;
 //         }
-//         console.log("RANGE2", range2);
+//
 //         let condition = {
 //           salon_id: mongoose.Types.ObjectId(s._id)
 //         };
@@ -605,7 +589,7 @@ function getSalons(req, res) {
 //                 );
 //               }
 //             } catch (error) {
-//               console.log("ERROR", error);
+//
 //               reject(error);
 //             }
 //           });
@@ -640,7 +624,6 @@ async function fetchbookedSlots(data) {
     var alreadyBookedSlots = [];
     if (data) {
       data.forEach(async function(s) {
-        console.log("SO", s);
         var newDate;
         newDate =
           new Date(s.date).getFullYear() +
@@ -649,37 +632,32 @@ async function fetchbookedSlots(data) {
           "-" +
           new Date(s.date).getDate();
 
-        console.log(newDate);
-
         var Cudate = moment(s.date)
           .tz(s.timezonestring)
           .format("DD:MM:YYYY");
-        console.log(Cudate);
+
         try {
           s.slots.forEach(function(i, index) {
             tempSlots.push(i.time);
           });
-          // console.log("tempSlots", tempSlots);
+
           for (var i = 0; i < tempSlots.length; i++) {
             range2Array.push({ start: tempSlots[i], end: tempSlots[++i] });
 
             --i;
           }
 
-          console.log("RangeArray1", range2Array);
-
           let condition = {
             salon_id: mongoose.Types.ObjectId(s._id)
           };
-          console.log(condition);
+
           let bookedSlots = await commonQuery.fetch_all(
             appointments,
             condition
           );
-          console.log("bookedslots", bookedSlots);
+
           if (bookedSlots) {
             bookedSlots.forEach(async u => {
-              console.log("UUU", u);
               try {
                 if (
                   Cudate ===
@@ -688,17 +666,6 @@ async function fetchbookedSlots(data) {
                     .format("DD:MM:YYYY")
                 ) {
                   collectedAppointments.push(u);
-                  console.log(
-                    "SSS",
-                    moment(
-                      newDate.toString() + "T" + u.starttime.toString(),
-                      "YYYY-MM-DD HH:mm "
-                    )
-                  );
-
-                  console.log(
-                    moment(u.starttime).format("YYYY-MM-DDTHH:mm:00.000[Z]")
-                  );
 
                   range1 = Mmoment.range(
                     moment(
@@ -710,10 +677,9 @@ async function fetchbookedSlots(data) {
                       "YYYY-MM-DD HH:mm "
                     )
                   );
-                  console.log("r1", range1);
+
                   range1Array.push(range1);
                 }
-                // console.log("range1Array=======", range1Array);
               } catch (error) {
                 console.log("inner", error);
               }
@@ -723,7 +689,7 @@ async function fetchbookedSlots(data) {
           }
           resolve(bookedSlotsArrayToSend);
         } catch (error) {
-          // console.log("outer", error);
+          console.log("outer", error);
         }
 
         for (var j = 0; j < range2Array.length; j++) {
@@ -737,18 +703,14 @@ async function fetchbookedSlots(data) {
               "YYYY-MM-DD HH:mm "
             )
           );
-          console.log("r2", range2);
+
           tempRange2Array.push(range2);
         }
-        // console.log("tempRange2Array====", tempRange2Array);
-        // console.log("kilo", tempRange2Array, range1Array);
 
         for (var i = 0; i < tempRange2Array.length; i++) {
           for (var j = 0; j < range1Array.length; j++) {
             if (tempRange2Array[i].overlaps(range1Array[j])) {
-              //console.log(tempRange2Array[i]);
               bookedSlotsArrayToSend.push(tempRange2Array[i]);
-              console.log("bookedslotyss", bookedSlotsArrayToSend);
             } else {
               console.log(false);
             }
@@ -874,7 +836,7 @@ async function addSalonServices(req, res) {
           serviceData.service_id
         );
         var categoryName = await util.getCategoryName(categories, categoryId);
-        // console.log("serviceName+++categoryName", serviceName + "***" + categoryName); return;
+
         var countCond = {
           salon_id: salonId,
           service_id: serviceData.service_id,
@@ -1034,7 +996,6 @@ function addPromocodes(req, res) {
  */
 
 function getPromoCodes(req, res) {
-  //console.log(req.body.user_id);
   async function getPromoCodes() {
     try {
       if (req.body && req.body.salon_id) {
@@ -1046,7 +1007,6 @@ function getPromoCodes(req, res) {
 
         let fetchPromoCodes = await commonQuery.findAll(promocodes, conditon);
         //{ usedbyusers: { $nin: [ ObjectId("5e43e6ceafc9ca277790242f") ] } }
-        // console.log("PROMOCODE", fetchPromoCodes);
 
         if (!fetchPromoCodes) {
           res.json(
@@ -1209,10 +1169,8 @@ async function updateEmployee(req, res) {
  */
 function addServicesToEmployee(req, res) {
   async function addServicesToEmployee() {
-    // console.log("req.body.employee_id", req.body.employee_id); //return;
     try {
       if (req.body.employee_id && req.body) {
-        // console.log("call here in if condition");
         let tempSev = [];
         req.body.salonservices_id.forEach(function(v) {
           tempSev.push(mongoose.Types.ObjectId(v));
@@ -1252,7 +1210,7 @@ function addServicesToEmployee(req, res) {
             empCond,
             updateData
           );
-          // console.log("updateService", updateService); return;
+
           if (!updateService) {
             res.json(
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -1268,7 +1226,6 @@ function addServicesToEmployee(req, res) {
           }
         }
       }
-      // console.log("req.body =============>", req.body); return;
     } catch (error) {
       res.json(
         Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
@@ -1358,7 +1315,6 @@ function getCategoriesAndServicesOfSalon(req, res) {
  * On dated 03-01-2020
  */
 function addSalonWeeklySlots(req, res) {
-  // console.log("req.body", req.body); return;
   if (req.body.salon_id && req.body.user_id) {
     var finalDataArr = [];
     var finalUpdateDataArr = [];
@@ -1375,13 +1331,13 @@ function addSalonWeeklySlots(req, res) {
             status: record.status,
             order_sort: record.order_sort
           };
-          //console.log("req.body", req.body); return;
+
           let countCond = {
             user_id: req.body.user_id,
             salon_id: req.body.salon_id,
             days: record.days
           };
-          //  console.log("countCond", countCond); return;
+
           let salonWeeklySlotCount = await commonQuery.countData(
             salonweeklyslots,
             countCond
@@ -1520,7 +1476,7 @@ function viewSalonDetails(req, res) {
 
 function updateSalonDetails(req, res) {
   var image_path;
-  //console.log(req.body);
+
   async function updateSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -1652,8 +1608,6 @@ function updateSalonDetails(req, res) {
 }
 
 function fetchSalonData(req, res) {
-  // console.log("HERE", req.body);
-
   async function fetchSalonData() {
     try {
       if (req.body && req.body.user_id) {
@@ -1662,14 +1616,12 @@ function fetchSalonData(req, res) {
         };
 
         let getSalonData = await commonQuery.findoneData(salons, condition);
-        //  console.log(getSalonData);
 
         if (!getSalonData) {
           return res.json(
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
-          //   console.log(getSalonData);
           var TempUrl = imageUrl.imageBaseUrl;
           var url = TempUrl + getSalonData.image;
           getSalonData.image = url;
@@ -1693,7 +1645,6 @@ function fetchSalonData(req, res) {
 }
 
 async function bookSlot(data) {
-  console.log("AYADATA", data);
   let bookedAppointmentData;
   var orderId = Math.random(1234567910)
     .toString(25)
@@ -1702,7 +1653,6 @@ async function bookSlot(data) {
   if (data.paymentType === "cash") {
     var starttime = data.time;
 
-    //  console.log("ST", starttime);
     var duration = data.duration;
     var hour = starttime.split(":");
     var hourInt = hour[0] * 60;
@@ -1739,20 +1689,15 @@ async function bookSlot(data) {
         endTimeCalculated
     );
 
-    // console.log("endTimeCalculated", endTimeCalculated);
     let findEmp = await commonQuery.filterEmployee(
       employees,
       mongoose.Types.ObjectId(data.salon_id),
       mongoose.Types.ObjectId(data.service_id)
     );
 
-    // console.log(findEmp);
-
     if (!findEmp) {
     } else {
       var empId = findEmp[0]._id;
-
-      //  console.log("FINDEMP", findEmp);
 
       console.log(empId);
 
@@ -1772,8 +1717,6 @@ async function bookSlot(data) {
         endtimedate: endtimedate.toISOString(),
         starttimedate: starttimedate.toISOString()
       });
-
-      // console.log("saveAppointment", saveAppointment);
 
       let bookAppointment = await commonQuery.InsertIntoCollection(
         appointments,
@@ -1856,7 +1799,7 @@ async function bookSlot(data) {
         "-" +
         endTimeCalculated
     );
-    // console.log("endTimeCalculated", endTimeCalculated);
+
     let findEmp = await commonQuery.filterEmployee(
       employees,
       mongoose.Types.ObjectId(data.salon_id),
@@ -1871,24 +1814,19 @@ async function bookSlot(data) {
     //     _id,
     //     dataToPass
     //   );
-    //   // console.log("INA", addInPromocode);
+    //
     // }
-
-    //console.log("FINDEMP", findEmp);
 
     if (!findEmp) {
     } else {
       var empId = findEmp[0]._id;
 
-      // console.log(empId);
-
       let salon_connected_id;
       let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };
       let connectedAccountId = await commonQuery.findoneData(salons, condition);
-      console.log("CONNECTEDID", connectedAccountId);
+
       if (connectedAccountId) {
         salon_connected_id = connectedAccountId.connected_account_id;
-        // console.log("connected_account_id", salon_connected_id);
       }
 
       let saveAppointment = new appointments({
@@ -1909,8 +1847,6 @@ async function bookSlot(data) {
         endtimedate: endtimedate
       });
 
-      // console.log("saveAppointment", saveAppointment);
-
       let bookAppointment = await commonQuery.InsertIntoCollection(
         appointments,
         saveAppointment
@@ -1926,7 +1862,6 @@ async function bookSlot(data) {
             _id,
             dataToPass
           );
-          console.log(addInPromocode);
         }
 
         var message = {
@@ -2740,17 +2675,16 @@ function getCompletedBookingTransaction(req, res) {
 }
 
 function autoCompleteBookings() {
-  console.log("running");
   async function autoCompleteBookings() {
     try {
       var todaysDate = moment()
         .utc()
         .format("YYYY-MM-DDTHH:mm:00.000[Z]");
-      console.log(todaysDate);
+
       let condition = {
         isCompleted: false,
         isActive: true,
-        date: { $lt: todaysDate, $eq: todaysDate }
+        date: { $lt: todaysDate }
       };
 
       let dataToUpdate = {
@@ -2765,7 +2699,6 @@ function autoCompleteBookings() {
       );
 
       console.log(updatedData);
-      res.send(updatedData);
     } catch (error) {}
   }
   autoCompleteBookings().then(function() {});
