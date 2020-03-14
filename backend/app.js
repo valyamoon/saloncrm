@@ -86,21 +86,21 @@ app.use("/", function(req, res) {
 
 // start server
 var port = process.env.PORT || config.port;
-// app.listen(port).timeout = 1800000; //30 min
+app.listen(port).timeout = 1800000; //30 min
 
-const httpsOptions = {
-  key: fs.readFileSync(
-    "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.key",
-    "utf8"
-  ),
-  cert: fs.readFileSync(
-    "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.crt",
-    "utf8"
-  )
-};
-var server = https.createServer(httpsOptions, app).listen(port, () => {
-  console.log("server running at " + port);
-});
+// const httpsOptions = {
+//   key: fs.readFileSync(
+//     "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.key",
+//     "utf8"
+//   ),
+//   cert: fs.readFileSync(
+//     "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.crt",
+//     "utf8"
+//   )
+// };
+// var server = https.createServer(httpsOptions, app).listen(port, () => {
+//   console.log("server running at " + port);
+// });
 
 console.log("Available on:", config.backendBaseUrl);
 module.exports.urlInUser = {
