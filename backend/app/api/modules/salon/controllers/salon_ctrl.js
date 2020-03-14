@@ -387,7 +387,6 @@ function getSalons(req, res) {
               let currentTime = new Date().toLocaleString("en-US", {
                 timeZone: v.timezonestring
               });
-              console.log("currenttime", currentTime);
 
               if (currentTime === v.cltime) {
                 times_ara = [];
@@ -396,7 +395,6 @@ function getSalons(req, res) {
               starttime = moment(new Date(currentTime.toString())).format(
                 "YYYY-MM-DDTHH:mm:00.000[Z]"
               );
-              console.log("isstam", starttime);
             } else {
               starttime = v.optime;
             }
@@ -501,8 +499,6 @@ function getSalons(req, res) {
               }
 
               salonListingNew.slots = timeArray;
-
-              // console.log("WAA", salonListingNew);
 
               return res.json(
                 Response(
@@ -712,7 +708,7 @@ async function fetchbookedSlots(data) {
             if (tempRange2Array[i].overlaps(range1Array[j])) {
               bookedSlotsArrayToSend.push(tempRange2Array[i]);
             } else {
-              console.log(false);
+              console.log(bookedSlotsArrayToSend);
             }
           }
         }
@@ -899,7 +895,7 @@ async function addSalonServices(req, res) {
       },
       function(err, data) {
         if (err) {
-          console.log("Error @427", err);
+          console.log("Error @898", err);
         } else {
           res.json(
             Response(
@@ -1391,7 +1387,7 @@ function addSalonWeeklySlots(req, res) {
         },
         function(err) {
           if (err) {
-            console.log("Error @ 179", err);
+            console.log("Error @ 1390", err);
           } else {
             if (finalDataArr.length != 0) {
               res.json(
@@ -1864,28 +1860,31 @@ async function bookSlot(data) {
           );
         }
 
-        var message = {
-          to: data.deviceToken,
-          collapse_key: "your_collapse_key",
+        if (data.deviceToken) {
+          var message = {
+            to: data.deviceToken,
+            collapse_key: "your_collapse_key",
 
-          notification: {
-            title: "HI AMrut",
-            body: "Body of your push notification"
-          },
+            notification: {
+              title: "HI AMrut",
+              body: "Body of your push notification"
+            },
 
-          data: {
-            my_key: "AMRUT",
-            my_another_key: "NADIM"
-          }
-        };
+            data: {
+              my_key: "AMRUT",
+              my_another_key: "NADIM"
+            }
+          };
 
-        fcm.send(message, async function(err, response) {
-          if (err) {
-            console.log("Something has gone wrong!", err);
-          } else {
-            console.log("Successfully sent with response: ", response);
-          }
-        });
+          fcm.send(message, async function(err, response) {
+            if (err) {
+              console.log("Something has gone wrong!", err);
+            } else {
+              console.log("Successfully sent with response: ", response);
+            }
+          });
+        }
+
         // console.log("BOOKAAIN CARD", bookAppointment);
         bookedAppointmentData = bookAppointment;
         // return bookAppointment;
@@ -1915,7 +1914,6 @@ async function getSalonByUser(req, res) {
     };
     let salonDetails = await commonQuery.fetch_one(salons, cond);
     if (salonDetails) {
-      console.log("salonDEtils", salonDetails);
       var TempUrl = imageUrl.imageBaseUrl;
       var url = TempUrl + salonDetails.image;
       salonDetails.image = url;
@@ -2372,8 +2370,6 @@ function appointmentCompleted(req, res) {
         );
         if (!findBooking) {
         } else {
-          console.log("Booking", findBooking);
-
           let condition = {
             _id: mongoose.Types.ObjectId(findBooking["salon_id"])
           };
@@ -2382,7 +2378,6 @@ function appointmentCompleted(req, res) {
             condition
           );
 
-          console.log(findConnectedId.connected_account_id);
           if (findConnectedId) {
             let cDate = findBooking["date"];
 
@@ -2433,7 +2428,6 @@ function getUpcomingbookings(req, res) {
   let pageSize =
     +req.body.pageSize || +req.body.pageSize ? req.body.pageSize : +10;
   let page = +req.body.page || +req.body.page ? req.body.page : +1;
-  //  console.log("II", req.body);
   var ascend = req.body.ascend;
   let bookingCount;
   let upcond;
@@ -2543,7 +2537,6 @@ function getChangeInBookingsData(req, res) {
         ];
 
         let changeInData = appointments.watch(pipeline);
-        console.log("changeInData", changeInData);
       }
     } catch (error) {}
   }
@@ -2587,7 +2580,6 @@ function getSalonWeeklyDetails(req, res) {
 }
 
 function validatePromocode(req, res) {
-  console.log(req.body);
   async function validatePromocode() {
     try {
       if (req.body && req.body.user_id) {
@@ -2635,7 +2627,6 @@ function validatePromocode(req, res) {
 }
 
 function getCompletedBookingTransaction(req, res) {
-  console.log(req.body);
   async function getCompletedBookingTransaction() {
     try {
       let condition = {
@@ -2687,16 +2678,66 @@ function autoCompleteBookings() {
         date: { $lt: todaysDate }
       };
 
-      let dataToUpdate = {
-        isCompleted: true,
-        isActive: false
-      };
-
-      let updatedData = await commonQuery.updateAllDocument(
+      let findToCompleteBookings = await commonQuery.findoneData(
         appointments,
-        condition,
-        dataToUpdate
+        condition
       );
+
+      if (findToCompleteBookings) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(findToCompleteBookings["salon_id"])
+        };
+        let findConnectedId = await commonQuery.findoneData(salons, condition);
+
+        if (findConnectedId) {
+          let cDate = findToCompleteBookings["date"];
+
+          let afterDate = new Date();
+
+          afterDate.setUTCDate(cDate.getDate() + 8);
+
+          let completedBookingSave = new completedbookings({
+            salon_id: findToCompleteBookings["salon_id"],
+            user_id: findToCompleteBookings["user_id"],
+            total_amount: findToCompleteBookings["totalamount"],
+            connected_account_id: findConnectedId.connected_account_id,
+            onDate: findToCompleteBookings["date"],
+            booking_id: findToCompleteBookings["_id"],
+            transferDate: afterDate
+          });
+
+          let schedulePaymentTransfer = await commonQuery.InsertIntoCollection(
+            completedbookings,
+            completedBookingSave
+          );
+          if (schedulePaymentTransfer) {
+            console.log("Payment intiated for");
+
+            let condition = {
+              _id: mongoose.Types.ObjectId(findToCompleteBookings["_id"])
+            };
+
+            let dataToUpdate = {
+              isCompleted: true,
+              isActive: false
+            };
+
+            let updatedData = await commonQuery.updateOneDocument(
+              appointments,
+              condition,
+              dataToUpdate
+            );
+
+            if (updatedData) {
+              console.log("updated");
+            } else {
+              console.log("error @2735");
+            }
+          } else {
+            console.log("error @2716");
+          }
+        }
+      }
 
       console.log(updatedData);
     } catch (error) {}
@@ -2723,7 +2764,7 @@ cron.schedule("* * * * * *", async function() {
         async function(err, transfer) {
           // asynchronously called
           if (err) {
-            console.log("error", err);
+            console.log("error @ 2717", err);
           } else {
             let conditionToUpdate = {
               isTransferred: true

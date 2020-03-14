@@ -46,6 +46,7 @@ export class CheckoutComponent implements OnInit {
   isPayable: boolean;
   isWalletAmountUsed: boolean;
   walletAmountUsed: any;
+  showUseWalletCheckBox: boolean;
   constructor(
     private router: Router,
     private allserv: AllservService,
@@ -102,9 +103,25 @@ export class CheckoutComponent implements OnInit {
       this.expDate = "";
       this.cvc = "";
       this.enableMakePaymentButton = false;
+      this.showUseWalletCheckBox = false;
     } else if (event.target["defaultValue"] === "card") {
       this.isCardDetailsRequired = false;
       this.enableMakePaymentButton = true;
+
+      if (this.walletAmount > 0) {
+        this.showUseWalletCheckBox = true;
+        this.isPayable = true;
+
+        if (this.totalPrice > this.walletAmount) {
+          this.isCardDetailsRequired = false;
+        } else if (this.totalPrice < this.walletAmount) {
+          this.isCardDetailsRequired = true;
+          this.enableMakePaymentButton = true;
+        }
+      } else if (this.walletAmount <= 0) {
+        this.isPayable = false;
+        this.showUseWalletCheckBox = false;
+      }
 
       this.toastServ.success("Please enter card details", "", {
         timeOut: 1000
@@ -301,11 +318,118 @@ export class CheckoutComponent implements OnInit {
             });
           }
         });
+      } else if (this.isUseWallet === true) {
+        if (this.expDate && this.cardNum && this.cvc) {
+          this.month = this.expDate.slice(0, 2);
+          this.year = this.expDate.slice(2);
+
+          let cardData = {
+            cardNum: this.cardNum,
+            month: this.month,
+            cvc: this.cvc,
+            year: this.year
+          };
+
+          this.userServ.getStripeToken(cardData).subscribe((data: any) => {
+            if (data["code"] === 200) {
+              this.stripeToken = data["data"]["id"];
+              this.stripeEmail = this.userEmailID;
+
+              dataToPass = {
+                payType: this.paymentMode,
+                totalAmt: this.totalPrice,
+                salon_id: this.salonData["_id"],
+                user_id: this.userID,
+                date: this.onDate,
+                time: this.startTime,
+                service_id: this.checkoutData["_id"],
+                promocode_id: promocodeID,
+                deviceToken: null,
+                duration: this.checkoutData["duration"],
+                stripeToken: this.stripeToken,
+                stripeEmail: this.stripeEmail,
+                isWalletUsed: true,
+                walletAmountUsed: this.walletAmount
+              };
+
+              this.userServ.payForService(dataToPass).subscribe(
+                (data: any) => {
+                  if (data["code"] === 200) {
+                    this.isBookingCompleted = true;
+
+                    sessionStorage.removeItem("userprefrence");
+                    sessionStorage.removeItem("bookingData");
+                    setTimeout(() => this.router.navigate(["/home"]), 2500);
+                    // this.router.navigate(["/home"]);
+                  } else if (data["code"] === 400) {
+                    this.isBookingCompleted = false;
+                    this.toastServ.error(data["message"], "", {
+                      timeOut: 1000
+                    });
+                  }
+                },
+                error => {
+                  this.toastServ.error(error.error["message"], "", {
+                    timeOut: 1000
+                  });
+                }
+              );
+            } else if (data["code"] === 400) {
+              this.toastServ.error(data["data"]["raw"]["message"], "", {
+                timeOut: 1000
+              });
+            }
+          });
+        } else {
+          dataToPass = {
+            payType: this.paymentMode,
+            totalAmt: this.totalPrice,
+            salon_id: this.salonData["_id"],
+            user_id: this.userID,
+            date: this.onDate,
+            time: this.startTime,
+            service_id: this.checkoutData["_id"],
+            promocode_id: promocodeID,
+            deviceToken: null,
+            duration: this.checkoutData["duration"],
+            stripeToken: null,
+            stripeEmail: null,
+            isWalletUsed: true,
+            walletAmountUsed: this.walletAmount
+          };
+
+          this.userServ.payForService(dataToPass).subscribe(
+            (data: any) => {
+              if (data["code"] === 200) {
+                this.isBookingCompleted = true;
+
+                sessionStorage.removeItem("userprefrence");
+                sessionStorage.removeItem("bookingData");
+                setTimeout(() => this.router.navigate(["/home"]), 2500);
+                // this.router.navigate(["/home"]);
+              } else if (data["code"] === 400) {
+                this.isBookingCompleted = false;
+                this.toastServ.error(data["message"], "", {
+                  timeOut: 1000
+                });
+              }
+            },
+            error => {
+              this.toastServ.error(error.error["message"], "", {
+                timeOut: 1000
+              });
+            }
+          );
+        }
       }
     }
   }
   goToBookings() {
     this.router.navigate(["/booking"]);
+  }
+  goToHome() {
+    this.router.navigate(["/home"]);
+    sessionStorage.removeItem("userprefrence");
   }
   modelChanged(event) {}
 
@@ -318,12 +442,6 @@ export class CheckoutComponent implements OnInit {
       (data: any) => {
         if (data["code"] === 200) {
           this.walletAmount = data["data"][0].amount;
-
-          if (this.walletAmount > 0) {
-            this.isPayable = true;
-          } else if (this.walletAmount <= 0) {
-            this.isPayable = false;
-          }
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000
@@ -340,26 +458,34 @@ export class CheckoutComponent implements OnInit {
   checkIsWallet(data) {
     if (data === false) {
       this.isUseWallet = true;
-      if (this.isUseWallet === true) {
-        this.enableMakePaymentButton = false;
-        if (this.walletAmount > this.totalPrice) {
-          this.isCardDetailsRequired = true;
-        } else if (this.walletAmount <= this.totalPrice) {
-          this.isCardDetailsRequired = false;
-        }
-      }
-
-      console.log(this.isUseWallet);
+      this.cardNum = "";
+      this.expDate = "";
+      this.cvc = "";
+      this.enableMakePaymentButton = false;
     } else if (data === true) {
       this.isUseWallet = false;
-      if (this.isUseWallet === false) {
-        this.enableMakePaymentButton = false;
-        if (this.walletAmount > this.totalPrice) {
-          this.isCardDetailsRequired = false;
-        } else if (this.walletAmount <= this.totalPrice) {
-          this.isCardDetailsRequired = false;
-        }
-      }
     }
+
+    // if (data === false) {
+    //   this.isUseWallet = true;
+    //   if (this.isUseWallet === true) {
+    //     this.enableMakePaymentButton = false;
+    //     if (this.walletAmount > this.totalPrice) {
+    //       this.isCardDetailsRequired = true;
+    //     } else if (this.walletAmount <= this.totalPrice) {
+    //       this.isCardDetailsRequired = false;
+    //     }
+    //   }
+    // } else if (data === true) {
+    //   this.isUseWallet = false;
+    //   if (this.isUseWallet === false) {
+    //     this.enableMakePaymentButton = false;
+    //     if (this.walletAmount > this.totalPrice) {
+    //       this.isCardDetailsRequired = false;
+    //     } else if (this.walletAmount <= this.totalPrice) {
+    //       this.isCardDetailsRequired = false;
+    //     }
+    //   }
+    // }
   }
 }

@@ -283,7 +283,6 @@ function verifyUser(req, res) {
 //  */
 
 function registerUser(req, res) {
-  console.log("REQBOD", req.body);
   async function registerUser() {
     let roleid;
     let isActiveStatus;
@@ -331,10 +330,7 @@ function registerUser(req, res) {
             };
           }
 
-          console.log("CONDITION:", condition);
-
           let checkUser = await commonQuery.findoneUser(users, condition);
-          console.log("CGEC", checkUser);
 
           if (!checkUser.length) {
             var newUser = new users({
@@ -438,7 +434,6 @@ function registerUser(req, res) {
 //  */
 
 function login(req, res) {
-  console.log("inHJEre", req.body);
   async function login() {
     try {
       if (req.body.email && req.body.password) {
@@ -451,9 +446,8 @@ function login(req, res) {
         // }
         let roleCondition = { name: req.body.role };
         let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
-        console.log("roleUID", fetchRoleId);
+
         let roleId = mongoose.Types.ObjectId(fetchRoleId._id);
-        console.log(roleId);
 
         let conditionToCheck = {
           email: req.body.email,
@@ -462,7 +456,6 @@ function login(req, res) {
         };
 
         let findUser = await commonQuery.findoneData(users, conditionToCheck);
-        console.log("findUser", findUser);
 
         if (!findUser) {
           res.json(
@@ -530,7 +523,6 @@ function login(req, res) {
  * @smartData Enterprises (I) Ltd
  */
 function updateUser(req, res) {
-  console.log(req.body);
   async function updateUser() {
     var image_path;
     let updatedUserData = {};
@@ -567,8 +559,6 @@ function updateUser(req, res) {
                 // return false;
                 db_path =
                   "uploads/profileImages/" + timeStamp + "_" + imgOriginalName;
-                console.log("DB PATH", db_path);
-                console.log("PATH IS", path);
               }
               if (db_path) {
                 //image_path= db_path;
@@ -996,68 +986,169 @@ function userPayment(req, res) {
 
       let bookingDetails = salonCtrl.bookSlot(dataToPass);
       bookingDetails.then(result => {
-        console.log("BOOKINFDETAILA", result);
         res.json(
           Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, result)
         );
       });
     } else if (req.body.payType === "card") {
-      let amount = +req.body.totalAmt * 100; // 500 cents means $5
+      if (req.body.isWalletUsed === true) {
+        if (req.body.totalAmt <= req.body.walletAmountUsed) {
+          var walletAmountToMinus =
+            parseInt(req.body.walletAmountUsed) - parseInt(req.body.totalAmt);
 
-      stripe.charges.create(
-        {
-          amount: amount,
-          currency: "usd",
-          source: req.body.stripeToken,
-          description: "Charge for" + req.body.stripeEmail,
-          shipping: {
-            name: "Jenny Rosen",
-            address: {
-              line1: "510 Townsend St",
-              postal_code: "98140",
-              city: "San Francisco",
-              state: "CA",
-              country: "US"
+          let dataToMinus = {
+            user_id: req.body.user_id,
+            amount: walletAmountToMinus
+          };
+
+          let dataToPass = {
+            totalamount: req.body.totalAmt,
+            salon_id: req.body.salon_id,
+            stripeToken: req.body.stripeToken,
+            date: req.body.date,
+            time: req.body.time,
+            service_id: req.body.service_id,
+            user_id: req.body.user_id,
+            stripeEmail: req.body.stripeEmail,
+            promocode_id: req.body.promocode_id,
+            deviceToken: req.body.deviceToken,
+            createdon: null,
+            payment_method: "wallet",
+            card_last_digit: null,
+            duration: req.body.duration,
+            paymentType: req.body.payType
+          };
+
+          let bookingDetails = salonCtrl.bookSlot(dataToPass);
+
+          bookingDetails.then(result => {
+            res.json(
+              Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, result)
+            );
+            minusWalletAmount(dataToMinus);
+          });
+        } else if (req.body.totalAmt > req.body.walletAmountUsed) {
+          var amount =
+            parseInt(req.body.totalAmt) - parseInt(req.body.walletAmountUsed);
+
+          let dataToMinus = {
+            user_id: req.body.user_id,
+            amount: req.body.walletAmountUsed
+          };
+
+          amount = amount * 100; // 500 cents means $5
+
+          stripe.charges.create(
+            {
+              amount: amount,
+              currency: "usd",
+              source: req.body.stripeToken,
+              description: "Charge for" + req.body.stripeEmail,
+              shipping: {
+                name: "Jenny Rosen",
+                address: {
+                  line1: "510 Townsend St",
+                  postal_code: "98140",
+                  city: "San Francisco",
+                  state: "CA",
+                  country: "US"
+                }
+              }
+            },
+            async function(err, charge) {
+              if (err) {
+              } else {
+                let dataToPass = {
+                  totalamount: req.body.totalAmt,
+                  salon_id: req.body.salon_id,
+                  stripeToken: req.body.stripeToken,
+                  date: req.body.date,
+                  time: req.body.time,
+                  service_id: req.body.service_id,
+                  user_id: req.body.user_id,
+                  stripeEmail: req.body.stripeEmail,
+                  promocode_id: req.body.promocode_id,
+                  deviceToken: req.body.deviceToken,
+                  createdon: charge.created,
+                  payment_method: charge.payment_method,
+                  card_last_digit:
+                    charge.payment_method_details["card"]["last4"],
+                  duration: req.body.duration,
+                  paymentType: req.body.payType
+                };
+
+                let bookingDetails = salonCtrl.bookSlot(dataToPass);
+
+                bookingDetails.then(result => {
+                  res.json(
+                    Response(
+                      constant.SUCCESS_CODE,
+                      constant.FETCHED_ALL_DATA,
+                      result
+                    )
+                  );
+                  minusWalletAmount(dataToMinus);
+                });
+              }
+            }
+          );
+        }
+      } else if (req.body.isWalletUsed === false) {
+        let amount = +req.body.totalAmt * 100; // 500 cents means $5
+
+        stripe.charges.create(
+          {
+            amount: amount,
+            currency: "usd",
+            source: req.body.stripeToken,
+            description: "Charge for" + req.body.stripeEmail,
+            shipping: {
+              name: "Jenny Rosen",
+              address: {
+                line1: "510 Townsend St",
+                postal_code: "98140",
+                city: "San Francisco",
+                state: "CA",
+                country: "US"
+              }
+            }
+          },
+          async function(err, charge) {
+            if (err) {
+            } else {
+              let dataToPass = {
+                totalamount: req.body.totalAmt,
+                salon_id: req.body.salon_id,
+                stripeToken: req.body.stripeToken,
+                date: req.body.date,
+                time: req.body.time,
+                service_id: req.body.service_id,
+                user_id: req.body.user_id,
+                stripeEmail: req.body.stripeEmail,
+                promocode_id: req.body.promocode_id,
+                deviceToken: req.body.deviceToken,
+                createdon: charge.created,
+                payment_method: charge.payment_method,
+                card_last_digit: charge.payment_method_details["card"]["last4"],
+                duration: req.body.duration,
+                paymentType: req.body.payType
+              };
+
+              let bookingDetails = salonCtrl.bookSlot(dataToPass);
+
+              bookingDetails.then(result => {
+                res.json(
+                  Response(
+                    constant.SUCCESS_CODE,
+                    constant.FETCHED_ALL_DATA,
+                    result
+                  )
+                );
+              });
             }
           }
-        },
-        async function(err, charge) {
-          if (err) {
-          } else {
-            let dataToPass = {
-              totalamount: req.body.totalAmt,
-              salon_id: req.body.salon_id,
-              stripeToken: req.body.stripeToken,
-              date: req.body.date,
-              time: req.body.time,
-              service_id: req.body.service_id,
-              user_id: req.body.user_id,
-              stripeEmail: req.body.stripeEmail,
-              promocode_id: req.body.promocode_id,
-              deviceToken: req.body.deviceToken,
-              createdon: charge.created,
-              payment_method: charge.payment_method,
-              card_last_digit: charge.payment_method_details["card"]["last4"],
-              duration: req.body.duration,
-              paymentType: req.body.payType
-            };
-
-            let bookingDetails = salonCtrl.bookSlot(dataToPass);
-            console.log("BOokDetails", bookingDetails, typeof bookingDetails);
-
-            bookingDetails.then(result => {
-              console.log("BOOKINFDETAILA", err, result);
-              res.json(
-                Response(
-                  constant.SUCCESS_CODE,
-                  constant.FETCHED_ALL_DATA,
-                  result
-                )
-              );
-            });
-          }
-        }
-      );
+        );
+      }
     }
   }
 
@@ -1081,13 +1172,11 @@ function cancelBooking(req, res) {
         );
         if (!updateBooking) {
         } else {
-          console.log("UPADT", updateBooking);
           let dataToPass = {
             user_id: updateBooking.user_id,
             amount: updateBooking.totalamount
           };
 
-          console.log("DATATIPASS", dataToPass);
           addWalletAmount(dataToPass);
           res.json(
             Response(
@@ -1167,7 +1256,6 @@ function addWalletAmount(dataToPass) {
 }
 
 function getWalletAmount(req, res) {
-  console.log("wwwwwwwwwwwwwwwww", req.body);
   async function getWalletAmount() {
     try {
       if (req.body.user_id && req.body) {
@@ -1201,13 +1289,23 @@ function minusWalletAmount(data) {
   async function minusWalletAmount() {
     try {
       if (data && data.user_id) {
-        let condition = { _id: mongoose.Types.ObjectId(data.user_id) };
+        let condition = { user_id: mongoose.Types.ObjectId(data.user_id) };
         let fetchWalletAmount = await commonQuery.findoneData(
           wallets,
           condition
         );
+
         if (fetchWalletAmount) {
-          var updatedAmount = fetchWalletAmount - parseInt(data.amount);
+          var updatedAmount;
+
+          if (data.amount === 0) {
+            updatedAmount = 0;
+          } else {
+            updatedAmount =
+              parseInt(fetchWalletAmount.amount) - parseInt(data.amount);
+          }
+
+          let condition = { user_id: mongoose.Types.ObjectId(data.user_id) };
           let updateCondition = { amount: updatedAmount };
           let updateWallet = await commonQuery.updateOneDocument(
             wallets,
@@ -1215,14 +1313,11 @@ function minusWalletAmount(data) {
             updateCondition
           );
           if (updateWallet) {
-            console.log("WALLET", updateWallet);
           }
         }
       }
     } catch (error) {
-      return res.json(
-        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
-      );
+      console.log("error", error);
     }
   }
   minusWalletAmount().then(function() {});
