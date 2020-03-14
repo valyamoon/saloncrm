@@ -19,6 +19,7 @@ export class AuthServService {
     localStorage.removeItem("LoggedInUser");
     sessionStorage.removeItem("emailID");
     sessionStorage.removeItem("userID");
+    sessionStorage.removeItem("username");
     localStorage.clear();
     location.reload();
   }

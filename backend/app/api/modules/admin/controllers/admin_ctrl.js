@@ -136,7 +136,6 @@ function getSalonsRequestList(req, res) {
           isDeleted: false,
           isDeclined: false
         };
-        console.log("Hiii");
 
         let count = await commonQuery.findCount(salons, condition);
 
@@ -1429,7 +1428,7 @@ async function getServiceList(req, res) {
       },
       async function(err, data) {
         if (err) {
-          console.log("Error @427", err);
+          console.log("Error @1431", err);
         } else {
           res.json(Response(constant.SUCCESS_CODE, finalServiceArr));
         }
@@ -1457,7 +1456,6 @@ async function getServices(req, res) {
     };
 
     let servicesList = await commonQuery.fetch_all(services, cond);
-    // console.log("servicesList", servicesList); return;
     if (!servicesList) {
       res.json(Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null));
     } else {
@@ -1588,7 +1586,6 @@ function deactiveUsers() {
  */
 
 function createSubscription(req, res) {
-  console.log(req.body);
   async function createSubscription() {
     try {
       if (req.body && req.body.amount) {

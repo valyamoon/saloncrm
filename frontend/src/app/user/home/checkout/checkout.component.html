@@ -189,7 +189,7 @@
                   </div>
                 </div>
                 <div class="remove">
-                  <button class="btnRem">Remove</button>
+                  <button class="btnRem" (click)="goToHome()">Remove</button>
                 </div>
               </div>
             </div>
@@ -216,7 +216,7 @@
               <span>{{ walletAmount | currency: "USD" }}</span>
             </div>
             <div class="amountData">
-              <div>
+              <div *ngIf="showUseWalletCheckBox">
                 <input
                   [disabled]="isCardDetailsRequired && !isPayable"
                   type="checkbox"

@@ -225,7 +225,6 @@ commonQuery.findoneData = async function findoneData(
   return new Promise(function(resolve, reject) {
     model.findOne(condition, fetchVal, function(err, data) {
       if (err) {
-        console.log("Erroe @ 234", err);
         reject(err);
       } else {
         resolve(data);
@@ -528,8 +527,6 @@ commonQuery.filterEmployee = function filterEmployee(
   salon_id,
   service_id
 ) {
-  console.log("salon_id", salon_id);
-  console.log("service_id", service_id);
   return new Promise(function(resolve, reject) {
     model
       .aggregate([
@@ -538,11 +535,8 @@ commonQuery.filterEmployee = function filterEmployee(
       ])
       .exec((err, response) => {
         if (err) {
-          console.log("errpr", err);
           reject(err);
         } else {
-          console.log("response", response);
-
           resolve(response);
         }
       });
@@ -583,7 +577,6 @@ commonQuery.fetch_all = function fetch_all(model, cond = {}, fetchd = {}) {
     model.find(cond, fetchd).exec(function(err, userData) {
       // console.log("userData", userData);
       if (err) {
-        console.log("errrrrrr", err);
         reject(err);
       } else {
         resolve(userData);
@@ -636,7 +629,6 @@ commonQuery.fetch_all_sort_by_order = function fetch_all_sort_by_order(
       .sort("order_sort")
       .exec(function(err, userData) {
         if (err) {
-          console.log("errrrrrr", err);
           reject(err);
         } else {
           resolve(userData);
@@ -655,7 +647,6 @@ commonQuery.fetch_all_by_sort = function fetch_all_by_sort(
       .sort("createdAt")
       .exec(function(err, userData) {
         if (err) {
-          console.log("errrrrrr", err);
           reject(err);
         } else {
           resolve(userData);
@@ -1238,8 +1229,6 @@ commonQuery.find_all_employee_paginate = function find_all_employee_paginate(
   return new Promise(function(resolve, reject) {
     let pageSizes = pageSize;
     let currentPage = page;
-    console.log("pageSizes", pageSizes);
-    console.log("currentPage", currentPage);
 
     if (cond) {
       cond = cond;
@@ -1529,7 +1518,6 @@ commonQuery.getSalonOnPrice = function getSalonOnPrice() {
     model.find(cond, fetchd).exec(function(err, userData) {
       // console.log("userData", userData);
       if (err) {
-        console.log("errrrrrr", err);
         reject(err);
       } else {
         resolve(userData);
@@ -1542,7 +1530,6 @@ commonQuery.ensureIndex = function ensureIndex(model) {
     model.createIndexes({ location: "2dsphere" }).exec(function(err, userData) {
       //console.log("userData", userData);
       if (err) {
-        console.log("errrrrrr", err);
         reject(err);
       } else {
         resolve(userData);
@@ -1623,7 +1610,6 @@ commonQuery.addServicesInCategories = function addServicesInCategories(
       .exec(function(err, userData) {
         // console.log("userData", userData);
         if (err) {
-          console.log("errrrrrr", err);
           reject(err);
         } else {
           resolve(userData);
@@ -1647,7 +1633,6 @@ commonQuery.addEmployeeToSalon = function addEmployeeToSalon(
       .exec(function(err, userData) {
         // console.log("userData", userData);
         if (err) {
-          console.log("errrrrrr", err);
           reject(err);
         } else {
           resolve(userData);
@@ -1776,7 +1761,6 @@ commonQuery.fetch_categories = function fetch_categories(
           reject(err);
         } else {
           resolve(data);
-          console.log("data", data);
         }
       });
   });
