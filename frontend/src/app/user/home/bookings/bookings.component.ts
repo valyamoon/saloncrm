@@ -39,7 +39,6 @@ export class BookingsComponent implements OnInit {
     };
     this.userServ.getUserBookings(dataToPass).subscribe(
       (data: any) => {
-        console.log(data);
         if (data["code"] === 200) {
           this.bookingListData = data["data"];
         } else if (data["code"] === 400) {
@@ -67,8 +66,6 @@ export class BookingsComponent implements OnInit {
     }
   }
   getBookingDetails(data) {
-    console.log(data);
-
     this.bookingDetails = data;
 
     let dataToPass = {
@@ -79,7 +76,6 @@ export class BookingsComponent implements OnInit {
         if (data["code"] === 200) {
           this.salonDetails = data["data"];
           this.isDetailShow = true;
-          console.log(this.salonDetails);
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 100
@@ -104,10 +100,8 @@ export class BookingsComponent implements OnInit {
 
     this.userServ.getAdminDetails(dataToPass).subscribe(
       (data: any) => {
-        console.log(data);
         if (data["code"] === 200) {
           this.adminDetails = data["data"];
-          console.log(this.adminDetails);
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 100
@@ -126,12 +120,9 @@ export class BookingsComponent implements OnInit {
     this.isAddReviewModal = true;
   }
   onRatingSet(event) {
-    console.log(event);
     this.starRating = event;
   }
   submitStarRating() {
-    console.log(this.starRating, this.comment);
-
     let dataToPass = {
       ratings: this.starRating,
       comments: this.comment,
@@ -140,7 +131,6 @@ export class BookingsComponent implements OnInit {
     };
     this.userServ.addReviewAndRatings(dataToPass).subscribe(
       (data: any) => {
-        console.log(data);
         if (data["code"] === 200) {
           this.toastServ.success("Submitted Successfully", "", {
             timeOut: 500

@@ -1,2389 +1,3727 @@
 {
-    "swagger": "2.0",
-    "title": "SALON CRM Api Swagger",
-    "description": "Swagger Api Tool for SALON CRM api",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
-    },
-    "version": "1.0.0",
-    "host": "localhost:3000",
-    "basePath": "/api",
-    "schemes": [
-      "http",
-      "https"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
-      "/getotp": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "Get otp to verify mobile number",
-          "description": "Get otp to verify mobile number",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Get otp to verify mobile number",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/requestVerification"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
+  "swagger": "2.0",
+  "title": "SALON CRM Api Swagger",
+  "description": "Swagger Api Tool for SALON CRM api",
+  "license": {
+    "name": "MIT",
+    "url": "https://opensource.org/licenses/MIT"
+  },
+  "version": "1.0.0",
+  "host": "localhost:4001",
+  "basePath": "/api",
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/getotp": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Get otp to verify mobile number",
+        "description": "Get otp to verify mobile number",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get otp to verify mobile number",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/requestVerification"
             }
           }
-        }
-      },
-      "/verifyotp": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "Verify the otp",
-          "description": "Verify the otp",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Add User by Super Admin",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/verifyUser"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/register": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "Register User",
-          "description": "Register User add role as user for user and admin/salon for respective registerations",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Add User by Super Admin",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/registerUser"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/updateuser": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "Update User data",
-          "description": "Update User data",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Update user data",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/updateUser"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/logout": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "logout user",
-          "description": "logout user",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Add User by Super Admin",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/logoutUser"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/users": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "Get List of all users",
-          "description": "Get List of all users",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Get List of all users",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/getAllUsers"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },                          
-      "/login": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "Api endpoint for upload image",
-          "description": "Image uploading on server test",
-          "parameters": [
-            {
-              "name": "image",
-              "discription": "To upload Image file",
-              "in": "formData",
-              "type": "file",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/ImageUpload"
-              }
-            },
-            {
-              "name": "userId",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "firstname",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "lastname",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "email",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "username",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "phone",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "address",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "city",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "state",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "country",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "zipcode",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            }
-          ],
-          "produces": [
-            "multipart/form-data"
-          ],
-          "responses": {
-            "200": {
-              "description": "Data uploaded successfully",
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
               "$ref": "#definitions/appResponse"
-            },
-            "400": {
-              "description": "Login Error",
-              "$ref": "#definitions/userlogin"
             }
-          }
-        }
-      },
-      "/service/addAdminService": {
-        "post": {
-          "tags": [
-            "Service Details Module"
-          ],
-          "summary": "Api endpoint for upload image",
-          "description": "Image uploading on server test",
-          "parameters": [
-            {
-              "name": "Serviceimage",
-              "discription": "To upload Image file",
-              "in": "formData",
-              "type": "file",
-              "required": "true"
-            },
-            {
-              "name": "userId",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "description",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            },
-            {
-              "name": "discount",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "number",
-              "required": "true"
-            },
-            {
-              "name": "cost",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "number",
-              "required": "true"
-            },
-            {
-              "name": "duration",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "number",
-              "required": "true"
-            },
-            {
-              "name": "Service_name",
-              "description": "Data to edit",
-              "in": "formData",
-              "type": "string",
-              "required": "true"
-            }
-         ],
-          "produces": [
-            "multipart/form-data"
-            
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },    
-      "/user/getProfile": {
-        "post": {
-          "tags": [
-            "User Details Module"
-          ],
-          "summary": "get individual User Details",
-          "description": "get User",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "get User",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/getUserDetail"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/user/login": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "User login",
-          "description": "User login",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "User login",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/userLogin"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/user/forgotPassword": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "User forgot Password",
-          "description": "User forgot Password",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "User forgot Password",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/forgotPassword"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/user/resetPassword": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "Reset Password",
-          "description": "Reset Password",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Reset Password",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/resetPassword"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "$ref": "#definitions/appResponse"
-            },
-            "400": {
-              "description": "Error",
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
               "$ref": "#definitions/errorResponse"
-            }
-          }
-        }
-      },
-      "/user/changePassword": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "change Password",
-          "description": "change Password",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "change Password",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/changePassword"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "$ref": "#definitions/appResponse"
-            },
-            "400": {
-              "description": "Error",
-              "$ref": "#definitions/errorResponse"
-            }
-          }
-        }
-      },
-      "/user/userLogout": {
-        "post": {
-          "tags": [
-            "User Module"
-          ],
-          "summary": "User Logout ",
-          "description": "User Logout",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "User Logout",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/userLogout"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/clinic/addClinic": {
-        "post": {
-          "tags": [
-            "Clinic Module"
-          ],
-          "summary": "Clinic add ",
-          "description": "Clinic add",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Clinic add",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addClinic"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/clinic/editClinic": {
-        "post": {
-          "tags": [
-            "Clinic Module"
-          ],
-          "summary": "Edit Clinic ",
-          "description": "Edit Clinic",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Edit Clinic",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/editClinic"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/clinic/listClinic": {
-        "get": {
-          "tags": [
-            "Clinic Module"
-          ],
-          "summary": "List Clinic ",
-          "description": "List Clinic",
-          "parameters": [
-            {
-              "name": "path",
-              "in": "path",
-              "description": "List Clinic"
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/lawyer/listLawyer": {
-        "post": {
-          "tags": [
-            "Lawyer Module"
-          ],
-          "summary": "List Lawyer ",
-          "description": "List Lawyer",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "List Lawyer",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/listLawyer"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/clinic/deleteClinic": {
-        "post": {
-          "tags": [
-            "Clinic Module"
-          ],
-          "summary": "Delete Clinic ",
-          "description": "Delete Clinic",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Delete Clinic",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/deleteClinic"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/caseState/addEditCaseState": {
-        "post": {
-          "tags": [
-            "Case state Module"
-          ],
-          "summary": "add/edit case state",
-          "description": "add/edit case state",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add/edit case state",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addEditCaseState"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/caseState/getAllCaseState/": {
-        "get": {
-          "tags": [
-            "Case state Module"
-          ],
-          "summary": "get all case states",
-          "description": "get all case states",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/amaQualification/addEditQualification": {
-        "post": {
-          "tags": [
-            "AMA Qualification Module"
-          ],
-          "summary": "add/edit qualification",
-          "description": "add/edit qualification",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add/edit qualification",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addEditQualification"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/amaQualification/getAllAMA/": {
-        "get": {
-          "tags": [
-            "AMA Qualification Module"
-          ],
-          "summary": "get all Qualification",
-          "description": "get all Qualification",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/amaQualification/changeStatus": {
-        "post": {
-          "tags": [
-            "AMA Qualification Module"
-          ],
-          "summary": "change status of ama qualification",
-          "description": "change status of ama qualification",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "change status of ama qualification",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/changeStatus"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/amaQualification/deleteAMA": {
-        "post": {
-          "tags": [
-            "AMA Qualification Module"
-          ],
-          "summary": "delete Case type",
-          "description": "delete Case type",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "delete Case type",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/deleteAMA"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/role/addEditRole": {
-        "post": {
-          "tags": [
-            "Role Module"
-          ],
-          "summary": "add/edit role",
-          "description": "add/edit role",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add/edit role",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addEditRole"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/role/getAllRole/": {
-        "get": {
-          "tags": [
-            "Role Module"
-          ],
-          "summary": "get all roles",
-          "description": "get all roles",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/role/changeStatus": {
-        "post": {
-          "tags": [
-            "Role Module"
-          ],
-          "summary": "change status of role",
-          "description": "change status of role",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "change status of role",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/changeStatus"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/role/deleteRole": {
-        "post": {
-          "tags": [
-            "Role Module"
-          ],
-          "summary": "delete role",
-          "description": "delete role",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "delete role",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/deleteRole"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/casesType/addEditCaseType": {
-        "post": {
-          "tags": [
-            "Case type Module"
-          ],
-          "summary": "add/edit case type",
-          "description": "add/edit case type",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add/edit case type",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addEditCaseType"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/casesType/getAllcaseType/": {
-        "get": {
-          "tags": [
-            "Case type Module"
-          ],
-          "summary": "get all Case types",
-          "description": "get all Case types",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/casesType/changeStatus": {
-        "post": {
-          "tags": [
-            "Case type Module"
-          ],
-          "summary": "change status of caseType",
-          "description": "change status of caseType",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "change status of caseType",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/changeStatus"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/casesType/deleteCaseType": {
-        "post": {
-          "tags": [
-            "Case type Module"
-          ],
-          "summary": "delete Case type",
-          "description": "delete Case type",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "delete Case type",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/deleteCaseType"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/skills/addSkill": {
-        "post": {
-          "tags": [
-            "Skill Module"
-          ],
-          "summary": "add specialist skill",
-          "description": "add specialist skill",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add specialist skill",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addSkill"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/skills/editSkill": {
-        "post": {
-          "tags": [
-            "Skill Module"
-          ],
-          "summary": "edit specialist skill",
-          "description": "edit specialist skill",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "edit specialist skill",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/editSkill"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/skills/changeStatus": {
-        "post": {
-          "tags": [
-            "Skill Module"
-          ],
-          "summary": "change status of skill",
-          "description": "change status of skill",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "change status of skill",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/changeStatus"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/skills/deleteSkill": {
-        "post": {
-          "tags": [
-            "Skill Module"
-          ],
-          "summary": "delete skill",
-          "description": "delete skill",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "delete skill",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/deleteSkill"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/skills/getAllSkill/": {
-        "get": {
-          "tags": [
-            "Skill Module"
-          ],
-          "summary": "get all specialist skills",
-          "description": "get all specialist skills",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/country/getAllCountry/": {
-        "get": {
-          "tags": [
-            "Country Module"
-          ],
-          "summary": "get all countries list",
-          "description": "get all countries list",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/country/addCountry": {
-        "post": {
-          "tags": [
-            "Country Module"
-          ],
-          "summary": "add country ",
-          "description": "add country ",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add country ",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addCountry"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/country/editCountry": {
-        "post": {
-          "tags": [
-            "Country Module"
-          ],
-          "summary": "edit country",
-          "description": "edit country",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "edit country",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/editCountry"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/state/addState": {
-        "post": {
-          "tags": [
-            "State Module"
-          ],
-          "summary": "add state ",
-          "description": "add state ",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add state ",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addState"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/state/getAllState/": {
-        "post": {
-          "tags": [
-            "State Module"
-          ],
-          "summary": "get all state list",
-          "description": "get all stete list",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add country ",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/getAllState"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/specialRequirement/addEditspecialRqmt": {
-        "post": {
-          "tags": [
-            "Special requirement Module"
-          ],
-          "summary": "add/edit special requirement",
-          "description": "add/edit special requirement",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "add/edit special requirement",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addEditspecialRqmt"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/specialRequirement/getAllspecialRqmt/": {
-        "get": {
-          "tags": [
-            "Special requirement Module"
-          ],
-          "summary": "get all special requirement list",
-          "description": "get all special requirement list",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/user/getCalenderSetting/": {
-        "get": {
-          "tags": [
-            "Calendar setting"
-          ],
-          "summary": "get default calendar setting",
-          "description": "get default calendar setting",
-          "parameters": [],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/document/addFolder": {
-        "post": {
-          "tags": [
-            "Document Module"
-          ],
-          "summary": "Add folder to the document and rename ",
-          "description": "Add folder to the document and rename ",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Add folder to the document and rename ",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/addFolder"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/document/docListing": {
-        "post": {
-          "tags": [
-            "Document Module"
-          ],
-          "summary": "List of Document ",
-          "description": "List of Document",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "List Document",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/docList"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
-            }
-          }
-        }
-      },
-      "/document/deleteFileOrFolder": {
-        "post": {
-          "tags": [
-            "Document Module"
-          ],
-          "summary": "Delete folder and files",
-          "description": "Delete folder and files",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Delete folder and files",
-              "required": "true",
-              "schema": {
-                "$ref": "#definitions/delFolder"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
             }
           }
         }
       }
     },
-    "_comment": "Complex objects have schema definitions",
-    "definitions": {
-      "appResponse": {
-        "required": "message",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "code": {
-            "type": "number"
-          }
-        }
-      },
-      "errorResponse": {
-        "required": "message",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "requestVerification": {
-        "type": "object",
-        "properties": {
-          "phone": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "via":{
-              "type":"string"
-          }
-        }
-      },
-      "verifyUser": {
-        "type": "object",
-        "properties": {
-          "phone": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "token": {
-            "type": "string"
-          }   
-        }
-      },
-      "registerUser": {
-        "type": "object",
-        "properties": {
-          "phone": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "loggedInVia": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "lat": {
-            "type": "string"
-          },
-          "long": {
-            "type": "string"
-          },
-          "gender": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string"
-          },
-          "password":{
-            "type": "string" 
-          }
-        }
-      },
-      "updateUser": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "profilepic": {
-            "type": "file"
-          },
-          "address": {
-            "type": "string"
-          }
-        }
-      },
-      "logoutUser": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          }
-        }
-      }, 
-      "getAllUsers": {
-        "type": "object",
-        "properties": {
-          "pageSize": {
-            "type": "string"
-          },
-          "page": {
-            "type": "boolean"
-          }
-        }
-      },                       
-      "userLogin": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          }
-        }
-      },
-      "addFolder": {
-        "type": "object",
-        "properties": {
-          "user_id": {
-            "type": "string"
-          },
-          "folderName": {
-            "type": "string"
-          },
-          "node_id": {
-            "type": "string"
-          },
-          "isUpdate": {
-            "type": "boolean"
-          },
-          "isParent": {
-            "type": "boolean"
-          }
-        }
-      },
-      "delFolder": {
-        "type": "object",
-        "properties": {
-          "user_id": {
-            "type": "string"
-          },
-          "node_id": {
-            "type": "string"
-          },
-          "isParent": {
-            "type": "boolean"
-          }
-        }
-      },
-      "forgotPassword": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          }
-        }
-      },
-      "resetPassword": {
-        "type": "object",
-        "properties": {
-          "password": {
-            "type": "string"
-          },
-          "resetkey": {
-            "type": "string"
-          }
-        }
-      },
-      "changePassword": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string"
-          },
-          "oldPassword": {
-            "type":"string"
-          },        
-          "newRepassword": {
-            "type": "string"
-          },
-          "newPassword": {
-            "type": "string"
-          }
-        }
-      },
-      "addEditCaseState": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "addEditCaseType": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "duration": {
-            "type": "string"
-          },
-          "pricing": {
-            "type": "string"
-          },
-          "review_report_pricing": {
-            "type": "string"
-          },
-          "sort_order": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "addEditspecialRqmt": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "addEditQualification": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "addState": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "country_id": {
-            "type": "string"
-          }
-        }
-      },
-      "addCountry": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          }
-        }
-      },
-      "getAllState": {
-        "type": "object",
-        "properties": {
-          "country_id": {
-            "type": "string"
-          }
-        }
-      },
-      "editCountry": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "addSkill": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "editSkill": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "changeStatus": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "deleteSkill": {
-        "type": "object",
-        "properties": {
-          "delete": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "deleteCaseType": {
-        "type": "object",
-        "properties": {
-          "delete": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "addEditRole": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "deleteRole": {
-        "type": "object",
-        "properties": {
-          "delete": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "deleteAMA": {
-        "type": "object",
-        "properties": {
-          "delete": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "addClinic": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "registration_no": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "contact": {
-            "type": "string"
-          }
-        }
-      },
-      "editClinic": {
-        "type": "object",
-        "properties": {
-          "clinic_id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "registration_no": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "contact": {
-            "type": "string"
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "isDeleted": {
-            "type": "boolean"
-          }
-        }
-      },
-      "deleteClinic": {
-        "type": "object",
-        "properties": {
-          "clinic_id": {
-            "type": "string"
-          }
-        }
-      },
-      "getUserDetail": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string"
-          }
-        }
-      },
-      "listLawyer": {
-        "type": "object",
-        "properties": {
-          "rolename": {
-            "type": "string"
-          }
-        }
-      },
-      "docList": {
-        "type": "object",
-        "properties": {
-          "sharedWith": {
-            "type": "string"
-          },
-          "createdBY": {
-            "type": "string"
-          },
-          "searchText": {
-            "type": "string"
-          },
-          "count": {
-            "type": "string"
-          },
-          "page": {
-            "type": "string"
-          }
-        }
-      },
-      "/lawyer/deleteLawyer": {
-        "post": {
-          "tags": [
-            "Lawyer Details Module"
-          ],
-          "summary": "Delete Lawyer from system",
-          "description": "Delete Lawyer from system",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Delete Lawyer from system",
-              "required": true,
-              "schema": {
-                "$ref": "#definitions/deleteUser"
-              }
+    "/verifyotp": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Verify the otp",
+        "description": "Verify the otp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add User by Super Admin",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/verifyUser"
             }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "schema": {
-                "$ref": "#definitions/appResponse"
-              }
-            },
-            "default": {
-              "description": "Error",
-              "schema": {
-                "$ref": "#definitions/errorResponse"
-              }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Register User",
+        "description": "Register User add role as user for user and admin/salon for respective registerations",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add User by Super Admin",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/registerUser"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/updateuser": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Update User data",
+        "description": "Update User data",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update user data",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/updateUser"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "logout user",
+        "description": "logout user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add User by Super Admin",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/logoutUser"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Get List of all users",
+        "description": "Get List of all users",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get List of all users",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getAllUser"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Api endpoint to Login",
+        "description": "Login User",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get List of all users",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/login"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/addreviewrating": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Api endpoint to Add Review And Rating to Salon",
+        "description": "Add Review And Ratings",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Review and Rating",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addreviewratings"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user-detail": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Api endpoint to get user details",
+        "description": "Get User Details",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get user detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/userDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/charge": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Api endpoint to make payment and appointment Booking",
+        "description": "Make Payment and Book Appointment",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Make Payment and Book Appointment",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/bookAppointments"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users-booking": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Api endpoint to get list of upcoming and completed bookings",
+        "description": "Get User Upcoming and completed bookings",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get User Upcoming and completed bookings",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getBookings"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users-wallet": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Api endpoint to get Users Wallet Amount",
+        "description": "Get User Wallet Amount",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Users Wallet Amount",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getWalletAmount"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-stripe-token": {
+      "post": {
+        "tags": ["User Module"],
+        "summary": "Api endpoint to Get Stripe Token",
+        "description": "Get Stripe Token",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Stripe Token",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getStripeToken"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/add-categories": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Add Categories",
+        "description": "Add Categories",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Categories",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addCategory"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salonsrequest": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get All Salons Request",
+        "description": "Get All Salons Request",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get All Salons Request",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonRequest"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/acceptrequest": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Accept Salon Request",
+        "description": "Accept Salon Request",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Accept Salon Request",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/acceptSalonRequest"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/suspendsalon": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Suspend Salon Request",
+        "description": "Suspend Salon Request",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Suspend Salon Request",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/suspendSalonRequest"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Categories List",
+        "description": "Get Categories List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Categories List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getCategories"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/add-service": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Add Service To Category",
+        "description": "Add Service To Category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Service To Category",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addService"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/remove-service": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Remove Service To Category",
+        "description": "Remove Service To Category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Remove Service To Category",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/removeService"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/add-role": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Add Role",
+        "description": "Add Role",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Role",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addRole"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Roles",
+        "description": "Get Role",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Role",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getRole"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/activesalons": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Active Salons List",
+        "description": "Get Active Salons List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Active Salons List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getActiveSalons"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/userscount": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get user count",
+        "description": "Get user count",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get user count",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getUserCount"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salonscount": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Salons count",
+        "description": "Get Salons count",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salons count",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonCount"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/userslist": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Users List",
+        "description": "Get Users List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Users List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getUserList"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/remove-categories": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Remove Category",
+        "description": "Get Remove Category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Remove Category",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/removeCategory"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/archive-categories": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Archive Category",
+        "description": "Get Archive Category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Archive Category",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getArchiveCategory"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/admin-categories": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Admin Categories",
+        "description": "Get Admin Categories",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Admin Categories",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getAdminCategory"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/remove-role": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Remove Role",
+        "description": "Remove Role",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Remove Role",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/removeRole"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/edit-role": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Edit Role",
+        "description": "Edit Role",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Edit Role",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/editRole"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/active-services": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Active Service",
+        "description": "Get Active Service",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Active Service",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getActiveService"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/active-admin": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Active Admins",
+        "description": "Get Active Admins",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Active Admins",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getActiveAdmin"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/all-users": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get All Users",
+        "description": "Get All Users",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get All Users",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getAllUsers"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/services": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get All Services",
+        "description": "Get All Services",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get All Services",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getAllServices"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/servicelist": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get All service List",
+        "description": "Get All service List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get All service List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getAllServiceList"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/create-plan": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Create a Subscription Plan",
+        "description": "Create a Subscription Plan",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Create a Subscription Plan",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/createSubscriptionPlan"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/delete-plan": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Delete a Subscription Plan",
+        "description": "Delete a Subscription Plan",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Delete a Subscription Plan",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/deleteSubscriptionPlan"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-plan": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get a Subscription Plan",
+        "description": "Get a Subscription Plan",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get a Subscription Plan",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSubscriptionPlan"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/add-email": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Add email template",
+        "description": "Add email template",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add email template",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addEmailTemplate"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-subscriptions": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get a Subscriptions",
+        "description": "Get a Subscriptions",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get a Subscriptions",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSubscriptions"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/update-category": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Update Category",
+        "description": "Update Category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update Category",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/updateCategory"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/update-service": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Update Service",
+        "description": "Update CateServicegory",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update Service",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/updateService"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/admin-detail": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Add Admin Detail",
+        "description": "Add Admin Detail",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Admin Detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addAdminDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/update-admin": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Update Admin Detail",
+        "description": "Update Admin Detail",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update Admin Detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/updateAdminDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-admin-detail": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Admin Detail",
+        "description": "Get Admin Detail",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Admin Detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/GetAdminDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-bookings-admin": {
+      "post": {
+        "tags": ["Admin Module"],
+        "summary": "Api endpoint to Get Admin Booking Detail",
+        "description": "Get Admin Booking Detail",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Admin Booking Detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/GetAdminBookingDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/add-salon": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Add Salon Details",
+        "description": "Add Salon Details",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Salon Details",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addSalonDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/searchsalon": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salons",
+        "description": "Get Salons",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salons",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalons"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/addsalonservices": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Add Services to salon",
+        "description": "Add Services to salon",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Services to salon",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addServicesToSalon"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salon": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Detail",
+        "description": "Get Salon Detail",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/reviewsratings": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Review and rating",
+        "description": "Get Salon Review and rating",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Review and rating",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonReviewAndRating"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/add-promocode": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Add promocode to salon",
+        "description": "Add promocode to salon",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add promocode to salon",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addPromocode"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/promocodes": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Promocode List",
+        "description": "Get Promocode List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Promocode List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getPromocode"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salonservices": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Services List",
+        "description": "Get Salon Services  List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Services  List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonServices"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/addemployee": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Add Employee To Salon",
+        "description": "Add Employee To Salon",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Employee To Salon",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addEmployee"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/assignservice": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Assign Service To Salon",
+        "description": "Assign Service To Salon",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Assign Service To Salon",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/assignService"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/removeservice": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Remove Service To Salon",
+        "description": "Remove Service To Salon",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Remove Service To Salon",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/removeServiceToSalon"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/saloncategories": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Categories",
+        "description": "Get Salon Categories",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Categories",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonCategories"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/removesalonservice": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Remove Salon Service",
+        "description": "Remove Salon Service",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Remove Salon Service",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/removeServiceFromSalon"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/addsalonweeklyslot": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Add Salon Weekly Slot",
+        "description": "Add Salon Weekly Slot",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add Salon Weekly Slot",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/addSalonWeeklySlot"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salonweeklyslot": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Weekly Slot",
+        "description": "Get Salon Weekly Slot",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Weekly Slot",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonWeeklySlot"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/view-salon": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Details",
+        "description": "Get Salon Details",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Details ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonDetails"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/update-salon": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Update Salon Details",
+        "description": "Update Salon Details",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update Salon Details ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/updateSalonDetails"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-salon": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Details",
+        "description": "Get Salon Details",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Details ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonData"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/book-slot": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Book an Appointment",
+        "description": "Book an Appointment",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Book an Appointment",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/bookAppointment"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salondatabyuser": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Data With Respect To User",
+        "description": "Get Salon Data With Respect To User",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Data With Respect To User",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonDataByUser"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salonservicelist": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Services List",
+        "description": "Get Salon Services List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Services List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonServicesList"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/employeeservicelist": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Employee Services List",
+        "description": "Get Employee Services List",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Employee Services List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getEmployeeServicesList"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/removeemployee": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Remove Employee",
+        "description": "Remove Employee",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Employee Services List",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/removeEmployee"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salon-subscribe-detail": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get Salon Subscription Detail",
+        "description": "Get Salon Subscription Detail",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get Salon Subscription Detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getSalonSubscriptionDetail"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/create-token": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Create A Stripe token",
+        "description": "Create A Stripe token",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Create A Stripe token",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/createStripeToken"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/updateemployee": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Update Employee Detail",
+        "description": "Update Employee Detail",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update Employee Detail",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/updateEmployee"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/delete-promocode": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Delete Promocode",
+        "description": "Delete Promocode",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Delete Promocode",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/deletePromocode"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/connect-account": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Connect Salon Account to Admin",
+        "description": "Connect Salon Account to Admin",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Connect Salon Account to Admin",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/connectSalonAccount"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/appointment-complete": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Complete Appointment Salon",
+        "description": "Complete Appointment Salon",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Complete Appointment Salon",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/completeAppointment"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/upcoming-appointment": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get upcoming Appointment",
+        "description": "Get upcoming Appointment",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get upcoming Appointment",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getUpcomingAppointment"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/validate-promocode": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Validate Promocode",
+        "description": "Validate Promocode",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Validate Promocode",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/validatePromocode"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/updatesalonservices": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Update Salon Services",
+        "description": "Update Salon Services",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update Salon Services",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/updateSalonServices"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-transactions": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Get List Of Transactions",
+        "description": "Get List Of Transactions",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Get List Of Transactions",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/getListOfTransactions"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
             }
           }
         }
       }
     }
+  },
+  "_comment": "Complex objects have schema definitions",
+  "definitions": {
+    "appResponse": {
+      "required": "message",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "code": {
+          "type": "number"
+        }
+      }
+    },
+    "errorResponse": {
+      "required": "message",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "requestVerification": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "via": {
+          "type": "string"
+        }
+      }
+    },
+    "verifyUser": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "via": {
+          "type": "string"
+        }
+      }
+    },
+    "registerUser": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "loggedInVia": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "long": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "updateUser": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "profilepic": {
+          "type": "file"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
+    "logoutUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getAllUsers": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "boolean"
+        }
+      }
+    },
+    "login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "addreviewratings": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "ratings": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "string"
+        }
+      }
+    },
+    "userDetail": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "bookAppointment": {
+      "type": "object",
+      "properties": {
+        "total_Amt": {
+          "type": "string"
+        },
+        "salon_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "payType": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "stripeToken": {
+          "type": "string"
+        },
+        "stripeEmail": {
+          "type": "string"
+        },
+        "deviceToken": {
+          "type": "string"
+        },
+        "promocode_id": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getBookings": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getWalletAmount": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getStripeToken": {
+      "type": "object",
+      "properties": {
+        "cardNum": {
+          "type": "string"
+        },
+        "month": {
+          "type": "string"
+        },
+        "year": {
+          "type": "string"
+        },
+        "cvc": {
+          "type": "string"
+        }
+      }
+    },
+    "addCategory": {
+      "type": "object",
+      "properties": {
+        "catname": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonRequest": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        }
+      }
+    },
+    "acceptSalonRequest": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "suspendSalonRequest": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getCategories": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "addService": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        }
+      }
+    },
+    "removeService": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        }
+      }
+    },
+    "addRole": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "getRole": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getActiveSalons": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getUserCount": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonCount": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getUserList": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "removeCategory": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getArchiveCategory": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getAdminCategory": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "removeRole": {
+      "type": "object",
+      "properties": {
+        "role_id": {
+          "type": "string"
+        }
+      }
+    },
+    "editRole": {
+      "type": "object",
+      "properties": {
+        "role_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getActiveService": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getActiveAdmin": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getAllUser": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getAllServices": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getAllServiceList": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "createSubscriptionPlan": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "string"
+        },
+        "planname": {
+          "type": "string"
+        },
+        "trialperiod": {
+          "type": "string"
+        }
+      }
+    },
+    "deleteSubscriptionPlan": {
+      "type": "object",
+      "properties": {
+        "planid": {
+          "type": "string"
+        },
+        "_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSubscriptionPlan": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getSubscriptions": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "addEmailTemplate": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "unique_keyword": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "updateCategory": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "string"
+        },
+        "catname": {
+          "type": "string"
+        }
+      }
+    },
+    "updateService": {
+      "type": "object",
+      "properties": {
+        "service_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "addAdminDetail": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "about": {
+          "type": "string"
+        }
+      }
+    },
+    "updateAdminDetail": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "about": {
+          "type": "string"
+        }
+      }
+    },
+    "getAdminDetail": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "getAdminBookingDetail": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        }
+      }
+    },
+    "addSalonDetail": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "long": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "salonaddress": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        },
+        "timezonestring": {
+          "type": "string"
+        },
+        "opentime": {
+          "type": "string"
+        },
+        "closetime": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalons": {
+      "type": "object",
+      "properties": {
+        "service_id": {
+          "type": "string"
+        },
+        "long": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "string"
+        },
+        "date": {
+          "type": "date"
+        }
+      }
+    },
+    "addServicesToSalon": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "string"
+        },
+        "services": {
+          "type": "string"
+        },
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonDetail": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonReviewAndRating": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        }
+      }
+    },
+    "addPromocode": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "termsAndCondition": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "getPromocode": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonServices": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "addEmployee": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "assignService": {
+      "type": "object",
+      "properties": {
+        "salonservices_id": {
+          "type": "string"
+        },
+        "employee_id": {
+          "type": "string"
+        }
+      }
+    },
+    "removeServiceToSalon": {
+      "type": "object",
+      "properties": {
+        "salonservices_id": {
+          "type": "string"
+        },
+        "employee_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonCategories": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "removeServiceFromSalon": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "salonService": {
+          "type": "string"
+        }
+      }
+    },
+    "addSalonWeeklySlot": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "dataDays": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonWeeklySlot": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonDetails": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "updateSalonDetails": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "long": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "opentime": {
+          "type": "string"
+        },
+        "closetime": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonData": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "bookAppointments": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonDataByUser": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonServicesList": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getEmployeeServicesList": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "pageSize": {
+          "type": "string"
+        }
+      }
+    },
+    "removeEmployee": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getSalonSubscriptionDetail": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "createStripeToken": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "string"
+        },
+        "exp_month": {
+          "type": "string"
+        },
+        "exp_year": {
+          "type": "string"
+        },
+        "cvc": {
+          "type": "string"
+        }
+      }
+    },
+    "updateEmployee": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "deletePromocode": {
+      "type": "object",
+      "properties": {
+        "promocode_id": {
+          "type": "string"
+        }
+      }
+    },
+    "connectSalonAccount": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "completeAppointment": {
+      "type": "object",
+      "properties": {
+        "booking_id": {
+          "type": "string"
+        }
+      }
+    },
+    "getUpcomingAppointment": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string"
+        },
+        "page": {
+          "type": "string"
+        },
+        "ascend": {
+          "type": "string"
+        },
+        "salon_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "validatePromocode": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "salon_id": {
+          "type": "string"
+        },
+        "promocode_id": {
+          "type": "string"
+        }
+      }
+    },
+    "updateSalonServices": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "string"
+        }
+      }
+    },
+    "getListOfTransactions": {
+      "type": "object",
+      "properties": {
+        "salon_id": {
+          "type": "string"
+        }
+      }
+    }
   }
+}

@@ -30,7 +30,6 @@ export class SalonHeaderComponent implements OnInit {
     this.showLogout = true;
   }
   getSalonData(userId) {
-    // console.log("GetUser ID ", userId);
     let data = {
       user_id: userId
     };
@@ -38,7 +37,6 @@ export class SalonHeaderComponent implements OnInit {
       (responce: any) => {
         if (responce.code === 200) {
           this.salonData = responce.data;
-          // console.log("sss", this.salonData);
         } else {
           this.toastServ.error("Invalid salon details", "", {
             timeOut: 3000

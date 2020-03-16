@@ -26,7 +26,5 @@ export class HomeComponent implements OnInit {
   //   this.locationValue = location;
   // }
 
-  showServicesList() {
-    console.log("clicked");
-  }
+  showServicesList() {}
 }

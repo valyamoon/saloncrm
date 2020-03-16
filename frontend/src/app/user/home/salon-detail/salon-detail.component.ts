@@ -113,7 +113,6 @@ export class SalonDetailComponent implements OnInit {
   }
 
   getReviewRatings() {
-    console.log(this.salonData);
     let dataToPass = {
       salon_id: this.salonID
     };
@@ -121,7 +120,6 @@ export class SalonDetailComponent implements OnInit {
       (data: any) => {
         this.isReviewShow = true;
         if (data["code"] === 200) {
-          console.log(data);
           this.salonStarRatings = data["data"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
