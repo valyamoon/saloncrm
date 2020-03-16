@@ -1691,6 +1691,8 @@ async function bookSlot(data) {
       mongoose.Types.ObjectId(data.service_id)
     );
 
+    console.log("employees", findEmp);
+
     if (!findEmp) {
     } else {
       var empId = findEmp[0]._id;

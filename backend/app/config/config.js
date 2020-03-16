@@ -50,9 +50,9 @@ const config = {
       password: "SDfr456ty56",
       url: "mongodb://localhost/saloncrm"
     },
-    baseUrl: "http://15.236.28.12:5977/",
-    backendBaseUrl: "http://15.236.28.12:5977/",
-    imageBaseUrl: "http://15.236.28.12:5977/",
+    baseUrl: "https://bookapp.ch/",
+    backendBaseUrl: "https://bookapp.ch/",
+    imageBaseUrl: "https://bookapp.ch/",
     env: "prod",
     smtp: {
       service: "gmail",
