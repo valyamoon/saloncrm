@@ -35,9 +35,9 @@ app.use(fileUpload());
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local ser/ver
-// process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
+process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
-process.env.NODE_ENV = process.env.NODE_ENV || "prod"; //prod server (mdout.com)
+// process.env.NODE_ENV = process.env.NODE_ENV || "prod"; //prod server (mdout.com)
 
 const config = require("./app/config/config.js").get(process.env.NODE_ENV);
 require("./app/config/db");
@@ -86,21 +86,21 @@ app.use("/", function(req, res) {
 
 // start server
 var port = process.env.PORT || config.port;
-app.listen(port).timeout = 1800000; //30 min
+// app.listen(port).timeout = 1800000; //30 min
 
-// const httpsOptions = {
-//   key: fs.readFileSync(
-//     "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.key",
-//     "utf8"
-//   ),
-//   cert: fs.readFileSync(
-//     "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.crt",
-//     "utf8"
-//   )
-// };
-// var server = https.createServer(httpsOptions, app).listen(port, () => {
-//   console.log("server running at " + port);
-// });
+const httpsOptions = {
+  key: fs.readFileSync(
+    "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.key",
+    "utf8"
+  ),
+  cert: fs.readFileSync(
+    "/home/gitlab-runner/SSL_Free_24Jan2019/meanstack_stagingsdei_com.crt",
+    "utf8"
+  )
+};
+var server = https.createServer(httpsOptions, app).listen(port, () => {
+  console.log("server running at " + port);
+});
 
 console.log("Available on:", config.backendBaseUrl);
 module.exports.urlInUser = {

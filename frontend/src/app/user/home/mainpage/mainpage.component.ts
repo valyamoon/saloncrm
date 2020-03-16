@@ -105,7 +105,7 @@ export class MainpageComponent implements OnInit {
   }
   getAddress(place: Object) {
     var address = place;
-    //console.log(address);
+
     this.lat = place["geometry"].location.lat();
     this.long = place["geometry"].location.lng();
 
@@ -119,7 +119,6 @@ export class MainpageComponent implements OnInit {
   }
   getCurrentLocation() {
     navigator.geolocation.getCurrentPosition(data => {
-      console.log(data);
       this.lat = data["coords"].latitude;
       this.long = data["coords"].longitude;
       this.searchSalonForm.get("lat").setValue(this.lat);

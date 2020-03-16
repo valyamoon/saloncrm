@@ -967,8 +967,6 @@ function getDetailsOfUser(req, res) {
  */
 
 function userPayment(req, res) {
-  console.log("INSIDE USER FI", req.body);
-
   async function userPayment() {
     if (req.body.payType === "cash") {
       let dataToPass = {

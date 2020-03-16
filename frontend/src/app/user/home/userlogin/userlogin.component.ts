@@ -87,7 +87,6 @@ export class UserloginComponent implements OnInit {
           if (data["code"] === 200) {
             if (data["data"]["isalreadyexist"] === true) {
               this.authServ.sendToken(data["data"]["token"]);
-              console.log(data);
 
               sessionStorage.setItem("userID", data["data"]["user"]["_id"]);
               sessionStorage.setItem(
@@ -177,18 +176,15 @@ export class UserloginComponent implements OnInit {
   }
 
   selectEvent(item) {
-    console.log("ieten", item);
     // do something with selected item
   }
 
   onChangeSearch(search: string) {
-    console.log(search);
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
   }
 
   onFocused(e) {
-    console.log("e", e);
     // do something
   }
 

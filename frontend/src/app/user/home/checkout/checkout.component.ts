@@ -128,9 +128,7 @@ export class CheckoutComponent implements OnInit {
       });
     }
   }
-  keyPress(event) {
-    console.log(event);
-  }
+  keyPress(event) {}
   goToLogin() {
     this.allserv.setPrevRoute(this.currentRoute);
     this.router.navigate(["/login"]);

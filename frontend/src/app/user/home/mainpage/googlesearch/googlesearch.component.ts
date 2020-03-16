@@ -31,7 +31,6 @@ export class GooglesearchComponent implements OnInit, AfterViewInit {
 
   private getPlaceAutocomplete() {
     this.mapsAPILoader.load().then(res => {
-      console.log("RES", res);
       const autocomplete = new google.maps.places.Autocomplete(
         this.addresstext.nativeElement,
         {

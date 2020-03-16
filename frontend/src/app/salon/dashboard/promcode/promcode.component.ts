@@ -86,7 +86,6 @@ export class PromcodeComponent implements OnInit {
         }
       },
       error => {
-        console.log(error);
         this.toastServ.error("Server - Error", "", {
           timeOut: 1000
         });
@@ -112,8 +111,7 @@ export class PromcodeComponent implements OnInit {
         }
       },
       error => {
-        console.log(error);
-        this.toastServ.error("Server - Error", error.error, {
+        this.toastServ.error("Server - Error", error.error["message"], {
           timeOut: 1000
         });
       }

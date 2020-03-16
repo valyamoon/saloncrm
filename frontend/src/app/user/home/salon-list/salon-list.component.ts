@@ -52,8 +52,6 @@ export class SalonListComponent implements OnInit {
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
       data => {
-        console.log("After", data);
-
         if (data["code"] === 200) {
           this.salonListingData = data["data"];
 
@@ -155,7 +153,6 @@ export class SalonListComponent implements OnInit {
     this.router.navigate(["/detail"]);
   }
   bookSlot(starttime, serviceData) {
-    console.log(starttime, serviceData);
     let dataToPass = {
       stime: starttime,
       data: serviceData

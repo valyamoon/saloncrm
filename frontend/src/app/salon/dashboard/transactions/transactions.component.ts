@@ -55,7 +55,6 @@ export class TransactionsComponent implements OnInit {
           } else {
             this.noRecordsFound = false;
           }
-          console.log(this.dataSource, this.totalCount);
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000

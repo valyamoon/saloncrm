@@ -117,13 +117,9 @@ export class SalondetailsComponent implements OnInit {
     return this.submitSalonDetails.get("contact");
   }
 
-  onOpenTimeSelect(event) {
-    console.log("event", event);
-  }
+  onOpenTimeSelect(event) {}
 
-  onCloseTimeSelect(event) {
-    console.log("event", event);
-  }
+  onCloseTimeSelect(event) {}
 
   logout() {
     this.authServ.logout();
@@ -195,15 +191,9 @@ export class SalondetailsComponent implements OnInit {
     );
   }
 
-  openTime(data) {
-    console.log(data);
-  }
-  closeTime(data) {
-    console.log(data);
-  }
-  timeChanged(data) {
-    console.log(data);
-  }
+  openTime(data) {}
+  closeTime(data) {}
+  timeChanged(data) {}
   cancelSalonUpdate() {
     this.editSalonDetails = false;
   }

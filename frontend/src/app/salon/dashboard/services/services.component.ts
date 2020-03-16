@@ -62,12 +62,9 @@ export class ServicesComponent implements OnInit {
   }
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   ngOnInit() {
-
     this.user_id = sessionStorage.getItem("userId");
     this.getSalonService();
-
   }
-
 
   paginate(event) {
     this.page = event.pageIndex + 1;
@@ -85,7 +82,6 @@ export class ServicesComponent implements OnInit {
     this.isDeleteDialog = false;
   }
   applyFilter(event: Event) {
-    console.log(event);
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -131,7 +127,7 @@ export class ServicesComponent implements OnInit {
           type: type,
           salonService: element
         };
-        // console.log("Delete element", deletedData); return;
+
         this.commServ.removeSalonService(deletedData).subscribe(
           (data: any) => {
             if (data["code"] == 200) {
@@ -186,7 +182,7 @@ export class ServicesComponent implements OnInit {
 
   updateEmpService(data) {
     data.id = this.edit_servie_id;
-    //console.log("Update Data", data);
+
     this.commServ.updateSalonService(data).subscribe(
       (result: any) => {
         if (result["code"] == 200) {
