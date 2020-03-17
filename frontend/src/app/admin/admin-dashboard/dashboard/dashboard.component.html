@@ -17,31 +17,41 @@
   ><app-header-text class="header"></app-header-text>
 </div>
 <div class="table-responsive tablecustom">
-  <div class="mat-elevation-z8">
+  <div class="example-container mat-elevation-z8">
     <table mat-table [dataSource]="SalonRequestList">
       <!-- Position Column -->
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        <td mat-cell *matCellDef="let element">
+          <span class="mobile-label">Name:</span>
+          {{ element.name }}
+        </td>
       </ng-container>
 
       <!-- Weight Column -->
       <ng-container matColumnDef="salonaddress">
         <th mat-header-cell *matHeaderCellDef>Address</th>
-        <td mat-cell *matCellDef="let element">{{ element.salonaddress }}</td>
+        <td mat-cell *matCellDef="let element">
+          <span class="mobile-label">Address:</span>
+          {{ element.salonaddress }}
+        </td>
       </ng-container>
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="contact">
         <th mat-header-cell *matHeaderCellDef class="status-check">Contact</th>
-        <td mat-cell *matCellDef="let element">{{ element.contact }}</td>
+        <td mat-cell *matCellDef="let element">
+          <span class="mobile-label">Contact:</span>
+          {{ element.contact }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="isactive">
         <th mat-header-cell *matHeaderCellDef class="status-check">Status</th>
         <td mat-cell *matCellDef="let element">
+          <span class="mobile-label">Status:</span>
           <mat-slide-toggle
             [checked]="element.isActive"
             [disabled]="disabled"
@@ -54,8 +64,9 @@
           Action
         </th>
         <td mat-cell *matCellDef="let element" class="btnArea">
+          <span class="mobile-label">Action:</span>
           <button
-            class="btn btn-primary btn-sign-in"
+            class="btn btn-primary btn-sign-in btnsec"
             (click)="approveSalonRequest(element)"
           >
             Approve
@@ -107,7 +118,7 @@
 </div>
 
 <div class="userDetailsOverlay" *ngIf="showSalonDetail">
-  <div class="main-section-area">
+  <div class="main-section-area col-lg-6 col-md-6 col-sm-12">
     <div class="header">
       <h1>Salon Details</h1>
     </div>

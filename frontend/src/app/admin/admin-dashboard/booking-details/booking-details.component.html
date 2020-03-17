@@ -14,7 +14,7 @@
     placeholder="Search"
   />
   <div class="table-responsive tablecustom">
-    <div class="mat-elevation-z8">
+    <div class="example-container mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" matSort>
         <!-- Position Column -->
 
@@ -22,28 +22,39 @@
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
           <td mat-cell *matCellDef="let element">
+            <span class="mobile-label">Date:</span>
             {{ element.date | date: "longDate" }}
           </td>
         </ng-container>
         <ng-container matColumnDef="salonname">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Salon Name</th>
-          <td mat-cell *matCellDef="let element">{{ element.salonName }}</td>
+          <td mat-cell *matCellDef="let element">
+            <span class="mobile-label">Salon Name:</span>
+            {{ element.salonName }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>User Name</th>
-          <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
+          <td mat-cell *matCellDef="let element">
+            <span class="mobile-label">User Name:</span>
+            {{ element.userName }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="orderid">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Id</th>
-          <td mat-cell *matCellDef="let element">{{ element.orderId }}</td>
+          <td mat-cell *matCellDef="let element">
+            <span class="mobile-label">Order Id:</span>
+            {{ element.orderId }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="status-check">Action</th>
           <td mat-cell *matCellDef="let element">
+            <span class="mobile-label">Action:</span>
             <div class="buttonArea">
               <button
-                class="btn-primary btn-sign-in"
+                class="btn-primary btn-sign-in can"
                 (click)="cancelBooking(element)"
               >
                 Cancel

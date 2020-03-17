@@ -68,7 +68,7 @@
   </div>
 
   <div class="addPlanModel" *ngIf="isAddPlan">
-    <div class="modal-content">
+    <div class="modal-content col-lg-6 col-md-6 col-sm-12">
       <div class="headerText">
         <h2>{{ headertext }}</h2>
       </div>
@@ -102,7 +102,7 @@
         </div>
         <div class="inpFeilds">
           <label>Cycle:</label>
-          <select formControlName="interval">
+          <select class="select-css selectOption" formControlName="interval">
             <option *ngFor="let item of intervals" [ngValue]="item.value">{{
               item.key
             }}</option>

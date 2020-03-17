@@ -2064,6 +2064,92 @@ commonQuery.fetch_Salon_list_Near = async function fetch_Salon_list_Near(
   });
 };
 
+commonQuery.findSalonsCount = function findSalonsCount(
+  model,
+  long,
+  lat,
+  service_id,
+  name,
+  sortParam
+) {
+  return new Promise(function(resolve, reject) {
+    model
+      .aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: [long, lat]
+            },
+            spherical: true,
+            distanceField: "dist.calculated",
+            distanceMultiplier: 0.00062137,
+            maxDistance: 32186
+          }
+        },
+        {
+          $match: {
+            name: new RegExp(name ? name : " ", "gi")
+          }
+        },
+        {
+          $match: {
+            isservicesadded: "true"
+          }
+        },
+        {
+          $lookup: {
+            from: "reviewratings",
+            localField: "_id",
+            foreignField: "salon_id",
+            as: "ratings"
+          }
+        },
+        {
+          $lookup: {
+            from: "salonservices",
+            localField: "_id",
+            foreignField: "salon_id",
+            as: "servicesSelected"
+          }
+        },
+        { $sort: { "servicesSelected.price": -1 } },
+        { $unwind: "$servicesSelected" },
+        { $sort: sortParam },
+        {
+          $match: {
+            "servicesSelected.service_id": service_id
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            address: "$salonaddress",
+            contact: 1,
+            code: 1,
+            closetime: 1,
+            opentime: 1,
+            location: 1,
+            timezonestring: 1,
+            image: 1,
+            avgRatings: { $avg: "$ratings.ratings" },
+            distance: "$dist.calculated",
+            service: "$servicesSelected"
+          }
+        }
+      ])
+      .exec(function(err, res) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(res.length);
+        }
+      });
+  });
+};
+
 commonQuery.getSalonSubscriptionDetails = function getSalonSubscriptionDetails(
   model,
   condition

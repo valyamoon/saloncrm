@@ -272,6 +272,7 @@ function saveSalonDetails(req, res) {
 function getSalons(req, res) {
   async function getSalons() {
     try {
+      var salonscount;
       var intervals;
       var timeArray = [];
       var bookedSlotsArray = [];
@@ -315,6 +316,18 @@ function getSalons(req, res) {
           sortParam = {
             "servicesSelected.price": 1
           };
+        }
+
+        let salonCount = await commonQuery.findSalonsCount(
+          salons,
+          long,
+          lat,
+          service_id,
+          name,
+          sortParam
+        );
+        if (salonCount) {
+          salonscount = salonCount;
         }
 
         let salonList = await commonQuery.fetch_Salon_list_Near(
@@ -490,6 +503,14 @@ function getSalons(req, res) {
                 bookedSlotsArray.push(data[k]["end"].format("HH:mm"));
               }
 
+              var findEmp = commonQuery.filterEmployee(
+                employees,
+                mongoose.Types.ObjectId(salonListingNew._id),
+                mongoose.Types.ObjectId(salonListingNew.services)
+              );
+
+              console.log("employees", findEmp);
+
               for (var i = 0; i < timeArray.length; i++) {
                 for (var j = 0; j < bookedSlotsArray.length; j++) {
                   if (timeArray[i].time === bookedSlotsArray[j]) {
@@ -499,13 +520,17 @@ function getSalons(req, res) {
               }
 
               salonListingNew.slots = timeArray;
+              let dataToPass = {
+                salon: salonListingNew,
+                count: salonscount
+              };
 
               return res.json(
                 Response(
                   constant.SUCCESS_CODE,
                   constant.FETCHED_ALL_DATA,
                   //salonList
-                  salonListingNew
+                  dataToPass
                 )
               );
             });
@@ -1642,6 +1667,7 @@ function fetchSalonData(req, res) {
 
 async function bookSlot(data) {
   let bookedAppointmentData;
+  var empId;
   var orderId = Math.random(1234567910)
     .toString(25)
     .replace(/[^a-z-^0-1000-z-aA-Z]+/g, "")
@@ -1695,9 +1721,52 @@ async function bookSlot(data) {
 
     if (!findEmp) {
     } else {
-      var empId = findEmp[0]._id;
+      console.log(data.date);
 
-      console.log(empId);
+      let checkCondition = { _id: mongoose.Types.ObjectId(data.salon_id) };
+      let salonData = await commonQuery.findoneData(salons, checkCondition);
+
+      var m = moment(
+        data.date.toString(),
+        "YYYY-MM-DD HH:mm:ss [Z]",
+        salonData.timezonestring.toString()
+      );
+      var startT = m.clone().startOf("day");
+
+      var endT = m.clone().endOf("day");
+
+      console.log(startT, endT);
+
+      let condition = {
+        service: data.service_id,
+        date: { $gte: startT, $lt: endT },
+        salon_id: data.salon_id
+      };
+
+      let checkAppointments = await commonQuery.fetch_all(
+        appointments,
+        condition
+      );
+
+      if (checkAppointments.length) {
+        for (var i = 0; i < findEmp.length; i++) {
+          console.log(findEmp[i]);
+          for (var j = 0; j < checkAppointments.length; j++) {
+            if (
+              findEmp[i]["_id"].toString() ===
+              checkAppointments[j]["employee_id"].toString()
+            ) {
+              console.log(findEmp[i]);
+            } else {
+              empId = findEmp[i]["_id"];
+            }
+          }
+        }
+      } else {
+        empId = findEmp[0]._id;
+      }
+
+      console.log(checkAppointments);
 
       let saveAppointment = new appointments({
         salon_id: data.salon_id,
@@ -1818,6 +1887,48 @@ async function bookSlot(data) {
     if (!findEmp) {
     } else {
       var empId = findEmp[0]._id;
+      // let checkCondition = { _id: mongoose.Types.ObjectId(data.salon_id) };
+      // let salonData = await commonQuery.findoneData(salons, checkCondition);
+
+      // var m = moment(
+      //   data.date.toString(),
+      //   "YYYY-MM-DD HH:mm:ss [Z]",
+      //   salonData.timezonestring.toString()
+      // );
+      // var startT = m.clone().startOf("day");
+
+      // var endT = m.clone().endOf("day");
+
+      // console.log(startT, endT);
+
+      // let condition = {
+      //   service: data.service_id,
+      //   date: { $gte: startT, $lt: endT },
+      //   salon_id: data.salon_id
+      // };
+
+      // let checkAppointments = await commonQuery.fetch_all(
+      //   appointments,
+      //   condition
+      // );
+
+      // if (checkAppointments.length) {
+      //   for (var i = 0; i < findEmp.length; i++) {
+      //     console.log(findEmp[i]);
+      //     for (var j = 0; j < checkAppointments.length; j++) {
+      //       if (
+      //         findEmp[i]["_id"].toString() ===
+      //         checkAppointments[j]["employee_id"].toString()
+      //       ) {
+      //         console.log(findEmp[i]);
+      //       } else {
+      //         empId = findEmp[i]["_id"];
+      //       }
+      //     }
+      //   }
+      // } else {
+      //   empId = findEmp[0]._id;
+      // }
 
       let salon_connected_id;
       let condition = { _id: mongoose.Types.ObjectId(data.salon_id) };

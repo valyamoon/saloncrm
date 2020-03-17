@@ -13,6 +13,7 @@ export class SalonListComponent implements OnInit {
   pageSize: any = 10;
   searchTerm: any;
   salonListingData: any;
+  salonCount: any;
   page: any = 1;
   readOnly: boolean = true;
   checkedcolor: "gold";
@@ -23,6 +24,7 @@ export class SalonListComponent implements OnInit {
   readonly: false;
   totalstars: 5;
   showNoRecords: boolean = false;
+  isShowCountButton: boolean;
 
   constructor(
     private router: Router,
@@ -41,6 +43,20 @@ export class SalonListComponent implements OnInit {
     }
   }
 
+  getAllSalons() {
+    let dataToPass = {
+      service_id: this.userPrefrence.service_id
+        ? this.userPrefrence.service_id
+        : "",
+      date: this.userPrefrence.date,
+      lat: this.userPrefrence.lat,
+      long: this.userPrefrence.long,
+      pageSize: this.salonCount,
+      page: this.page
+    };
+    this.getSalonsList(dataToPass);
+  }
+
   getSalonsList(data) {
     let dataToPass = {
       service_id: data.service_id ? data.service_id : "",
@@ -53,11 +69,17 @@ export class SalonListComponent implements OnInit {
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
-          this.salonListingData = data["data"];
+          this.salonListingData = data["data"]["salon"];
 
+          this.salonCount = data["data"]["count"];
+          if (this.salonCount > 10) {
+            this.isShowCountButton = true;
+          } else if (this.salonCount <= 10) {
+            this.isShowCountButton = false;
+          }
           if (data["data"].length === 0) {
             this.showNoRecords = true;
-          } else if (data["data"].length > 0) {
+          } else if (data["data"]["salon"].length > 0) {
             this.showNoRecords = false;
           }
         } else if (data["code"] === 400) {
@@ -96,7 +118,7 @@ export class SalonListComponent implements OnInit {
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
-          this.salonListingData = data["data"];
+          this.salonListingData = data["data"]["salon"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000
@@ -129,7 +151,7 @@ export class SalonListComponent implements OnInit {
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
-          this.salonListingData = data["data"];
+          this.salonListingData = data["data"]["salon"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000

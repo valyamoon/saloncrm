@@ -21,5 +21,6 @@ module.exports = function(router) {
   router.post("/users-booking", user.getBookingList);
   router.post("/users-wallet", user.getWalletAmount);
   router.post("/get-stripe-token", user.getStripeToken);
+  router.post("/initate-wallet", user.InitiateWalletAmount);
   return router;
 };

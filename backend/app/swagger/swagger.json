@@ -1993,6 +1993,39 @@
         }
       }
     },
+    "/initate-wallet": {
+      "post": {
+        "tags": ["Salon Module"],
+        "summary": "Api endpoint to Initate Wallet Amount",
+        "description": "Initate Wallet Amount",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Initate Wallet Amount",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/initateWalletAmount"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/addsalonweeklyslot": {
       "post": {
         "tags": ["Salon Module"],
@@ -3719,6 +3752,14 @@
       "type": "object",
       "properties": {
         "salon_id": {
+          "type": "string"
+        }
+      }
+    },
+    "initateWalletAmount": {
+      "type": "object",
+      "properties": {
+        "user_id": {
           "type": "string"
         }
       }

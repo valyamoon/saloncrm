@@ -439,7 +439,7 @@ export class CheckoutComponent implements OnInit {
     this.userServ.getWalletAmount(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] === 200) {
-          this.walletAmount = data["data"][0].amount;
+          this.walletAmount = data["data"].amount;
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000
@@ -485,5 +485,8 @@ export class CheckoutComponent implements OnInit {
     //     }
     //   }
     // }
+  }
+  goToList() {
+    this.router.navigate(['/list  '])
   }
 }

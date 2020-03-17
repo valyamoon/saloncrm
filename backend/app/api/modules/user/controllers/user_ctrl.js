@@ -53,7 +53,8 @@ module.exports = {
   minusWalletAmount: minusWalletAmount,
   getBookingList: getBookingList,
   getWalletAmount: getWalletAmount,
-  getStripeToken: getStripeToken
+  getStripeToken: getStripeToken,
+  InitiateWalletAmount: InitiateWalletAmount
 };
 
 // /* Function is use to Request Otp
@@ -984,6 +985,7 @@ function userPayment(req, res) {
 
       let bookingDetails = salonCtrl.bookSlot(dataToPass);
       bookingDetails.then(result => {
+        console.log("result", result);
         res.json(
           Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, result)
         );
@@ -1265,11 +1267,13 @@ function getWalletAmount(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
+          console.log(getWalletAmount);
+
           res.json(
             Response(
               constant.SUCCESS_CODE,
               constant.FETCHED_ALL_DATA,
-              getWalletAmount
+              getWalletAmount[0]
             )
           );
         }
@@ -1423,4 +1427,38 @@ function getStripeToken(req, res) {
   }
 
   getStripeToken().then(function() {});
+}
+
+function InitiateWalletAmount(req, res) {
+  async function InitiateWalletAmount() {
+    try {
+      let saveWallet = new wallets({
+        user_id: mongoose.Types.ObjectId(req.body.user_id),
+        amount: 0
+      });
+
+      let saveWalletInitally = await commonQuery.InsertIntoCollection(
+        wallets,
+        saveWallet
+      );
+
+      if (saveWalletInitally) {
+        res.json(
+          Response(
+            constant.SUCCESS_CODE,
+            constant.ADDED_SUCCESS,
+            saveWalletInitally
+          )
+        );
+      } else {
+        res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+
+  InitiateWalletAmount().then(function() {});
 }
