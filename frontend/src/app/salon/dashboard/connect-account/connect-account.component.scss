@@ -22,6 +22,8 @@
 
     .stripeStatus {
       margin-bottom: 5px;
+      display: flex;
+      flex-wrap: wrap;
       .disconnected {
         border: 1px solid red;
         background: red;
@@ -29,6 +31,7 @@
         padding: 3px;
         border-radius: 11px;
         width: auto;
+        margin-left: 10px;
         font-weight: 600;
       }
       .connected {
@@ -36,6 +39,7 @@
         background: green;
         color: white;
         padding: 3px;
+        margin-left: 10px;
         border-radius: 11px;
         width: auto;
         font-weight: 600;

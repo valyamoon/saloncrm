@@ -3,7 +3,7 @@
     <app-header-text></app-header-text>
     <div class="actionBtn">
       <button
-        class="btn btn-primary btn-sign-in"
+        class="btn btn-primary btn-sign-in btnService"
         (click)="openAddServiceModal('add')"
       >
         Add Service
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="addServiceModal" *ngIf="addServiceModal">
-    <div class="modalContent">
+    <div class="modalContent  col-lg-6 col-md-6 col-sm-12">
       <div class="headerText">
         <h3>{{ action }}Service</h3>
       </div>
@@ -19,7 +19,7 @@
         <form class="serviceForm" #form [formGroup]="saveServiceForm">
           <div class="fields" *ngIf="!isShowUpdate">
             <label class="label">Select Category:</label>
-            <select class="selectOption select-css" formControlName="category">
+            <select class="select-css selectOption" formControlName="category">
               <option *ngFor="let item of categoriesList" [value]="item._id">{{
                 item.catname
               }}</option>

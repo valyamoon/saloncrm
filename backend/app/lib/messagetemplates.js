@@ -4,7 +4,7 @@ module.exports = {
   acceptSalonRequest: {
     subject: "Salon Activation Successful",
     message:
-      "Your request for salon activation has been accepted. Please login at "
+      '<div style="background:white; height: auto; width:100%;color:purple;border:1px solid purple; border-radius: 10px;padding: 1em;text-align: center;"><div class="content"><p>Your request for salon activation has been accepted. Please login<astyle="font-weight:600; font-family:Regular Lato; color:purple"href="https://bookapp.ch/salon">here</a></p></div></div>'
   },
 
   rejectSalonRequest: {
