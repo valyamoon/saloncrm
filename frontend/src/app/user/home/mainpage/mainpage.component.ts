@@ -47,11 +47,15 @@ export class MainpageComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log(environment.env)
 
     if(environment.env === "prod"){
+        console.log(location.protocol)
 
-      if(location.protocol === "http"){
+      if(location.protocol === "http:"){
+        console.log(":")
        window.location.href = location.href.replace('http', 'https'); 
+       console.log(window.location)
       }
 
 
