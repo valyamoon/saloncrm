@@ -29,6 +29,12 @@ export class SalonHeaderComponent implements OnInit {
   showLogoutButton() {
     this.showLogout = true;
   }
+    toggleHeader() {
+    document
+      .getElementById("navbarSupportedContent")
+      .classList.toggle("expanded");
+  }
+
   getSalonData(userId) {
     let data = {
       user_id: userId

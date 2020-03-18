@@ -6,6 +6,7 @@
     <button
       class="navbar-toggler"
       type="button"
+      (click)="toggleHeader()"
       data-toggle="collapse"
       data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent"
@@ -18,7 +19,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav">
+      <ul class="nav navbar-nav navbar-right">
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="profile"
             >PROFILE <span class="sr-only">(current)</span></a
@@ -36,11 +37,11 @@
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="transactions">TRANSACTIONS</a>
         </li>
-        <li class="nav-item notification-img">
+        <!-- <li class="nav-item notification-img">
           <a class="nav-link" href="#">
             <img src="../../../assets/images/Notification .svg" />
           </a>
-        </li>
+        </li> -->
 
         <button
           mat-button
