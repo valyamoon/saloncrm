@@ -2,9 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
-
+import { environment } from "../../../../environments/environment";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router, Routes, ActivatedRoute } from "@angular/router";
+import {Location} from '@angular/common';
+
+
 
 @Component({
   selector: "app-mainpage",
@@ -12,13 +15,15 @@ import { Router, Routes, ActivatedRoute } from "@angular/router";
   styleUrls: ["./mainpage.component.scss"]
 })
 export class MainpageComponent implements OnInit {
+  location:Location;
   constructor(
     private userCommServ: UsercommonserviceService,
     private toastServ: ToastrService,
     private fb: FormBuilder,
     private bsConfig: BsDatepickerConfig,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+ 
   ) {}
   myDateValue: Date;
   today = new Date();
@@ -41,6 +46,17 @@ export class MainpageComponent implements OnInit {
   categoriesForm: FormGroup;
 
   ngOnInit() {
+
+
+    if(environment.env === "prod"){
+
+      if(location.protocol === "http"){
+       window.location.href = location.href.replace('http', 'https'); 
+      }
+
+
+    }
+    
     this.minDate = new Date();
     this.myDateValue = new Date();
     this.fetchCategories();

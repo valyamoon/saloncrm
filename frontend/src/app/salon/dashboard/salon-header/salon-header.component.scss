@@ -163,6 +163,13 @@ html, body {
      
         padding-right: 20px;
     }   
+    .expanded{
+    display:block !important}
+    .header-sec .navbar-nav{
+    background: transparent linear-gradient(267deg, #783A87 0%, #BC2E65 100%) 0% 0% no-repeat padding-box;
+        color:black;
+    }
+
 }
 .mat-tab-group {
     width: 95% !important;
