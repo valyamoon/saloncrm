@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
 // const authy = require("authy")("Y23QOjmAiKdXpEU1MEVAp1g99X77QqFp");
-const authy = require("authy")("8MoNt8nsgLs3IUN0qO3ikuLnl3Pq4ZXn");
+const authy = require("authy")("8acafe3af6da8cc77a75c7d5998bacd4");
 
 const jwt = require("jsonwebtoken");
 
@@ -11,7 +11,7 @@ const salonCtrl = require("../../salon/controllers/salon_ctrl");
 
 //const webUrl = "http://172.10.230.180:4001/uploads/profileImages/";
 const webUrl = "http://54.71.18.74:5977/uploads/profileImages/";
-const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
+const stripe = require("stripe")("sk_live_7AMm4SiOjGahMNq9AyLNirqw00cw4K9Rmg");
 //const stripe = require("stripe")("sk_test_KIPp24RuZLwG2pgVc8Hsd6lS00iSpeKk3X");
 const jwtKey = "saloncrm";
 const mkdirp = require("mkdirp");

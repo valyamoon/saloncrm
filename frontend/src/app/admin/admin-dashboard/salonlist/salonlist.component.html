@@ -112,14 +112,13 @@
                   alt="Salon Details"
                 />
               </div>
+              <button
+                class="btn btn-primary btn-sign-in btn-sus"
+                (click)="getMontlyUser(element)"
+              >
+                Users
+              </button>
             </div>
-
-            <!-- <button
-              class="btn btn-primary btn-sign-in btn-sus"
-              (click)="declineSalonRequest(element)"
-            >
-              Detail
-            </button> -->
           </td>
         </ng-container>
 
@@ -142,10 +141,10 @@
 
   <div class="userDetailsOverlay" *ngIf="showSalonDetail">
     <div class="main-section-area col-lg-6 col-md-6 col-sm-12">
-      <div class="header">
+      <div class="header" *ngIf="!isCountShow">
         <h1>Salon Details</h1>
       </div>
-      <div class="main-section">
+      <div class="main-section" *ngIf="!isCountShow">
         <div class="field-row img">
           <img src="{{ salonDetails.image }}" class="profilePic" />
         </div>
@@ -178,6 +177,11 @@
           </div>
         </div>
       </div>
+
+      <div class="countShow" *ngIf="isCountShow">
+        <h1>{{ monthlyUserCount }}</h1>
+      </div>
+
       <div class="btn-Area">
         <button
           class=" btn btn-sign-in btn-primary"

@@ -149,6 +149,11 @@ export class AdminServService {
   addAdminDetails(data) {
     return this.http.post(this.baseUrl + "/admin-detail", data, httpOptions);
   }
+
+  getMonthlyUsersCount(data) {
+    return this.http.post(this.baseUrl + "/get-analysis", data, httpOptions);
+  }
+
   updateAdminDetails(data) {
     return this.http.post(this.baseUrl + "/update-admin", data, httpOptions);
   }

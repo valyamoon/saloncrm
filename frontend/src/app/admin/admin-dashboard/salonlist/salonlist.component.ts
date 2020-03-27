@@ -11,6 +11,7 @@ import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
 export class SalonlistComponent implements OnInit {
   activeSalons: any;
   noRecordsFound: boolean;
+  isCountShow: boolean;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   isLoader: boolean;
@@ -26,7 +27,7 @@ export class SalonlistComponent implements OnInit {
   limit: any = 0;
   count: any = 5;
   pageSize: any = 5;
-
+  monthlyUserCount: any;
   page: any = 1;
   ActiveSalonsCount: any;
   disabled: boolean = true;
@@ -152,6 +153,29 @@ export class SalonlistComponent implements OnInit {
 
   closeSalonDetails() {
     this.showSalonDetail = false;
+    this.isCountShow = false;
+  }
+
+  getMontlyUser(data) {
+    if (data) {
+      let dataToPass = { salon_id: data["_id"] };
+      this.adminServ.getMonthlyUsersCount(dataToPass).subscribe(
+        (data: any) => {
+          if (data.code === 200) {
+            this.monthlyUserCount = data.data;
+            this.showSalonDetail = true;
+            this.isCountShow = true;
+          } else if (data.code == 400) {
+            this.toastrServ.error(data.message, "", {
+              timeOut: 1000
+            });
+          }
+        },
+        error => {
+          this.toastrServ.error(error.message, "", { timeOut: 1000 });
+        }
+      );
+    }
   }
 
   declineSalonRequest(data) {
