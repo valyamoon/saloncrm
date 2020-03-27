@@ -22,7 +22,7 @@ var ts = require("time-slots-generator");
 const moment = require("moment-timezone");
 
 const jwt = require("jsonwebtoken");
-const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
+const stripe = require("stripe")("sk_live_7AMm4SiOjGahMNq9AyLNirqw00cw4K9Rmg");
 //const stripe = require("stripe")("sk_test_KIPp24RuZLwG2pgVc8Hsd6lS00iSpeKk3X");
 
 const mkdirp = require("mkdirp");
@@ -90,7 +90,8 @@ module.exports = {
   validatePromocode: validatePromocode,
   getChangeInBookingsData: getChangeInBookingsData,
   autoCompleteBookings: autoCompleteBookings,
-  getCompletedBookingTransaction: getCompletedBookingTransaction
+  getCompletedBookingTransaction: getCompletedBookingTransaction,
+  getMontlyUsers: getMontlyUsers
 };
 
 /**
@@ -509,8 +510,6 @@ function getSalons(req, res) {
                 mongoose.Types.ObjectId(salonListingNew.services)
               );
 
-              console.log("employees", findEmp);
-
               for (var i = 0; i < timeArray.length; i++) {
                 for (var j = 0; j < bookedSlotsArray.length; j++) {
                   if (timeArray[i].time === bookedSlotsArray[j]) {
@@ -520,10 +519,19 @@ function getSalons(req, res) {
               }
 
               salonListingNew.slots = timeArray;
-              let dataToPass = {
-                salon: salonListingNew,
-                count: salonscount
-              };
+              let dataToPass = {};
+
+              if (count === 0) {
+                dataToPass = {
+                  salon: [],
+                  count: 0
+                };
+              } else {
+                dataToPass = {
+                  salon: salonListingNew,
+                  count: salonscount
+                };
+              }
 
               return res.json(
                 Response(
@@ -545,90 +553,6 @@ function getSalons(req, res) {
 
   getSalons().then(function() {});
 }
-
-// async function fetchbookedSlots(data) {
-//   return new Promise(async function(reject, resolve) {
-//     var bookedSlotsData = [];
-//     let range1;
-//     let range2;
-
-//     var collectedAppointments = [];
-//     var alreadyBookedSlots = [];
-
-//     data.forEach(async s => {
-//       var newDate;
-//       try {
-//         var updatedSlot = [];
-//         var Cudate = moment(s.date)
-//           .tz(s.timezonestring)
-//           .format("DD:MM:YYYY");
-//
-//         for (var i = 0; i < s.slots.length; i++) {
-//           range2 = Mmoment.range(
-//             moment(
-//               newDate.toString() + s["slots"][i]["time"].toString(),
-//               "YYYY-MM-DD HH:mm Z"
-//             ),
-//             moment(
-//               newDate.toString() + s["slots"][++i]["time"].toString(),
-//               "YYYY-MM-DD HH:mm Z"
-//             )
-//           );
-//           --i;
-//         }
-//
-//         let condition = {
-//           salon_id: mongoose.Types.ObjectId(s._id)
-//         };
-//         let bookedSlots = await commonQuery.fetch_all(appointments, condition);
-//         if (bookedSlots) {
-//           bookedSlots.forEach(async u => {
-//             try {
-//               if (
-//                 Cudate ===
-//                 moment(u.date)
-//                   .tz(s.timezonestring)
-//                   .format("DD:MM:YYYY")
-//               ) {
-//                 newDate =
-//                   u.date.getFullYear() +
-//                   "-" +
-//                   (u.date.getMonth() + 1) +
-//                   "-" +
-//                   u.date.getDate();
-
-//                 collectedAppointments.push(u);
-//                 range1 = Mmoment.range(
-//                   moment(
-//                     newDate.toString() + u.starttime.toString(),
-//                     "YYYY-MM-DD HH:mm Z"
-//                   ),
-//                   moment(
-//                     newDate.toString() + u.endtime.toString(),
-//                     "YYYY-MM-DD HH:mm Z"
-//                   )
-//                 );
-//               }
-//             } catch (error) {
-//
-//               reject(error);
-//             }
-//           });
-//         } else {
-//           console.log(!bookedSlots);
-//         }
-
-//         if (range1.overlaps(range2) === true) {
-//           console.log("TRUE");
-//         } else if (range1.overlaps(range2) === false) {
-//           console.log("FALSE");
-//         }
-//       } catch (error) {
-//         reject(error);
-//       }
-//     });
-//   });
-// }
 
 async function fetchbookedSlots(data) {
   return new Promise(async function(reject, resolve) {
@@ -701,17 +625,13 @@ async function fetchbookedSlots(data) {
 
                   range1Array.push(range1);
                 }
-              } catch (error) {
-                console.log("inner", error);
-              }
+              } catch (error) {}
             });
           } else {
             console.log("error");
           }
           resolve(bookedSlotsArrayToSend);
-        } catch (error) {
-          console.log("outer", error);
-        }
+        } catch (error) {}
 
         for (var j = 0; j < range2Array.length; j++) {
           range2 = Mmoment.range(
@@ -1717,12 +1637,8 @@ async function bookSlot(data) {
       mongoose.Types.ObjectId(data.service_id)
     );
 
-    console.log("employees", findEmp);
-
     if (!findEmp) {
     } else {
-      console.log(data.date);
-
       let checkCondition = { _id: mongoose.Types.ObjectId(data.salon_id) };
       let salonData = await commonQuery.findoneData(salons, checkCondition);
 
@@ -1734,8 +1650,6 @@ async function bookSlot(data) {
       var startT = m.clone().startOf("day");
 
       var endT = m.clone().endOf("day");
-
-      console.log(startT, endT);
 
       let condition = {
         service: data.service_id,
@@ -1756,7 +1670,6 @@ async function bookSlot(data) {
               findEmp[i]["_id"].toString() ===
               checkAppointments[j]["employee_id"].toString()
             ) {
-              console.log(findEmp[i]);
             } else {
               empId = findEmp[i]["_id"];
             }
@@ -1765,8 +1678,6 @@ async function bookSlot(data) {
       } else {
         empId = findEmp[0]._id;
       }
-
-      console.log(checkAppointments);
 
       let saveAppointment = new appointments({
         salon_id: data.salon_id,
@@ -1800,7 +1711,6 @@ async function bookSlot(data) {
             _id,
             dataToPass
           );
-          console.log(addInPromocode);
         }
 
         var message = {
@@ -1808,8 +1718,9 @@ async function bookSlot(data) {
           collapse_key: "your_collapse_key",
 
           notification: {
-            title: "HI AMrut",
-            body: "Body of your push notification"
+            title: "BookApp",
+            body:
+              "Your Appointment is booked. Please login to see upcoming bookings."
           },
 
           data: {
@@ -1979,8 +1890,9 @@ async function bookSlot(data) {
             collapse_key: "your_collapse_key",
 
             notification: {
-              title: "HI AMrut",
-              body: "Body of your push notification"
+              title: "BookApp",
+              body:
+                "Your Appointment is booked. Please login to see upcoming bookings."
             },
 
             data: {
@@ -1998,13 +1910,11 @@ async function bookSlot(data) {
           });
         }
 
-        // console.log("BOOKAAIN CARD", bookAppointment);
         bookedAppointmentData = bookAppointment;
-        // return bookAppointment;
       }
     }
   }
-  //console.log("BOOKEDAPPOINTMENTDATA", bookedAppointmentData);
+
   return bookedAppointmentData;
 }
 
@@ -2019,7 +1929,6 @@ async function bookSlot(data) {
  * Created On 16/01/2020
  */
 async function getSalonByUser(req, res) {
-  // console.log("call here"); return;
   if (req.body.user_id) {
     let userId = req.body.user_id;
     let cond = {
@@ -2037,7 +1946,6 @@ async function getSalonByUser(req, res) {
   } else {
     res.json(Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null));
   }
-  //console.log("req.body", req.body); return;
 }
 
 /**
@@ -2049,7 +1957,6 @@ async function getSalonByUser(req, res) {
  * Created On 21/01/2020
  */
 async function getSalonServiceList(req, res) {
-  //console.log("req.body", req.body); return;
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
@@ -2072,7 +1979,7 @@ async function getSalonServiceList(req, res) {
       serviceList: serviceList,
       serviceCount: serviceCount
     };
-    //console.log("serviceList", serviceList); return;
+
     res.json(
       Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, serviceDetails)
     );
@@ -2091,7 +1998,6 @@ async function getSalonServiceList(req, res) {
  * Created On 21/01/2020
  */
 async function getEmployeeServiceList(req, res) {
-  //console.log("req.body", req.body); //return;
   let pageSize =
     +req.query.pageSize || +req.body.pageSize ? req.body.pageSize : 10;
   let currentPage = +req.query.page || req.body.page ? req.body.page : 1;
@@ -2101,9 +2007,6 @@ async function getEmployeeServiceList(req, res) {
     let empCond = {
       salon_id: salonId
     };
-    // console.log("pageSize", pageSize);
-    //let pageSize = 100;
-    //let page = 1;
 
     let employeeData = await commonQuery.find_all_employee_paginate(
       employees,
@@ -2116,7 +2019,7 @@ async function getEmployeeServiceList(req, res) {
       employeeData: employeeData,
       employeeCount: employeeCount
     };
-    // console.log("employeeList", employeeList); return;
+
     res.json(
       Response(
         constant.SUCCESS_CODE,
@@ -2132,7 +2035,6 @@ async function getEmployeeServiceList(req, res) {
 }
 
 async function updateSalonServices(req, res) {
-  // console.log("req.body", req.body); //return;
   if (req.body) {
     let updateCond = {
       _id: req.body.id
@@ -2146,7 +2048,7 @@ async function updateSalonServices(req, res) {
       updateCond,
       updateData
     );
-    // console.log("updateService", updateService);
+
     if (updateService) {
       res.json(
         Response(constant.SUCCESS_CODE, constant.SERVICE_UPDATED, updateService)
@@ -2160,14 +2062,13 @@ async function updateSalonServices(req, res) {
 }
 
 async function removeEmployee(req, res) {
-  // console.log("req.body", req.body); return;
   if (req.body._id) {
     let updateCond = {
       _id: req.body._id
     };
 
     let removeEmp = await commonQuery.hard_delete(employees, updateCond);
-    // console.log("updateService", updateService);
+
     if (removeEmp) {
       let salonUpdate = await commonQuery.removeEmployeeFromSalon(
         salons,
@@ -2191,7 +2092,6 @@ async function removeEmployee(req, res) {
 }
 
 async function getSalonWeeklySlots(req, res) {
-  //console.log("req.body", req.body);
   if (req.body.user_id && req.body.salon_id) {
     let cond = {
       user_id: req.body.user_id,
@@ -2201,7 +2101,7 @@ async function getSalonWeeklySlots(req, res) {
       salonweeklyslots,
       cond
     );
-    //console.log("salonSotList", salonSotList);
+
     if (salonSotList) {
       res.json(
         Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonSotList)
@@ -2215,7 +2115,6 @@ async function getSalonWeeklySlots(req, res) {
 }
 
 function createCardToken(req, res) {
-  // console.log(req.body);
   var card_id;
   var token_id;
   async function createCardToken() {
@@ -2824,8 +2723,6 @@ function autoCompleteBookings() {
             completedBookingSave
           );
           if (schedulePaymentTransfer) {
-            console.log("Payment intiated for");
-
             let condition = {
               _id: mongoose.Types.ObjectId(findToCompleteBookings["_id"])
             };
@@ -2905,3 +2802,44 @@ cron.schedule("* * * * * *", async function() {
     }
   }
 });
+
+function getMontlyUsers(req, res) {
+  async function getMontlyUsers() {
+    try {
+      if (req.body && req.body.salon_id) {
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+        var start = moment.utc(firstDay).startOf("day");
+        var end = moment.utc(lastDay).endOf("day");
+
+        let condition = {
+          salon_id: mongoose.Types.ObjectId(req.body.salon_id),
+          date: { $gte: start, $lt: end }
+        };
+
+        let CountOfUsers = await commonQuery.findCount(appointments, condition);
+
+        if (CountOfUsers) {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              CountOfUsers
+            )
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getMontlyUsers().then(function() {});
+}
