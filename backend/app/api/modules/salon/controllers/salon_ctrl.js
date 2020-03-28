@@ -113,6 +113,7 @@ function saveSalonDetails(req, res) {
           isActive: false,
           isDeleted: false
         };
+        // cins
 
         let checkUser = await commonQuery.findoneData(users, conditon);
 
