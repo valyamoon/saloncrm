@@ -16,6 +16,7 @@ import { ManageplanComponent } from "./admin-dashboard/manageplan/manageplan.com
 import { SubcriptionsListComponent } from "./admin-dashboard/subcriptions-list/subcriptions-list.component";
 import { DetailsComponent } from "./admin-dashboard/details/details.component";
 import { BookingDetailsComponent } from "./admin-dashboard/booking-details/booking-details.component";
+import { OtherComponent } from "./admin-dashboard/other/other.component";
 
 // const routes: Routes = [{path:'',component:AdminloginComponent},
 
@@ -41,6 +42,7 @@ const routes: Routes = [
       { path: "detail", component: DetailsComponent },
       { path: "manage-plan", component: ManageplanComponent },
       { path: "bookings", component: BookingDetailsComponent },
+      { path: "other", component: OtherComponent },
       { path: "subscribed-salons", component: SubcriptionsListComponent },
       // { path: "location", component: ConfirmationComponent },
       { path: "manage-admin", component: ManageAdminComponent },

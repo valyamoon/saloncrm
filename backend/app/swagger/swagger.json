@@ -12,6 +12,23 @@
   "schemes": ["http", "https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
+  "securityDefinitions": {
+    "JWT": {
+      "type": "saloncrm",
+      "in": "query",
+      "name": "saloncrm"
+    }
+  },
+  "security": [
+    {
+      "JWT": []
+    }
+  ],
+  "responses": {
+    "UnauthorizedError": {
+      "description": "Access token is missing or invalid"
+    }
+  },
   "paths": {
     "/getotp": {
       "post": {
@@ -79,6 +96,205 @@
         }
       }
     },
+    "/add-about": {
+      "post": {
+        "tags": ["Headers"],
+        "summary": "Add About Us",
+        "description": "About Us",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add About Us",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/add-about"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-about": {
+      "post": {
+        "tags": ["Headers"],
+        "summary": "Get About",
+        "description": "Get About",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "GET About Us",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/get-about"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/update-about": {
+      "post": {
+        "tags": ["Headers"],
+        "summary": "Update About",
+        "description": "Update About",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update About Us",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/update-about"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/add-tc": {
+      "post": {
+        "tags": ["Headers"],
+        "summary": "Add TC",
+        "description": "terms And Condition",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add TC",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/add-tc"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/get-tc": {
+      "post": {
+        "tags": ["Headers"],
+        "summary": "Get TC",
+        "description": "Get TC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "GET TC ",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/get-tc"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/update-tc": {
+      "post": {
+        "tags": ["Headers"],
+        "summary": "Update TC",
+        "description": "Update TC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update TC",
+            "required": "true",
+            "schema": {
+              "$ref": "#definitions/update-tc"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#definitions/appResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+
     "/register": {
       "post": {
         "tags": ["User Module"],
@@ -3760,6 +3976,60 @@
       "type": "object",
       "properties": {
         "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "add-about": {
+      "type": "object",
+      "properties": {
+        "about": {
+          "type": "string"
+        }
+      }
+    },
+    "get-about": {
+      "type": "object",
+      "properties": {
+        "about_id": {
+          "type": "string"
+        }
+      }
+    },
+    "update-about": {
+      "type": "object",
+      "properties": {
+        "about_id": {
+          "type": "string"
+        },
+        "about": {
+          "type": "string"
+        }
+      }
+    },
+    "add-tc": {
+      "type": "object",
+      "properties": {
+        "tc": {
+          "type": "string"
+        }
+      }
+    },
+    "get-tc": {
+      "type": "object",
+      "properties": {
+        "tc_id": {
+          "type": "string"
+        }
+      }
+    },
+    "update-tc": {
+      "type": "object",
+      "properties": {
+        "tc_id": {
+          "type": "string"
+        },
+        "tc": {
           "type": "string"
         }
       }

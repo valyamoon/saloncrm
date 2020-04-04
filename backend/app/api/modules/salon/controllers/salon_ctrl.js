@@ -522,7 +522,7 @@ function getSalons(req, res) {
               salonListingNew.slots = timeArray;
               let dataToPass = {};
 
-              if (count === 0) {
+              if (salonscount === 0) {
                 dataToPass = {
                   salon: [],
                   count: 0

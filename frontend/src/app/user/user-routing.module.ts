@@ -12,6 +12,7 @@ import { DownloadComponent } from "./home/download/download.component";
 import { TermsandconditionComponent } from "./home/termsandcondition/termsandcondition.component";
 import { FaqComponent } from "./home/faq/faq.component";
 import { CheckoutComponent } from "./home/checkout/checkout.component";
+import { PrivacypolicyComponent } from "./privacypolicy/privacypolicy.component";
 
 const routes: Routes = [
   {
@@ -28,6 +29,7 @@ const routes: Routes = [
       { path: "termsandcondition", component: TermsandconditionComponent },
       { path: "checkout", component: CheckoutComponent },
       { path: "faq", component: FaqComponent },
+      { path: "privacypolicy", component: PrivacypolicyComponent },
       { path: "", redirectTo: "home", pathMatch: "full" }
     ]
   }

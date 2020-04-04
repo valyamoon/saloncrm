@@ -31,6 +31,8 @@ import { LoaderComponent } from "./admin-dashboard/loader/loader.component";
 import { DeleteDialogComponent } from "./admin-dashboard/delete-dialog/delete-dialog.component";
 import { DetailsComponent } from "./admin-dashboard/details/details.component";
 import { BookingDetailsComponent } from "./admin-dashboard/booking-details/booking-details.component";
+import { OthersComponent } from './others/others.component';
+import { OtherComponent } from './admin-dashboard/other/other.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { BookingDetailsComponent } from "./admin-dashboard/booking-details/booki
     LoaderComponent,
     DeleteDialogComponent,
     DetailsComponent,
-    BookingDetailsComponent
+    BookingDetailsComponent,
+    OthersComponent,
+    OtherComponent
   ],
   imports: [
     CommonModule,

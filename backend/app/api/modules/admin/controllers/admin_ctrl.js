@@ -10,6 +10,9 @@ const nodemailer = require("nodemailer");
 const cron = require("node-cron");
 const mailer = require("../../../../lib/mailer");
 
+const aboutus = require("../model/aboutUs");
+const tc = require("../model/t&c");
+
 const subscriptionplans = require("../model/subscriptionPlan");
 const appointments = require("../../salon/model/appointmentsSchema");
 const constant = require("../../../../config/constant.js");
@@ -72,7 +75,13 @@ module.exports = {
   addAdminDetails: addAdminDetails,
   updateAdminDetails: updateAdminDetails,
   getAdminDetails: getAdminDetails,
-  getAllUpcomingBookings: getAllUpcomingBookings
+  getAllUpcomingBookings: getAllUpcomingBookings,
+  addAboutUs: addAboutUs,
+  getAboutUs: getAboutUs,
+  addTC: addTC,
+  getTC: getTC,
+  updateAboutUs: updateAboutUs,
+  updateTC: updateTC
 };
 
 /**
@@ -2154,4 +2163,196 @@ function getAllUpcomingBookings(req, res) {
   }
 
   getAllUpcomingBookings().then(function() {});
+}
+
+//addAboutUs: addAboutUs,
+// getAboutUs: getAboutUs,
+// addTC: addTC,
+// getTC: getTC,
+// updateAboutUs: updateAboutUs,
+// updateTC: updateTC
+
+function getTC(req, res) {
+  async function getTC() {
+    try {
+      if (req.body && req.body.tc_id) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.tc_id)
+        };
+        let gettc = await commonQuery.findoneData(tc, condition);
+        if (gettc) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, gettc)
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  gettc().then(function() {});
+}
+
+function getAboutUs(req, res) {
+  async function getAboutUs() {
+    try {
+      if (req.body && req.body.about_id) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.about_id)
+        };
+        let getAboutUs = await commonQuery.findoneData(aboutus, condition);
+        if (getAboutUs) {
+          res.json(
+            Response(
+              constant.SUCCESS_CODE,
+              constant.FETCHED_ALL_DATA,
+              getAboutUs
+            )
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  getAboutUs().then(function() {});
+}
+
+function addAboutUs(req, res) {
+  async function addAboutUs() {
+    try {
+      if (req.body && req.body.about) {
+        let saveaboutUs = new aboutus({
+          about: req.body.about
+        });
+        let saveNow = await commonQuery.InsertIntoCollection(
+          aboutus,
+          saveaboutUs
+        );
+        if (saveNow) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveNow)
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addAboutUs().then(function() {});
+}
+function updateAboutUs(req, res) {
+  async function updateAboutUs() {
+    try {
+      if (req.body && req.body.about_id) {
+        let condition = {
+          _id: req.body.about_id
+        };
+
+        let updCond = {
+          about: req.body.about
+        };
+
+        let saveNow = await commonQuery.updateOneDocument(
+          aboutus,
+          condition,
+          updCond
+        );
+        if (saveNow) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.UPDATE_SUCCESS, saveNow)
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  updateAboutUs().then(function() {});
+}
+function updateTC(req, res) {
+  async function updateTC() {
+    try {
+      if (req.body && req.body.tc_id) {
+        let condition = {
+          _id: req.body.tc_id
+        };
+
+        let updCond = {
+          about: req.body.about
+        };
+
+        let saveNow = await commonQuery.updateOneDocument(
+          tc,
+          condition,
+          updCond
+        );
+        if (saveNow) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.UPDATE_SUCCESS, saveNow)
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  updateTC().then(function() {});
+}
+
+function addTC(req, res) {
+  async function addTC() {
+    try {
+      if (req.body && req.body.tc) {
+        let saveaboutUs = new tc({
+          tc: req.body.tc
+        });
+        let saveNow = await commonQuery.InsertIntoCollection(tc, saveaboutUs);
+        if (saveNow) {
+          res.json(
+            Response(constant.SUCCESS_CODE, constant.ADDED_SUCCESS, saveNow)
+          );
+        } else {
+          res.json(
+            Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
+          );
+        }
+      }
+    } catch (error) {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error)
+      );
+    }
+  }
+  addTC().then(function() {});
 }
