@@ -1,0 +1,33 @@
+.mainSection {
+  margin-top: 6em;
+}
+.app-info-section {
+  background-image: url('../../../../assets/images/bg-app-info.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: rgba(118, 57, 135, 1);
+  .app-info-inner {
+    // background: #763987 0% 0% no-repeat padding-box;
+    // opacity: 0.8;
+    padding: 70px 0;
+    .app-info {
+      margin-top: 190px;
+      margin-left: 70px;
+      h5 {
+        font-size: 18px;
+        text-align: left;
+        letter-spacing: 1.44px;
+        color: #ffffff;
+        font-weight: 100;
+      }
+      h4 {
+        text-align: left;
+        letter-spacing: 2.88px;
+        color: aliceblue;
+        font-size: 36px;
+        font-weight: 600;
+        padding-bottom: 30px;
+      }
+    }
+  }
+}

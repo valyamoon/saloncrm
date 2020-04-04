@@ -50,6 +50,7 @@ import { DownloadComponent } from "./home/download/download.component";
 import { TermsandconditionComponent } from "./home/termsandcondition/termsandcondition.component";
 import { FaqComponent } from "./home/faq/faq.component";
 import { CheckoutComponent } from "./home/checkout/checkout.component";
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
@@ -83,7 +84,8 @@ export function getAuthServiceConfigs() {
     DownloadComponent,
     TermsandconditionComponent,
     FaqComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    PrivacypolicyComponent
   ],
   imports: [
     CommonModule,

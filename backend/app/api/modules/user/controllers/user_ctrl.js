@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 const utility = require("../../../../lib/utility.js");
 // const authy = require("authy")("Y23QOjmAiKdXpEU1MEVAp1g99X77QqFp");
-const authy = require("authy")("8acafe3af6da8cc77a75c7d5998bacd4");
+const authy = require("authy")("YuDynfRcXThtqrHflJMDCm2Hp7nJVZGM");
 
 const jwt = require("jsonwebtoken");
 

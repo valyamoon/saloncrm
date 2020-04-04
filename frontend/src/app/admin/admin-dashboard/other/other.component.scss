@@ -1,0 +1,15 @@
+.managePlanWrapper {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .actionButtons {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .mainSection {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

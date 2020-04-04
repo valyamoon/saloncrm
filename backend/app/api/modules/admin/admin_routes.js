@@ -45,6 +45,12 @@ module.exports = function(router) {
   router.post("/update-admin", admin.updateAdminDetails);
   router.post("/get-admin-detail", admin.getAdminDetails);
   router.post("/get-bookings-admin", admin.getAllUpcomingBookings);
+  router.post("/get-tc", admin.getTC);
+  router.post("/add-tc", admin.addTC);
+  router.post("/get-about", admin.getAboutUs);
+  router.post("/add-about", admin.addAboutUs);
+  router.post("/update-tc", admin.updateTC);
+  router.post("/update-about", admin.updateAboutUs);
 
   return router;
 };
