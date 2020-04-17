@@ -1,3 +1,23 @@
+<!-- // contry = country; // 
+<span matPrefix>
+  //
+  <mat-select
+    formControlName="countrycode"
+    *ngIf="country_code.length > 1"
+    matPrefix
+  >
+    //
+    <mat-option *ngFor="let code of country_code">
+      // {{ code }} //
+    </mat-option>
+    //
+  </mat-select>
+  //
+  <h6 *ngIf="country_code.length == 1">{{ country_code[0] }}</h6>
+  // &nbsp; //
+</span>
+-->
+
 <div class="user-login-section">
   <div class="login-section-inner">
     <div class="login-left">
@@ -16,26 +36,29 @@
 
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <input
-                        type=" text"
-                        class="form-control"
-                        placeholder="Search Country And Country Code"
-                        [(ngModel)]="searchterm"
-                        [ngModelOptions]="{ standalone: true }"
-                      />
                       <mat-form-field>
-                        <mat-select #mySelect formControlName="code">
+                        <mat-label>Country</mat-label>
+                        <mat-select
+                          formControlName="country"
+                          (selectionChange)="countryCode($event.value)"
+                        >
                           <mat-option
-                            (focus)="onFocus()"
-                            *ngFor="
-                              let item of countrycodes | filter: searchterm
-                            "
-                            [value]="item.code"
+                            *ngFor="let sub of countriesList"
+                            [value]="sub"
                           >
-                            +{{ item.code }} {{ item.name }}
+                            {{ sub.name }}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>
+
+                      <input
+                        type=" text"
+                        class="form-control codesList"
+                        placeholder="Country Code"
+                        disabled
+                        formControlName="code"
+                      />
+
                       <input
                         type="text"
                         class="form-control"

@@ -3,6 +3,7 @@ import { countries } from "../../../admin/country";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
+import { country } from "./countries";
 import { AuthServService } from "../auth-serv.service";
 import {
   AuthService,
@@ -21,7 +22,8 @@ export class UserloginComponent implements OnInit {
   phoneNumber: any;
   socialLoginID: any;
   countrycodes: any;
-
+  countriesList = country;
+  country_code: any = [];
   searchterm: any;
   firstName: any;
   LastName: any;
@@ -54,7 +56,8 @@ export class UserloginComponent implements OnInit {
 
     this.loginForm = this.fb.group({
       code: ["", Validators.required],
-      phone: ["", Validators.required]
+      phone: ["", Validators.required],
+      country: [""]
     });
     this.otpVerificationForm = this.fb.group({
       token: ["", Validators.required]
@@ -186,6 +189,12 @@ export class UserloginComponent implements OnInit {
 
   onFocused(e) {
     // do something
+  }
+
+  countryCode(code) {
+    this.country_code = code.callingCodes;
+    this.loginForm.get("code").setValue(this.country_code[0]);
+    this.loginForm.updateValueAndValidity();
   }
 
   getOtpOnCall() {
