@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { AllservService } from "../../allserv.service";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-login",
@@ -29,6 +30,20 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (environment.env === "prod") {
+      console.log(location.protocol);
+      window.console.log = function() {};
+      if (window) {
+        window.console.log = function() {};
+      }
+
+      if (location.protocol === "http:") {
+        console.log(":");
+        window.location.href = location.href.replace("http", "https");
+        console.log(window.location);
+      }
+    }
+
     this.salonLoginForm = this.fb.group({
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]],
       password: [

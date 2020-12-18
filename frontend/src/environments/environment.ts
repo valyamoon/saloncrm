@@ -4,12 +4,9 @@
 export const environment = {
   env: "local",
   production: true,
-  // apiUrl: "http://localhost:4001",
-  // baseUrl: "http://localhost:4001",
-  // backendBaseUrl: "http://localhost:4001"
-  apiUrl: "http://172.10.230.180:4001",
-  baseUrl: "http://172.10.230.180:4001",
-  backendBaseUrl: "http://172.10.230.180:4001"
+  apiUrl: "https://bookapp-ch.herokuapp.com",
+  baseUrl: "https://bookapp.ch",
+  backendBaseUrl: "https://bookapp-ch.herokuapp.com",
 };
 
 /*

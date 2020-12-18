@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
 
     this.getActiveSalonsCount();
     this.getActiveUsersCount();
-    this.subscription = timer(0, 10000)
+    this.subscription = timer(0, 100000)
       .pipe(switchMap(() => this.adminServ.getSalonsRequest(this.dataDefault)))
       .subscribe(result => {
         this.SalonRequestList = result["data"]["data"];

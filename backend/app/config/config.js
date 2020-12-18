@@ -4,9 +4,9 @@ const config = {
   local: {
     port: 4001,
     db: {
-      user: "",
-      password: "",
-      url: "mongodb://localhost:27017/salonCRM"
+      user: "bookapp",
+      password: "bookapp",
+      url: "mongodb+srv://cluster0.9zkw3.mongodb.net/saloncrm"
     },
     baseUrl: "http://localhost:4001/",
     backendBaseUrl: "http://localhost:4001/",
@@ -44,15 +44,15 @@ const config = {
     }
   },
   prod: {
-    port: 5977,
+    port: process.env.PORT,
     db: {
-      user: "saloncrm",
-      password: "SDfr456ty56",
-      url: "mongodb://localhost/saloncrm"
+      user: "bookapp",
+      password: "bookapp",
+      url: "mongodb+srv://cluster0.9zkw3.mongodb.net/saloncrm"
     },
-    baseUrl: "https://bookapp.ch/",
-    backendBaseUrl: "https://bookapp.ch/",
-    imageBaseUrl: "https://bookapp.ch/",
+    baseUrl: "https://bookapp-ch-api.herokuapp.com/",
+    backendBaseUrl: "https://bookapp-ch-api.herokuapp.com/",
+    imageBaseUrl: "https://bookapp-ch-api.herokuapp.com/",
     env: "prod",
     smtp: {
       service: "gmail",

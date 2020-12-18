@@ -527,6 +527,7 @@ commonQuery.filterEmployee = function filterEmployee(
   salon_id,
   service_id
 ) {
+  console.log("HELLO", salon_id, service_id);
   return new Promise(function(resolve, reject) {
     model
       .aggregate([
@@ -537,6 +538,7 @@ commonQuery.filterEmployee = function filterEmployee(
         if (err) {
           reject(err);
         } else {
+          console.log("response", response);
           resolve(response);
         }
       });

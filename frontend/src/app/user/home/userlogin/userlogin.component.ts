@@ -242,7 +242,7 @@ export class UserloginComponent implements OnInit {
           this.toastServ.success(data["message"], "", {
             timeOut: 1000
           });
-
+          console.log("DATA", data);
           this.authServ.sendToken(data["data"]["token"]);
           sessionStorage.setItem("userID", data["data"]["user"]["_id"]);
           sessionStorage.setItem("username", data["data"]["user"]["firstName"]);

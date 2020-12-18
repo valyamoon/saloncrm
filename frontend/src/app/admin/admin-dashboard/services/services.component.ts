@@ -98,22 +98,21 @@ export class ServicesComponent implements OnInit {
 
   fetchCategoriesList() {
     let dataToPass = {
-      type: "admin-categories",
-      pageSize: this.count,
-      page: this.page
+      type: "categories"
     };
 
-    this.adminServ.getAdmincategoriesList(dataToPass).subscribe(
+    this.adminServ.getCategories(dataToPass).subscribe(
       data => {
         if (data["code"] === 200) {
+          // console.log("data", data);
           this.adminCategoriesCount = data["data"]["count"];
 
-          if (data["data"]["data"].length === 0) {
+          if (data["data"].length === 0) {
             this.showNoRecords(true);
           }
-          if (data["data"]["data"].length > 0) {
+          if (data["data"].length > 0) {
             this.showNoRecords(false);
-            this.categoriesList = data["data"]["data"];
+            this.categoriesList = data["data"];
           }
         } else {
           this.toastrServ.error("Failed To Fetch", "Error", {
