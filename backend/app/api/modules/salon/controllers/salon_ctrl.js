@@ -478,6 +478,8 @@ function getSalons(req, res) {
             var url = TempUrl + v.image;
             v.image = url;
 
+            console.log("VVVV", v);
+
             salonListingNew.push({
               starttime: v.optime,
               date: v.date,
@@ -500,16 +502,25 @@ function getSalons(req, res) {
           fetchbookedSlots(salonListingNew)
             .then(data => {})
             .catch(data => {
-              for (var k = 0; k < data.length; k++) {
+              for (var k = 0; k < data.length; k++) { 
                 bookedSlotsArray.push(data[k]["start"].format("HH:mm"));
                 bookedSlotsArray.push(data[k]["end"].format("HH:mm"));
               }
+              console.log("salonListinfNEW", salonListingNew);
+              var findEmp = commonQuery
+                .filterEmployee(
+                  employees,
+                  mongoose.Types.ObjectId(salonListingNew._id),
+                  mongoose.Types.ObjectId(salonListingNew.service)
+                )
+                .then(sucess => {
+                  console.log("success", sucess);
+                })
+                .catch(error => {
+                  console.log("error", error);
+                });
 
-              var findEmp = commonQuery.filterEmployee(
-                employees,
-                mongoose.Types.ObjectId(salonListingNew._id),
-                mongoose.Types.ObjectId(salonListingNew.services)
-              );
+              console.log("employes", findEmp);
 
               for (var i = 0; i < timeArray.length; i++) {
                 for (var j = 0; j < bookedSlotsArray.length; j++) {

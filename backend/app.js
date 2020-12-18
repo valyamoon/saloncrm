@@ -3,6 +3,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 
+
 const fileUpload = require("express-fileupload");
 const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 var path = require("path");
@@ -29,11 +30,21 @@ global.__debug = function() {
 };
 
 var app = express();
+const sslRedirect = require('heroku-ssl-redirect').default
+
+
+if(process.env.NODE_ENV == 'prod'){
+  // enable ssl redirect
+  app.use(sslRedirect([
+    'prod'
+    ]));
+}
+
 app.use(cors());
 app.use(fileUpload());
 
 app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+//
 // process.env.NODE_ENV = process.env.NODE_ENV || "local"; //local ser/ver
 // process.env.NODE_ENV = process.env.NODE_ENV || "staging"; //staging server
 // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';    //dev server (dev.mdout.com)
@@ -79,9 +90,12 @@ app.use("/api", require("./app/api/routes")(express));
 //   //res.sendFile("./frontend/index.html");
 // });
 
-app.use("/", function(req, res) {
-  // res.sendFile(path.join(__dirname, './dist/frontend', 'index.html'));
-  res.sendfile("./frontend/index.html");
+// Serve only the static files form the dist directory
+app.use(express.static(__dirname + '/frontend'));
+
+app.get('/*', function(req,res) {
+    
+res.sendFile(path.join(__dirname+'/frontend/index.html'));
 });
 
 // start server

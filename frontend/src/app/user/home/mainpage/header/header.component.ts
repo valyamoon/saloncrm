@@ -32,5 +32,6 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authServ.logout();
     this.router.navigate(["/home"]);
+    localStorage.removeItem("LoggedInUser");
   }
 }

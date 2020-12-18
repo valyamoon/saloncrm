@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.css"]
+  styleUrls: ["./dashboard.component.css"],
 })
 export class DashboardComponent implements OnInit {
   dropdownVisible = false;
@@ -40,15 +40,18 @@ export class DashboardComponent implements OnInit {
   }
   getSalonData(userId) {
     let data = {
-      user_id: userId
+      user_id: userId,
     };
     this.commServ.getSalonData(data).subscribe(
       (response: any) => {
+        //temporarily mark all salon users subscribed
+        response["data"]["isSubscribed"] = true;
+
         if (
           response["data"]["isSubscribed"] === false &&
           response["data"]["isApproved"] === true
         ) {
-          this.router.navigate(["/salon/home/subscribe"]);
+          // this.router.navigate(["/salon/home/subscribe"]);
         } else if (response["data"]["isSubscribed"] === true) {
           this.router.navigate(["/salon/home/profile"]);
         }
@@ -62,13 +65,13 @@ export class DashboardComponent implements OnInit {
           );
         } else {
           this.toastrServ.error("Invalid salon details", "", {
-            timeOut: 3000
+            timeOut: 3000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastrServ.error("Failed to get salon data", error, {
-          timeOut: 3000
+          timeOut: 3000,
         });
       }
     );

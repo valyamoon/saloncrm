@@ -108,7 +108,7 @@
             "description": "Add About Us",
             "required": "true",
             "schema": {
-              "$ref": "#definitions/add-about"
+              "$ref": "#definitions/addabout"
             }
           }
         ],
@@ -141,7 +141,7 @@
             "description": "GET About Us",
             "required": "true",
             "schema": {
-              "$ref": "#definitions/get-about"
+              "$ref": "#definitions/getabout"
             }
           }
         ],
@@ -174,7 +174,7 @@
             "description": "Update About Us",
             "required": "true",
             "schema": {
-              "$ref": "#definitions/update-about"
+              "$ref": "#definitions/updateabout"
             }
           }
         ],
@@ -207,7 +207,7 @@
             "description": "Add TC",
             "required": "true",
             "schema": {
-              "$ref": "#definitions/add-tc"
+              "$ref": "#definitions/addtc"
             }
           }
         ],
@@ -240,7 +240,7 @@
             "description": "GET TC ",
             "required": "true",
             "schema": {
-              "$ref": "#definitions/get-tc"
+              "$ref": "#definitions/gettc"
             }
           }
         ],
@@ -273,7 +273,7 @@
             "description": "Update TC",
             "required": "true",
             "schema": {
-              "$ref": "#definitions/update-tc"
+              "$ref": "#definitions/updatetc"
             }
           }
         ],
@@ -3980,7 +3980,7 @@
         }
       }
     },
-    "add-about": {
+    "addabout": {
       "type": "object",
       "properties": {
         "about": {
@@ -3988,7 +3988,7 @@
         }
       }
     },
-    "get-about": {
+    "getabout": {
       "type": "object",
       "properties": {
         "about_id": {
@@ -3996,7 +3996,7 @@
         }
       }
     },
-    "update-about": {
+    "updateabout": {
       "type": "object",
       "properties": {
         "about_id": {
@@ -4007,7 +4007,7 @@
         }
       }
     },
-    "add-tc": {
+    "addtc": {
       "type": "object",
       "properties": {
         "tc": {
@@ -4015,7 +4015,7 @@
         }
       }
     },
-    "get-tc": {
+    "gettc": {
       "type": "object",
       "properties": {
         "tc_id": {
@@ -4023,7 +4023,7 @@
         }
       }
     },
-    "update-tc": {
+    "updatetc": {
       "type": "object",
       "properties": {
         "tc_id": {

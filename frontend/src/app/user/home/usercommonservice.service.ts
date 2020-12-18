@@ -72,14 +72,6 @@ export class UsercommonserviceService {
   payForService(data) {
     return this.http.post(this.baseUrl + "/charge", data);
   }
-  getAbout(data) {
-    return this.http.post(this.baseUrl + "/get-about", data);
-  }
-
-  getTCText(data) {
-    return this.http.post(this.baseUrl + "/get-tc", data);
-  }
-
   getUserBookings(data) {
     return this.http.post(this.baseUrl + "/users-booking", data);
   }

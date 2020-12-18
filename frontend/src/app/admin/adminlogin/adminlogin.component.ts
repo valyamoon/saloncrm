@@ -6,6 +6,7 @@ import { AuthService } from "../auth.service";
 
 import { Router } from "@angular/router";
 import { AllservService } from "../../allserv.service";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-adminlogin",
@@ -26,6 +27,19 @@ export class AdminloginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (environment.env === "prod") {
+      console.log(location.protocol);
+      window.console.log = function() {};
+      if (window) {
+        window.console.log = function() {};
+      }
+
+      if (location.protocol === "http:") {
+        console.log(":");
+        window.location.href = location.href.replace("http", "https");
+        console.log(window.location);
+      }
+    }
     this.adminLogin = this.fb.group({
       email: ["", [Validators.required, Validators.pattern(this.emailPattern)]],
       password: [

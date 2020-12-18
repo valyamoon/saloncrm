@@ -82,6 +82,10 @@ export class AdminServService {
     );
   }
 
+  getCategories(data) {
+    return this.http.post(this.baseUrl + "/categories", data, httpOptions);
+  }
+
   addCategories(data) {
     return this.http.post(this.baseUrl + "/add-categories", data, httpOptions);
   }

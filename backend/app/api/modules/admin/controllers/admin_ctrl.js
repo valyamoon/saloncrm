@@ -2175,8 +2175,11 @@ function getAllUpcomingBookings(req, res) {
 function getTC(req, res) {
   async function getTC() {
     try {
-      if (req.body && req.body.type === "tc") {
-        let gettc = await commonQuery.findoneData(tc);
+      if (req.body && req.body.tc_id) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.tc_id)
+        };
+        let gettc = await commonQuery.findoneData(tc, condition);
         if (gettc) {
           res.json(
             Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, gettc)
@@ -2193,15 +2196,17 @@ function getTC(req, res) {
       );
     }
   }
-  getTC().then(function() {});
+  gettc().then(function() {});
 }
 
 function getAboutUs(req, res) {
   async function getAboutUs() {
     try {
-      if (req.body && req.body.type === "about") {
-        let getAboutUs = await commonQuery.findoneData(aboutus);
-
+      if (req.body && req.body.about_id) {
+        let condition = {
+          _id: mongoose.Types.ObjectId(req.body.about_id)
+        };
+        let getAboutUs = await commonQuery.findoneData(aboutus, condition);
         if (getAboutUs) {
           res.json(
             Response(
@@ -2226,6 +2231,7 @@ function getAboutUs(req, res) {
 }
 
 function addAboutUs(req, res) {
+  console.log(req.body);
   async function addAboutUs() {
     try {
       if (req.body && req.body.about) {

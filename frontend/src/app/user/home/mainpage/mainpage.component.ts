@@ -5,9 +5,7 @@ import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { environment } from "../../../../environments/environment";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router, Routes, ActivatedRoute } from "@angular/router";
-import {Location} from '@angular/common';
-
-
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-mainpage",
@@ -15,15 +13,14 @@ import {Location} from '@angular/common';
   styleUrls: ["./mainpage.component.scss"]
 })
 export class MainpageComponent implements OnInit {
-  location:Location;
+  location: Location;
   constructor(
     private userCommServ: UsercommonserviceService,
     private toastServ: ToastrService,
     private fb: FormBuilder,
     private bsConfig: BsDatepickerConfig,
     private router: Router,
-    private route: ActivatedRoute,
- 
+    private route: ActivatedRoute
   ) {}
   myDateValue: Date;
   today = new Date();
@@ -46,21 +43,22 @@ export class MainpageComponent implements OnInit {
   categoriesForm: FormGroup;
 
   ngOnInit() {
+    console.log(environment.env);
 
-    console.log(environment.env)
-
-    if(environment.env === "prod"){
-        console.log(location.protocol)
-
-      if(location.protocol === "http:"){
-        console.log(":")
-       window.location.href = location.href.replace('http', 'https'); 
-       console.log(window.location)
+    if (environment.env === "prod") {
+      console.log(location.protocol);
+      window.console.log = function() {};
+      if (window) {
+        window.console.log = function() {};
       }
 
-
+      if (location.protocol === "http:") {
+        console.log(":");
+        window.location.href = location.href.replace("http", "https");
+        console.log(window.location);
+      }
     }
-    
+
     this.minDate = new Date();
     this.myDateValue = new Date();
     this.fetchCategories();
