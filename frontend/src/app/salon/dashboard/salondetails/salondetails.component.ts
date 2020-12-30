@@ -18,7 +18,7 @@ export class SalondetailsComponent implements OnInit {
   salonEmail: any;
   opentime: any;
   showNow: boolean = false;
-  numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+  numberPattern = /\d{9}/
   lat: any;
   lng: any;
   chosenTime: any;
