@@ -50,9 +50,9 @@ const validator = require("../../../../config/validator.js");
 const Config = require("../../../../config/config").get(
   process.env.NODE_ENV || "local"
 );
-const imageUrl = Config;
 const commonQuery = require("../../../../lib/commonQuery.js");
 const util = require("../../../../lib/util");
+const s3Service = require("../../s3Service/s3Service").getInstance();
 
 module.exports = {
   saveSalonDetails: saveSalonDetails,
@@ -114,7 +114,6 @@ function saveSalonDetails(req, res) {
           isDeleted: false
         };
         // cins
-
         let checkUser = await commonQuery.findoneData(users, conditon);
 
         if (!checkUser) {
@@ -138,31 +137,26 @@ function saveSalonDetails(req, res) {
               } else {
                 let db_path = "";
                 let path = "";
+                let imgName;
+
                 if (req.files) {
                   extension = req.files.image["name"].split(".");
                   let imgOriginalName = req.files.image["name"];
-                  path =
-                    constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
-                  // constant.directoryPath.SERVICEIMAGE
-                  // return false;
-                  db_path =
-                    "uploads/profileImages/" +
-                    timeStamp +
-                    "_" +
-                    imgOriginalName;
+                  path = timeStamp + "_" + imgOriginalName;
+                  imgName = path;
+
+                  db_path = `${Config.s3.bucketBaseUrl}/${path}`;
                 }
                 if (db_path) {
-                  //image_path= db_path;
                   image_path = db_path;
                 }
                 if (path != "") {
                   let extensionArray = ["jpg", "jpeg", "png", "jfif"];
                   let format = extension[extension.length - 1];
                   if (extensionArray.includes(format)) {
-                    let result = await commonQuery
-                      .fileUpload(path, req.files.image["data"])
-                      .then(async data => {
-                        if (data.status) {
+                    let result = await s3Service
+                      .fileUpload(imgName, req.files.image["data"])
+                        .then(async () => {
                           stripe.customers.create(
                             {
                               email: req.body.email,
@@ -209,8 +203,7 @@ function saveSalonDetails(req, res) {
 
                                 if (!saveSalon) {
                                 } else {
-                                  var TempUrl = imageUrl.imageBaseUrl;
-                                  var url = TempUrl + saveSalon.image;
+                                  var url = saveSalon.image;
                                   saveSalon.image = url;
                                   let updateCondition = {
                                     isSubmitted: true
@@ -241,9 +234,7 @@ function saveSalonDetails(req, res) {
                               }
                             }
                           );
-                        } else {
-                        }
-                      });
+                      }).catch();
                   } else {
                     return res.json(
                       Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED)
@@ -474,8 +465,7 @@ function getSalons(req, res) {
               timeArray.push({ time: jj, status: false });
             });
 
-            var TempUrl = imageUrl.imageBaseUrl;
-            var url = TempUrl + v.image;
+            var url = v.image;
             v.image = url;
 
             console.log("VVVV", v);
@@ -502,7 +492,7 @@ function getSalons(req, res) {
           fetchbookedSlots(salonListingNew)
             .then(data => {})
             .catch(data => {
-              for (var k = 0; k < data.length; k++) { 
+              for (var k = 0; k < data.length; k++) {
                 bookedSlotsArray.push(data[k]["start"].format("HH:mm"));
                 bookedSlotsArray.push(data[k]["end"].format("HH:mm"));
               }
@@ -700,8 +690,7 @@ function getSalonDetails(req, res) {
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
-          var TempUrl = imageUrl.imageBaseUrl;
-          var url = TempUrl + salonDetails[0].image;
+          var url = salonDetails[0].image;
           salonDetails[0].image = url;
           res.json(
             Response(
@@ -1459,8 +1448,7 @@ function updateSalonDetails(req, res) {
                   constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
                 // constant.directoryPath.SERVICEIMAGE
                 // return false;
-                db_path =
-                  "uploads/profileImages/" + timeStamp + "_" + imgOriginalName;
+                db_path = `${Config.s3.bucketDir}/${imgOriginalName}`;
               }
               if (db_path) {
                 //image_path= db_path;
@@ -1575,8 +1563,7 @@ function fetchSalonData(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
-          var TempUrl = imageUrl.imageBaseUrl;
-          var url = TempUrl + getSalonData.image;
+          var url = getSalonData.image;
           getSalonData.image = url;
           return res.json(
             Response(
@@ -1693,7 +1680,6 @@ async function bookSlot(data) {
 
       let saveAppointment = new appointments({
         salon_id: data.salon_id,
-        user_id: data.user_id,
         totalamount: data.totalamount,
         service: data.service_id,
         duration: data.duration,
@@ -1863,7 +1849,6 @@ async function bookSlot(data) {
 
       let saveAppointment = new appointments({
         salon_id: data.salon_id,
-        user_id: data.user_id,
         totalamount: data.totalamount,
         service: data.service_id,
         duration: data.duration,
@@ -1948,8 +1933,7 @@ async function getSalonByUser(req, res) {
     };
     let salonDetails = await commonQuery.fetch_one(salons, cond);
     if (salonDetails) {
-      var TempUrl = imageUrl.imageBaseUrl;
-      var url = TempUrl + salonDetails.image;
+      var url = salonDetails.image;
       salonDetails.image = url;
       res.json(
         Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonDetails)

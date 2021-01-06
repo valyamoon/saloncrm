@@ -3,7 +3,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 
-
+require('dotenv').config();
 const fileUpload = require("express-fileupload");
 const stripe = require("stripe")("sk_test_NKkb8atD9EpUwsWTE38S64Yr00DT0y0RDh");
 var path = require("path");

@@ -16,10 +16,16 @@ const config = {
       service: "gmail",
       username: "salon.sdn@gmail.com",
       password: "Smartdata@123",
-      mailUsername: "",
       host: "gmail.com",
       mailUsername: "",
       verificationMail: ""
+    },
+    s3: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      bucketName: process.env.AWS_BUCKET_NAME,
+      bucketDir: process.env.AWS_BUCKET_DIR,
+      bucketBaseUrl: `https://ba-upload.s3.eu-west-3.amazonaws.com/${process.env.AWS_BUCKET_DIR}`
     }
   },
   staging: {
@@ -37,10 +43,16 @@ const config = {
       service: "gmail",
       username: "salon.sdn@gmail.com",
       password: "Smartdata@123",
-      mailUsername: "",
       host: "gmail.com",
       mailUsername: "",
       verificationMail: ""
+    },
+    s3: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      bucketName: process.env.AWS_BUCKET_NAME,
+      bucketDir: process.env.AWS_BUCKET_DIR,
+      bucketBaseUrl: `https://ba-upload.s3.eu-west-3.amazonaws.com/${process.env.AWS_BUCKET_DIR}`
     }
   },
   prod: {
@@ -52,19 +64,25 @@ const config = {
     },
     baseUrl: "https://bookapp-ch-api.herokuapp.com/",
     backendBaseUrl: "https://bookapp-ch-api.herokuapp.com/",
-    imageBaseUrl: "https://bookapp-ch-api.herokuapp.com/",
     env: "prod",
     smtp: {
       service: "gmail",
       username: "salon.sdn@gmail.com",
       password: "Smartdata@123",
-      mailUsername: "",
       host: "gmail.com",
       mailUsername: "",
       verificationMail: ""
+    },
+    s3: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      bucketName: process.env.AWS_BUCKET_NAME,
+      bucketDir: process.env.AWS_BUCKET_DIR,
+      bucketBaseUrl: `https://ba-upload.s3.eu-west-3.amazonaws.com/${process.env.AWS_BUCKET_DIR}`
     }
   }
 };
+
 module.exports.get = function get(env) {
   return config[env] || config.default;
 };
