@@ -219,8 +219,6 @@ function saveSalonDetails(req, res) {
                     );
                   })
                   .catch();
-              } else {
-                return res.json(Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED));
               }
             }
           }
