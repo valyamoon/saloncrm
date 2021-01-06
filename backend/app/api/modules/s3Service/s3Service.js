@@ -24,7 +24,6 @@ class S3Service {
     }
 
     async fileUpload (fileName, fileContent) {
-        console.log(fileName)
         const s3 = S3Service.getS3Instance();
         const params = {
             Bucket: config.s3.bucketName,
@@ -34,7 +33,8 @@ class S3Service {
 
         return new Promise((resolve, reject) => s3.upload(params, (err, data) => {
             if (err) {
-                reject();
+                console.log(JSON.stringify(err));
+                reject(err);
             }
 
             resolve();
