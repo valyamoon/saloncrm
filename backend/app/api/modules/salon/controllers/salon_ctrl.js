@@ -101,7 +101,6 @@ module.exports = {
  */
 function saveSalonDetails(req, res) {
   async function saveSalonDetails() {
-    try {
       var image_path;
       var customer_id_value;
 
@@ -224,7 +223,6 @@ function saveSalonDetails(req, res) {
           }
         }
       }
-    }
   }
 
   saveSalonDetails().then(function () {});
