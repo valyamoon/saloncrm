@@ -921,7 +921,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_2__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/ranjitatwal/Downloads/MEAN-saloncrm/frontend/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/ruslan/projects/saloncrm/frontend/src/main.ts */"./src/main.ts");
 
 
 /***/ })
