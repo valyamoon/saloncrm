@@ -1733,7 +1733,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   /***/
   function _(module, exports, __webpack_require__) {
     module.exports = __webpack_require__(
-    /*! /Users/ranjitatwal/Downloads/MEAN-saloncrm/frontend/src/main.ts */
+    /*! /home/ruslan/projects/saloncrm/frontend/src/main.ts */
     "./src/main.ts");
     /***/
   }
