@@ -224,8 +224,6 @@ function saveSalonDetails(req, res) {
           }
         }
       }
-    } catch (error) {
-      return res.json(Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, error));
     }
   }
 
