@@ -100,7 +100,6 @@ module.exports = {
  * @smartData Enterprises (I) Ltd
  */
 function saveSalonDetails(req, res) {
-  res.json(Config.s3);
   async function saveSalonDetails() {
     try {
       var image_path;
