@@ -1666,7 +1666,7 @@ async function getSalonByUser(req, res) {
       salonDetails.image = url;
       res.json(Response(constant.SUCCESS_CODE, constant.FETCHED_ALL_DATA, salonDetails));
     }
-    res.json(Response(constant.ERROR_CODE, constant.FETCHED_ALL_DATA));
+    res.json(Response(constant.SUCCESS_CODE, constant.DATA_NOT_FOUND));
   } else {
     res.json(Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null));
   }
