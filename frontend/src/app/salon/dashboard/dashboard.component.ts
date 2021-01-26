@@ -44,29 +44,33 @@ export class DashboardComponent implements OnInit {
     };
     this.commServ.getSalonData(data).subscribe(
       (response: any) => {
-        //temporarily mark all salon users subscribed
-        response["data"]["isSubscribed"] = true;
+        const { data } = response;
 
-        if (
-          response["data"]["isSubscribed"] === false &&
-          response["data"]["isApproved"] === true
-        ) {
-          // this.router.navigate(["/salon/home/subscribe"]);
-        } else if (response["data"]["isSubscribed"] === true) {
-          this.router.navigate(["/salon/home/profile"]);
-        }
+        if (data) {
+          //temporarily mark all salon users subscribed
+          response["data"]["isSubscribed"] = true;
 
-        if (response.code === 200) {
-          this.salonData = response.data;
-          this.commServ.setCustomer_id(response.data["customer_id"]);
-          this.commServ.setSalon_id(response.data["_id"]);
-          this.commServ.setStripeConnectedStatus(
-            response.data["isStripeCreated"]
-          );
-        } else {
-          this.toastrServ.error("Invalid salon details", "", {
-            timeOut: 3000,
-          });
+          if (
+            response["data"]["isSubscribed"] === false &&
+            response["data"]["isApproved"] === true
+          ) {
+            // this.router.navigate(["/salon/home/subscribe"]);
+          } else if (response["data"]["isSubscribed"] === true) {
+            this.router.navigate(["/salon/home/profile"]);
+          }
+
+          if (response.code === 200) {
+            this.salonData = response.data;
+            this.commServ.setCustomer_id(response.data["customer_id"]);
+            this.commServ.setSalon_id(response.data["_id"]);
+            this.commServ.setStripeConnectedStatus(
+              response.data["isStripeCreated"]
+            );
+          } else {
+            this.toastrServ.error("Invalid salon details", "", {
+              timeOut: 3000,
+            });
+          }
         }
       },
       (error) => {
