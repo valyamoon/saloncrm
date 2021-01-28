@@ -23,8 +23,14 @@
     <div class="login-left">
       <div class="login-left-info">
         <img src="../../../../assets/images/logo.svg" />
-        <h2>Welcome!</h2>
-        <div class="sign-in">Sign in to manage your listings and booking</div>
+        <h2>{{ "Welcome!" | translate: this.currentLanguage | async }}</h2>
+        <div class="sign-in">
+          {{
+            "Sign in to manage your listings and booking"
+              | translate: this.currentLanguage
+              | async
+          }}
+        </div>
       </div>
       <div class="form-sec">
         <form [formGroup]="loginForm" id="mobileNoForm" *ngIf="!isOtpShow">
@@ -32,12 +38,16 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="InputEmail">Mobile Number</label>
+                  <label for="InputEmail">{{
+                    "Mobile Number" | translate: this.currentLanguage | async
+                  }}</label>
 
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <mat-form-field>
-                        <mat-label>Country</mat-label>
+                        <mat-label>{{
+                          "Country" | translate: this.currentLanguage | async
+                        }}</mat-label>
                         <mat-select
                           formControlName="country"
                           (selectionChange)="countryCode($event.value)"
@@ -77,7 +87,12 @@
                   (click)="getOtp(loginForm.value)"
                   class="btn btn-primary btn-get-otp"
                 >
-                  GET OTP
+                  {{
+                    "GET OTP"
+                      | translate: this.currentLanguage
+                      | async
+                      | uppercase
+                  }}
                 </button>
               </div>
             </div>
@@ -99,7 +114,12 @@
               class="btn btn-primary btn-get-otp"
               (click)="getOtpOnCall()"
             >
-              GET OTP ON CALL
+              {{
+                "GET OTP ON CALL"
+                  | translate: this.currentLanguage
+                  | async
+                  | uppercase
+              }}
             </button>
           </div>
           <div class="fields">
@@ -107,7 +127,12 @@
               class="btn btn-primary btn-get-otp"
               (click)="completeOtpVerification(otpVerificationForm.value)"
             >
-              SUBMIT OTP
+              {{
+                "SUBMIT OTP"
+                  | translate: this.currentLanguage
+                  | async
+                  | uppercase
+              }}
             </button>
           </div>
         </form>
@@ -159,13 +184,21 @@
               [disabled]="registerUserForm.invalid"
               (click)="registerUser(registerUserForm.value)"
             >
-              REGISTER
+              {{
+                "REGISTER" | translate: this.currentLanguage | async | uppercase
+              }}
             </button>
           </div>
         </form>
 
         <div class="col-md-12">
-          <h5>or Login using social media</h5>
+          <h5>
+            {{
+              "or Login using social media"
+                | translate: this.currentLanguage
+                | async
+            }}
+          </h5>
           <div class="social-info">
             <a class="socilaLogin" (click)="socialSignIn('facebook')">
               <i aria-hidden="true" class="fa fa-facebook fb-icon"></i>
@@ -175,7 +208,9 @@
             </a>
           </div>
         </div>
-        <a href="" class="terms-privacy">Terms & Privacy Policy</a>
+        <a href="" class="terms-privacy">{{
+          "Terms & Privacy Policy" | translate: this.currentLanguage | async
+        }}</a>
       </div>
     </div>
     <div class="login-right">
