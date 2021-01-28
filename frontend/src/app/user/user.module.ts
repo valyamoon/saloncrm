@@ -1,7 +1,7 @@
 import {
   NgModule,
   NO_ERRORS_SCHEMA,
-  CUSTOM_ELEMENTS_SCHEMA
+  CUSTOM_ELEMENTS_SCHEMA,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {} from "googlemaps";
@@ -28,7 +28,7 @@ import {
   SocialLoginModule,
   AuthServiceConfig,
   GoogleLoginProvider,
-  FacebookLoginProvider
+  FacebookLoginProvider,
 } from "ngx-angular-social-login";
 
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
@@ -39,7 +39,7 @@ import {
   MatSelectModule,
   MatAutocompleteModule,
   MatInputModule,
-  MatCardModule
+  MatCardModule,
 } from "@angular/material";
 import { GooglesearchComponent } from "./home/mainpage/googlesearch/googlesearch.component";
 import { NgxMaskModule } from "ngx-mask";
@@ -50,20 +50,21 @@ import { DownloadComponent } from "./home/download/download.component";
 import { TermsandconditionComponent } from "./home/termsandcondition/termsandcondition.component";
 import { FaqComponent } from "./home/faq/faq.component";
 import { CheckoutComponent } from "./home/checkout/checkout.component";
-import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
+import { PrivacypolicyComponent } from "./privacypolicy/privacypolicy.component";
+import { PipeModule } from "../pipes";
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
     {
       id: FacebookLoginProvider.PROVIDER_ID,
-      provider: new FacebookLoginProvider("197843614836498")
+      provider: new FacebookLoginProvider("197843614836498"),
     },
     {
       id: GoogleLoginProvider.PROVIDER_ID,
       provider: new GoogleLoginProvider(
         "938330214511-nou0imenqd5mm6eb2hn0iprcnqe9tun2.apps.googleusercontent.com"
-      )
-    }
+      ),
+    },
   ]);
   return config;
 }
@@ -85,7 +86,7 @@ export function getAuthServiceConfigs() {
     TermsandconditionComponent,
     FaqComponent,
     CheckoutComponent,
-    PrivacypolicyComponent
+    PrivacypolicyComponent,
   ],
   imports: [
     CommonModule,
@@ -111,14 +112,15 @@ export function getAuthServiceConfigs() {
     MatTabsModule,
     MatCardModule,
     AutocompleteLibModule,
-    NgxStarsModule
+    NgxStarsModule,
+    PipeModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [
     {
       provide: AuthServiceConfig,
-      useFactory: getAuthServiceConfigs
-    }
-  ]
+      useFactory: getAuthServiceConfigs,
+    },
+  ],
 })
 export class UserModule {}
