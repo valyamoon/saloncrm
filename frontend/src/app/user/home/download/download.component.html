@@ -12,8 +12,22 @@
             </div>
             <div class="col-md-6">
               <div class="app-info">
-                <h5>THE APP IS NOW</h5>
-                <h4>AVAILABLE ON</h4>
+                <h5>
+                  {{
+                    "THE APP IS NOW"
+                      | translate: this.currentLanguage
+                      | async
+                      | uppercase
+                  }}
+                </h5>
+                <h4>
+                  {{
+                    "AVAILABLE ON"
+                      | translate: this.currentLanguage
+                      | async
+                      | uppercase
+                  }}
+                </h4>
                 <img src="../../../../assets/images/Appstore.png" />
               </div>
             </div>
