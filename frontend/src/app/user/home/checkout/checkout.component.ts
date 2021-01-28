@@ -1,16 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AllservService } from "../../../allserv.service";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { AvailableLanguages } from "../../../enums";
+import { LanguagesService } from "../../../services";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-checkout",
   templateUrl: "./checkout.component.html",
-  styleUrls: ["./checkout.component.scss"]
+  styleUrls: ["./checkout.component.scss"],
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
   cardForm: FormGroup;
   isBookingCompleted: any;
   userEmailID: any;
@@ -47,13 +50,20 @@ export class CheckoutComponent implements OnInit {
   isWalletAmountUsed: boolean;
   walletAmountUsed: any;
   showUseWalletCheckBox: boolean;
+  currentLanguage: AvailableLanguages;
+  currentLanguageSub: Subscription;
+
   constructor(
     private router: Router,
     private allserv: AllservService,
     private userServ: UsercommonserviceService,
     private toastServ: ToastrService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private languagesService: LanguagesService
   ) {}
+  ngOnDestroy(): void {
+    this.currentLanguageSub.unsubscribe();
+  }
 
   ngOnInit() {
     this.userEmailID = sessionStorage.getItem("emailID");
@@ -62,16 +72,16 @@ export class CheckoutComponent implements OnInit {
       expDate: [
         "",
         Validators.required,
-        Validators.pattern(this.expiryPattern)
+        Validators.pattern(this.expiryPattern),
       ],
       cvc: [
         "",
         Validators.compose([
           Validators.required,
           Validators.maxLength(4),
-          Validators.minLength(3)
-        ])
-      ]
+          Validators.minLength(3),
+        ]),
+      ],
     });
 
     this.salonData = JSON.parse(sessionStorage.getItem("bookingData"))["data"];
@@ -92,6 +102,10 @@ export class CheckoutComponent implements OnInit {
     this.startTime = JSON.parse(sessionStorage.getItem("bookingData"))["stime"];
     this.totalPrice = this.checkoutData["price"];
     this.getWalletBalance();
+
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
   }
 
   checkPaymentMode(event) {
@@ -124,7 +138,7 @@ export class CheckoutComponent implements OnInit {
       }
 
       this.toastServ.success("Please enter card details", "", {
-        timeOut: 1000
+        timeOut: 1000,
       });
     }
   }
@@ -136,7 +150,7 @@ export class CheckoutComponent implements OnInit {
 
   getPromocodeList() {
     let dataToPass = {
-      salon_id: this.checkoutData["salon_id"]
+      salon_id: this.checkoutData["salon_id"],
     };
     this.userServ.getPromocodes(dataToPass).subscribe(
       (data: any) => {
@@ -151,13 +165,13 @@ export class CheckoutComponent implements OnInit {
           }
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -169,7 +183,7 @@ export class CheckoutComponent implements OnInit {
     let dataToPass = {
       promocode_id: result["_id"],
       salon_id: this.checkoutData["salon_id"],
-      user_id: this.userID
+      user_id: this.userID,
     };
     this.userServ.checkPromoCodeValidity(dataToPass).subscribe(
       (data: any) => {
@@ -194,17 +208,17 @@ export class CheckoutComponent implements OnInit {
           }
 
           this.toastServ.success(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -230,7 +244,7 @@ export class CheckoutComponent implements OnInit {
         service_id: this.checkoutData["_id"],
         promocode_id: promocodeID,
         deviceToken: null,
-        duration: this.checkoutData["duration"]
+        duration: this.checkoutData["duration"],
       };
       this.userServ.payForService(dataToPass).subscribe(
         (data: any) => {
@@ -244,13 +258,13 @@ export class CheckoutComponent implements OnInit {
           } else if (data["code"] === 400) {
             this.isBookingCompleted = false;
             this.toastServ.error(data["message"], "", {
-              timeOut: 1000
+              timeOut: 1000,
             });
           }
         },
-        error => {
+        (error) => {
           this.toastServ.error(error.error["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       );
@@ -263,7 +277,7 @@ export class CheckoutComponent implements OnInit {
           cardNum: this.cardNum,
           month: this.month,
           cvc: this.cvc,
-          year: this.year
+          year: this.year,
         };
 
         this.userServ.getStripeToken(cardData).subscribe((data: any) => {
@@ -285,7 +299,7 @@ export class CheckoutComponent implements OnInit {
               stripeToken: this.stripeToken,
               stripeEmail: this.stripeEmail,
               isWalletUsed: false,
-              walletAmountUsed: null
+              walletAmountUsed: null,
             };
 
             this.userServ.payForService(dataToPass).subscribe(
@@ -300,19 +314,19 @@ export class CheckoutComponent implements OnInit {
                 } else if (data["code"] === 400) {
                   this.isBookingCompleted = false;
                   this.toastServ.error(data["message"], "", {
-                    timeOut: 1000
+                    timeOut: 1000,
                   });
                 }
               },
-              error => {
+              (error) => {
                 this.toastServ.error(error.error["message"], "", {
-                  timeOut: 1000
+                  timeOut: 1000,
                 });
               }
             );
           } else if (data["code"] === 400) {
             this.toastServ.error(data["data"]["raw"]["message"], "", {
-              timeOut: 1000
+              timeOut: 1000,
             });
           }
         });
@@ -325,7 +339,7 @@ export class CheckoutComponent implements OnInit {
             cardNum: this.cardNum,
             month: this.month,
             cvc: this.cvc,
-            year: this.year
+            year: this.year,
           };
 
           this.userServ.getStripeToken(cardData).subscribe((data: any) => {
@@ -347,7 +361,7 @@ export class CheckoutComponent implements OnInit {
                 stripeToken: this.stripeToken,
                 stripeEmail: this.stripeEmail,
                 isWalletUsed: true,
-                walletAmountUsed: this.walletAmount
+                walletAmountUsed: this.walletAmount,
               };
 
               this.userServ.payForService(dataToPass).subscribe(
@@ -362,19 +376,19 @@ export class CheckoutComponent implements OnInit {
                   } else if (data["code"] === 400) {
                     this.isBookingCompleted = false;
                     this.toastServ.error(data["message"], "", {
-                      timeOut: 1000
+                      timeOut: 1000,
                     });
                   }
                 },
-                error => {
+                (error) => {
                   this.toastServ.error(error.error["message"], "", {
-                    timeOut: 1000
+                    timeOut: 1000,
                   });
                 }
               );
             } else if (data["code"] === 400) {
               this.toastServ.error(data["data"]["raw"]["message"], "", {
-                timeOut: 1000
+                timeOut: 1000,
               });
             }
           });
@@ -393,7 +407,7 @@ export class CheckoutComponent implements OnInit {
             stripeToken: null,
             stripeEmail: null,
             isWalletUsed: true,
-            walletAmountUsed: this.walletAmount
+            walletAmountUsed: this.walletAmount,
           };
 
           this.userServ.payForService(dataToPass).subscribe(
@@ -408,13 +422,13 @@ export class CheckoutComponent implements OnInit {
               } else if (data["code"] === 400) {
                 this.isBookingCompleted = false;
                 this.toastServ.error(data["message"], "", {
-                  timeOut: 1000
+                  timeOut: 1000,
                 });
               }
             },
-            error => {
+            (error) => {
               this.toastServ.error(error.error["message"], "", {
-                timeOut: 1000
+                timeOut: 1000,
               });
             }
           );
@@ -433,7 +447,7 @@ export class CheckoutComponent implements OnInit {
 
   getWalletBalance() {
     let dataToPass = {
-      user_id: this.userID
+      user_id: this.userID,
     };
 
     this.userServ.getWalletAmount(dataToPass).subscribe(
@@ -442,13 +456,13 @@ export class CheckoutComponent implements OnInit {
           this.walletAmount = data["data"].amount;
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -487,6 +501,6 @@ export class CheckoutComponent implements OnInit {
     // }
   }
   goToList() {
-    this.router.navigate(['/list  '])
+    this.router.navigate(["/list  "]);
   }
 }
