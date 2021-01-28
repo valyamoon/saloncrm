@@ -1,14 +1,17 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
+import { AvailableLanguages } from "../../../enums";
+import { LanguagesService } from "../../../services";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-salon-detail",
   templateUrl: "./salon-detail.component.html",
-  styleUrls: ["./salon-detail.component.scss"]
+  styleUrls: ["./salon-detail.component.scss"],
 })
-export class SalonDetailComponent implements OnInit {
+export class SalonDetailComponent implements OnInit, OnDestroy {
   salonDetailsData: any;
   averageRatings: any;
   salonStarRatings: any;
@@ -22,10 +25,14 @@ export class SalonDetailComponent implements OnInit {
   salonCategoriesData: any;
   isReviewShow: boolean = false;
 
+  currentLanguage: AvailableLanguages;
+  currentLanguageSub: Subscription;
+
   constructor(
     private userServ: UsercommonserviceService,
     private toastServ: ToastrService,
-    private router: Router
+    private router: Router,
+    private languagesService: LanguagesService
   ) {}
 
   ngOnInit() {
@@ -39,10 +46,18 @@ export class SalonDetailComponent implements OnInit {
       this.getSalonCategories(this.salonID);
       this.getSalonWeeklyDays(this.salonID);
     }
+
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
+  }
+
+  ngOnDestroy() {
+    this.currentLanguageSub.unsubscribe();
   }
 
   findDirection() {
-    navigator.geolocation.getCurrentPosition(pos => {
+    navigator.geolocation.getCurrentPosition((pos) => {
       this.lng = +pos.coords.longitude;
       this.lat = +pos.coords.latitude;
       window.open(
@@ -68,7 +83,7 @@ export class SalonDetailComponent implements OnInit {
 
   getSalonDetails(data) {
     let dataToPass = {
-      salon_id: data
+      salon_id: data,
     };
     this.userServ.getSalonDetails(dataToPass).subscribe(
       (data: any) => {
@@ -78,13 +93,13 @@ export class SalonDetailComponent implements OnInit {
           this.averageRatings = this.salonDetailsData["avgRatings"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -92,7 +107,7 @@ export class SalonDetailComponent implements OnInit {
 
   getSalonCategories(data) {
     let dataToPass = {
-      salon_id: data
+      salon_id: data,
     };
     this.userServ.getSalonCategories(dataToPass).subscribe(
       (data: any) => {
@@ -100,13 +115,13 @@ export class SalonDetailComponent implements OnInit {
           this.salonCategoriesData = data["data"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -114,7 +129,7 @@ export class SalonDetailComponent implements OnInit {
 
   getReviewRatings() {
     let dataToPass = {
-      salon_id: this.salonID
+      salon_id: this.salonID,
     };
     this.userServ.getReviewRatings(dataToPass).subscribe(
       (data: any) => {
@@ -123,13 +138,13 @@ export class SalonDetailComponent implements OnInit {
           this.salonStarRatings = data["data"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -141,7 +156,7 @@ export class SalonDetailComponent implements OnInit {
 
   getSalonWeeklyDays(data) {
     let dataToPass = {
-      salon_id: data
+      salon_id: data,
     };
     this.userServ.getSalonWeekDays(dataToPass).subscribe(
       (data: any) => {
@@ -149,13 +164,13 @@ export class SalonDetailComponent implements OnInit {
           this.salonAvailalbilityData = data["data"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
