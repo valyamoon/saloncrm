@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
@@ -6,13 +6,15 @@ import { environment } from "../../../../environments/environment";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router, Routes, ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
+import { LanguagesService } from "../../../services";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-mainpage",
   templateUrl: "./mainpage.component.html",
-  styleUrls: ["./mainpage.component.scss"]
+  styleUrls: ["./mainpage.component.scss"],
 })
-export class MainpageComponent implements OnInit {
+export class MainpageComponent implements OnInit, OnDestroy {
   location: Location;
   constructor(
     private userCommServ: UsercommonserviceService,
@@ -20,7 +22,8 @@ export class MainpageComponent implements OnInit {
     private fb: FormBuilder,
     private bsConfig: BsDatepickerConfig,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private languagesService: LanguagesService
   ) {}
   myDateValue: Date;
   today = new Date();
@@ -42,14 +45,17 @@ export class MainpageComponent implements OnInit {
   serviceIdSelected: any;
   categoriesForm: FormGroup;
 
+  currentLanguage: string;
+  currentLanguageSub: Subscription;
+
   ngOnInit() {
     console.log(environment.env);
 
     if (environment.env === "prod") {
       console.log(location.protocol);
-      window.console.log = function() {};
+      window.console.log = function () {};
       if (window) {
-        window.console.log = function() {};
+        window.console.log = function () {};
       }
 
       if (location.protocol === "http:") {
@@ -63,16 +69,25 @@ export class MainpageComponent implements OnInit {
     this.myDateValue = new Date();
     this.fetchCategories();
     this.categoriesForm = this.fb.group({
-      service: ["", Validators.required]
+      service: ["", Validators.required],
     });
 
     this.searchSalonForm = this.fb.group({
       service_id: ["", Validators.required],
       date: ["", Validators.required],
       lat: ["", Validators.required],
-      long: ["", Validators.required]
+      long: ["", Validators.required],
     });
+
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
   }
+
+  ngOnDestroy() {
+    this.currentLanguageSub.unsubscribe();
+  }
+
   onDateChange(event) {
     let date = new Date(event).toISOString();
     this.searchSalonForm.get("date").setValue(date);
@@ -102,13 +117,13 @@ export class MainpageComponent implements OnInit {
           this.categoriesList = data["data"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error("Server-Error", error.error["message"], {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -136,7 +151,7 @@ export class MainpageComponent implements OnInit {
     this.searchSalonForm.updateValueAndValidity();
   }
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(data => {
+    navigator.geolocation.getCurrentPosition((data) => {
       this.lat = data["coords"].latitude;
       this.long = data["coords"].longitude;
       this.searchSalonForm.get("lat").setValue(this.lat);
