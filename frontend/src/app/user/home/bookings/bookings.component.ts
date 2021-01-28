@@ -1,13 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
+import { AvailableLanguages } from "../../../enums/availableLanguages.enum";
+import { LanguagesService } from "../../../services";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-bookings",
   templateUrl: "./bookings.component.html",
-  styleUrls: ["./bookings.component.scss"]
+  styleUrls: ["./bookings.component.scss"],
 })
-export class BookingsComponent implements OnInit {
+export class BookingsComponent implements OnInit, OnDestroy {
   userID: any;
   bookingListData: any;
   adminDetails: any;
@@ -20,9 +23,13 @@ export class BookingsComponent implements OnInit {
   comment: any;
 
   selectedTab: any = "upcoming";
+
+  currentLanguage: AvailableLanguages;
+  currentLanguageSub: Subscription;
   constructor(
     private userServ: UsercommonserviceService,
-    private toastServ: ToastrService
+    private toastServ: ToastrService,
+    private languagesService: LanguagesService
   ) {}
 
   ngOnInit() {
@@ -30,12 +37,20 @@ export class BookingsComponent implements OnInit {
 
     this.getBookingList(this.selectedTab);
     this.getAdminDetail();
+
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
+  }
+
+  ngOnDestroy() {
+    this.currentLanguageSub.unsubscribe();
   }
 
   getBookingList(data) {
     let dataToPass = {
       user_id: this.userID,
-      type: data
+      type: data,
     };
     this.userServ.getUserBookings(dataToPass).subscribe(
       (data: any) => {
@@ -43,13 +58,13 @@ export class BookingsComponent implements OnInit {
           this.bookingListData = data["data"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 100
+            timeOut: 100,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 100
+          timeOut: 100,
         });
       }
     );
@@ -69,7 +84,7 @@ export class BookingsComponent implements OnInit {
     this.bookingDetails = data;
 
     let dataToPass = {
-      salon_id: this.bookingDetails["salon_id"]
+      salon_id: this.bookingDetails["salon_id"],
     };
     this.userServ.getSalonDetails(dataToPass).subscribe(
       (data: any) => {
@@ -78,13 +93,13 @@ export class BookingsComponent implements OnInit {
           this.isDetailShow = true;
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 100
+            timeOut: 100,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 100
+          timeOut: 100,
         });
       }
     );
@@ -95,7 +110,7 @@ export class BookingsComponent implements OnInit {
   }
   getAdminDetail() {
     let dataToPass = {
-      type: "admin"
+      type: "admin",
     };
 
     this.userServ.getAdminDetails(dataToPass).subscribe(
@@ -104,13 +119,13 @@ export class BookingsComponent implements OnInit {
           this.adminDetails = data["data"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 100
+            timeOut: 100,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 100
+          timeOut: 100,
         });
       }
     );
@@ -127,26 +142,26 @@ export class BookingsComponent implements OnInit {
       ratings: this.starRating,
       comments: this.comment,
       user_id: this.userID,
-      salon_id: this.bookingDetails["salon_id"]
+      salon_id: this.bookingDetails["salon_id"],
     };
     this.userServ.addReviewAndRatings(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] === 200) {
           this.toastServ.success("Submitted Successfully", "", {
-            timeOut: 500
+            timeOut: 500,
           });
           this.isAddReviewModal = false;
           this.isDetailShow = false;
           this.comment = "";
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 100
+            timeOut: 100,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 100
+          timeOut: 100,
         });
       }
     );
