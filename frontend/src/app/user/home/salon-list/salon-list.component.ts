@@ -1,14 +1,17 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
+import { AvailableLanguages } from "../../../enums";
+import { LanguagesService } from "../../../services";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-salon-list",
   templateUrl: "./salon-list.component.html",
-  styleUrls: ["./salon-list.component.scss"]
+  styleUrls: ["./salon-list.component.scss"],
 })
-export class SalonListComponent implements OnInit {
+export class SalonListComponent implements OnInit, OnDestroy {
   userPrefrence: any;
   pageSize: any = 10;
   searchTerm: any;
@@ -26,11 +29,15 @@ export class SalonListComponent implements OnInit {
   showNoRecords: boolean = false;
   isShowCountButton: boolean;
 
+  currentLanguage: AvailableLanguages;
+  currentLanguageSub: Subscription;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private userCommnServ: UsercommonserviceService,
-    private toastServ: ToastrService
+    private toastServ: ToastrService,
+    private languagesService: LanguagesService
   ) {}
 
   ngOnInit() {
@@ -41,6 +48,14 @@ export class SalonListComponent implements OnInit {
     } else {
       this.getSalonsList(this.userPrefrence);
     }
+
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
+  }
+
+  ngOnDestroy() {
+    this.currentLanguageSub.unsubscribe();
   }
 
   getAllSalons() {
@@ -52,7 +67,7 @@ export class SalonListComponent implements OnInit {
       lat: this.userPrefrence.lat,
       long: this.userPrefrence.long,
       pageSize: this.salonCount,
-      page: this.page
+      page: this.page,
     };
     this.getSalonsList(dataToPass);
   }
@@ -64,10 +79,10 @@ export class SalonListComponent implements OnInit {
       lat: data.lat,
       long: data.long,
       pageSize: this.pageSize,
-      page: this.page
+      page: this.page,
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
-      data => {
+      (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
 
@@ -84,13 +99,13 @@ export class SalonListComponent implements OnInit {
           }
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -113,21 +128,21 @@ export class SalonListComponent implements OnInit {
       lat: this.userPrefrence.lat,
       long: this.userPrefrence.long,
       pageSize: this.pageSize,
-      page: this.page
+      page: this.page,
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
-      data => {
+      (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -146,21 +161,21 @@ export class SalonListComponent implements OnInit {
       lat: this.userPrefrence.lat,
       long: this.userPrefrence.long,
       pageSize: this.pageSize,
-      page: this.page
+      page: this.page,
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
-      data => {
+      (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -177,7 +192,7 @@ export class SalonListComponent implements OnInit {
   bookSlot(starttime, serviceData) {
     let dataToPass = {
       stime: starttime,
-      data: serviceData
+      data: serviceData,
     };
     sessionStorage.setItem("bookingData", JSON.stringify(dataToPass));
 
@@ -193,10 +208,10 @@ export class SalonListComponent implements OnInit {
       lat: this.userPrefrence.lat,
       long: this.userPrefrence.long,
       pageSize: this.pageSize,
-      page: this.page
+      page: this.page,
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
-      data => {
+      (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"];
           if (data["data"].length === 0) {
@@ -206,13 +221,13 @@ export class SalonListComponent implements OnInit {
           }
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );

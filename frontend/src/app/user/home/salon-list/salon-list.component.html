@@ -3,15 +3,17 @@
   <div class="salon-list">
     <div class="salon-list-inner">
       <div class="filterPref">
-        <h4>Filters</h4>
+        <h4>{{ "Filters" | translate: this.currentLanguage | async }}</h4>
         <button (click)="goToFilter()" class="btn btn-primary regBtn">
-          RESET FILTER
+          {{
+            "RESET FILTER" | translate: this.currentLanguage | async | uppercase
+          }}
         </button>
       </div>
       <input
         type="text"
         class="form-control searchInput"
-        placeholder="Search"
+        placeholder="{{ 'Search' | translate: this.currentLanguage | async }}"
         [(ngModel)]="searchTerm"
         (ngModelChange)="clearFilter()"
       />
@@ -20,7 +22,7 @@
   <div class="salon-info-outer">
     <div class="container">
       <div class="salon-filter">
-        <h4>Salons</h4>
+        <h4>{{ "Salons" | translate: this.currentLanguage | async }}</h4>
         <img
           src="../../../../assets/images/Hamburger.svg"
           (click)="openFilterModal()"
@@ -29,7 +31,9 @@
 
       <div class="row">
         <div class="noRecordsDiv" *ngIf="showNoRecords">
-          <span>No Salons Found</span>
+          <span>{{
+            "No Salons Found" | translate: this.currentLanguage | async
+          }}</span>
         </div>
         <!-- starthere -->
         <div class="col-md-12" *ngFor="let item of salonListingData">
@@ -56,7 +60,7 @@
                       (click)="showSalonDetails(item)"
                       class="btn btn-primary detailBtn"
                     >
-                      Detail
+                      {{ "Detail" | translate: this.currentLanguage | async }}
                     </button>
                   </div>
                 </div>
@@ -75,7 +79,11 @@
                     </div>
                   </div>
                   <div *ngIf="!item.slots.length" class="noSlots">
-                    No Slots Available
+                    {{
+                      "No Slots Available"
+                        | translate: this.currentLanguage
+                        | async
+                    }}
                   </div>
                 </div>
               </div>
@@ -90,16 +98,21 @@
         (click)="getAllSalons()"
         *ngIf="isShowCountButton"
       >
-        Show More
+        {{ "Show More" | translate: this.currentLanguage | async }}
       </button>
     </div>
-    <div class="bookapp-rights">2020, Bookapp. All rights reserved</div>
+    <div class="bookapp-rights">
+      2020, Bookapp.
+      {{ "All rights reserved" | translate: this.currentLanguage | async }}
+    </div>
   </div>
 </section>
 
 <div class="FilterOverlay" *ngIf="isShowFilterPopUp">
   <div class="mainSect col-lg-3 col-md-6 col-sm-12">
-    <label class="sortBY">Sort By</label>
+    <label class="sortBY">{{
+      "Sort By" | translate: this.currentLanguage | async
+    }}</label>
     <div class="price" (click)="sortByPrice()" title="Sort by price"></div>
     <div
       class="distance"
