@@ -9,7 +9,7 @@ import { countries } from "../../../admin/country";
 @Component({
   selector: "app-salondetails",
   templateUrl: "./salondetails.component.html",
-  styleUrls: ["./salondetails.component.scss"]
+  styleUrls: ["./salondetails.component.scss"],
 })
 export class SalondetailsComponent implements OnInit {
   submitSalonDetails: FormGroup;
@@ -18,7 +18,7 @@ export class SalondetailsComponent implements OnInit {
   salonEmail: any;
   opentime: any;
   showNow: boolean = false;
-  numberPattern = /\d{9}/
+  numberPattern = /\d{9}/;
   lat: any;
   lng: any;
   chosenTime: any;
@@ -46,17 +46,17 @@ export class SalondetailsComponent implements OnInit {
     private router: Router
   ) {
     if (navigator) {
-      navigator.geolocation.getCurrentPosition(pos => {
+      navigator.geolocation.getCurrentPosition((pos) => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
       });
     }
 
-    navigator.geolocation.getCurrentPosition(pos => {});
+    navigator.geolocation.getCurrentPosition((pos) => {});
   }
 
   ngOnInit() {
-    navigator.geolocation.getCurrentPosition(pos => {});
+    navigator.geolocation.getCurrentPosition((pos) => {});
 
     this.salonEmail = sessionStorage.getItem("email");
     this.user_id = sessionStorage.getItem("userId");
@@ -69,7 +69,7 @@ export class SalondetailsComponent implements OnInit {
       name: ["", Validators.required],
       contact: [
         "",
-        [Validators.required, Validators.pattern(this.numberPattern)]
+        [Validators.required, Validators.pattern(this.numberPattern)],
       ],
       code: ["", Validators.required],
       salonaddress: ["", Validators.required],
@@ -78,7 +78,7 @@ export class SalondetailsComponent implements OnInit {
       closetime: ["", Validators.required],
       timezonestring: [""],
       lat: [""],
-      long: [""]
+      long: [""],
     });
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
@@ -94,13 +94,17 @@ export class SalondetailsComponent implements OnInit {
   }
 
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(pos => {
+    navigator.geolocation.getCurrentPosition((pos) => {
       this.lng = +pos.coords.longitude;
       this.lat = +pos.coords.latitude;
 
       if (this.lng && this.lat) {
         this.toastrServ.success("Got your location", "", {
-          timeOut: 1000
+          timeOut: 1000,
+        });
+      } else {
+        this.toastrServ.error("Your location is not loaded", "", {
+          timeOut: 1000,
         });
       }
     });
@@ -147,48 +151,54 @@ export class SalondetailsComponent implements OnInit {
       timezonestring: Intl.DateTimeFormat().resolvedOptions().timeZone,
       user_id: this.user_id,
       opentime: data.opentime,
-      closetime: data.closetime
+      closetime: data.closetime,
     };
 
-    const postData = new FormData();
-    postData.append("name", dataToPass.name);
-    postData.append("image", dataToPass.image);
-    postData.append("lat", dataToPass.lat);
-    postData.append("long", dataToPass.long);
-    postData.append("salonaddress", dataToPass.salonaddress);
-    postData.append("opentime", dataToPass.opentime);
-    postData.append("closetime", dataToPass.closetime);
-    postData.append("timezonestring", dataToPass.timezonestring);
-    postData.append("contact", dataToPass.contact);
-    postData.append("user_id", dataToPass.user_id);
-    postData.append("email", this.salonEmail);
+    if (!this.lat && !this.lng) {
+      this.toastrServ.warning("Please select your location", "", {
+        timeOut: 1000,
+      });
+    } else {
+      const postData = new FormData();
+      postData.append("name", dataToPass.name);
+      postData.append("image", dataToPass.image);
+      postData.append("lat", dataToPass.lat);
+      postData.append("long", dataToPass.long);
+      postData.append("salonaddress", dataToPass.salonaddress);
+      postData.append("opentime", dataToPass.opentime);
+      postData.append("closetime", dataToPass.closetime);
+      postData.append("timezonestring", dataToPass.timezonestring);
+      postData.append("contact", dataToPass.contact);
+      postData.append("user_id", dataToPass.user_id);
+      postData.append("email", this.salonEmail);
 
-    var options = { content: postData };
+      var options = { content: postData };
 
-    this.commServ.saveSalonDetails(postData).subscribe(
-      data => {
-        if (data["code"] === 200) {
-          this.showPendingApproval = true;
-          this.toastrServ.success(
-            "Salon Details Submitted Successfully",
-            "Waiting For Admin Approval",
-            {
-              timeOut: 2000
-            }
-          );
-        } else {
-          this.showPendingApproval = false;
-          this.toastrServ.error("Failed To Submit Salon Details", "", {
-            timeOut: 2000
+      this.commServ.saveSalonDetails(postData).subscribe(
+        (data) => {
+          if (data["code"] === 200) {
+            this.showPendingApproval = true;
+            this.toastrServ.success(
+              "Salon Details Submitted Successfully",
+              "Waiting For Admin Approval",
+              {
+                timeOut: 2000,
+              }
+            );
+          } else {
+            this.showPendingApproval = false;
+            this.toastrServ.error("Failed To Submit Salon Details", "", {
+              timeOut: 2000,
+            });
+          }
+        },
+        (error) => {
+          this.toastrServ.error("Server Error", error, {
+            timeOut: 2000,
           });
         }
-      },
-      error => {
-        this.toastrServ.error("Server Error", error, {
-          timeOut: 2000
-        });
-      }
-    );
+      );
+    }
   }
 
   openTime(data) {}
@@ -200,7 +210,7 @@ export class SalondetailsComponent implements OnInit {
 
   getsalonsData(data) {
     let dataToPass = {
-      user_id: data
+      user_id: data,
     };
     this.commServ.getSalonDetailsData(dataToPass).subscribe(
       (data: any) => {
@@ -209,13 +219,13 @@ export class SalondetailsComponent implements OnInit {
           this.salonid = data["data"]._id;
         } else {
           this.toastrServ.error("Failed to fetch salon details", "error", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastrServ.error("Server Error", error, {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -246,7 +256,7 @@ export class SalondetailsComponent implements OnInit {
       contact: data.contact,
       image: data.image,
       opentime: data.opentime,
-      closetime: data.closetime
+      closetime: data.closetime,
     };
 
     const postData = new FormData();
@@ -261,26 +271,26 @@ export class SalondetailsComponent implements OnInit {
     var options = { content: postData };
 
     this.commServ.updateSalonDetails(postData).subscribe(
-      data => {
+      (data) => {
         if (data["code"] === 200) {
           this.editSalonDetails = false;
           this.toastrServ.success(
             "Salon Details Updated Successfully",
             "Success",
             {
-              timeOut: 2000
+              timeOut: 2000,
             }
           );
         } else {
           this.showPendingApproval = false;
           this.toastrServ.error("Failed To Update Salon Details", "", {
-            timeOut: 2000
+            timeOut: 2000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastrServ.error("Server Error", error, {
-          timeOut: 2000
+          timeOut: 2000,
         });
       }
     );
