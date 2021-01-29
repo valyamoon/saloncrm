@@ -13,7 +13,7 @@ import { AuthServService } from "../../auth-serv.service";
 export class HeaderComponent implements OnInit, OnDestroy {
   isUserLoggedIn: boolean;
   userName: any;
-  langList = AvailableLanguages;
+  langList: string[] = Object.values(AvailableLanguages);
   currentLanguage: AvailableLanguages;
   currentLanguageSub: Subscription;
 

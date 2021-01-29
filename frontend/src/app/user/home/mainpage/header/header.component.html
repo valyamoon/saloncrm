@@ -68,7 +68,7 @@
           <a
             class="nav-link dropdown-toggle"
             id="navbarDropdown"
-            [value]="langList.EN"
+            [value]="currentLanguage"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
@@ -78,46 +78,16 @@
             class="dropdown-menu langDropdown"
             aria-labelledby="navbarDropdown"
           >
-            <li>
-              <a
-                class="dropdown-item"
-                [value]="langList.EN"
-                (click)="handleDropDown($event.target)"
-                >En</a
-              >
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                [value]="langList.DE"
-                (click)="handleDropDown($event.target)"
-                >De</a
-              >
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                [value]="langList.FR"
-                (click)="handleDropDown($event.target)"
-                >Fr</a
-              >
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                [value]="langList.IT"
-                (click)="handleDropDown($event.target)"
-                >It</a
-              >
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                [value]="langList.RU"
-                (click)="handleDropDown($event.target)"
-                >Ru</a
-              >
-            </li>
+            <ng-container *ngFor="let item of langList">
+              <li *ngIf="item !== currentLanguage">
+                <a
+                  class="dropdown-item"
+                  [value]="item"
+                  (click)="handleDropDown($event.target)"
+                  >{{ item }}</a
+                >
+              </li>
+            </ng-container>
           </ul>
         </li>
         <li class="nav-item">
