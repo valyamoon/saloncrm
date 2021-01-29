@@ -5,5 +5,5 @@ export const environment = {
   baseUrl: "https://bookapp-staging.herokuapp.com",
   backendBaseUrl: "https://bookapp-staging.herokuapp.com",
   translationUrl: "https://translation.googleapis.com/language/translate/v2",
-  googleApiKey: "AIzaSyDaakGHke7OFoCbNcD141a0cVPJQrGkXXc"
+  googleApiKey: "AIzaSyAvJBguyLtqPxDZ7STn25mYxj4yyCH0PYY",
 };

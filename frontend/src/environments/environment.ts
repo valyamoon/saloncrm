@@ -8,7 +8,7 @@ export const environment = {
   baseUrl: "http://localhost:4001",
   backendBaseUrl: "http://localhost:4001",
   translationUrl: "https://translation.googleapis.com/language/translate/v2",
-  googleApiKey: "AIzaSyDaakGHke7OFoCbNcD141a0cVPJQrGkXXc"
+  googleApiKey: "AIzaSyAvJBguyLtqPxDZ7STn25mYxj4yyCH0PYY",
 };
 
 /*
