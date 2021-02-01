@@ -5,6 +5,9 @@ import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { countries } from "../../../admin/country";
+import { BehaviorSubject } from "rxjs";
+import { PhoneValidator } from "../../../validators";
+import { getCorrectPhone } from "../../../helpers";
 
 @Component({
   selector: "app-salondetails",
@@ -18,7 +21,6 @@ export class SalondetailsComponent implements OnInit {
   salonEmail: any;
   opentime: any;
   showNow: boolean = false;
-  numberPattern = /\d{9}/;
   lat: any;
   lng: any;
   chosenTime: any;
@@ -37,6 +39,7 @@ export class SalondetailsComponent implements OnInit {
   userid: any;
   salonid: any;
   isApprovedStatus: boolean;
+  selectedCountry: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor(
     private authServ: AuthService,
@@ -67,10 +70,7 @@ export class SalondetailsComponent implements OnInit {
 
     this.submitSalonDetails = this.fb.group({
       name: ["", Validators.required],
-      contact: [
-        "",
-        [Validators.required, Validators.pattern(this.numberPattern)],
-      ],
+      contact: ["", [Validators.required]],
       code: ["", Validators.required],
       salonaddress: ["", Validators.required],
       image: null,
@@ -80,6 +80,13 @@ export class SalondetailsComponent implements OnInit {
       lat: [""],
       long: [""],
     });
+
+    this.selectedCountry.subscribe((code) => {
+      this.submitSalonDetails
+        .get("contact")
+        .setValidators(PhoneValidator(code));
+    });
+
     this.checkIsApprovedProfile();
     this.user_id = sessionStorage.getItem("userId");
 
@@ -91,6 +98,10 @@ export class SalondetailsComponent implements OnInit {
     } else {
       this.showPendingApproval = false;
     }
+  }
+
+  handleCountryCode(code: string) {
+    this.selectedCountry.next(code);
   }
 
   getCurrentLocation() {
@@ -168,7 +179,10 @@ export class SalondetailsComponent implements OnInit {
       postData.append("opentime", dataToPass.opentime);
       postData.append("closetime", dataToPass.closetime);
       postData.append("timezonestring", dataToPass.timezonestring);
-      postData.append("contact", dataToPass.contact);
+      postData.append(
+        "contact",
+        getCorrectPhone(dataToPass.contact, this.selectedCountry.getValue())
+      );
       postData.append("user_id", dataToPass.user_id);
       postData.append("email", this.salonEmail);
 
@@ -265,7 +279,10 @@ export class SalondetailsComponent implements OnInit {
     postData.append("salonaddress", dataToPass.salonaddress);
     postData.append("opentime", dataToPass.opentime);
     postData.append("closetime", dataToPass.closetime);
-    postData.append("contact", dataToPass.contact);
+    postData.append(
+      "contact",
+      getCorrectPhone(dataToPass.contact, this.selectedCountry.getValue())
+    );
     postData.append("salon_id", dataToPass.salon_id);
 
     var options = { content: postData };
