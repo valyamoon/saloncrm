@@ -7,7 +7,11 @@ import { Router } from "@angular/router";
 import { countries } from "../../../admin/country";
 import { PhoneValidator } from "../../../validators";
 import { BehaviorSubject } from "rxjs";
-import { getCorrectPhone } from "../../../helpers";
+import {
+  getCorrectPhone,
+  getCountryCode,
+  getNationalNumber,
+} from "../../../helpers";
 
 @Component({
   selector: "app-editsalon",
@@ -57,18 +61,19 @@ export class EditsalonComponent implements OnInit {
     this.user_id = sessionStorage.getItem("userId");
     this.userid = this.user_id;
 
-    this.getsalonsData(this.userid);
     this.submitSalonDetails = this.fb.group({
-      name: ["", Validators.required],
+      name: ["", [Validators.required]],
       contact: ["", [Validators.required]],
-      code: ["", Validators.required],
-      salonaddress: ["", Validators.required],
+      code: ["", [Validators.required]],
+      salonaddress: ["", [Validators.required]],
       image: null,
-      opentime: ["", Validators.required],
-      closetime: ["", Validators.required],
+      opentime: ["", [Validators.required]],
+      closetime: ["", [Validators.required]],
       lat: [""],
       long: [""],
     });
+
+    this.getsalonsData(this.userid);
 
     this.selectedCountry.subscribe((code) => {
       this.submitSalonDetails
@@ -79,7 +84,8 @@ export class EditsalonComponent implements OnInit {
   }
 
   handleCountryCode(code: string) {
-    this.selectedCountry.next(code);
+    const { char } = countries.find((x) => x.code == code);
+    this.selectedCountry.next(char);
   }
 
   get contact() {
@@ -118,10 +124,16 @@ export class EditsalonComponent implements OnInit {
             .setValue(this.salonDetailsData.name);
           this.submitSalonDetails
             .get("code")
-            .setValue(this.salonDetailsData.code);
+            .setValue(
+              countries.find(
+                (x) =>
+                  x.code ==
+                  String(getCountryCode(this.salonDetailsData.contact))
+              ).code
+            );
           this.submitSalonDetails
             .get("contact")
-            .setValue(this.salonDetailsData.contact);
+            .setValue(String(getNationalNumber(this.salonDetailsData.contact)));
           this.submitSalonDetails
             .get("salonaddress")
             .setValue(this.salonDetailsData.salonaddress);

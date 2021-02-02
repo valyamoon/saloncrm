@@ -90,7 +90,7 @@
           formControlName="code"
           (ngModelChange)="handleCountryCode($event)"
         >
-          <option *ngFor="let item of countriesData" [ngValue]="item.char">
+          <option *ngFor="let item of countriesData" [ngValue]="item.code">
             {{ item.name }} {{ item.code }}
           </option>
         </select>
