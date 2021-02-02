@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build-backend:staging": "cd backend && npm run start:staging",
+    "build-backend:prod": "cd backend && npm run start:prod",
     "heroku-postbuild": "cd backend && npm i"
   },
   "repository": {

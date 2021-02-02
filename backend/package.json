@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "start:dev": "cross-env NODE_ENV=local nodemon app.js",
-    "start:staging": "cross-env NODE_ENV=staging node app.js"
+    "start:staging": "cross-env NODE_ENV=staging node app.js",
+    "start:prod": "cross-env NODE_ENV=prod node app.js"
   },
   "dependencies": {
     "async": "^3.1.0",
