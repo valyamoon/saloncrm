@@ -84,10 +84,15 @@
         </div> -->
       <div class="field">
         <label class="label">Country Code:</label>
-        <select class="select-css" style="width: 60%;" formControlName="code">
-          <option *ngFor="let item of countriesData" [ngValue]="item.code"
-            >{{ item.name }} {{ item.code }}</option
-          >
+        <select
+          class="select-css"
+          style="width: 60%"
+          formControlName="code"
+          (ngModelChange)="handleCountryCode($event)"
+        >
+          <option *ngFor="let item of countriesData" [ngValue]="item.code">
+            {{ item.name }} {{ item.code }}
+          </option>
         </select>
       </div>
 
@@ -114,9 +119,7 @@
             *ngIf="contact.invalid && (contact.dirty || contact.touched)"
             class="erroralert"
           >
-            <div *ngIf="contact.invalid">
-              Invalid Contact Number
-            </div>
+            <div *ngIf="contact.invalid">Invalid Contact Number</div>
           </div>
         </div>
       </div>

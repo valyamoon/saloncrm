@@ -1,12 +1,26 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { AvailableLanguages } from "../../../enums";
+import { LanguagesService } from "../../../services";
 
 @Component({
   selector: "app-download",
   templateUrl: "./download.component.html",
-  styleUrls: ["./download.component.scss"]
+  styleUrls: ["./download.component.scss"],
 })
-export class DownloadComponent implements OnInit {
-  constructor() {}
+export class DownloadComponent implements OnInit, OnDestroy {
+  currentLanguage: AvailableLanguages;
+  currentLanguageSub: Subscription;
 
-  ngOnInit() {}
+  constructor(private languagesService: LanguagesService) {}
+
+  ngOnInit() {
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
+  }
+
+  ngOnDestroy() {
+    this.currentLanguageSub.unsubscribe();
+  }
 }

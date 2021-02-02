@@ -1,11 +1,17 @@
 <div class="wrapper">
   <app-header> </app-header>
   <div class="mainSection">
-    <div class="col-lg-12 sectionsWrapper ">
+    <div class="col-lg-12 sectionsWrapper">
       <div class="col-lg-8 col-md-8 col-sm-6">
         <div class="header">
-          <img src="../../../../assets/images/right-arrow(3).svg" alt="" (click)="goToList()" />
-          <span>{{ salonData.name }}</span>
+          <img
+            src="../../../../assets/images/right-arrow(3).svg"
+            alt=""
+            (click)="goToList()"
+          />
+          <span>{{
+            salonData.name | translate: this.currentLanguage | async
+          }}</span>
         </div>
         <div class="mainContent row">
           <div class="subsection col-lg-6 col-md-6 col-sm-12">
@@ -21,7 +27,9 @@
               <label class="paywithlabel" for="card">
                 <div>
                   <img src="../../../../assets/images/pay.svg" alt="" />
-                  <span class="payText">Pay with Card</span>
+                  <span class="payText">{{
+                    "Pay with Card" | translate: this.currentLanguage | async
+                  }}</span>
                 </div>
               </label>
             </div>
@@ -42,7 +50,10 @@
                     disabled
                   />
                   <div class="valid">
-                    <span>VALID THRU</span><br />
+                    <span>{{
+                      "VALID THRU" | translate: this.currentLanguage | async
+                    }}</span
+                    ><br />
                     <input
                       [(ngModel)]="expDate"
                       type="text"
@@ -55,7 +66,11 @@
               </div>
               <div class="cardDetailInput">
                 <strong>
-                  Type your card details
+                  {{
+                    "Type your card details"
+                      | translate: this.currentLanguage
+                      | async
+                  }}
                 </strong>
                 <div class="detBox">
                   <form [formGroup]="cardForm">
@@ -93,8 +108,12 @@
                 </div>
               </div>
               <div class="markcard">
-                <input type="checkbox" /> Mark card as a default for all
-                payments
+                <input type="checkbox" />
+                {{
+                  "Mark card as a default for all payments"
+                    | translate: this.currentLanguage
+                    | async
+                }}
               </div>
             </div>
           </div>
@@ -111,14 +130,20 @@
               <label class="paywithlabel" for="cash">
                 <div>
                   <img src="../../../../assets/images/cash.svg" alt="" />
-                  <span class="payText">Pay with Cash</span>
+                  <span class="payText">{{
+                    "Pay with Cash" | translate: this.currentLanguage | async
+                  }}</span>
                 </div>
               </label>
             </div>
 
             <div class="cardDetailInput">
               <div class="text-center">
-                <strong>Select from previously added cards</strong>
+                <strong>{{
+                  "Select from previously added cards"
+                    | translate: this.currentLanguage
+                    | async
+                }}</strong>
               </div>
               <div class="cardBox">
                 <div class="cards">
@@ -150,7 +175,7 @@
           >
             <span>{{ totalPrice | currency: "USD" }}</span>
             <span
-              >Make Payment
+              >{{ "Make Payment" | translate: this.currentLanguage | async }}
               <img
                 src="../../../../assets/images/right-arrow(3) (1).svg"
                 alt=""
@@ -162,7 +187,7 @@
             (click)="goToLogin()"
             *ngIf="!isLoggedInCheck"
           >
-            Login
+            {{ "Login" | translate: this.currentLanguage | async }}
             <img
               src="../../../../assets/images/right-arrow(3) (1).svg"
               alt=""
@@ -171,7 +196,7 @@
         </div>
       </div>
       <div class="serviceArea col-lg-4 col-md-4 col-sm-6">
-        <h3>Services</h3>
+        <h3>{{ "Services" | translate: this.currentLanguage | async }}</h3>
         <div class="serviceDetailBox">
           <div class="hair-sec">
             <div class="hair-sec-inner">
@@ -181,37 +206,63 @@
                     <img src="../../../../assets/images/Group 8177.svg" />
                   </div>
                   <div>
-                    <h6>{{ checkoutData.servicename }}</h6>
+                    <h6>
+                      {{
+                        checkoutData.servicename
+                          | translate: this.currentLanguage
+                          | async
+                      }}
+                    </h6>
                     <div class="dollar-req">
                       {{ checkoutData.price | currency: "USD" }}
                     </div>
-                    <div class="min-req">{{ checkoutData.duration }} mins</div>
+                    <div class="min-req">
+                      {{ checkoutData.duration }}
+                      {{ "mins" | translate: this.currentLanguage | async }}
+                    </div>
                   </div>
                 </div>
                 <div class="remove">
-                  <button class="btnRem" (click)="goToHome()">Remove</button>
+                  <button class="btnRem" (click)="goToHome()">
+                    {{ "Remove" | translate: this.currentLanguage | async }}
+                  </button>
                 </div>
               </div>
             </div>
             <div class="dateAndTime">
-              {{ onDate | date: "longDate" }} at {{ startTime }}
+              {{
+                onDate
+                  | date: "longDate"
+                  | translate: this.currentLanguage
+                  | async
+              }}
+              {{ "at" | translate: this.currentLanguage | async }}
+              {{ startTime }}
             </div>
             <div class="amountData">
-              <label>Actual Price</label>
+              <label>{{
+                "Actual Price" | translate: this.currentLanguage | async
+              }}</label>
               <span> {{ checkoutData.price | currency: "USD" }}</span>
             </div>
             <div class="amountData" *ngIf="isPromocodeApplied">
-              <label>Promocode Offer</label>
+              <label>{{
+                "Promocode Offer" | translate: this.currentLanguage | async
+              }}</label>
               <span>$5</span>
             </div>
             <div class="amountData subtotal">
-              <label>Total</label>
+              <label>{{
+                "Total" | translate: this.currentLanguage | async
+              }}</label>
               <span>{{ totalPrice | currency: "USD" }}</span>
             </div>
             <div class="amountData wallet">
               <div>
                 <img src="../../../../assets/images/wallet.svg" alt="" />
-                <strong class="walletString">Wallet Balance</strong>
+                <strong class="walletString">{{
+                  "Wallet Balance" | translate: this.currentLanguage | async
+                }}</strong>
               </div>
               <span>{{ walletAmount | currency: "USD" }}</span>
             </div>
@@ -224,22 +275,28 @@
                   (click)="checkIsWallet(useWallet)"
                   id="isWallet"
                 />
-                <label class="uwbString" for="isWallet"
-                  >Use wallet balance</label
-                >
+                <label class="uwbString" for="isWallet">{{
+                  "Use wallet balance" | translate: this.currentLanguage | async
+                }}</label>
               </div>
             </div>
             <div class="promocodeArea">
               <button class="promBtn" (click)="getPromocodeList()">
-                Add Promocode
+                {{ "Add Promocode" | translate: this.currentLanguage | async }}
               </button>
             </div>
             <div class="cancellingArea">
               <p>
-                <strong>Cancelling Description:</strong>
-
-                As deposit is not refundable. User can use deposit in future
-                bookings as a credit in any salon
+                <strong>{{
+                  "Cancelling Description:"
+                    | translate: this.currentLanguage
+                    | async
+                }}</strong>
+                {{
+                  "As deposit is not refundable. User can use deposit in future bookings as a credit in any salon"
+                    | translate: this.currentLanguage
+                    | async
+                }}
               </p>
             </div>
           </div>
@@ -250,16 +307,24 @@
 
   <div class="promocodeOverlay" *ngIf="isShowPromocode">
     <div class="mainSection col-lg-3 col-md-3 col-sm-12">
-      <h3>Promocodes</h3>
+      <h3>{{ "Promocodes" | translate: this.currentLanguage | async }}</h3>
       <div class="promocodes" *ngFor="let item of promocodesList">
         <div class="promocode">
           <span class="promotext"
             ><label for="{{ item.name }}">{{ item.name }}</label>
-            <span class="terms">{{ item.description }}</span>
+            <span class="terms">{{
+              item.description | translate: this.currentLanguage | async
+            }}</span>
             <span class="termsC">
               *T&C
               <span class="termandcondition"
-                ><p>{{ item.termsAndCondition }}</p></span
+                ><p>
+                  {{
+                    item.termsAndCondition
+                      | translate: this.currentLanguage
+                      | async
+                  }}
+                </p></span
               >
             </span>
           </span>
@@ -274,10 +339,14 @@
         </div>
       </div>
       <div class="noPromocode" *ngIf="noPromocode">
-        <h5>No Promocodes Available</h5>
+        <h5>
+          {{
+            "No Promocodes Available" | translate: this.currentLanguage | async
+          }}
+        </h5>
       </div>
       <button class="btn btn-primary btn-sign-in" (click)="dismissModal()">
-        Cancel
+        {{ "Cancel" | translate: this.currentLanguage | async }}
       </button>
     </div>
   </div>
@@ -285,10 +354,16 @@
   <div class="promocodeOverlay" *ngIf="isBookingCompleted">
     <div class="mainSection col-lg-3 col-md-3 col-sm-12">
       <div><img src="../../../../assets/images/Asset 1.svg" alt="" /></div>
-      <div class="paymentSuccess">Payment and Booking Successful</div>
+      <div class="paymentSuccess">
+        {{
+          "Payment and Booking Successful"
+            | translate: this.currentLanguage
+            | async
+        }}
+      </div>
       <div>
         <button class="btn btn-primary btn-sign-in" (click)="goToBookings()">
-          See Bookings
+          {{ "See Bookings" | translate: this.currentLanguage | async }}
         </button>
       </div>
     </div>

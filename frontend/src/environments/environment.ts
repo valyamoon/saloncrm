@@ -3,10 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 export const environment = {
   env: "local",
-  production: true,
-  apiUrl: "https://bookapp-ch.herokuapp.com",
-  baseUrl: "https://bookapp.ch",
-  backendBaseUrl: "https://bookapp-ch.herokuapp.com",
+  production: false,
+  apiUrl: "http://localhost:4001",
+  baseUrl: "http://localhost:4001",
+  backendBaseUrl: "http://localhost:4001",
+  translationUrl: "https://translation.googleapis.com/language/translate/v2",
+  googleApiKey: "AIzaSyAvJBguyLtqPxDZ7STn25mYxj4yyCH0PYY",
 };
 
 /*

@@ -5,11 +5,18 @@ import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { countries } from "../../../admin/country";
+import { PhoneValidator } from "../../../validators";
+import { BehaviorSubject } from "rxjs";
+import {
+  getCorrectPhone,
+  getCountryCode,
+  getNationalNumber,
+} from "../../../helpers";
 
 @Component({
   selector: "app-editsalon",
   templateUrl: "./editsalon.component.html",
-  styleUrls: ["./editsalon.component.scss"]
+  styleUrls: ["./editsalon.component.scss"],
 })
 export class EditsalonComponent implements OnInit {
   submitSalonDetails: FormGroup;
@@ -17,7 +24,6 @@ export class EditsalonComponent implements OnInit {
   opentime: any;
   countriesData: any = countries;
   showNow: boolean = false;
-  numberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
   lat: any;
   lng: any;
   chosenTime: any;
@@ -29,6 +35,7 @@ export class EditsalonComponent implements OnInit {
   tempUrl: string | ArrayBuffer;
   imageTemp: any;
   public url = <any>"";
+  selectedCountry: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   showPendingApproval: boolean = false;
   checkInitialApprovalStatus: boolean;
@@ -43,7 +50,7 @@ export class EditsalonComponent implements OnInit {
     private router: Router
   ) {
     if (navigator) {
-      navigator.geolocation.getCurrentPosition(pos => {
+      navigator.geolocation.getCurrentPosition((pos) => {
         this.lng = +pos.coords.longitude;
         this.lat = +pos.coords.latitude;
       });
@@ -54,23 +61,33 @@ export class EditsalonComponent implements OnInit {
     this.user_id = sessionStorage.getItem("userId");
     this.userid = this.user_id;
 
-    this.getsalonsData(this.userid);
     this.submitSalonDetails = this.fb.group({
-      name: ["", Validators.required],
-      contact: [
-        "",
-        [Validators.required, Validators.pattern(this.numberPattern)]
-      ],
-      code: ["", Validators.required],
-      salonaddress: ["", Validators.required],
+      name: ["", [Validators.required]],
+      contact: ["", [Validators.required]],
+      code: ["", [Validators.required]],
+      salonaddress: ["", [Validators.required]],
       image: null,
-      opentime: ["", Validators.required],
-      closetime: ["", Validators.required],
+      opentime: ["", [Validators.required]],
+      closetime: ["", [Validators.required]],
       lat: [""],
-      long: [""]
+      long: [""],
+    });
+
+    this.getsalonsData(this.userid);
+
+    this.selectedCountry.subscribe((code) => {
+      this.submitSalonDetails
+        .get("contact")
+        .setValidators(PhoneValidator(code));
     });
     //this.editSalonDetailsShow();
   }
+
+  handleCountryCode(code: string) {
+    const { char } = countries.find((x) => x.code == code);
+    this.selectedCountry.next(char);
+  }
+
   get contact() {
     return this.submitSalonDetails.get("contact");
   }
@@ -94,7 +111,7 @@ export class EditsalonComponent implements OnInit {
 
   getsalonsData(data) {
     let dataToPass = {
-      user_id: data
+      user_id: data,
     };
     this.commServ.getSalonDetailsData(dataToPass).subscribe(
       (data: any) => {
@@ -107,10 +124,16 @@ export class EditsalonComponent implements OnInit {
             .setValue(this.salonDetailsData.name);
           this.submitSalonDetails
             .get("code")
-            .setValue(this.salonDetailsData.code);
+            .setValue(
+              countries.find(
+                (x) =>
+                  x.code ==
+                  String(getCountryCode(this.salonDetailsData.contact))
+              ).code
+            );
           this.submitSalonDetails
             .get("contact")
-            .setValue(this.salonDetailsData.contact);
+            .setValue(String(getNationalNumber(this.salonDetailsData.contact)));
           this.submitSalonDetails
             .get("salonaddress")
             .setValue(this.salonDetailsData.salonaddress);
@@ -122,13 +145,13 @@ export class EditsalonComponent implements OnInit {
             .setValue(this.salonDetailsData.closetime);
         } else {
           this.toastrServ.error("Failed to fetch salon details", "error", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastrServ.error("Server Error", error, {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -175,7 +198,7 @@ export class EditsalonComponent implements OnInit {
       opentime: data.opentime,
       closetime: data.closetime,
       lat: this.lat,
-      long: this.lng
+      long: this.lng,
     };
 
     const postData = new FormData();
@@ -184,7 +207,10 @@ export class EditsalonComponent implements OnInit {
     postData.append("salonaddress", dataToPass.salonaddress);
     postData.append("opentime", dataToPass.opentime);
     postData.append("closetime", dataToPass.closetime);
-    postData.append("contact", dataToPass.contact);
+    postData.append(
+      "contact",
+      getCorrectPhone(dataToPass.contact, this.selectedCountry.getValue())
+    );
     postData.append("code", dataToPass.code);
     postData.append("salon_id", dataToPass.salon_id);
     postData.append("lat", dataToPass.lat);
@@ -193,14 +219,14 @@ export class EditsalonComponent implements OnInit {
     var options = { content: postData };
 
     this.commServ.updateSalonDetails(postData).subscribe(
-      data => {
+      (data) => {
         if (data["code"] === 200) {
           this.router.navigate(["/salon/home/profile"]);
           this.toastrServ.success(
             "Salon Details Updated Successfully",
             "Success",
             {
-              timeOut: 2000
+              timeOut: 2000,
             }
           );
 
@@ -211,13 +237,13 @@ export class EditsalonComponent implements OnInit {
         } else {
           this.showPendingApproval = false;
           this.toastrServ.error("Failed To Update Salon Details", "", {
-            timeOut: 2000
+            timeOut: 2000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastrServ.error("Server Error", error, {
-          timeOut: 2000
+          timeOut: 2000,
         });
       }
     );

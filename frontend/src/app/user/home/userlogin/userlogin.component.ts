@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { countries } from "../../../admin/country";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UsercommonserviceService } from "../usercommonservice.service";
@@ -8,16 +8,18 @@ import { AuthServService } from "../auth-serv.service";
 import {
   AuthService,
   FacebookLoginProvider,
-  GoogleLoginProvider
+  GoogleLoginProvider,
 } from "ngx-angular-social-login";
 import { Router } from "@angular/router";
 import { AllservService } from "../../../allserv.service";
+import { LanguagesService } from "../../../services";
+import { Subscription } from "rxjs";
 @Component({
   selector: "app-userlogin",
   templateUrl: "./userlogin.component.html",
-  styleUrls: ["./userlogin.component.scss"]
+  styleUrls: ["./userlogin.component.scss"],
 })
-export class UserloginComponent implements OnInit {
+export class UserloginComponent implements OnInit, OnDestroy {
   @ViewChild("mySelect", { static: false }) mySelect;
   phoneNumber: any;
   socialLoginID: any;
@@ -37,6 +39,10 @@ export class UserloginComponent implements OnInit {
   isOtpShow: boolean = false;
 
   showRegisterForm: boolean;
+
+  currentLanguage: string;
+  currentLanguageSub: Subscription;
+
   constructor(
     private fb: FormBuilder,
     private userCommServ: UsercommonserviceService,
@@ -44,7 +50,8 @@ export class UserloginComponent implements OnInit {
     private socialAuthService: AuthService,
     private authServ: AuthServService,
     private router: Router,
-    private allServ: AllservService
+    private allServ: AllservService,
+    private languagesService: LanguagesService
   ) {}
 
   ngOnInit() {
@@ -57,18 +64,26 @@ export class UserloginComponent implements OnInit {
     this.loginForm = this.fb.group({
       code: ["", Validators.required],
       phone: ["", Validators.required],
-      country: [""]
+      country: [""],
     });
     this.otpVerificationForm = this.fb.group({
-      token: ["", Validators.required]
+      token: ["", Validators.required],
     });
 
     this.registerUserForm = this.fb.group({
       firstName: ["", Validators.required],
       lastName: ["", Validators.required],
       email: ["", Validators.required],
-      phone: ["", Validators.required]
+      phone: ["", Validators.required],
     });
+
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
+  }
+
+  ngOnDestroy() {
+    this.currentLanguageSub.unsubscribe();
   }
 
   onFocus() {
@@ -82,7 +97,7 @@ export class UserloginComponent implements OnInit {
         code: "+" + this.code,
         phone: this.phoneNumber,
         via: "sms",
-        token: data.token
+        token: data.token,
       };
 
       this.userCommServ.verifyOtp(dataToPass).subscribe(
@@ -112,25 +127,25 @@ export class UserloginComponent implements OnInit {
               }
 
               this.toastServ.success(data["message"], "", {
-                timeOut: 1000
+                timeOut: 1000,
               });
             } else if (data["code"] === 400) {
               this.toastServ.error(data["message"], "", {
-                timeOut: 1000
+                timeOut: 1000,
               });
             }
           }
         },
-        error => {
+        (error) => {
           this.toastServ.error(error.error["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       );
     } else if (data.socialLoginId) {
       dataToPass = {
         email: data.email,
-        socialLoginId: data.socialLoginId
+        socialLoginId: data.socialLoginId,
       };
 
       this.userCommServ.verifyOtp(dataToPass).subscribe(
@@ -160,18 +175,18 @@ export class UserloginComponent implements OnInit {
               }
 
               this.toastServ.success(data["message"], "", {
-                timeOut: 1000
+                timeOut: 1000,
               });
             } else if (data["code"] === 400) {
               this.toastServ.error(data["message"], "", {
-                timeOut: 1000
+                timeOut: 1000,
               });
             }
           }
         },
-        error => {
+        (error) => {
           this.toastServ.error(error.error["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       );
@@ -201,24 +216,24 @@ export class UserloginComponent implements OnInit {
     let dataToPass = {
       code: "+" + this.code,
       phone: this.phoneNumber,
-      via: "call"
+      via: "call",
     };
     this.userCommServ.getOtpForVerification(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] === 200) {
           this.isOtpShow = true;
           this.toastServ.success(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -233,14 +248,14 @@ export class UserloginComponent implements OnInit {
       role: "user",
       isVerified: true,
       socialLoginId: this.socialLoginID,
-      loggedInVia: this.loggedInVia
+      loggedInVia: this.loggedInVia,
     };
 
     this.userCommServ.registerUser(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] === 200) {
           this.toastServ.success(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
           console.log("DATA", data);
           this.authServ.sendToken(data["data"]["token"]);
@@ -249,13 +264,13 @@ export class UserloginComponent implements OnInit {
           this.router.navigate(["/home"]);
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -267,24 +282,24 @@ export class UserloginComponent implements OnInit {
     let dataToPass = {
       code: "+" + data.code,
       phone: data.phone,
-      via: "sms"
+      via: "sms",
     };
     this.userCommServ.getOtpForVerification(dataToPass).subscribe(
       (data: any) => {
         if (data["code"] === 200) {
           this.isOtpShow = true;
           this.toastServ.success(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.toastServ.error(error.error["message"], "", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -297,7 +312,7 @@ export class UserloginComponent implements OnInit {
       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
     }
 
-    this.socialAuthService.signIn(socialPlatformProvider).then(userData => {
+    this.socialAuthService.signIn(socialPlatformProvider).then((userData) => {
       if (userData) {
         var fullName: any;
         fullName = userData["name"];
@@ -318,7 +333,7 @@ export class UserloginComponent implements OnInit {
 
       let dataToPass = {
         email: this.EmailID,
-        socialLoginId: this.socialLoginID
+        socialLoginId: this.socialLoginID,
       };
 
       this.completeOtpVerification(dataToPass);

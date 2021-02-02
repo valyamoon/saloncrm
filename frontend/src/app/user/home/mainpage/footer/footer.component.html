@@ -4,10 +4,26 @@
     <img src="../../../../../assets/images/logo_white.png" />
     <div class="footer-links">
       <ul>
-        <li><a href="">HOME</a></li>
-        <li><a href="">ABOUT</a></li>
-        <li><a href="">DOWNLOAD</a></li>
-        <li><a href="">HELP</a></li>
+        <li>
+          <a href="">{{
+            "HOME" | translate: this.currentLanguage | async | uppercase
+          }}</a>
+        </li>
+        <li>
+          <a href="">{{
+            "ABOUT" | translate: this.currentLanguage | async | uppercase
+          }}</a>
+        </li>
+        <li>
+          <a href="">{{
+            "DOWNLOAD" | translate: this.currentLanguage | async | uppercase
+          }}</a>
+        </li>
+        <li>
+          <a href="">{{
+            "HELP" | translate: this.currentLanguage | async | uppercase
+          }}</a>
+        </li>
       </ul>
     </div>
     <div class="social-icons">
@@ -47,10 +63,17 @@
   </div>
   <div class="footer-below">
     <div class="reserved-sec">
-      © All rights reserved | Bookapp, Inc.
+      © {{ "All rights reserved" | translate: this.currentLanguage | async }} |
+      Bookapp, Inc.
     </div>
     <div class="terms-privacy">
-      <a href="">Terms of Use</a> | <a href="">Privacy​ Policy</a>
+      <a href="">{{
+        "Terms of Use" | translate: this.currentLanguage | async
+      }}</a>
+      |
+      <a href="">{{
+        "Privacy​ Policy" | translate: this.currentLanguage | async
+      }}</a>
     </div>
   </div>
 </section>

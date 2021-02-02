@@ -1,0 +1,20 @@
+{
+  "name": "saloncrm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-backend:staging": "cd backend && npm run start:staging",
+    "heroku-postbuild": "cd backend && npm i"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valyamoon/saloncrm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valyamoon/saloncrm/issues"
+  },
+  "homepage": "https://github.com/valyamoon/saloncrm#readme"
+}

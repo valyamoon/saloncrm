@@ -1,7 +1,9 @@
 export const environment = {
   env: "staging",
-  production: true,
-  apiUrl: "https://meanstack.stagingsdei.com:5977",
-  baseUrl: "https://meanstack.stagingsdei.com:5977",
-  backendBaseUrl: "https://meanstack.stagingsdei.com:5977"
+  production: false,
+  apiUrl: "https://bookapp-ch-stage.herokuapp.com",
+  baseUrl: "https://bookapp-ch-stage.herokuapp.com",
+  backendBaseUrl: "https://bookapp-ch-stage.herokuapp.com",
+  translationUrl: "https://translation.googleapis.com/language/translate/v2",
+  googleApiKey: "AIzaSyAvJBguyLtqPxDZ7STn25mYxj4yyCH0PYY",
 };

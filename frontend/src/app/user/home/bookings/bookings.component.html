@@ -126,7 +126,7 @@
         <div class="imgSection">
           <img src="{{ salonDetails.image }}" class="image" alt="" />
           <div class="salonName">
-            {{ bookingDetails.name }}
+            {{ bookingDetails.name | translate: this.currentLanguage | async }}
           </div>
           <div class="starRatingSec">
             <app-starrating [ratings]="salonDetails.avgRatings">
@@ -134,7 +134,9 @@
           </div>
         </div>
         <div class="detailSec">
-          <span class="serviceName">{{ bookingDetails.servicename }}</span>
+          <span class="serviceName">{{
+            bookingDetails.servicename | translate: this.currentLanguage | async
+          }}</span>
 
           <mat-card class="mat">
             <div class="dates">
@@ -144,30 +146,49 @@
               </span>
             </div>
             <div class="fields">
-              <span class="labels">Total Amount Paid:</span>
+              <span class="labels">{{
+                "Total Amount Paid:" | translate: this.currentLanguage | async
+              }}</span>
               <span>{{ bookingDetails.totalamount | currency: "USD" }}</span>
             </div>
             <div class="fields">
-              <span class="labels">Payment Mode:</span>
+              <span class="labels">{{
+                "Payment Mode:" | translate: this.currentLanguage | async
+              }}</span>
               <span>{{ bookingDetails.paymentType }}</span>
             </div>
             <div class="fields">
-              <span class="labels">Order Id:</span>
+              <span class="labels">{{
+                "Order Id:" | translate: this.currentLanguage | async
+              }}</span>
               <span>{{ bookingDetails.orderId }}</span>
             </div>
-            <div class="bookingstatus">Booking Confirmed</div>
+            <div class="bookingstatus">
+              {{
+                "Booking Confirmed" | translate: this.currentLanguage | async
+              }}
+            </div>
           </mat-card>
           <mat-card *ngIf="!isShowAddReview">
-            <div class="dates">Cancellation Policy</div>
+            <div class="dates">
+              {{
+                "Cancellation Policy" | translate: this.currentLanguage | async
+              }}
+            </div>
             <div>
               <p>
-                If you are unable to keep the schedule appointment. please give
-                24 hr advance notice, to ensure that you will not be charged for
-                this appointment and your paid balance will be refunded to your
-                wallet.
+                {{
+                  "If you are unable to keep the schedule appointment. please give 24 hr advance notice, to ensure that you will not be charged for this appointment and your paid balance will be refunded to your wallet."
+                    | translate: this.currentLanguage
+                    | async
+                }}
               </p>
               <p>
-                To cancel the appointment please contact
+                {{
+                  "To cancel the appointment please contact"
+                    | translate: this.currentLanguage
+                    | async
+                }}
               </p>
               <span class="dates"
                 >+ {{ adminDetails.code }} {{ adminDetails.phone }}</span
@@ -177,7 +198,7 @@
         </div>
         <div class="addReview" *ngIf="isShowAddReview">
           <button class="btn-primary btn-sign-in" (click)="addReview()">
-            Add Review
+            {{ "Add Review" | translate: this.currentLanguage | async }}
           </button>
         </div>
       </div>
@@ -208,7 +229,7 @@
           class="btn-primary btn-sign-in"
           (click)="submitStarRating()"
         >
-          Submit
+          {{ "Submit" | translate: this.currentLanguage | async }}
         </button>
       </div>
     </div>

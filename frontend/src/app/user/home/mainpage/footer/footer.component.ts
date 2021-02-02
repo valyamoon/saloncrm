@@ -1,15 +1,32 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { AvailableLanguages } from "../../../../enums";
+import { LanguagesService } from "../../../../services";
 
 @Component({
   selector: "app-footer",
   templateUrl: "./footer.component.html",
-  styleUrls: ["./footer.component.scss"]
+  styleUrls: ["./footer.component.scss"],
 })
-export class FooterComponent implements OnInit {
-  constructor(private router: Router) {}
+export class FooterComponent implements OnInit, OnDestroy {
+  currentLanguage: AvailableLanguages;
+  currentLanguageSub: Subscription;
 
-  ngOnInit() {}
+  constructor(
+    private router: Router,
+    private languagesService: LanguagesService
+  ) {}
+
+  ngOnInit() {
+    this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
+      (x) => (this.currentLanguage = x)
+    );
+  }
+
+  ngOnDestroy() {
+    this.currentLanguageSub.unsubscribe();
+  }
 
   goTo(data) {
     if (data === "facebook") {

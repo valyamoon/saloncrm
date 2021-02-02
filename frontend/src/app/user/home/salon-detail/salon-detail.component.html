@@ -32,7 +32,7 @@
                     title="Find direction on Google Maps"
                     (click)="findDirection()"
                   >
-                    Direction
+                    {{ "Direction" | translate: this.currentLanguage | async }}
                   </h4>
                   <div class="">
                     <i class="fa fa-phone" aria-hidden="true"></i>
@@ -43,28 +43,42 @@
                   <div class="share">
                     <img src="../../../../assets/images/share.svg" />
                     <!-- <img src="../../../../assets/images/pin.svg"> -->
-                    <h4>Share</h4>
+                    <h4>
+                      {{ "Share" | translate: this.currentLanguage | async }}
+                    </h4>
                   </div>
 
                   <div class="reviews" (click)="getReviewRatings()">
-                    <i class="fa fa-star active-star " aria-hidden="true"></i>
-                    <span>Reviews</span>
+                    <i class="fa fa-star active-star" aria-hidden="true"></i>
+                    <span>{{
+                      "Reviews" | translate: this.currentLanguage | async
+                    }}</span>
                   </div>
                 </li>
               </ul>
               <div class="working-days">
-                <h5>Working Days</h5>
+                <h5>
+                  {{ "Working Days" | translate: this.currentLanguage | async }}
+                </h5>
                 <ul *ngFor="let item of salonAvailalbilityData">
                   <li>
-                    <div class="date-sec ">
+                    <div class="date-sec">
                       <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
                       <h5>{{ item._id }}</h5>
                     </div>
                     <div class="time-sec" *ngIf="item.status">
-                      <span> Open</span>
+                      <span>
+                        {{
+                          "Open" | translate: this.currentLanguage | async
+                        }}</span
+                      >
                     </div>
                     <div class="time-sec close-sec" *ngIf="!item.status">
-                      <span style="color:purple;"> Closed</span>
+                      <span style="color: purple">
+                        {{
+                          "Closed" | translate: this.currentLanguage | async
+                        }}</span
+                      >
                     </div>
                   </li>
                 </ul>
@@ -74,9 +88,13 @@
         </div>
         <div class="col-md-4">
           <div class="our-services">
-            <h5>Our Services</h5>
+            <h5>
+              {{ "Our Services" | translate: this.currentLanguage | async }}
+            </h5>
             <div class="hair-sec" *ngFor="let item of salonCategoriesData">
-              <h6 class="categoryName">{{ item.name }}</h6>
+              <h6 class="categoryName">
+                {{ item.name | translate: this.currentLanguage | async }}
+              </h6>
               <div class="hair-sec-inner">
                 <div
                   class="hair-services"
@@ -86,7 +104,13 @@
                     <img src="../../../../assets/images/Group 8177.svg" />
                   </div>
                   <div>
-                    <h6>{{ service.servicename }}</h6>
+                    <h6>
+                      {{
+                        service.servicename
+                          | translate: this.currentLanguage
+                          | async
+                      }}
+                    </h6>
                     <div class="dollar-req">{{ service.price }}</div>
                     <div class="min-req">{{ service.duration }} mins</div>
                   </div>
@@ -119,7 +143,9 @@
           <div class="userName">
             <span>{{ item.firstName }}</span> <span>{{ item.lastName }}</span>
           </div>
-          <div class="comment">{{ item.comments }}</div>
+          <div class="comment">
+            {{ item.comments | translate: this.currentLanguage | async }}
+          </div>
           <div class="ratings">
             <app-starrating [ratings]="item.ratings"></app-starrating>
           </div>
