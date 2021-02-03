@@ -36,7 +36,7 @@
                   </h4>
                   <div class="">
                     <i class="fa fa-phone" aria-hidden="true"></i>
-                    <span>+{{ salonData.code }} {{ salonData.contact }}</span>
+                    <span>{{ salonData.contact }}</span>
                   </div>
                 </li>
                 <li>
@@ -64,7 +64,9 @@
                   <li>
                     <div class="date-sec">
                       <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                      <h5>{{ item._id }}</h5>
+                      <h5>
+                        {{ item._id | translate: this.currentLanguage | async }}
+                      </h5>
                     </div>
                     <div class="time-sec" *ngIf="item.status">
                       <span>
@@ -112,7 +114,10 @@
                       }}
                     </h6>
                     <div class="dollar-req">{{ service.price }}</div>
-                    <div class="min-req">{{ service.duration }} mins</div>
+                    <div class="min-req">
+                      {{ service.duration }}
+                      {{ "mins" | translate: this.currentLanguage | async }}
+                    </div>
                   </div>
                 </div>
               </div>
