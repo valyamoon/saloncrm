@@ -97,16 +97,6 @@
       </div>
 
       <div class="field">
-        <label class="label">Location:</label>
-        <app-google-searc
-          class="geoLoc searchBlock"
-          (setAddress)="getAddress($event)"
-          adressType="geocode"
-        >
-        </app-google-searc>
-      </div>
-
-      <div class="field">
         <label class="label">Contact:</label>
         <div class="phoneArea">
           <input
@@ -115,22 +105,28 @@
             placeholder="Contact"
             formControlName="contact"
           />
-          <div
-            *ngIf="contact.invalid && (contact.dirty || contact.touched)"
-            class="erroralert"
-          >
+          <div *ngIf="contact.invalid" class="erroralert">
             <div *ngIf="contact.invalid">Invalid Contact Number</div>
           </div>
         </div>
       </div>
+
       <div class="field">
-        <label class="label">Address:</label>
-        <input
-          type="text"
-          class="form-control fields"
-          placeholder="Address"
-          formControlName="salonaddress"
-        />
+        <label class="label">Location:</label>
+        <app-google-searc
+          class="geoLoc searchBlock"
+          (setAddress)="getAddress($event)"
+          adressType="geocode"
+          [autocompleteInput]="submitSalonDetails.value['location']"
+        >
+        </app-google-searc>
+        <div>
+          <img
+            (click)="getCurrentLocation()"
+            class="location"
+            src="../../../../assets/images/current-location.png"
+          />
+        </div>
       </div>
 
       <button
