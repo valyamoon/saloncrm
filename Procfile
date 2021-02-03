@@ -1,1 +1,1 @@
-web: npm run build-backend:prod
+web: npm run build-backend:staging
