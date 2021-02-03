@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
 import { AvailableLanguages } from "../../../enums";
-import { LanguagesService } from "../../../services";
+import { GeocoderService, LanguagesService } from "../../../services";
 import { Subscription } from "rxjs";
 
 @Component({
@@ -34,10 +34,10 @@ export class SalonListComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private userCommnServ: UsercommonserviceService,
     private toastServ: ToastrService,
-    private languagesService: LanguagesService
+    private languagesService: LanguagesService,
+    private geocoder: GeocoderService
   ) {}
 
   ngOnInit() {
@@ -82,9 +82,19 @@ export class SalonListComponent implements OnInit, OnDestroy {
       page: this.page,
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
-      (data) => {
+      async (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
+          for (const [idx, salon] of this.salonListingData.entries()) {
+            const [longitude, latitude] = salon.location.coordinates;
+            let location = await this.geocoder.getLocationByCoords(
+              latitude,
+              longitude
+            );
+
+            salon.location = location;
+            this.salonListingData[idx] = salon;
+          }
 
           this.salonCount = data["data"]["count"];
           if (this.salonCount > 10) {

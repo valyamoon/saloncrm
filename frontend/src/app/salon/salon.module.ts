@@ -29,7 +29,7 @@ import {
   MatTableModule,
   MatSlideToggleModule,
   MatExpansionModule,
-  MatSortModule
+  MatSortModule,
 } from "@angular/material";
 import { TimingComponent } from "./dashboard/timing/timing.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
@@ -39,12 +39,11 @@ import { EditsalonComponent } from "./dashboard/editsalon/editsalon.component";
 import { SubscribeComponent } from "./dashboard/subscribe/subscribe.component";
 import { SubscriptionComponent } from "./dashboard/subscription/subscription.component";
 import { PromcodeComponent } from "./dashboard/promcode/promcode.component";
-import { ConnectAccountComponent } from './dashboard/connect-account/connect-account.component';
-import { ConfirmationDialogComponent } from './dashboard/confirmation-dialog/confirmation-dialog.component'
-import { SimpleModalModule } from 'ngx-simple-modal';
-import { GoogleSearcComponent } from './dashboard/google-searc/google-searc.component';
-import { TransactionsComponent } from './dashboard/transactions/transactions.component';
-
+import { ConnectAccountComponent } from "./dashboard/connect-account/connect-account.component";
+import { ConfirmationDialogComponent } from "./dashboard/confirmation-dialog/confirmation-dialog.component";
+import { SimpleModalModule } from "ngx-simple-modal";
+import { GoogleSearcComponent } from "./dashboard/google-searc/google-searc.component";
+import { TransactionsComponent } from "./dashboard/transactions/transactions.component";
 
 @NgModule({
   declarations: [
@@ -67,7 +66,7 @@ import { TransactionsComponent } from './dashboard/transactions/transactions.com
     ConnectAccountComponent,
     ConfirmationDialogComponent,
     GoogleSearcComponent,
-    TransactionsComponent
+    TransactionsComponent,
   ],
   imports: [
     CommonModule,
@@ -84,7 +83,7 @@ import { TransactionsComponent } from './dashboard/transactions/transactions.com
     MatSelectModule,
     MatTabsModule,
     AgmCoreModule.forRoot({
-      apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg"
+      apiKey: "AIzaSyBtFviJz4HltgeXLEnK8p-sbztqf7fVfFg",
     }),
     NgxMaterialTimepickerModule,
     OwlDateTimeModule,
@@ -92,8 +91,8 @@ import { TransactionsComponent } from './dashboard/transactions/transactions.com
     NgxMaskModule.forRoot(),
     MatExpansionModule,
     SimpleModalModule.forRoot({ container: "modal-container" }),
-    MatSortModule
+    MatSortModule,
   ],
-  entryComponents: [ConfirmationDialogComponent]
+  entryComponents: [ConfirmationDialogComponent],
 })
-export class SalonModule { }
+export class SalonModule {}
