@@ -5,9 +5,10 @@ import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { countries } from "../../../admin/country";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { PhoneValidator } from "../../../validators";
 import { getCorrectPhone } from "../../../helpers";
+import { GeocoderService } from "../../../services";
 
 @Component({
   selector: "app-salondetails",
@@ -40,13 +41,15 @@ export class SalondetailsComponent implements OnInit {
   salonid: any;
   isApprovedStatus: boolean;
   selectedCountry: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  location: Subject<string> = new Subject<string>();
 
   constructor(
     private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
     private toastrServ: ToastrService,
-    private router: Router
+    private router: Router,
+    private geocoder: GeocoderService
   ) {
     if (navigator) {
       navigator.geolocation.getCurrentPosition((pos) => {
@@ -72,7 +75,7 @@ export class SalondetailsComponent implements OnInit {
       name: ["", Validators.required],
       contact: ["", [Validators.required]],
       code: ["", Validators.required],
-      salonaddress: ["", Validators.required],
+      location: ["", Validators.required],
       image: null,
       opentime: ["", Validators.required],
       closetime: ["", Validators.required],
@@ -85,6 +88,12 @@ export class SalondetailsComponent implements OnInit {
       this.submitSalonDetails
         .get("contact")
         .setValidators(PhoneValidator(code));
+      this.submitSalonDetails.get("contact").updateValueAndValidity();
+    });
+
+    this.location.subscribe((x) => {
+      this.submitSalonDetails.get("location").setValue(x);
+      this.submitSalonDetails.get("location").updateValueAndValidity();
     });
 
     this.checkIsApprovedProfile();
@@ -104,10 +113,11 @@ export class SalondetailsComponent implements OnInit {
     this.selectedCountry.next(code);
   }
 
-  getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      this.lng = +pos.coords.longitude;
-      this.lat = +pos.coords.latitude;
+  async getCurrentLocation() {
+    try {
+      const { lat, long } = await this.geocoder.getCurrentPosition();
+      this.lat = lat;
+      this.lng = long;
 
       if (this.lng && this.lat) {
         this.toastrServ.success("Got your location", "", {
@@ -118,7 +128,26 @@ export class SalondetailsComponent implements OnInit {
           timeOut: 1000,
         });
       }
-    });
+      const location = await this.geocoder.getLocationByCoords(
+        this.lat,
+        this.lng
+      );
+
+      this.location.next(location);
+    } catch (err) {}
+  }
+
+  getAddress(place) {
+    this.lat = place.geometry.location.lat();
+    this.lng = place.geometry.location.lng();
+
+    this.submitSalonDetails.get("lat").setValue(this.lat);
+
+    this.submitSalonDetails.updateValueAndValidity();
+
+    this.submitSalonDetails.get("long").setValue(this.lng);
+
+    this.submitSalonDetails.updateValueAndValidity();
   }
 
   chechIsApprovedStatus(data) {
@@ -154,7 +183,7 @@ export class SalondetailsComponent implements OnInit {
   submitSalon(data) {
     let dataToPass = {
       name: data.name,
-      salonaddress: data.salonaddress,
+      location: data.location,
       contact: data.contact,
       lat: this.lat,
       long: this.lng,
@@ -175,7 +204,7 @@ export class SalondetailsComponent implements OnInit {
       postData.append("image", dataToPass.image);
       postData.append("lat", dataToPass.lat);
       postData.append("long", dataToPass.long);
-      postData.append("salonaddress", dataToPass.salonaddress);
+      postData.append("location", dataToPass.location);
       postData.append("opentime", dataToPass.opentime);
       postData.append("closetime", dataToPass.closetime);
       postData.append("timezonestring", dataToPass.timezonestring);
@@ -252,8 +281,8 @@ export class SalondetailsComponent implements OnInit {
       .get("contact")
       .setValue(this.salonDetailsData.contact);
     this.submitSalonDetails
-      .get("salonaddress")
-      .setValue(this.salonDetailsData.salonaddress);
+      .get("location")
+      .setValue(this.salonDetailsData.location);
     this.submitSalonDetails
       .get("opentime")
       .setValue(this.salonDetailsData.opentime);
@@ -266,7 +295,7 @@ export class SalondetailsComponent implements OnInit {
     let dataToPass = {
       salon_id: this.salonid,
       name: data.name,
-      salonaddress: data.salonaddress,
+      location: data.location,
       contact: data.contact,
       image: data.image,
       opentime: data.opentime,
@@ -276,7 +305,7 @@ export class SalondetailsComponent implements OnInit {
     const postData = new FormData();
     postData.append("name", dataToPass.name);
     postData.append("image", dataToPass.image);
-    postData.append("salonaddress", dataToPass.salonaddress);
+    postData.append("location", dataToPass.location);
     postData.append("opentime", dataToPass.opentime);
     postData.append("closetime", dataToPass.closetime);
     postData.append(
