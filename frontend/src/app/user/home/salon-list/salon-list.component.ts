@@ -94,6 +94,7 @@ export class SalonListComponent implements OnInit, OnDestroy {
 
             salon.location = location;
             this.salonListingData[idx] = salon;
+            this.salonListingData[idx].coordinates = { latitude, longitude };
           }
 
           this.salonCount = data["data"]["count"];

@@ -39,8 +39,9 @@ export class SalonDetailComponent implements OnInit, OnDestroy {
     this.salonData = JSON.parse(sessionStorage.getItem("salonDetails"));
     if (this.salonData) {
       this.salonID = this.salonData["_id"];
-      this.salonlat = this.salonData["location"]["coordinates"][0];
-      this.salonlong = this.salonData["location"]["coordinates"][1];
+      const { latitude, longitude } = this.salonData.coordinates;
+      this.salonlat = latitude;
+      this.salonlong = longitude;
 
       this.getSalonDetails(this.salonID);
       this.getSalonCategories(this.salonID);
