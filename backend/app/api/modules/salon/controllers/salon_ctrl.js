@@ -101,7 +101,7 @@ module.exports = {
  */
 function saveSalonDetails(req, res) {
   async function saveSalonDetails() {
-    try {
+    try { 
       var image_path;
       var customer_id_value;
 

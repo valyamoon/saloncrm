@@ -1,5 +1,7 @@
-const AWS = require('aws-sdk');
-const config = require('../../../config/config').get(process.env.NODE_ENV || 'local');
+const AWS = require("aws-sdk");
+const config = require("../../../config/config").get(
+  process.env.NODE_ENV || "local"
+);
 
 class S3Service {
   static getInstance() {
@@ -17,7 +19,6 @@ class S3Service {
         secretAccessKey: config.s3.secretAccessKey,
       });
     }
-
     return S3Service._s3;
   }
 
@@ -36,7 +37,7 @@ class S3Service {
         }
 
         resolve();
-      }),
+      })
     );
   }
 }
