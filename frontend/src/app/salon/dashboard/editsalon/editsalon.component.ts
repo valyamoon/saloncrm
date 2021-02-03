@@ -1,17 +1,17 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CommonService } from "../common.service";
-import { AuthService } from "../../auth.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { countries } from "../../../admin/country";
 import { PhoneValidator } from "../../../validators";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import {
   getCorrectPhone,
   getCountryCode,
   getNationalNumber,
 } from "../../../helpers";
+import { GeocoderService } from "../../../services";
 
 @Component({
   selector: "app-editsalon",
@@ -36,6 +36,7 @@ export class EditsalonComponent implements OnInit {
   imageTemp: any;
   public url = <any>"";
   selectedCountry: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  location: Subject<string> = new Subject<string>();
 
   showPendingApproval: boolean = false;
   checkInitialApprovalStatus: boolean;
@@ -43,11 +44,11 @@ export class EditsalonComponent implements OnInit {
   userid: any;
   salonid: any;
   constructor(
-    private authServ: AuthService,
     private fb: FormBuilder,
     private commServ: CommonService,
     private toastrServ: ToastrService,
-    private router: Router
+    private router: Router,
+    private geocoder: GeocoderService
   ) {
     if (navigator) {
       navigator.geolocation.getCurrentPosition((pos) => {
@@ -65,7 +66,7 @@ export class EditsalonComponent implements OnInit {
       name: ["", [Validators.required]],
       contact: ["", [Validators.required]],
       code: ["", [Validators.required]],
-      salonaddress: ["", [Validators.required]],
+      location: ["", [Validators.required]],
       image: null,
       opentime: ["", [Validators.required]],
       closetime: ["", [Validators.required]],
@@ -79,6 +80,12 @@ export class EditsalonComponent implements OnInit {
       this.submitSalonDetails
         .get("contact")
         .setValidators(PhoneValidator(code));
+      this.submitSalonDetails.get("contact").updateValueAndValidity();
+    });
+
+    this.location.subscribe((x) => {
+      this.submitSalonDetails.get("location").setValue(x);
+      this.submitSalonDetails.get("location").updateValueAndValidity();
     });
     //this.editSalonDetailsShow();
   }
@@ -114,10 +121,15 @@ export class EditsalonComponent implements OnInit {
       user_id: data,
     };
     this.commServ.getSalonDetailsData(dataToPass).subscribe(
-      (data: any) => {
+      async (data: any) => {
         if (data["code"] === 200) {
           this.salonDetailsData = data["data"];
           this.salonid = data["data"]._id;
+          const [longitude, latitude] = data.data.location.coordinates;
+          let location = await this.geocoder.getLocationByCoords(
+            latitude,
+            longitude
+          );
 
           this.submitSalonDetails
             .get("name")
@@ -134,9 +146,7 @@ export class EditsalonComponent implements OnInit {
           this.submitSalonDetails
             .get("contact")
             .setValue(String(getNationalNumber(this.salonDetailsData.contact)));
-          this.submitSalonDetails
-            .get("salonaddress")
-            .setValue(this.salonDetailsData.salonaddress);
+          this.submitSalonDetails.get("location").setValue(location);
           this.submitSalonDetails
             .get("opentime")
             .setValue(this.salonDetailsData.opentime);
@@ -177,8 +187,8 @@ export class EditsalonComponent implements OnInit {
   //     .get("contact")
   //     .setValue(this.salonDetailsData.contact);
   //   this.submitSalonDetails
-  //     .get("salonaddress")
-  //     .setValue(this.salonDetailsData.salonaddress);
+  //     .get("location")
+  //     .setValue(this.salonDetailsData.location);
   //   this.submitSalonDetails
   //     .get("opentime")
   //     .setValue(this.salonDetailsData.opentime);
@@ -191,7 +201,7 @@ export class EditsalonComponent implements OnInit {
     let dataToPass = {
       salon_id: this.salonid,
       name: data.name,
-      salonaddress: data.salonaddress,
+      location: data.location,
       contact: data.contact,
       code: data.code,
       image: data.image,
@@ -204,7 +214,7 @@ export class EditsalonComponent implements OnInit {
     const postData = new FormData();
     postData.append("name", dataToPass.name);
     postData.append("image", dataToPass.image);
-    postData.append("salonaddress", dataToPass.salonaddress);
+    postData.append("location", dataToPass.location);
     postData.append("opentime", dataToPass.opentime);
     postData.append("closetime", dataToPass.closetime);
     postData.append(
@@ -247,5 +257,20 @@ export class EditsalonComponent implements OnInit {
         });
       }
     );
+  }
+
+  async getCurrentLocation() {
+    try {
+      const { lat, long } = await this.geocoder.getCurrentPosition();
+      this.lat = lat;
+      this.lng = long;
+
+      const location = await this.geocoder.getLocationByCoords(
+        this.lat,
+        this.lng
+      );
+
+      this.location.next(location);
+    } catch (err) {}
   }
 }

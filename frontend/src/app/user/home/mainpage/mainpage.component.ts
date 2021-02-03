@@ -4,10 +4,9 @@ import { ToastrService } from "ngx-toastr";
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { environment } from "../../../../environments/environment";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Router, Routes, ActivatedRoute } from "@angular/router";
-import { Location } from "@angular/common";
-import { LanguagesService } from "../../../services";
-import { Subscription } from "rxjs";
+import { Router, ActivatedRoute } from "@angular/router";
+import { GeocoderService, LanguagesService } from "../../../services";
+import { Subject, Subscription } from "rxjs";
 
 @Component({
   selector: "app-mainpage",
@@ -15,25 +14,25 @@ import { Subscription } from "rxjs";
   styleUrls: ["./mainpage.component.scss"],
 })
 export class MainpageComponent implements OnInit, OnDestroy {
-  location: Location;
   constructor(
     private userCommServ: UsercommonserviceService,
     private toastServ: ToastrService,
     private fb: FormBuilder,
-    private bsConfig: BsDatepickerConfig,
     private router: Router,
-    private route: ActivatedRoute,
-    private languagesService: LanguagesService
+    private languagesService: LanguagesService,
+    private geocoder: GeocoderService
   ) {}
   myDateValue: Date;
   today = new Date();
   errorMsg: any;
   isModal: boolean = false;
-  lat: any;
-  long: any;
+  location: Subject<string> = new Subject<string>();
   service_id: any;
   pageSize: any = 10;
   page: any = 1;
+
+  lat: number;
+  long: number;
 
   searchSalonForm: FormGroup;
 
@@ -75,8 +74,12 @@ export class MainpageComponent implements OnInit, OnDestroy {
     this.searchSalonForm = this.fb.group({
       service_id: ["", Validators.required],
       date: ["", Validators.required],
-      lat: ["", Validators.required],
-      long: ["", Validators.required],
+      location: ["", Validators.required],
+    });
+
+    this.location.subscribe((x) => {
+      this.searchSalonForm.get("location").setValue(x);
+      this.searchSalonForm.get("location").updateValueAndValidity();
     });
 
     this.currentLanguageSub = this.languagesService.currentLanguage$.subscribe(
@@ -100,7 +103,9 @@ export class MainpageComponent implements OnInit, OnDestroy {
     this.isModal = false;
   }
   searchSalons(data) {
-    if (data.date && data.service_id && data.lat && data.long) {
+    if (data.date && data.service_id && this.lat & this.long) {
+      data.lat = this.lat;
+      data.long = this.long;
       this.errorMsg = null;
       sessionStorage.setItem("userprefrence", JSON.stringify(data));
       this.userCommServ.setUserPrefrence(data);
@@ -136,31 +141,26 @@ export class MainpageComponent implements OnInit, OnDestroy {
     this.searchSalonForm.updateValueAndValidity();
     this.isModal = false;
   }
-  getAddress(place: Object) {
-    var address = place;
-
+  async getAddress(place: Object) {
     this.lat = place["geometry"].location.lat();
     this.long = place["geometry"].location.lng();
 
-    this.searchSalonForm.get("lat").setValue(this.lat);
-
-    this.searchSalonForm.updateValueAndValidity();
-
-    this.searchSalonForm.get("long").setValue(this.long);
-
-    this.searchSalonForm.updateValueAndValidity();
+    const location = await this.geocoder.getLocationByCoords(
+      this.lat,
+      this.long
+    );
+    this.location.next(location);
   }
-  getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition((data) => {
-      this.lat = data["coords"].latitude;
-      this.long = data["coords"].longitude;
-      this.searchSalonForm.get("lat").setValue(this.lat);
 
-      this.searchSalonForm.updateValueAndValidity();
+  async getCurrentLocation() {
+    try {
+      const { lat, long } = await this.geocoder.getCurrentPosition();
+      this.lat = lat;
+      this.long = long;
 
-      this.searchSalonForm.get("long").setValue(this.long);
+      const location = await this.geocoder.getLocationByCoords(lat, long);
 
-      this.searchSalonForm.updateValueAndValidity();
-    });
+      this.location.next(location);
+    } catch (err) {}
   }
 }

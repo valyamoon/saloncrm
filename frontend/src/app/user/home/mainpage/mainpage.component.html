@@ -47,7 +47,6 @@
                           (click)="getCurrentLocation()"
                           class="location"
                           src="../../../../assets/images/current-location.png"
-                          title="use current location | translate: this.currentLanguage | async"
                         />
                       </div>
                     </label>
@@ -63,6 +62,7 @@
                         class="geoLoc"
                         (setAddress)="getAddress($event)"
                         adressType="geocode"
+                        [autocompleteInput]="searchSalonForm.value['location']"
                       ></app-googlesearch>
                       <img src="../../../../assets/images/location-pin.svg" />
                     </div>
