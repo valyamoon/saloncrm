@@ -230,7 +230,7 @@ export class SalondetailsComponent implements OnInit {
             );
           } else {
             this.showPendingApproval = false;
-            this.toastrServ.error("Failed To Submit Salon Details", "", {
+            this.toastrServ.error(data["message"], "", {
               timeOut: 2000,
             });
           }
