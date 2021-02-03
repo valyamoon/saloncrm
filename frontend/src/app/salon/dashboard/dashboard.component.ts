@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CommonService } from "../dashboard/common.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
+import { GeocoderService } from "../../services";
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",
@@ -15,7 +16,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private commServ: CommonService,
     private toastrServ: ToastrService,
-    private router: Router
+    private router: Router,
+    private geocoder: GeocoderService
   ) {}
 
   ngOnInit() {
@@ -43,7 +45,7 @@ export class DashboardComponent implements OnInit {
       user_id: userId,
     };
     this.commServ.getSalonData(data).subscribe(
-      (response: any) => {
+      async (response: any) => {
         const { data } = response;
 
         if (data) {
@@ -61,6 +63,12 @@ export class DashboardComponent implements OnInit {
 
           if (response.code === 200) {
             this.salonData = response.data;
+            const [longitude, latitude] = data.location.coordinates;
+            let location = await this.geocoder.getLocationByCoords(
+              latitude,
+              longitude
+            );
+            this.salonData.location = location;
             this.commServ.setCustomer_id(response.data["customer_id"]);
             this.commServ.setSalon_id(response.data["_id"]);
             this.commServ.setStripeConnectedStatus(
