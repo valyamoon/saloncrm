@@ -235,9 +235,7 @@ function saveSalonDetails(req, res) {
               }
             }
           } else {
-            return res.json(
-              Response(constant.ERROR_CODE, "Image isn`t passed")
-            );
+            return res.json(Response(constant.ERROR_CODE, "Missing image"));
           }
         }
       }
