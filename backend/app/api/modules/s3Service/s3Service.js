@@ -33,10 +33,10 @@ class S3Service {
     return new Promise((resolve, reject) =>
       s3.upload(params, (err, data) => {
         if (err) {
-          reject();
+          reject(err);
         }
 
-        resolve();
+        resolve(data);
       })
     );
   }
