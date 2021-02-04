@@ -107,7 +107,7 @@ function saveSalonDetails(req, res) {
       var image_path;
       var customer_id_value;
 
-      if (req.body && req.body.user_id) {
+      if (req.body && req.body.user_id && req.body.lat && req.body.long) {
         let conditon = {
           _id: req.body.user_id,
           isActive: false,
@@ -238,6 +238,10 @@ function saveSalonDetails(req, res) {
             return res.json(Response(constant.ERROR_CODE, "Missing image"));
           }
         }
+      } else {
+        return res.json(
+          Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT)
+        );
       }
     } catch (error) {
       return res.json(
