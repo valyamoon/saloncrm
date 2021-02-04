@@ -461,8 +461,6 @@ function getSalons(req, res) {
             var url = v.image;
             v.image = url;
 
-            console.log("VVVV", v);
-
             salonListingNew.push({
               starttime: v.optime,
               date: v.date,
