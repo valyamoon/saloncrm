@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { UsercommonserviceService } from "../usercommonservice.service";
 import { ToastrService } from "ngx-toastr";
 import { AvailableLanguages } from "../../../enums";
@@ -85,17 +85,8 @@ export class SalonListComponent implements OnInit, OnDestroy {
       async (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
-          for (const [idx, salon] of this.salonListingData.entries()) {
-            const [longitude, latitude] = salon.location.coordinates;
-            let location = await this.geocoder.getLocationByCoords(
-              latitude,
-              longitude
-            );
 
-            salon.location = location;
-            this.salonListingData[idx] = salon;
-            this.salonListingData[idx].coordinates = { latitude, longitude };
-          }
+          await this.loadCoordinates(this.salonListingData);
 
           this.salonCount = data["data"]["count"];
           if (this.salonCount > 10) {
@@ -142,9 +133,10 @@ export class SalonListComponent implements OnInit, OnDestroy {
       page: this.page,
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
-      (data) => {
+      async (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
+          await this.loadCoordinates(this.salonListingData);
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000,
@@ -175,9 +167,10 @@ export class SalonListComponent implements OnInit, OnDestroy {
       page: this.page,
     };
     this.userCommnServ.getSalonsList(dataToPass).subscribe(
-      (data) => {
+      async (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
+          await this.loadCoordinates(this.salonListingData);
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000,
@@ -242,5 +235,19 @@ export class SalonListComponent implements OnInit, OnDestroy {
         });
       }
     );
+  }
+
+  private async loadCoordinates(salons) {
+    for (const [idx, salon] of salons.entries()) {
+      const [longitude, latitude] = salon.location.coordinates;
+      let location = await this.geocoder.getLocationByCoords(
+        latitude,
+        longitude
+      );
+
+      salon.location = location;
+      salons[idx] = salon;
+      salons[idx].coordinates = { latitude, longitude };
+    }
   }
 }
