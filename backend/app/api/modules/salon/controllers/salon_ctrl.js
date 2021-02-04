@@ -235,9 +235,7 @@ function saveSalonDetails(req, res) {
               }
             }
           } else {
-            return res.json(
-              Response(constant.ERROR_CODE, "Image isn`t passed")
-            );
+            return res.json(Response(constant.ERROR_CODE, "Missing image"));
           }
         }
       }
@@ -462,8 +460,6 @@ function getSalons(req, res) {
 
             var url = v.image;
             v.image = url;
-
-            console.log("VVVV", v);
 
             salonListingNew.push({
               starttime: v.optime,
@@ -1422,8 +1418,6 @@ function viewSalonDetails(req, res) {
 }
 
 function updateSalonDetails(req, res) {
-  var image_path;
-
   async function updateSalonDetails() {
     try {
       if (req.body && req.body.salon_id) {
@@ -1435,75 +1429,57 @@ function updateSalonDetails(req, res) {
         };
 
         if (req.files) {
+          let image_path;
           let timeStamp = Date.now();
 
           let extension;
-          if (err) {
-            return res.json(
-              Response(constant.ERROR_CODE, constant.INTERNAL_ERROR, err)
+          let path = "";
+          let imgName;
+
+          extension = req.files.image["name"].split(".");
+          let imgOriginalName = req.files.image["name"];
+          path = timeStamp + "_" + imgOriginalName;
+          imgName = path;
+
+          image_path = `${Config.s3.bucketBaseUrl}/${path}`;
+
+          let extensionArray = ["jpg", "jpeg", "png", "jfif"];
+          let format = extension[extension.length - 1];
+          if (extensionArray.includes(format)) {
+            await s3Service.fileUpload(imgName, req.files.image.data);
+            let condition = {
+              _id: mongoose.Types.ObjectId(req.body.salon_id),
+            };
+            let updateCondition = {
+              name: req.body.name,
+              salonaddress: req.body.salonaddress,
+              contact: req.body.contact,
+              code: req.body.code,
+              opentime: req.body.opentime,
+              closetime: req.body.closetime,
+              image: image_path,
+              location: locations,
+            };
+
+            let updateSalon = await commonQuery.updateOneDocument(
+              salons,
+              condition,
+              updateCondition
             );
+
+            if (updateSalon) {
+              res.json(
+                Response(
+                  constant.SUCCESS_CODE,
+                  constant.NEW_DATA_ADDED,
+                  updateSalon
+                )
+              );
+            }
           } else {
-            let db_path = "";
-            let path = "";
-            if (req.files) {
-              extension = req.files.image["name"].split(".");
-              let imgOriginalName = req.files.image["name"];
-              path = constant.PROFILEIMAGE + timeStamp + "_" + imgOriginalName;
-              // constant.directoryPath.SERVICEIMAGE
-              // return false;
-              db_path = `${Config.s3.bucketDir}/${imgOriginalName}`;
-            }
-            if (db_path) {
-              //image_path= db_path;
-              image_path = db_path;
-            }
-            if (path != "") {
-              let extensionArray = ["jpg", "jpeg", "png", "jfif"];
-              let format = extension[extension.length - 1];
-              if (extensionArray.includes(format)) {
-                let result = await commonQuery
-                  .fileUpload(path, req.files.image["data"])
-                  .then(async (data) => {
-                    if (data.status) {
-                      let condition = {
-                        _id: mongoose.Types.ObjectId(req.body.salon_id),
-                      };
-                      let updateCondition = {
-                        name: req.body.name,
-                        salonaddress: req.body.salonaddress,
-                        contact: req.body.contact,
-                        code: req.body.code,
-                        opentime: req.body.opentime,
-                        closetime: req.body.closetime,
-                        image: image_path,
-                        location: locations,
-                      };
-
-                      let updateSalon = await commonQuery.updateOneDocument(
-                        salons,
-                        condition,
-                        updateCondition
-                      );
-
-                      if (!updateSalon) {
-                      } else {
-                        res.json(
-                          Response(
-                            constant.SUCCESS_CODE,
-                            constant.NEW_DATA_ADDED,
-                            updateSalon
-                          )
-                        );
-                      }
-                    } else {
-                    }
-                  });
-              } else {
-                return res.json(
-                  Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED)
-                );
-              }
-            }
+            return res.json(
+              Response(constant.ERROR_CODE, constant.FILE_UNSUPPORTED)
+            );
           }
         } else if (!req.files) {
           let condition = {
@@ -1525,8 +1501,7 @@ function updateSalonDetails(req, res) {
             updateCondition
           );
 
-          if (!updateSalon) {
-          } else {
+          if (updateSalon) {
             res.json(
               Response(
                 constant.SUCCESS_CODE,
