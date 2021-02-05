@@ -28,7 +28,6 @@ export class GoogleSearcComponent implements OnInit, AfterViewInit {
   }
 
   private getPlaceAutocomplete() {
-    console.log("autocompleteInput", this.autocompleteInput);
     this.mapsAPILoader.load().then((res) => {
       const autocomplete = new google.maps.places.Autocomplete(
         this.addresstext.nativeElement,

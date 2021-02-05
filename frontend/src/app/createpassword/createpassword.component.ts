@@ -1,13 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
   selector: "app-createpassword",
   templateUrl: "./createpassword.component.html",
-  styleUrls: ["./createpassword.component.css"]
+  styleUrls: ["./createpassword.component.css"],
 })
-export class CreatepasswordComponent implements OnInit {
+export class CreatepasswordComponent {
   resetKey: any;
   constructor() {}
-
-  ngOnInit() {}
 }

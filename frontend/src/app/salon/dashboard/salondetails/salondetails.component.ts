@@ -75,7 +75,7 @@ export class SalondetailsComponent implements OnInit {
       name: ["", Validators.required],
       contact: ["", [Validators.required]],
       code: ["", Validators.required],
-      location: ["", Validators.required],
+      location: [""],
       image: null,
       opentime: ["", Validators.required],
       closetime: ["", Validators.required],
@@ -137,7 +137,7 @@ export class SalondetailsComponent implements OnInit {
     } catch (err) {}
   }
 
-  getAddress(place) {
+  async getAddress(place) {
     this.lat = place.geometry.location.lat();
     this.lng = place.geometry.location.lng();
 
@@ -148,6 +148,13 @@ export class SalondetailsComponent implements OnInit {
     this.submitSalonDetails.get("long").setValue(this.lng);
 
     this.submitSalonDetails.updateValueAndValidity();
+
+    const location = await this.geocoder.getLocationByCoords(
+      this.lat,
+      this.lng
+    );
+
+    this.location.next(location);
   }
 
   chechIsApprovedStatus(data) {

@@ -81,7 +81,7 @@ module.exports = {
   addTC: addTC,
   getTC: getTC,
   updateAboutUs: updateAboutUs,
-  updateTC: updateTC
+  updateTC: updateTC,
 };
 
 /**
@@ -96,7 +96,7 @@ function addCategories(req, res) {
     try {
       if (req.body.catname) {
         let newCategory = new categories({
-          catname: req.body.catname
+          catname: req.body.catname,
         });
 
         let addCategory = await commonQuery.InsertIntoCollection(
@@ -124,7 +124,7 @@ function addCategories(req, res) {
       );
     }
   }
-  addCategories().then(function() {});
+  addCategories().then(function () {});
 }
 /**
  * Function is use to get salon list which need to be approved by Admin
@@ -143,7 +143,7 @@ function getSalonsRequestList(req, res) {
         let condition = {
           isActive: false,
           isDeleted: false,
-          isDeclined: false
+          isDeclined: false,
         };
 
         let count = await commonQuery.findCount(salons, condition);
@@ -160,13 +160,13 @@ function getSalonsRequestList(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, error)
           );
         } else {
-          listOfSalons.forEach(function(c) {
+          listOfSalons.forEach(function (c) {
             c.isservicesadded = undefined;
             c.isreviewadded = undefined;
           });
           let dataToPass = {
             data: listOfSalons,
-            countNumber: count
+            countNumber: count,
           };
 
           res.json(
@@ -185,7 +185,7 @@ function getSalonsRequestList(req, res) {
     }
   }
 
-  getSalonsRequestList().then(function() {});
+  getSalonsRequestList().then(function () {});
 }
 
 /**
@@ -201,11 +201,11 @@ function acceptSalonRequest(req, res) {
     try {
       if (req.body.salon_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.salon_id)
+          _id: mongoose.Types.ObjectId(req.body.salon_id),
         };
         let activeCondition = {
           isActive: true,
-          isApproved: true
+          isApproved: true,
         };
 
         let acceptSalonRequest = await commonQuery.updateOneDocument(
@@ -223,10 +223,10 @@ function acceptSalonRequest(req, res) {
 
           let activeCondition = {
             isActive: true,
-            isApproved: true
+            isApproved: true,
           };
           let condition = {
-            _id: mongoose.Types.ObjectId(user_id)
+            _id: mongoose.Types.ObjectId(user_id),
           };
           let activeSalonLogin = await commonQuery.updateOneDocument(
             users,
@@ -240,7 +240,7 @@ function acceptSalonRequest(req, res) {
           } else {
             let messagetTemplate = {
               subject: messageTemplates.acceptSalonRequest["subject"],
-              message: messageTemplates.acceptSalonRequest["message"]
+              message: messageTemplates.acceptSalonRequest["message"],
             };
 
             let sendEmailConfirmation = await mailer.sendMailTO(
@@ -268,7 +268,7 @@ function acceptSalonRequest(req, res) {
     }
   }
 
-  acceptSalonRequest().then(function() {});
+  acceptSalonRequest().then(function () {});
 }
 /**
  * Function is use to suspend Salon on subsription expiry
@@ -283,12 +283,12 @@ function suspendSalon(req, res) {
     try {
       if (req.body.salon_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.salon_id)
+          _id: mongoose.Types.ObjectId(req.body.salon_id),
         };
         let activeCondition = {
           isActive: false,
           isDeclined: true,
-          isApproved: false
+          isApproved: false,
         };
 
         let suspendedSalon = await commonQuery.updateOneDocument(
@@ -306,10 +306,10 @@ function suspendSalon(req, res) {
 
           let activeCondition = {
             isActive: false,
-            isSubmitted: false
+            isSubmitted: false,
           };
           let condition = {
-            _id: mongoose.Types.ObjectId(user_id)
+            _id: mongoose.Types.ObjectId(user_id),
           };
           let deactivateLogin = await commonQuery.updateOneDocument(
             users,
@@ -324,7 +324,7 @@ function suspendSalon(req, res) {
           } else {
             let messagetTemplate = {
               subject: messageTemplates.accountSuspended["subject"],
-              message: messageTemplates.accountSuspended["message"]
+              message: messageTemplates.accountSuspended["message"],
             };
 
             let sendEmailConfirmation = await mailer.sendMailTO(
@@ -353,7 +353,7 @@ function suspendSalon(req, res) {
     }
   }
 
-  suspendSalon().then(function() {});
+  suspendSalon().then(function () {});
 }
 
 /**
@@ -378,8 +378,8 @@ function getCategories(req, res) {
             Response(constant.ERROR_CODE, constant.DATA_NOT_FOUND, null)
           );
         } else {
-          categoriesList.forEach(function(v) {
-            v.services.forEach(function(v) {
+          categoriesList.forEach(function (v) {
+            v.services.forEach(function (v) {
               delete v.isActive;
               delete v.isDeleted;
             });
@@ -400,7 +400,7 @@ function getCategories(req, res) {
       );
     }
   }
-  getCategories().then(function() {});
+  getCategories().then(function () {});
 }
 
 /**
@@ -419,7 +419,7 @@ function addServices(req, res) {
           name: req.body.name,
           category_id: req.body.category_id,
           logo: req.body.logo,
-          description: req.body.description
+          description: req.body.description,
         });
 
         let saveService = await commonQuery.InsertIntoCollection(
@@ -451,7 +451,7 @@ function addServices(req, res) {
     }
   }
 
-  addServices().then(function() {});
+  addServices().then(function () {});
 }
 
 /**
@@ -467,12 +467,12 @@ function removeServices(req, res) {
     try {
       if (req.body && req.body.service_id) {
         let condition = {
-          _id: req.body.service_id
+          _id: req.body.service_id,
         };
 
         let removeCondition = {
           isActive: false,
-          isDeleted: true
+          isDeleted: true,
         };
 
         let removeService = await commonQuery.updateOneDocument(
@@ -510,7 +510,7 @@ function removeServices(req, res) {
     }
   }
 
-  removeServices().then(function() {});
+  removeServices().then(function () {});
 }
 
 /**
@@ -526,7 +526,7 @@ function addRoles(req, res) {
     try {
       if (req.body && req.body.role) {
         let newRole = new roles({
-          name: req.body.role
+          name: req.body.role,
         });
         let saveRole = await commonQuery.InsertIntoCollection(roles, newRole);
         if (!saveRole) {
@@ -543,7 +543,7 @@ function addRoles(req, res) {
       );
     }
   }
-  addRoles().then(function() {});
+  addRoles().then(function () {});
 }
 /**
  * Function is use to get list of Roles
@@ -562,7 +562,7 @@ function getRoles(req, res) {
       if (req.body && req.body.type === "roles") {
         let condition = {
           status: true,
-          isDeleted: false
+          isDeleted: false,
         };
 
         let rolesCount = await commonQuery.findCount(roles, condition);
@@ -583,13 +583,13 @@ function getRoles(req, res) {
         if (!rolesList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
-          rolesList.forEach(function(v) {
+          rolesList.forEach(function (v) {
             v.isDeleted = undefined;
             v.status = undefined;
           });
           let dataToPass = {
             data: rolesList,
-            count: countNumber
+            count: countNumber,
           };
 
           res.json(
@@ -603,7 +603,7 @@ function getRoles(req, res) {
       );
     }
   }
-  getRoles().then(function() {});
+  getRoles().then(function () {});
 }
 
 /**
@@ -625,7 +625,7 @@ function getActiveSalonsList(req, res) {
           isActive: true,
           isDeleted: false,
           isApproved: true,
-          isDeclined: false
+          isDeclined: false,
         };
         let activeSalonsList = await commonQuery.fetch_all_paginated(
           salons,
@@ -636,7 +636,7 @@ function getActiveSalonsList(req, res) {
         if (!activeSalonsList) {
           res.json(Response(constant.ERROR_CODE, constant.FAILED_TO_ADD, null));
         } else {
-          activeSalonsList.forEach(function(v) {
+          activeSalonsList.forEach(function (v) {
             v.isDeleted = undefined;
             v.isreviewadded = undefined;
             v.isservicesadded = undefined;
@@ -659,7 +659,7 @@ function getActiveSalonsList(req, res) {
       );
     }
   }
-  getActiveSalonsList().then(function() {});
+  getActiveSalonsList().then(function () {});
 }
 
 /**
@@ -676,7 +676,7 @@ function fetchActiveUsersCount(req, res) {
       if (req.body && req.body.type) {
         if (req.body.type === "user") {
           let roleCondition = {
-            name: "user"
+            name: "user",
           };
           let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
 
@@ -685,7 +685,7 @@ function fetchActiveUsersCount(req, res) {
           let condition = {
             isActive: true,
             isDeleted: false,
-            role_id: roleId
+            role_id: roleId,
           };
           let usersCount = await commonQuery.findCount(users, condition);
           if (!usersCount) {
@@ -710,7 +710,7 @@ function fetchActiveUsersCount(req, res) {
     }
   }
 
-  fetchActiveUsersCount().then(function() {});
+  fetchActiveUsersCount().then(function () {});
 }
 /**
  * Function is use to Fetch Active Salon List
@@ -729,7 +729,7 @@ function fetchActiveSalonsCount(req, res) {
             isActive: true,
             isDeleted: false,
             isApproved: true,
-            isDeclined: false
+            isDeclined: false,
           };
           let salonsCount = await commonQuery.findCount(salons, condition);
 
@@ -755,7 +755,7 @@ function fetchActiveSalonsCount(req, res) {
     }
   }
 
-  fetchActiveSalonsCount().then(function() {});
+  fetchActiveSalonsCount().then(function () {});
 }
 
 function fetchActiveUsersList(req, res) {
@@ -767,7 +767,7 @@ function fetchActiveUsersList(req, res) {
       if (req.body && req.body.type) {
         if (req.body.type === "user") {
           let roleCondition = {
-            name: "user"
+            name: "user",
           };
           let fetchRoleId = await commonQuery.findoneData(roles, roleCondition);
 
@@ -776,7 +776,7 @@ function fetchActiveUsersList(req, res) {
           let condition = {
             isActive: true,
             isDeleted: false,
-            role_id: roleId
+            role_id: roleId,
           };
           let usersList = await commonQuery.fetch_all_paginated(
             users,
@@ -805,7 +805,7 @@ function fetchActiveUsersList(req, res) {
       );
     }
   }
-  fetchActiveUsersList().then(function() {});
+  fetchActiveUsersList().then(function () {});
 }
 /**
  * Function is use to remove categories
@@ -820,12 +820,12 @@ function removeCategories(req, res) {
     try {
       if (req.body && req.body.category_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.category_id)
+          _id: mongoose.Types.ObjectId(req.body.category_id),
         };
         let updateCondition = {
           isActive: false,
           isDeleted: true,
-          services: []
+          services: [],
         };
         let deleteCategory = await commonQuery.updateOneDocument(
           categories,
@@ -852,7 +852,7 @@ function removeCategories(req, res) {
       );
     }
   }
-  removeCategories().then(function() {});
+  removeCategories().then(function () {});
 }
 /**
  * Function is use to get list of archived categories
@@ -868,7 +868,7 @@ function getArchivedCategories(req, res) {
       if (req.body && req.body.type === "archive-categories") {
         let condition = {
           isActive: false,
-          isDeleted: true
+          isDeleted: true,
         };
         let archivedCategories = await commonQuery.fetch_all(
           categories,
@@ -894,7 +894,7 @@ function getArchivedCategories(req, res) {
       );
     }
   }
-  getArchivedCategories().then(function() {});
+  getArchivedCategories().then(function () {});
 }
 
 /**
@@ -915,7 +915,7 @@ function getAdminCategoriesList(req, res) {
       if (req.body && req.body.type === "admin-categories") {
         let condition = {
           isActive: true,
-          isDeleted: false
+          isDeleted: false,
         };
 
         let adminCategoriesCount = await commonQuery.findCount(
@@ -939,12 +939,12 @@ function getAdminCategoriesList(req, res) {
             Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
           );
         } else {
-          adminCategories.forEach(function(c) {
+          adminCategories.forEach(function (c) {
             c.services = undefined;
           });
           let dataToPass = {
             count: adminCount,
-            data: adminCategories
+            data: adminCategories,
           };
 
           res.json(
@@ -962,7 +962,7 @@ function getAdminCategoriesList(req, res) {
       );
     }
   }
-  getAdminCategoriesList().then(function() {});
+  getAdminCategoriesList().then(function () {});
 }
 
 /**
@@ -978,11 +978,11 @@ function removeRole(req, res) {
     try {
       if (req.body && req.body.role_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.role_id)
+          _id: mongoose.Types.ObjectId(req.body.role_id),
         };
         let updateCondition = {
           status: false,
-          isDeleted: true
+          isDeleted: true,
         };
         let removeRole = await commonQuery.updateOneDocument(
           roles,
@@ -1009,7 +1009,7 @@ function removeRole(req, res) {
       );
     }
   }
-  removeRole().then(function() {});
+  removeRole().then(function () {});
 }
 
 /**
@@ -1025,10 +1025,10 @@ function updateRole(req, res) {
     try {
       if (req.body && req.body._id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body._id)
+          _id: mongoose.Types.ObjectId(req.body._id),
         };
         let updateCondition = {
-          name: req.body.name
+          name: req.body.name,
         };
         let updatedRole = await commonQuery.updateOneDocument(
           roles,
@@ -1051,7 +1051,7 @@ function updateRole(req, res) {
       );
     }
   }
-  updateRole().then(function() {});
+  updateRole().then(function () {});
 }
 
 /**
@@ -1067,11 +1067,11 @@ function awakeCategory(req, res) {
     try {
       if (req.body && req.body._id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body._id)
+          _id: mongoose.Types.ObjectId(req.body._id),
         };
         let updateCondition = {
           isActive: true,
-          isDeleted: false
+          isDeleted: false,
         };
         let awakeCategories = await commonQuery.updateOneDocument(
           categories,
@@ -1098,7 +1098,7 @@ function awakeCategory(req, res) {
       );
     }
   }
-  awakeCategory().then(function() {});
+  awakeCategory().then(function () {});
 }
 
 /**
@@ -1120,7 +1120,7 @@ function getActiveServices(req, res) {
       if (req.body.type == "services") {
         let condition = {
           isActive: true,
-          isDeleted: false
+          isDeleted: false,
         };
         servicesCount = await commonQuery.findCount(services, condition);
         if (servicesCount) {
@@ -1142,7 +1142,7 @@ function getActiveServices(req, res) {
         } else {
           let dataToPass = {
             data: servicesList,
-            count: servicesCount
+            count: servicesCount,
           };
           res.json(
             Response(
@@ -1160,7 +1160,7 @@ function getActiveServices(req, res) {
     }
   }
 
-  getActiveServices().then(function() {});
+  getActiveServices().then(function () {});
 }
 
 /**
@@ -1182,7 +1182,7 @@ function getActiveAdminList(req, res) {
       if (req.body.type == "admin") {
         let condition = {
           isActive: true,
-          isDeleted: false
+          isDeleted: false,
         };
         AdminCount = await commonQuery.findCount(services, condition);
         if (AdminCount) {
@@ -1204,7 +1204,7 @@ function getActiveAdminList(req, res) {
         } else {
           let dataToPass = {
             data: servicesList,
-            count: servicesCount
+            count: servicesCount,
           };
           res.json(
             Response(
@@ -1222,7 +1222,7 @@ function getActiveAdminList(req, res) {
     }
   }
 
-  getActiveAdminList().then(function() {});
+  getActiveAdminList().then(function () {});
 }
 
 /**
@@ -1245,26 +1245,26 @@ function fetchActiveUsersAll(req, res) {
       if (req.body && req.body.type) {
         if (req.body.type) {
           let roleCondition = {
-            name: req.body.type
+            name: req.body.type,
           };
 
           if (req.body.type == "user") {
             countCondition = {
               isActive: true,
-              isDeleted: false
+              isDeleted: false,
             };
             model = users;
           } else if (req.body.type == "salon") {
             countCondition = {
               isActive: true,
               isDeleted: false,
-              isApproved: true
+              isApproved: true,
             };
             model = salons;
           } else if (req.body.type == "admin") {
             countCondition = {
               isActive: true,
-              isDeleted: false
+              isDeleted: false,
             };
             model = users;
           }
@@ -1276,7 +1276,7 @@ function fetchActiveUsersAll(req, res) {
           let condition = {
             isActive: true,
             isDeleted: false,
-            role_id: roleId
+            role_id: roleId,
           };
 
           let fetchCount = await commonQuery.findCount(model, condition);
@@ -1294,7 +1294,7 @@ function fetchActiveUsersAll(req, res) {
               Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
             );
           } else {
-            usersList.forEach(function(c) {
+            usersList.forEach(function (c) {
               c.password = undefined;
               c.lat = undefined;
               c.long = undefined;
@@ -1302,7 +1302,7 @@ function fetchActiveUsersAll(req, res) {
 
             let dataToPass = {
               data: usersList,
-              count: count
+              count: count,
             };
             res.json(
               Response(
@@ -1320,7 +1320,7 @@ function fetchActiveUsersAll(req, res) {
       );
     }
   }
-  fetchActiveUsersAll().then(function() {});
+  fetchActiveUsersAll().then(function () {});
 }
 
 /**
@@ -1343,16 +1343,16 @@ function forgotPassword(req, res) {
         var condition = {
           email: req.body.email,
           isDeleted: false,
-          isActive: true
+          isActive: true,
         };
         var userObj = await commonQuery.findoneData(model, condition);
 
         if (userObj) {
           var condition = {
-            _id: userObj._id
+            _id: userObj._id,
           };
           var updateData = {
-            resetkey: ""
+            resetkey: "",
           };
           updateData.resetkey = utility.uuid.v1();
 
@@ -1367,12 +1367,12 @@ function forgotPassword(req, res) {
             var userMailData = {
               userId: userObj._id,
               email: userObj.email ? userObj.email : "",
-              link: baseUrl + "#/create-password/" + updateKey.resetkey
+              link: baseUrl + "#/create-password/" + updateKey.resetkey,
             };
 
             let obj = {
               data: userMailData,
-              mailType: "Forget Password" //constant.varibleType.FORGET_PASSWORD //"Forget Password"
+              mailType: "Forget Password", //constant.varibleType.FORGET_PASSWORD //"Forget Password"
             };
 
             let sendMail = await commonQuery.sendEmailFunction(obj);
@@ -1397,7 +1397,7 @@ function forgotPassword(req, res) {
       );
     }
   }
-  forgot_password().then(data => {});
+  forgot_password().then((data) => {});
 }
 /**
  * Function is use to get list service provided by admin
@@ -1414,7 +1414,7 @@ async function getServiceList(req, res) {
 
     let salonCond = {
       isActive: true,
-      isDeleted: false
+      isDeleted: false,
     };
     let pageSize = 100;
     let page = 1;
@@ -1422,20 +1422,20 @@ async function getServiceList(req, res) {
 
     async.each(
       serviceList,
-      async function(serviceData, firstCB) {
+      async function (serviceData, firstCB) {
         let serviceCond = {
           salon_id: salonId,
           service_id: serviceData._id,
-          category_id: serviceData.category_id
+          category_id: serviceData.category_id,
         };
         let salonService = await commonQuery.findAll(salonservice, serviceCond);
         let salonServiceData = {
           service: serviceData,
-          salonserviceinfo: salonService
+          salonserviceinfo: salonService,
         };
         finalServiceArr.push(salonServiceData);
       },
-      async function(err, data) {
+      async function (err, data) {
         if (err) {
           console.log("Error @1431", err);
         } else {
@@ -1461,7 +1461,9 @@ async function getServiceList(req, res) {
 async function getServices(req, res) {
   if (req.body.category_id) {
     let cond = {
-      category_id: req.body.category_id
+      category_id: req.body.category_id,
+      isActive: true,
+      isDeleted: false,
     };
 
     let servicesList = await commonQuery.fetch_all(services, cond);
@@ -1525,7 +1527,7 @@ function activeUsers(req, res) {
       );
     }
   }
-  activeUsers().then(function() {});
+  activeUsers().then(function () {});
 }
 
 /**
@@ -1574,7 +1576,7 @@ function deactiveUsers() {
       );
     }
   }
-  deactiveUsers().then(function() {});
+  deactiveUsers().then(function () {});
 }
 
 // function viewDetails(req, res) {
@@ -1604,9 +1606,9 @@ function createSubscription(req, res) {
             currency: "usd",
             interval: req.body.interval,
             product: { name: req.body.planname },
-            trial_period_days: req.body.trialperiod
+            trial_period_days: req.body.trialperiod,
           },
-          async function(err, plan) {
+          async function (err, plan) {
             if (err) {
               res.json(
                 Response(constant.ERROR_CODE, constant.FAILED_TO_PROCESS, null)
@@ -1618,7 +1620,7 @@ function createSubscription(req, res) {
                 amount: req.body.amount,
                 interval: req.body.interval,
                 currency: "usd",
-                trial_period_days: req.body.trialperiod
+                trial_period_days: req.body.trialperiod,
               });
 
               let saveSubscription = await commonQuery.InsertIntoCollection(
@@ -1650,7 +1652,7 @@ function createSubscription(req, res) {
     }
   }
 
-  createSubscription().then(function() {});
+  createSubscription().then(function () {});
 }
 
 /**
@@ -1669,9 +1671,9 @@ function updateSubscription(req, res) {
         {
           amount: req.body.amount,
           interval: req.body.interval,
-          trial_period_days: req.body.trial_period_days
+          trial_period_days: req.body.trial_period_days,
         },
-        function(err, plan) {
+        function (err, plan) {
           if (err) {
             console.log(err);
             res.json(
@@ -1688,7 +1690,7 @@ function updateSubscription(req, res) {
     }
   }
 
-  updateSubscription().then(function() {});
+  updateSubscription().then(function () {});
 }
 
 /**
@@ -1703,7 +1705,7 @@ function deletePlan(req, res) {
   async function deletePlan() {
     try {
       if (req.body && req.body.planid) {
-        stripe.plans.del(req.body.planid, async function(err, confirmation) {
+        stripe.plans.del(req.body.planid, async function (err, confirmation) {
           // asynchronously called
           if (err) {
             console.log(err);
@@ -1743,7 +1745,7 @@ function deletePlan(req, res) {
     }
   }
 
-  deletePlan().then(function() {});
+  deletePlan().then(function () {});
 }
 
 /**
@@ -1782,7 +1784,7 @@ function getSubscription(req, res) {
     }
   }
 
-  getSubscription().then(function() {});
+  getSubscription().then(function () {});
 }
 
 /**
@@ -1815,7 +1817,7 @@ function getSubscirbedSalonsList(req, res) {
         } else {
           let dataToPass = {
             salons: subscriptionList,
-            count: count
+            count: count,
           };
           res.json(
             Response(
@@ -1832,7 +1834,7 @@ function getSubscirbedSalonsList(req, res) {
       );
     }
   }
-  getSubscirbedSalonsList().then(function() {});
+  getSubscirbedSalonsList().then(function () {});
 }
 
 /**
@@ -1852,7 +1854,7 @@ function addEmailTemplate(req, res) {
           unique_keyword: req.body.unique_keyword,
           subject: req.body.subject,
           description:
-            '<div class="body" style="padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#97d6c5; -webkit-text-size-adjust:none;"> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center" valign="top"> <table width="650" border="0" cellspacing="0" cellpadding="0" class="mobile-shell" style=" background: #FFF; padding: 20px 0; border-radius: 5px; margin: 15px 5px;"> <tr> <td class="td" style="width:650px; min-width:650px; font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;"> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center"> <img src="[[BASEURL]]assets/img/login.png" alt="" style="margin-bottom: 20px;"> </td></tr><tr> <td> &nbsp; </td></tr><tr style="background: #24b68d; width: 100%; height: 40px; font-size: 14px; text-align: center;"> <td> <a href="">Home</a> <a href="">About</a> <a href="">Contact Us</a> <a href="">Login</a> </td></tr></table> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr style="background: #ffffff; width: 100%; height: auto; font-size: 14px; text-align: center;"> <td style="padding: 60px 0 0 0"> <img src="[[BASEURL]]assets/img/email.png" alt="" style="width: 100%; max-width: 50px; margin: 0 0 20px 0;"> <h2 style="color: #57585b; font-weight: 500; font-size: 24px; margin: 20px 0;">Welcome To Dog-Grooming</h2> </td></tr></table> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td> <img src="[[BASEURL]]assets/img/free_white_blue.jpg" alt="" style="width: 100%;"> </td></tr><tr style="background: #E6FFF8; width: 100%; height: auto; font-size: 14px; text-align: center;"> <td style="text-align: left; padding: 0 30px 0 30px; vertical-align: top;"> <p style="font-size: 18px; font-weight: 500; margin: 0 0 12px 0;line-height: 20px;">Hello [[FirstName]] [[LastName]] ,</p><p style="font-size: 16px; line-height: 20px;">We have sent you this email in response to your request to reset your password on Dog-Grooming. For reset your password , please find below link . </p><p style="font-size: 16px; line-height: 26px;display: inlineblock; background: #05ad7c; padding: 5px 10px; color: #FFF;"><a href="[[NewPasswordLink]]" style="text-decoration: none;">Click here</a></p><p style="font-size: 13px; line-height: 26px;margin-top: 50px;">Thank You</p></td></tr><tr> <td> <img src="[[BASEURL]]assets/img/free_blue_white.jpg" alt="" style="width: 100%;"> </td></tr></table> </td></tr></table> </td></tr></table></div>'
+            '<div class="body" style="padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#97d6c5; -webkit-text-size-adjust:none;"> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center" valign="top"> <table width="650" border="0" cellspacing="0" cellpadding="0" class="mobile-shell" style=" background: #FFF; padding: 20px 0; border-radius: 5px; margin: 15px 5px;"> <tr> <td class="td" style="width:650px; min-width:650px; font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;"> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center"> <img src="[[BASEURL]]assets/img/login.png" alt="" style="margin-bottom: 20px;"> </td></tr><tr> <td> &nbsp; </td></tr><tr style="background: #24b68d; width: 100%; height: 40px; font-size: 14px; text-align: center;"> <td> <a href="">Home</a> <a href="">About</a> <a href="">Contact Us</a> <a href="">Login</a> </td></tr></table> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr style="background: #ffffff; width: 100%; height: auto; font-size: 14px; text-align: center;"> <td style="padding: 60px 0 0 0"> <img src="[[BASEURL]]assets/img/email.png" alt="" style="width: 100%; max-width: 50px; margin: 0 0 20px 0;"> <h2 style="color: #57585b; font-weight: 500; font-size: 24px; margin: 20px 0;">Welcome To Dog-Grooming</h2> </td></tr></table> <table width="100%" border="0" cellspacing="0" cellpadding="0"> <tr> <td> <img src="[[BASEURL]]assets/img/free_white_blue.jpg" alt="" style="width: 100%;"> </td></tr><tr style="background: #E6FFF8; width: 100%; height: auto; font-size: 14px; text-align: center;"> <td style="text-align: left; padding: 0 30px 0 30px; vertical-align: top;"> <p style="font-size: 18px; font-weight: 500; margin: 0 0 12px 0;line-height: 20px;">Hello [[FirstName]] [[LastName]] ,</p><p style="font-size: 16px; line-height: 20px;">We have sent you this email in response to your request to reset your password on Dog-Grooming. For reset your password , please find below link . </p><p style="font-size: 16px; line-height: 26px;display: inlineblock; background: #05ad7c; padding: 5px 10px; color: #FFF;"><a href="[[NewPasswordLink]]" style="text-decoration: none;">Click here</a></p><p style="font-size: 13px; line-height: 26px;margin-top: 50px;">Thank You</p></td></tr><tr> <td> <img src="[[BASEURL]]assets/img/free_blue_white.jpg" alt="" style="width: 100%;"> </td></tr></table> </td></tr></table> </td></tr></table></div>',
         };
 
         let saveTemplate = await commonQuery.InsertIntoCollection(
@@ -1865,7 +1867,7 @@ function addEmailTemplate(req, res) {
     } catch (error) {}
   }
 
-  addEmailTemplate().then(function() {});
+  addEmailTemplate().then(function () {});
 }
 
 /**
@@ -1890,7 +1892,7 @@ function resetPassword(req, res) {
         } else {
           let id = isResetkey.data[0]["_id"];
 
-          users.findById(id, function(err, result) {
+          users.findById(id, function (err, result) {
             if (err) {
               res.json(
                 Response(constant.ERROR_CODE, constant.FAILED_TO_RESET, null)
@@ -1914,7 +1916,7 @@ function resetPassword(req, res) {
     }
   }
 
-  resetPassword().then(function() {});
+  resetPassword().then(function () {});
 }
 
 /**
@@ -1958,7 +1960,7 @@ function updateCategories(req, res) {
     }
   }
 
-  updateCategories().then(function() {});
+  updateCategories().then(function () {});
 }
 
 /**
@@ -2002,7 +2004,7 @@ function updateService(req, res) {
     }
   }
 
-  updateService().then(function() {});
+  updateService().then(function () {});
 }
 
 function addAdminDetails(req, res) {
@@ -2013,7 +2015,7 @@ function addAdminDetails(req, res) {
           admin_id: req.body.admin_id,
           phone: req.body.phone,
           code: req.body.code,
-          about: req.body.about
+          about: req.body.about,
         });
 
         let addAdminDetail = await commonQuery.InsertIntoCollection(
@@ -2040,7 +2042,7 @@ function addAdminDetails(req, res) {
       );
     }
   }
-  addAdminDetails().then(function() {});
+  addAdminDetails().then(function () {});
 }
 
 function updateAdminDetails(req, res) {
@@ -2048,13 +2050,13 @@ function updateAdminDetails(req, res) {
     try {
       if (req.body && req.body.phone) {
         let condition = {
-          admin_id: mongoose.Types.ObjectId(req.body.admin_id)
+          admin_id: mongoose.Types.ObjectId(req.body.admin_id),
         };
 
         let updateCondition = {
           phone: req.body.phone,
           code: req.body.code,
-          about: req.body.about
+          about: req.body.about,
         };
 
         let updateAdmin = await commonQuery.updateOneDocument(
@@ -2082,7 +2084,7 @@ function updateAdminDetails(req, res) {
       );
     }
   }
-  updateAdminDetails().then(function() {});
+  updateAdminDetails().then(function () {});
 }
 
 function getAdminDetails(req, res) {
@@ -2110,7 +2112,7 @@ function getAdminDetails(req, res) {
       );
     }
   }
-  getAdminDetails().then(function() {});
+  getAdminDetails().then(function () {});
 }
 
 function getAllUpcomingBookings(req, res) {
@@ -2143,7 +2145,7 @@ function getAllUpcomingBookings(req, res) {
 
           let dataToPass = {
             bookings: getBookings,
-            count: totalCount
+            count: totalCount,
           };
 
           res.json(
@@ -2162,7 +2164,7 @@ function getAllUpcomingBookings(req, res) {
     }
   }
 
-  getAllUpcomingBookings().then(function() {});
+  getAllUpcomingBookings().then(function () {});
 }
 
 //addAboutUs: addAboutUs,
@@ -2177,7 +2179,7 @@ function getTC(req, res) {
     try {
       if (req.body && req.body.tc_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.tc_id)
+          _id: mongoose.Types.ObjectId(req.body.tc_id),
         };
         let gettc = await commonQuery.findoneData(tc, condition);
         if (gettc) {
@@ -2196,7 +2198,7 @@ function getTC(req, res) {
       );
     }
   }
-  gettc().then(function() {});
+  gettc().then(function () {});
 }
 
 function getAboutUs(req, res) {
@@ -2204,7 +2206,7 @@ function getAboutUs(req, res) {
     try {
       if (req.body && req.body.about_id) {
         let condition = {
-          _id: mongoose.Types.ObjectId(req.body.about_id)
+          _id: mongoose.Types.ObjectId(req.body.about_id),
         };
         let getAboutUs = await commonQuery.findoneData(aboutus, condition);
         if (getAboutUs) {
@@ -2227,7 +2229,7 @@ function getAboutUs(req, res) {
       );
     }
   }
-  getAboutUs().then(function() {});
+  getAboutUs().then(function () {});
 }
 
 function addAboutUs(req, res) {
@@ -2236,7 +2238,7 @@ function addAboutUs(req, res) {
     try {
       if (req.body && req.body.about) {
         let saveaboutUs = new aboutus({
-          about: req.body.about
+          about: req.body.about,
         });
         let saveNow = await commonQuery.InsertIntoCollection(
           aboutus,
@@ -2258,18 +2260,18 @@ function addAboutUs(req, res) {
       );
     }
   }
-  addAboutUs().then(function() {});
+  addAboutUs().then(function () {});
 }
 function updateAboutUs(req, res) {
   async function updateAboutUs() {
     try {
       if (req.body && req.body.about_id) {
         let condition = {
-          _id: req.body.about_id
+          _id: req.body.about_id,
         };
 
         let updCond = {
-          about: req.body.about
+          about: req.body.about,
         };
 
         let saveNow = await commonQuery.updateOneDocument(
@@ -2293,18 +2295,18 @@ function updateAboutUs(req, res) {
       );
     }
   }
-  updateAboutUs().then(function() {});
+  updateAboutUs().then(function () {});
 }
 function updateTC(req, res) {
   async function updateTC() {
     try {
       if (req.body && req.body.tc_id) {
         let condition = {
-          _id: req.body.tc_id
+          _id: req.body.tc_id,
         };
 
         let updCond = {
-          about: req.body.about
+          about: req.body.about,
         };
 
         let saveNow = await commonQuery.updateOneDocument(
@@ -2328,7 +2330,7 @@ function updateTC(req, res) {
       );
     }
   }
-  updateTC().then(function() {});
+  updateTC().then(function () {});
 }
 
 function addTC(req, res) {
@@ -2336,7 +2338,7 @@ function addTC(req, res) {
     try {
       if (req.body && req.body.tc) {
         let saveaboutUs = new tc({
-          tc: req.body.tc
+          tc: req.body.tc,
         });
         let saveNow = await commonQuery.InsertIntoCollection(tc, saveaboutUs);
         if (saveNow) {
@@ -2355,5 +2357,5 @@ function addTC(req, res) {
       );
     }
   }
-  addTC().then(function() {});
+  addTC().then(function () {});
 }

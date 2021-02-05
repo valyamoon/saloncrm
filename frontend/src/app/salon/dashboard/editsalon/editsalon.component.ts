@@ -126,6 +126,8 @@ export class EditsalonComponent implements OnInit {
           this.salonDetailsData = data["data"];
           this.salonid = data["data"]._id;
           const [longitude, latitude] = data.data.location.coordinates;
+          this.lat = latitude;
+          this.lng = longitude;
           let location = await this.geocoder.getLocationByCoords(
             latitude,
             longitude

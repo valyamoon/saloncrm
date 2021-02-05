@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AdminServService } from "../admin-serv.service";
 import { ToastrService } from "ngx-toastr";
-import { MatTableDataSource, MatSort, MatSortHeader } from "@angular/material";
+import { MatTableDataSource, MatSort } from "@angular/material";
+import { GeocoderService } from "../../../services";
 
 @Component({
   selector: "app-salonlist",
   templateUrl: "./salonlist.component.html",
-  styleUrls: ["./salonlist.component.scss"]
+  styleUrls: ["./salonlist.component.scss"],
 })
 export class SalonlistComponent implements OnInit {
   activeSalons: any;
@@ -21,7 +22,7 @@ export class SalonlistComponent implements OnInit {
     "contact",
     "opentime",
     "closetime",
-    "action"
+    "action",
   ];
 
   limit: any = 0;
@@ -38,7 +39,8 @@ export class SalonlistComponent implements OnInit {
 
   constructor(
     private adminServ: AdminServService,
-    private toastrServ: ToastrService
+    private toastrServ: ToastrService,
+    private geocoder: GeocoderService
   ) {}
 
   ngOnInit() {
@@ -59,10 +61,10 @@ export class SalonlistComponent implements OnInit {
     let dataToPass = {
       type: "activesalons",
       pageSize: this.count,
-      page: this.page
+      page: this.page,
     };
     this.adminServ.getSalonsList(dataToPass).subscribe(
-      data => {
+      (data) => {
         // console.log(data);
         // console.log("SalonsList", data["data"]);
         if (data["code"] === 200) {
@@ -78,14 +80,14 @@ export class SalonlistComponent implements OnInit {
         } else {
           this.isLoader = false;
           this.toastrServ.error("Failed To Fetch Salons", "Failed", {
-            timeOut: 1000
+            timeOut: 1000,
           });
         }
       },
-      error => {
+      (error) => {
         this.isLoader = false;
         this.toastrServ.success("Server Error", error.error["message"], {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -99,19 +101,19 @@ export class SalonlistComponent implements OnInit {
 
   getActiveSalonsCount() {
     let dataToPass = {
-      type: "salon"
+      type: "salon",
     };
     this.adminServ.getActiveSalonsCount(dataToPass).subscribe(
-      data => {
+      (data) => {
         //  console.log("DATA", data);
         if (data["code"] == 200) {
           this.ActiveSalonsCount = data["data"];
           //   console.log("ACTIVE SALONS COUNT", this.ActiveSalonsCount);
         }
       },
-      error => {
+      (error) => {
         this.toastrServ.error("Server Error", error.error["message"], {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     );
@@ -128,10 +130,10 @@ export class SalonlistComponent implements OnInit {
     this.isLoader = true;
     // console.log(data);
     let dataToPass = {
-      salon_id: data._id
+      salon_id: data._id,
     };
 
-    this.adminServ.getSalonDetails(dataToPass).subscribe((data: any) => {
+    this.adminServ.getSalonDetails(dataToPass).subscribe(async (data: any) => {
       //  console.log("DSS", data);
 
       if (data["code"] === 200) {
@@ -139,13 +141,18 @@ export class SalonlistComponent implements OnInit {
         this.isLoader = false;
         this.salonDetails = data["data"]["salondetail"];
         this.salonEmail = data["data"]["email"];
+
+        this.salonDetails.location = await this.loadCoordinates(
+          data.data.salondetail
+        );
+
         if (this.salonDetails["image"] === null) {
           this.salonDetails["image"] = "../../../assets/images/profilepic.png";
         }
       } else {
         this.isLoader = false;
         this.toastrServ.error("Failed To Fetch User Details", "Error", {
-          timeOut: 1000
+          timeOut: 1000,
         });
       }
     });
@@ -167,11 +174,11 @@ export class SalonlistComponent implements OnInit {
             this.isCountShow = true;
           } else if (data.code == 400) {
             this.toastrServ.error(data.message, "", {
-              timeOut: 1000
+              timeOut: 1000,
             });
           }
         },
-        error => {
+        (error) => {
           this.toastrServ.error(error.message, "", { timeOut: 1000 });
         }
       );
@@ -182,31 +189,40 @@ export class SalonlistComponent implements OnInit {
     this.isLoader = true;
     // console.log("ApproveFor", data);
     let dataToPass = {
-      salon_id: data._id
+      salon_id: data._id,
     };
     this.adminServ.declineSalonRequest(dataToPass).subscribe(
-      data => {
+      (data) => {
         // console.log("FFFF", data);
         if (data["code"] === 200) {
           this.isLoader = false;
           this.toastrServ.success("Salon Declined Successfully", "", {
-            timeOut: 3000
+            timeOut: 3000,
           });
           this.getActiveSalonsList();
           this.getActiveSalonsCount();
         } else {
           this.isLoader = false;
           this.toastrServ.error("Failed To Decline", "", {
-            timeOut: 3000
+            timeOut: 3000,
           });
         }
       },
-      error => {
+      (error) => {
         this.isLoader = false;
         this.toastrServ.error("Server Error", error.error["message"], {
-          timeOut: 3000
+          timeOut: 3000,
         });
       }
     );
+  }
+
+  private async loadCoordinates(salon) {
+    const [longitude, latitude] = salon.location.coordinates;
+    const location = await this.geocoder.getLocationByCoords(
+      latitude,
+      longitude
+    );
+    return location;
   }
 }
