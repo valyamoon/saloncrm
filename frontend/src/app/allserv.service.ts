@@ -2,11 +2,13 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AllservService {
-  constructor() {}
   private currentRoute = new BehaviorSubject<string>("");
+  private previousRoute = new BehaviorSubject<string>("");
+
+  constructor() {}
 
   setRoute(data: string) {
     // Fire the update event with the new data
@@ -16,8 +18,6 @@ export class AllservService {
   getRoute(): Observable<string> {
     return this.currentRoute.asObservable();
   }
-
-  private previousRoute = new BehaviorSubject<string>("");
 
   setPrevRoute(data: string) {
     // Fire the update event with the new data
