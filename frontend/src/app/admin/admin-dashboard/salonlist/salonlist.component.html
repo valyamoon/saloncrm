@@ -91,9 +91,7 @@
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="status-check">
-            Action
-          </th>
+          <th mat-header-cell *matHeaderCellDef class="status-check">Action</th>
           <td mat-cell *matCellDef="let element">
             <span class="mobile-label">Action:</span>
             <div class="actionArea">
@@ -158,7 +156,7 @@
         </div>
         <div class="field-row">
           <label>Address:</label>
-          <div class="details">{{ salonDetails.salonaddress }}</div>
+          <div class="details">{{ salonDetails.location }}</div>
         </div>
         <div class="field-row">
           <label>Contact:</label>
@@ -184,7 +182,7 @@
 
       <div class="btn-Area">
         <button
-          class=" btn btn-sign-in btn-primary"
+          class="btn btn-sign-in btn-primary"
           (click)="closeSalonDetails()"
         >
           Close
