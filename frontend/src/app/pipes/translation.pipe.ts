@@ -8,7 +8,6 @@ export class TranslationPipe implements PipeTransform {
 
   transform(text: string, target: string) {
     return this.translationService.translate(text, target).pipe(
-      //distinctUntilChanged(),
       map((x) => {
         const [{ translatedText }] = x.data.translations;
         return translatedText;
