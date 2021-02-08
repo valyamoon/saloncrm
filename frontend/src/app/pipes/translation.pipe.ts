@@ -8,7 +8,7 @@ import { TranslationService } from "../services";
 export class TranslationPipe implements PipeTransform {
   constructor(private translationService: TranslationService) {}
 
-  transform(text: string, target: AvailableLanguages) {
+  transform(text: string, target: string) {
     if (target === AvailableLanguages.EN) {
       return of(text);
     }
