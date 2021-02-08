@@ -13,7 +13,7 @@ export class TranslationService {
   translate(text: string, targetLanguage: string = "ru") {
     return this.httpClient.post<TranslationResponse>(
       `${this.url}?key=${this.key}`,
-      { q: text, target: targetLanguage }
+      { q: text, target: targetLanguage, format: "text" }
     );
   }
 }

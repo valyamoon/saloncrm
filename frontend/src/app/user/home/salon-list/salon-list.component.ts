@@ -86,7 +86,9 @@ export class SalonListComponent implements OnInit, OnDestroy {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
 
-          await this.loadCoordinates(this.salonListingData);
+          this.salonListingData
+            ? await this.loadCoordinates(this.salonListingData)
+            : null;
 
           this.salonCount = data["data"]["count"];
           if (this.salonCount > 10) {
@@ -136,7 +138,9 @@ export class SalonListComponent implements OnInit, OnDestroy {
       async (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
-          await this.loadCoordinates(this.salonListingData);
+          this.salonListingData
+            ? await this.loadCoordinates(this.salonListingData)
+            : null;
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000,
@@ -170,7 +174,9 @@ export class SalonListComponent implements OnInit, OnDestroy {
       async (data) => {
         if (data["code"] === 200) {
           this.salonListingData = data["data"]["salon"];
-          await this.loadCoordinates(this.salonListingData);
+          this.salonListingData
+            ? await this.loadCoordinates(this.salonListingData)
+            : null;
         } else if (data["code"] === 400) {
           this.toastServ.error(data["message"], "", {
             timeOut: 1000,
