@@ -107,7 +107,11 @@ export function getAuthServiceConfigs() {
       provide: HTTP_INTERCEPTORS,
       useClass: MyInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs,
+    },
   ],
   bootstrap: [AppComponent]
 })

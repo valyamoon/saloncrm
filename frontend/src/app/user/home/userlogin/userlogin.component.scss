@@ -125,15 +125,20 @@
           }
           .social-info {
             text-align: center;
+
             .fb-icon {
               color: #385c8e;
               font-weight: 600;
-              font-size: 20px;
+              font-size: 30px;
             }
             .google-icon {
               color: #f94938;
               font-weight: 600;
-              font-size: 20px;
+              font-size: 30px;
+            }
+            .apple-icon {
+              font-weight: 600;
+              font-size: 30px;
             }
             a {
               &:nth-child(1) {
@@ -172,15 +177,19 @@
         .fb-icon {
           color: #385c8e;
           font-weight: 600;
-          font-size: 20px;
+          font-size: 30px;
         }
         .google-icon {
           color: #f94938;
           font-weight: 600;
-          font-size: 20px;
+          font-size: 30px;
+        }
+        .apple-icon {
+          font-weight: 600;
+          font-size: 30px;
         }
         a {
-          &:nth-child(1) {
+          &:nth-child(n) {
             margin-right: 20px;
           }
         }

@@ -1,5 +1,4 @@
 {
     "git.ignoreLimitWarning": true,
-    "editor.formatOnSave": true,
     "editor.defaultFormatter": "numso.prettier-standard-vscode"
 }

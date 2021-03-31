@@ -304,7 +304,13 @@ export class UserloginComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   public socialSignIn(socialPlatform: string) {
+    if(socialPlatform === "apple"){
+      this.appleSocialSignIn();
+      return;
+    }
+
     let socialPlatformProvider;
     if (socialPlatform == "facebook") {
       socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
@@ -340,5 +346,9 @@ export class UserloginComponent implements OnInit, OnDestroy {
 
       // Now sign-in with userData
     });
+  }
+
+  public appleSocialSignIn() {
+    
   }
 }
