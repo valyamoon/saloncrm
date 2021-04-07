@@ -26,9 +26,6 @@ import { HttpClientModule } from "@angular/common/http";
 
 import {
   SocialLoginModule,
-  AuthServiceConfig,
-  GoogleLoginProvider,
-  FacebookLoginProvider,
 } from "ngx-angular-social-login";
 
 import { AutocompleteLibModule } from "angular-ng-autocomplete";

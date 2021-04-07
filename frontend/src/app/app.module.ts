@@ -23,7 +23,6 @@ import {
   SocialLoginModule,
   AuthServiceConfig,
   GoogleLoginProvider,
-  FacebookLoginProvider
 } from "ngx-angular-social-login";
 
 import { MatTabsModule } from "@angular/material/tabs";
@@ -43,6 +42,7 @@ import { RouterModule } from "@angular/router";
 import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.component";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+import { FacebookLoginProvider } from "./user/fb-login";
 
 // "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
 

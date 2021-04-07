@@ -7,13 +7,13 @@ import { country } from "./countries";
 import { AuthServService } from "../auth-serv.service";
 import {
   AuthService,
-  FacebookLoginProvider,
   GoogleLoginProvider,
 } from "ngx-angular-social-login";
 import { Router } from "@angular/router";
 import { AllservService } from "../../../allserv.service";
 import { LanguagesService } from "../../../services";
 import { Subscription } from "rxjs";
+import { FacebookLoginProvider } from "../../fb-login";
 @Component({
   selector: "app-userlogin",
   templateUrl: "./userlogin.component.html",
