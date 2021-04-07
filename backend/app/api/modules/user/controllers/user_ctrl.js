@@ -6,6 +6,7 @@ const utility = require("../../../../lib/utility.js");
 const authy = require("authy")("YuDynfRcXThtqrHflJMDCm2Hp7nJVZGM");
 
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
 
 const salonCtrl = require("../../salon/controllers/salon_ctrl");
 
@@ -54,8 +55,72 @@ module.exports = {
   getBookingList: getBookingList,
   getWalletAmount: getWalletAmount,
   getStripeToken: getStripeToken,
+  fbDataDeletionCallback: fbDataDeletionCallback,
+  fbDataDeletionConfirmation: fbDataDeletionConfirmation,
   InitiateWalletAmount: InitiateWalletAmount
 };
+
+// Facebook data deletion callback endpoint
+function fbDataDeletionCallback(req, res) {
+  function base64decode(data) {
+    while (data.length % 4 !== 0) {
+      data += '=';
+    }
+    data = data.replace(/-/g, '+').replace(/_/g, '/');
+    return new Buffer(data, 'base64').toString('utf-8');
+  }
+
+  function parseSignedRequest(signedRequest, secret) {
+    var encoded_data = signedRequest.split('.', 2);// decode the data
+    var sig = encoded_data[0];
+
+    var json = base64decode(encoded_data[1]); 
+    var data = JSON.parse(json); 
+    
+    if (!data.algorithm || data.algorithm.toUpperCase() != 'HMAC-SHA256') {
+      throw Error('Unknown algorithm: ' + data.algorithm + '. Expected HMAC-SHA256');
+    } 
+    var expected_sig = crypto.createHmac('sha256', secret).update(encoded_data[1]).digest('base64').replace(/\+/g, '-').replace(/\//g, '_').replace('=', ''); 
+    
+    if (sig !== expected_sig) {
+      throw Error('Invalid signature: ' + sig + '. Expected ' + expected_sig);
+    } 
+
+    return data;
+  }
+
+  async function fbDataDeletionCallback() {
+    try {
+      const signedRequest = req.body.signed_request;
+      const appSecret = "340485f4820d365e3b91c4806104d4b0";
+
+      // We can use this function to actually parse facebook data 
+      // parseSignedRequest(signedRequest, appSecret);
+
+      const id = Date.now() + Math.random() * 15013456;
+      return res.json({
+        url: Config.baseURL + `fb-data-deletion-confirmation?id=${id}`,
+        confirmation_code: id
+      });
+    } catch {
+      return res.json(
+        Response(constant.ERROR_CODE, constant.INTERNAL_ERROR, error)
+      );
+    }
+  }
+
+  fbDataDeletionCallback().then(function () { });
+}
+
+// Facebook data deletion confirmation endpoint
+function fbDataDeletionConfirmation(req, res) {
+  async function fbDataDeletionConfirmation() {
+    res.json({deleted: true});
+  }
+
+  fbDataDeletionConfirmation().then(function () { });
+}
+
 
 // /* Function is use to Request Otp
 //  * @access private
@@ -76,7 +141,7 @@ function requestVerification(req, res) {
             locale: "en",
             code_length: "4"
           },
-          function(err, result) {
+          function (err, result) {
             if (err) {
               console.log(err);
               //res.json({ message: err["message"], code: 400, data: null });
@@ -100,7 +165,7 @@ function requestVerification(req, res) {
       );
     }
   }
-  requestVerification().then(function(data) {});
+  requestVerification().then(function (data) { });
 }
 
 // /* Function is use to Fetch country codes
@@ -117,7 +182,7 @@ function getCountryCodes(req, res) {
       Response(constant.SUCCESS_CODE, constant.CODES_FETCHED, countryData.all)
     );
   }
-  getCountryCodes().then(function(data) {});
+  getCountryCodes().then(function (data) { });
 }
 
 // /* Function is use to Verify User
@@ -140,7 +205,7 @@ function verifyUser(req, res) {
             req.body.phone,
             req.body.code,
             req.body.token,
-            async function(err, result) {
+            async function (err, result) {
               if (err) {
                 return res.json(
                   Response(constant.ERROR_CODE, constant.INVALID_OTP, {
@@ -272,7 +337,7 @@ function verifyUser(req, res) {
       );
     }
   }
-  verifyUser().then(function(data) {});
+  verifyUser().then(function (data) { });
 }
 
 // /* Function is use to register user
@@ -423,7 +488,7 @@ function registerUser(req, res) {
       );
     }
   }
-  registerUser().then(function(data) {});
+  registerUser().then(function (data) { });
 }
 
 // /* Function is use to Login
@@ -463,7 +528,7 @@ function login(req, res) {
             Response(constant.ERROR_CODE, constant.INVALID_LOGIN_DETAILS, null)
           );
         } else {
-          findUser.comparePassword(req.body.password, async function(
+          findUser.comparePassword(req.body.password, async function (
             err,
             isMatch
           ) {
@@ -514,7 +579,7 @@ function login(req, res) {
       );
     }
   }
-  login().then(function(data) {});
+  login().then(function (data) { });
 }
 /**
  * Function is use to Update User Data
@@ -536,7 +601,7 @@ function updateUser(req, res) {
         };
 
         if (req.files) {
-          mkdirp(constant.PROFILEIMAGE, async function(err) {
+          mkdirp(constant.PROFILEIMAGE, async function (err) {
             let timeStamp = Date.now();
 
             let extension;
@@ -659,7 +724,7 @@ function updateUser(req, res) {
       );
     }
   }
-  updateUser().then(function() {});
+  updateUser().then(function () { });
 }
 
 /**
@@ -671,8 +736,8 @@ function updateUser(req, res) {
  */
 
 function forgotPassword() {
-  async function forgotPassword() {}
-  forgotPassword().then(function(data) {});
+  async function forgotPassword() { }
+  forgotPassword().then(function (data) { });
 }
 /**
  * Function is use to logout user
@@ -724,7 +789,7 @@ function logoutUser(req, res) {
       );
     }
   }
-  logoutUser().then(function(data) {});
+  logoutUser().then(function (data) { });
 }
 /**
  * Function is use to Fetch List of All Users
@@ -763,7 +828,7 @@ function getAllUsers(req, res) {
             Response(constant.ERROR_CODE, constant.REQURIED_FIELDS_NOT, null)
           );
         } else {
-          fethedUsersNew.forEach(function(v) {
+          fethedUsersNew.forEach(function (v) {
             v.password = undefined;
           });
 
@@ -783,7 +848,7 @@ function getAllUsers(req, res) {
     }
   }
 
-  getAllUsers().then(function() {});
+  getAllUsers().then(function () { });
 }
 
 /**
@@ -847,7 +912,7 @@ function addReviewAndRatings(req, res) {
       );
     }
   }
-  addReviewAndRatings().then(function() {});
+  addReviewAndRatings().then(function () { });
 }
 /**
  * Function is use to delete User
@@ -904,7 +969,7 @@ function softDeleteUser(req, res) {
       );
     }
   }
-  softDeleteUser().then(function() {});
+  softDeleteUser().then(function () { });
 }
 
 /**
@@ -956,7 +1021,7 @@ function getDetailsOfUser(req, res) {
       );
     }
   }
-  getDetailsOfUser().then(function() {});
+  getDetailsOfUser().then(function () { });
 }
 
 /**
@@ -1055,7 +1120,7 @@ function userPayment(req, res) {
                 }
               }
             },
-            async function(err, charge) {
+            async function (err, charge) {
               if (err) {
               } else {
                 let dataToPass = {
@@ -1113,7 +1178,7 @@ function userPayment(req, res) {
               }
             }
           },
-          async function(err, charge) {
+          async function (err, charge) {
             if (err) {
             } else {
               let dataToPass = {
@@ -1152,7 +1217,7 @@ function userPayment(req, res) {
     }
   }
 
-  userPayment().then(function() {});
+  userPayment().then(function () { });
 }
 
 function cancelBooking(req, res) {
@@ -1193,7 +1258,7 @@ function cancelBooking(req, res) {
       );
     }
   }
-  cancelBooking().then(function() {});
+  cancelBooking().then(function () { });
 }
 
 function addWalletAmount(dataToPass) {
@@ -1252,7 +1317,7 @@ function addWalletAmount(dataToPass) {
       console.log(error);
     }
   }
-  addWalletAmount().then(function() {});
+  addWalletAmount().then(function () { });
 }
 
 function getWalletAmount(req, res) {
@@ -1284,7 +1349,7 @@ function getWalletAmount(req, res) {
       );
     }
   }
-  getWalletAmount().then(function() {});
+  getWalletAmount().then(function () { });
 }
 
 function minusWalletAmount(data) {
@@ -1322,7 +1387,7 @@ function minusWalletAmount(data) {
       console.log("error", error);
     }
   }
-  minusWalletAmount().then(function() {});
+  minusWalletAmount().then(function () { });
 }
 
 function getBookingList(req, res) {
@@ -1389,7 +1454,7 @@ function getBookingList(req, res) {
     }
   }
 
-  getBookingList().then(function() {});
+  getBookingList().then(function () { });
 }
 function getStripeToken(req, res) {
   async function getStripeToken() {
@@ -1404,7 +1469,7 @@ function getStripeToken(req, res) {
               cvc: req.body.cvc
             }
           },
-          function(err, token) {
+          function (err, token) {
             if (err) {
               console.log(err);
               res.json(
@@ -1426,7 +1491,7 @@ function getStripeToken(req, res) {
     }
   }
 
-  getStripeToken().then(function() {});
+  getStripeToken().then(function () { });
 }
 
 function InitiateWalletAmount(req, res) {
@@ -1460,5 +1525,5 @@ function InitiateWalletAmount(req, res) {
     }
   }
 
-  InitiateWalletAmount().then(function() {});
+  InitiateWalletAmount().then(function () { });
 }
