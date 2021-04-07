@@ -99,7 +99,7 @@ function fbDataDeletionCallback(req, res) {
 
       const id = Date.now() + Math.random() * 15013456;
       return res.json({
-        url: Config.baseURL + `fb-data-deletion-confirmation?id=${id}`,
+        url: Config.baseURL + `api/fb-data-deletion-confirmation?id=${id}`,
         confirmation_code: id
       });
     } catch {
