@@ -13,7 +13,7 @@ import { Router } from "@angular/router";
 import { AllservService } from "../../../allserv.service";
 import { LanguagesService } from "../../../services";
 import { Subscription } from "rxjs";
-import { FacebookLoginProvider } from "../../fb-login";
+import { CustomFacebookLoginProvider } from "../../fb-login";
 @Component({
   selector: "app-userlogin",
   templateUrl: "./userlogin.component.html",
@@ -313,7 +313,7 @@ export class UserloginComponent implements OnInit, OnDestroy {
 
     let socialPlatformProvider;
     if (socialPlatform == "facebook") {
-      socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+      socialPlatformProvider = CustomFacebookLoginProvider.PROVIDER_ID;
     } else if (socialPlatform == "google") {
       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
     }

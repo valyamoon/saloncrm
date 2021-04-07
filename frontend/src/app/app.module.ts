@@ -42,15 +42,15 @@ import { RouterModule } from "@angular/router";
 import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.component";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
-import { FacebookLoginProvider } from "./user/fb-login";
+import { CustomFacebookLoginProvider } from "./user/fb-login";
 
 // "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
     {
-      id: FacebookLoginProvider.PROVIDER_ID,
-      provider: new FacebookLoginProvider("197843614836498")
+      id: CustomFacebookLoginProvider.PROVIDER_ID,
+      provider: new CustomFacebookLoginProvider("197843614836498")
     },
     {
       id: GoogleLoginProvider.PROVIDER_ID,
