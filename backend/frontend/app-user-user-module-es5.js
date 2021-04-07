@@ -18878,6 +18878,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _services__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
     /*! ../../../services */
     "./src/app/services/index.ts");
+    /* harmony import */
+
+
+    var _fb_login__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+    /*! ../../fb-login */
+    "./src/app/user/fb-login/index.ts");
 
     var UserloginComponent = /*#__PURE__*/function () {
       function UserloginComponent(fb, userCommServ, toastServ, socialAuthService, authServ, router, allServ, languagesService) {
@@ -19157,7 +19163,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var socialPlatformProvider;
 
           if (socialPlatform == "facebook") {
-            socialPlatformProvider = ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_8__["FacebookLoginProvider"].PROVIDER_ID;
+            socialPlatformProvider = _fb_login__WEBPACK_IMPORTED_MODULE_12__["CustomFacebookLoginProvider"].PROVIDER_ID;
           } else if (socialPlatform == "google") {
             socialPlatformProvider = ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_8__["GoogleLoginProvider"].PROVIDER_ID;
           }

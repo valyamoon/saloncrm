@@ -23480,6 +23480,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _allserv_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../allserv.service */ "./src/app/allserv.service.ts");
 /* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../services */ "./src/app/services/index.ts");
+/* harmony import */ var _fb_login__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../fb-login */ "./src/app/user/fb-login/index.ts");
+
 
 
 
@@ -23727,7 +23729,7 @@ let UserloginComponent = class UserloginComponent {
         }
         let socialPlatformProvider;
         if (socialPlatform == "facebook") {
-            socialPlatformProvider = ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_8__["FacebookLoginProvider"].PROVIDER_ID;
+            socialPlatformProvider = _fb_login__WEBPACK_IMPORTED_MODULE_12__["CustomFacebookLoginProvider"].PROVIDER_ID;
         }
         else if (socialPlatform == "google") {
             socialPlatformProvider = ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_8__["GoogleLoginProvider"].PROVIDER_ID;

@@ -1,3 +1,17 @@
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
@@ -1189,13 +1203,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var ngx_bootstrap_datepicker__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(
     /*! ngx-bootstrap/datepicker */
-    "./node_modules/ngx-bootstrap/datepicker/fesm2015/ngx-bootstrap-datepicker.js"); // "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
+    "./node_modules/ngx-bootstrap/datepicker/fesm2015/ngx-bootstrap-datepicker.js");
+    /* harmony import */
+
+
+    var _user_fb_login__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(
+    /*! ./user/fb-login */
+    "./src/app/user/fb-login/index.ts"); // "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
 
 
     function getAuthServiceConfigs() {
       var config = new ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["AuthServiceConfig"]([{
-        id: ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["FacebookLoginProvider"].PROVIDER_ID,
-        provider: new ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["FacebookLoginProvider"]("197843614836498")
+        id: _user_fb_login__WEBPACK_IMPORTED_MODULE_25__["CustomFacebookLoginProvider"].PROVIDER_ID,
+        provider: new _user_fb_login__WEBPACK_IMPORTED_MODULE_25__["CustomFacebookLoginProvider"]("197843614836498")
       }, {
         id: ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["GoogleLoginProvider"].PROVIDER_ID,
         provider: new ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["GoogleLoginProvider"]("938330214511-qde8job10q1a7kjralviskhbtdhpuo5p.apps.googleusercontent.com")
@@ -1517,6 +1537,79 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       "./src/app/salon/salon.component.css"))["default"]]
     })], SalonComponent);
     /***/
+  },
+
+  /***/
+  "./src/app/user/fb-login/index.ts":
+  /*!****************************************!*\
+    !*** ./src/app/user/fb-login/index.ts ***!
+    \****************************************/
+
+  /*! exports provided: CustomFacebookLoginProvider */
+
+  /***/
+  function srcAppUserFbLoginIndexTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "CustomFacebookLoginProvider", function () {
+      return CustomFacebookLoginProvider;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ngx-angular-social-login */
+    "./node_modules/ngx-angular-social-login/ngx-angular-social-login.umd.js");
+    /* harmony import */
+
+
+    var ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1__);
+
+    var CustomFacebookLoginProvider = /*#__PURE__*/function (_ngx_angular_social_l) {
+      _inherits(CustomFacebookLoginProvider, _ngx_angular_social_l);
+
+      var _super = _createSuper(CustomFacebookLoginProvider);
+
+      function CustomFacebookLoginProvider() {
+        _classCallCheck(this, CustomFacebookLoginProvider);
+
+        return _super.apply(this, arguments);
+      }
+
+      _createClass(CustomFacebookLoginProvider, [{
+        key: "signIn",
+        value: function signIn() {
+          return new Promise(function (resolve, reject) {
+            FB.login(function (response) {
+              if (response.authResponse) {
+                var accessToken = FB.getAuthResponse()['accessToken'];
+                FB.api('/me?fields=name,email,picture', function (res) {
+                  resolve(CustomFacebookLoginProvider.drawUser(Object.assign({}, {
+                    token: accessToken
+                  }, res)));
+                });
+              }
+            }, {
+              scope: 'email,public_profile'
+            });
+          });
+        }
+      }]);
+
+      return CustomFacebookLoginProvider;
+    }(ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1__["FacebookLoginProvider"]);
+    /***/
+
   },
 
   /***/

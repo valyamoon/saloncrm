@@ -530,6 +530,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pagenotfound_pagenotfound_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./pagenotfound/pagenotfound.component */ "./src/app/pagenotfound/pagenotfound.component.ts");
 /* harmony import */ var _forgetpassword_forgetpassword_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./forgetpassword/forgetpassword.component */ "./src/app/forgetpassword/forgetpassword.component.ts");
 /* harmony import */ var ngx_bootstrap_datepicker__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ngx-bootstrap/datepicker */ "./node_modules/ngx-bootstrap/datepicker/fesm2015/ngx-bootstrap-datepicker.js");
+/* harmony import */ var _user_fb_login__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./user/fb-login */ "./src/app/user/fb-login/index.ts");
+
 
 
 
@@ -559,8 +561,8 @@ __webpack_require__.r(__webpack_exports__);
 function getAuthServiceConfigs() {
     let config = new ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["AuthServiceConfig"]([
         {
-            id: ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["FacebookLoginProvider"].PROVIDER_ID,
-            provider: new ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["FacebookLoginProvider"]("197843614836498")
+            id: _user_fb_login__WEBPACK_IMPORTED_MODULE_25__["CustomFacebookLoginProvider"].PROVIDER_ID,
+            provider: new _user_fb_login__WEBPACK_IMPORTED_MODULE_25__["CustomFacebookLoginProvider"]("197843614836498")
         },
         {
             id: ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_10__["GoogleLoginProvider"].PROVIDER_ID,
@@ -804,6 +806,39 @@ SalonComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     })
 ], SalonComponent);
 
+
+
+/***/ }),
+
+/***/ "./src/app/user/fb-login/index.ts":
+/*!****************************************!*\
+  !*** ./src/app/user/fb-login/index.ts ***!
+  \****************************************/
+/*! exports provided: CustomFacebookLoginProvider */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CustomFacebookLoginProvider", function() { return CustomFacebookLoginProvider; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ngx-angular-social-login */ "./node_modules/ngx-angular-social-login/ngx-angular-social-login.umd.js");
+/* harmony import */ var ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1__);
+
+
+class CustomFacebookLoginProvider extends ngx_angular_social_login__WEBPACK_IMPORTED_MODULE_1__["FacebookLoginProvider"] {
+    signIn() {
+        return new Promise((resolve, reject) => {
+            FB.login((response) => {
+                if (response.authResponse) {
+                    const accessToken = FB.getAuthResponse()['accessToken'];
+                    FB.api('/me?fields=name,email,picture', (res) => {
+                        resolve(CustomFacebookLoginProvider.drawUser(Object.assign({}, { token: accessToken }, res)));
+                    });
+                }
+            }, { scope: 'email,public_profile' });
+        });
+    }
+}
 
 
 /***/ }),
