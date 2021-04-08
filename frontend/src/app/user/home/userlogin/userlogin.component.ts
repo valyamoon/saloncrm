@@ -7,13 +7,13 @@ import { country } from "./countries";
 import { AuthServService } from "../auth-serv.service";
 import {
   AuthService,
-  FacebookLoginProvider,
   GoogleLoginProvider,
 } from "ngx-angular-social-login";
 import { Router } from "@angular/router";
 import { AllservService } from "../../../allserv.service";
 import { LanguagesService } from "../../../services";
 import { Subscription } from "rxjs";
+import { CustomFacebookLoginProvider } from "../../fb-login";
 @Component({
   selector: "app-userlogin",
   templateUrl: "./userlogin.component.html",
@@ -304,10 +304,16 @@ export class UserloginComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   public socialSignIn(socialPlatform: string) {
+    if(socialPlatform === "apple"){
+      this.appleSocialSignIn();
+      return;
+    }
+
     let socialPlatformProvider;
     if (socialPlatform == "facebook") {
-      socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+      socialPlatformProvider = CustomFacebookLoginProvider.PROVIDER_ID;
     } else if (socialPlatform == "google") {
       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
     }
@@ -340,5 +346,9 @@ export class UserloginComponent implements OnInit, OnDestroy {
 
       // Now sign-in with userData
     });
+  }
+
+  public appleSocialSignIn() {
+    
   }
 }

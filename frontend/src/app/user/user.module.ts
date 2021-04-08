@@ -26,9 +26,6 @@ import { HttpClientModule } from "@angular/common/http";
 
 import {
   SocialLoginModule,
-  AuthServiceConfig,
-  GoogleLoginProvider,
-  FacebookLoginProvider,
 } from "ngx-angular-social-login";
 
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
@@ -52,22 +49,6 @@ import { FaqComponent } from "./home/faq/faq.component";
 import { CheckoutComponent } from "./home/checkout/checkout.component";
 import { PrivacypolicyComponent } from "./privacypolicy/privacypolicy.component";
 import { PipeModule } from "../pipes";
-
-export function getAuthServiceConfigs() {
-  let config = new AuthServiceConfig([
-    {
-      id: FacebookLoginProvider.PROVIDER_ID,
-      provider: new FacebookLoginProvider("197843614836498"),
-    },
-    {
-      id: GoogleLoginProvider.PROVIDER_ID,
-      provider: new GoogleLoginProvider(
-        "938330214511-nou0imenqd5mm6eb2hn0iprcnqe9tun2.apps.googleusercontent.com"
-      ),
-    },
-  ]);
-  return config;
-}
 
 @NgModule({
   declarations: [
@@ -116,11 +97,6 @@ export function getAuthServiceConfigs() {
     PipeModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-  providers: [
-    {
-      provide: AuthServiceConfig,
-      useFactory: getAuthServiceConfigs,
-    },
-  ],
+  providers: [],
 })
 export class UserModule {}

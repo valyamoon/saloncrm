@@ -23,7 +23,6 @@ import {
   SocialLoginModule,
   AuthServiceConfig,
   GoogleLoginProvider,
-  FacebookLoginProvider
 } from "ngx-angular-social-login";
 
 import { MatTabsModule } from "@angular/material/tabs";
@@ -43,19 +42,20 @@ import { RouterModule } from "@angular/router";
 import { PagenotfoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ForgetpasswordComponent } from "./forgetpassword/forgetpassword.component";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+import { CustomFacebookLoginProvider } from "./user/fb-login";
 
 // "AIzaSyBRGIpX7SrLucppkSH0U_zebyq9xPjTYSk",
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
     {
-      id: FacebookLoginProvider.PROVIDER_ID,
-      provider: new FacebookLoginProvider("197843614836498")
+      id: CustomFacebookLoginProvider.PROVIDER_ID,
+      provider: new CustomFacebookLoginProvider("197843614836498")
     },
     {
       id: GoogleLoginProvider.PROVIDER_ID,
       provider: new GoogleLoginProvider(
-        "938330214511-nou0imenqd5mm6eb2hn0iprcnqe9tun2.apps.googleusercontent.com"
+        "938330214511-qde8job10q1a7kjralviskhbtdhpuo5p.apps.googleusercontent.com"
       )
     }
   ]);
@@ -107,7 +107,11 @@ export function getAuthServiceConfigs() {
       provide: HTTP_INTERCEPTORS,
       useClass: MyInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs,
+    },
   ],
   bootstrap: [AppComponent]
 })
