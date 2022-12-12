@@ -36,7 +36,7 @@
     "angular-star-rating": "^2.0.0-rc.5",
     "bootstrap": "^4.6.0",
     "css-star-rating": "^1.2.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "geolocation": "^0.2.0",
     "google-libphonenumber": "^3.2.16",
     "jquery": "^3.5.1",
